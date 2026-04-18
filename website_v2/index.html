@@ -333,30 +333,23 @@
                 </div>
 
                 <div class="results-legend" aria-label="How to read the results tables">
-                  <div>
-                    <h4>Significance tier</h4>
-                    <div class="tier-row">
-                      <span class="tier-pill tier-bh" title="Survives Benjamini-Hochberg correction">BH</span>
-                      <span class="tier-pill tier-bonf" title="Survives Bonferroni correction">Bonf</span>
-                      <span class="tier-pill tier-raw" title="Raw p < 0.05 only">Raw</span>
+                  <div class="legend-row">
+                    <h4>Tier</h4>
+                    <div class="legend-pills">
+                      <span class="tier-pill tier-bh" title="Survives Benjamini-Hochberg">BH</span>
+                      <span class="tier-pill tier-bonf" title="Survives Bonferroni">Bonf</span>
+                      <span class="tier-pill tier-raw" title="Raw p &lt; 0.05 only">Raw</span>
                       <span class="tier-pill tier-ns" title="Not significant at 5%">n/s</span>
+                      <span class="legend-note">strongest p &lt; 0.05 threshold each spec clears</span>
                     </div>
-                    <p style="margin:6px 0 0;">Strongest threshold each spec clears at <span class="mono">p&lt;0.05</span>. BH is the most credible.</p>
                   </div>
-                  <div>
-                    <h4>p-value coloring</h4>
-                    <p style="margin:0;">
-                      <span class="mono" style="color:var(--good);font-weight:600;">green</span> = p &lt; 0.05;
-                      <span class="mono" style="color:var(--fg-muted);">grey</span> = p ≥ 0.05. Bonferroni and BH columns apply family-wise and FDR corrections.
-                    </p>
+                  <div class="legend-row">
+                    <h4>p</h4>
+                    <p><span class="p-sig-dot"></span> p &lt; 0.05 &nbsp;·&nbsp; <span class="p-ns-dot"></span> p ≥ 0.05</p>
                   </div>
-                  <div>
-                    <h4>Diagnostics</h4>
-                    <p style="margin:0;">
-                      <span class="mono">DW</span> ideally ≈ 2 (red if &lt; 1.2 or &gt; 2.8);
-                      <span class="mono">BP</span> &amp; <span class="mono">LB</span> p-values ideally &gt; 0.05.
-                      Click a headline row for per-variable coefficients and VIF.
-                    </p>
+                  <div class="legend-row">
+                    <h4>Diag</h4>
+                    <p><span class="mono">DW</span> ≈ 2 &nbsp;·&nbsp; <span class="mono">BP</span>, <span class="mono">LB</span> &gt; 0.05 &nbsp;·&nbsp; click a row for coefficients</p>
                   </div>
                 </div>
               </div>

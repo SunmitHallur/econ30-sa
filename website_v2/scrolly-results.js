@@ -61,13 +61,14 @@
           }
         );
 
+        const step = panel.dataset.step ?? "0";
         ScrollTrigger.create({
           trigger: panel,
-          start: "top 52%",
-          end: "bottom 48%",
-          onToggle(self) {
-            if (self.isActive) setRailActive(panel.dataset.step ?? "0");
-          },
+          start: "top 40%",
+          end: "bottom 40%",
+          onEnter: () => setRailActive(step),
+          onEnterBack: () => setRailActive(step),
+          invalidateOnRefresh: true,
         });
       });
 
