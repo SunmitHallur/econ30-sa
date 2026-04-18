@@ -333,14 +333,25 @@
                 </div>
 
                 <div class="results-legend" aria-label="How to read the results tables">
-                  <div class="legend-row">
+                  <div class="legend-row legend-tier">
                     <h4>Tier</h4>
                     <div class="legend-pills">
-                      <span class="tier-pill tier-bh" title="Survives Benjamini-Hochberg">BH</span>
-                      <span class="tier-pill tier-bonf" title="Survives Bonferroni">Bonf</span>
-                      <span class="tier-pill tier-raw" title="Raw p &lt; 0.05 only">Raw</span>
-                      <span class="tier-pill tier-ns" title="Not significant at 5%">n/s</span>
-                      <span class="legend-note">strongest p &lt; 0.05 threshold each spec clears</span>
+                      <span class="tier-def">
+                        <span class="tier-pill tier-bh">BH</span>
+                        <span class="tier-def-label">Benjamini–Hochberg</span>
+                      </span>
+                      <span class="tier-def">
+                        <span class="tier-pill tier-bonf">Bonf</span>
+                        <span class="tier-def-label">Bonferroni</span>
+                      </span>
+                      <span class="tier-def">
+                        <span class="tier-pill tier-raw">Raw</span>
+                        <span class="tier-def-label">raw p &lt; 0.05</span>
+                      </span>
+                      <span class="tier-def">
+                        <span class="tier-pill tier-ns">n/s</span>
+                        <span class="tier-def-label">not sig. at 5%</span>
+                      </span>
                     </div>
                   </div>
                   <div class="legend-row">
