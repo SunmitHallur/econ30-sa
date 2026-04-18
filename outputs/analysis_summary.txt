@@ -1,0 +1,228 @@
+South Africa — observational macro analysis (World Bank WDI)
+Source: data/sa_wdi_panel.csv (ZAF, 1990–2023). Not causal identification.
+
+EXECUTIVE SUMMARY (double-checked with HAC SE, Breusch-Pagan, Ljung-Box, VIF)
+- All series here come from the World Bank API (fetch_sa_wdi.py).
+- Strong bivariate link: trade/GDP is highly correlated with log GDP per capita (r~0.87, p<1e-10, n=34).
+- Multivariate log GDP ~ trade + FDI + time: trade and time significant (OLS); with HAC, FDI is negative with p<0.05, but VIF~7 on trade and time (multicollinearity) - do not treat slopes as causal.
+- Unemployment ~ trade + FDI: trade significant at 1% (OLS), borderline 5-10% with HAC; FDI not robust. Residuals show strong autocorrelation (low DW, Ljung-Box rejects white noise).
+- Official Gini in WDI has only 7 years for ZAF here - descriptive plot only, not regression.
+
+=== Pearson correlations (pairwise complete, min n shown) ===
+trade_pct_gdp vs log_gdp_pc: r=0.8699, p=2.399e-11, n=34
+trade_pct_gdp vs unemployment_ilo_pct: r=0.5296, p=0.001529, n=33
+fdi_net_inflows_pct_gdp vs log_gdp_pc: r=0.2470, p=0.1591, n=34
+trade_pct_gdp vs gini: r=-0.1904, p=0.6826, n=7
+
+=== OLS: unemployment_ilo_pct ~ trade_pct_gdp + fdi_net_inflows_pct_gdp ===
+                             OLS Regression Results                             
+================================================================================
+Dep. Variable:     unemployment_ilo_pct   R-squared:                       0.346
+Model:                              OLS   Adj. R-squared:                  0.303
+Method:                   Least Squares   F-statistic:                     7.944
+Date:                  Fri, 10 Apr 2026   Prob (F-statistic):            0.00170
+Time:                          14:25:32   Log-Likelihood:                -78.113
+No. Observations:                    33   AIC:                             162.2
+Df Residuals:                        30   BIC:                             166.7
+Df Model:                             2                                         
+Covariance Type:              nonrobust                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+const                      15.8987      2.864      5.552      0.000      10.051      21.747
+trade_pct_gdp               0.1637      0.058      2.803      0.009       0.044       0.283
+fdi_net_inflows_pct_gdp     0.4805      0.277      1.738      0.093      -0.084       1.045
+==============================================================================
+Omnibus:                        0.685   Durbin-Watson:                   0.268
+Prob(Omnibus):                  0.710   Jarque-Bera (JB):                0.421
+Skew:                           0.274   Prob(JB):                        0.810
+Kurtosis:                       2.919   Cond. No.                         310.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+HAC (Newey–West, maxlags=2):
+                             OLS Regression Results                             
+================================================================================
+Dep. Variable:     unemployment_ilo_pct   R-squared:                       0.346
+Model:                              OLS   Adj. R-squared:                  0.303
+Method:                   Least Squares   F-statistic:                     2.663
+Date:                  Fri, 10 Apr 2026   Prob (F-statistic):             0.0862
+Time:                          14:25:32   Log-Likelihood:                -78.113
+No. Observations:                    33   AIC:                             162.2
+Df Residuals:                        30   BIC:                             166.7
+Df Model:                             2                                         
+Covariance Type:                    HAC                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+const                      15.8987      3.870      4.108      0.000       7.994      23.803
+trade_pct_gdp               0.1637      0.084      1.958      0.060      -0.007       0.334
+fdi_net_inflows_pct_gdp     0.4805      0.343      1.402      0.171      -0.220       1.180
+==============================================================================
+Omnibus:                        0.685   Durbin-Watson:                   0.268
+Prob(Omnibus):                  0.710   Jarque-Bera (JB):                0.421
+Skew:                           0.274   Prob(JB):                        0.810
+Kurtosis:                       2.919   Cond. No.                         310.
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 2 lags and without small sample correction
+
+VIF (slopes only):
+               variable      VIF
+          trade_pct_gdp 1.767873
+fdi_net_inflows_pct_gdp 1.767873
+
+Breusch–Pagan LM=14.5578, p=0.0006899 (heteroskedasticity vs homoskedastic null)
+Ljung–Box on residuals (lag 5): Q=50.5370, p=1.076e-09
+
+=== OLS: log(gdp_pc) ~ trade_pct_gdp + fdi_net_inflows_pct_gdp + year_t ===
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             log_gdp_pc   R-squared:                       0.838
+Model:                            OLS   Adj. R-squared:                  0.822
+Method:                 Least Squares   F-statistic:                     51.90
+Date:                Fri, 10 Apr 2026   Prob (F-statistic):           5.50e-12
+Time:                        14:25:32   Log-Likelihood:                 49.968
+No. Observations:                  34   AIC:                            -91.94
+Df Residuals:                      30   BIC:                            -85.83
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+const                       8.1087      0.088     92.049      0.000       7.929       8.289
+trade_pct_gdp               0.0069      0.002      3.012      0.005       0.002       0.012
+fdi_net_inflows_pct_gdp    -0.0073      0.006     -1.209      0.236      -0.020       0.005
+year_t                      0.0077      0.002      3.793      0.001       0.004       0.012
+==============================================================================
+Omnibus:                        3.791   Durbin-Watson:                   0.422
+Prob(Omnibus):                  0.150   Jarque-Bera (JB):                2.686
+Skew:                          -0.675   Prob(JB):                        0.261
+Kurtosis:                       3.274   Cond. No.                         466.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+HAC (Newey–West, maxlags=2):
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             log_gdp_pc   R-squared:                       0.838
+Model:                            OLS   Adj. R-squared:                  0.822
+Method:                 Least Squares   F-statistic:                     28.94
+Date:                Fri, 10 Apr 2026   Prob (F-statistic):           5.43e-09
+Time:                        14:25:32   Log-Likelihood:                 49.968
+No. Observations:                  34   AIC:                            -91.94
+Df Residuals:                      30   BIC:                            -85.83
+Df Model:                           3                                         
+Covariance Type:                  HAC                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+const                       8.1087      0.085     94.863      0.000       7.934       8.283
+trade_pct_gdp               0.0069      0.002      3.359      0.002       0.003       0.011
+fdi_net_inflows_pct_gdp    -0.0073      0.003     -2.243      0.032      -0.014      -0.001
+year_t                      0.0077      0.002      4.566      0.000       0.004       0.011
+==============================================================================
+Omnibus:                        3.791   Durbin-Watson:                   0.422
+Prob(Omnibus):                  0.150   Jarque-Bera (JB):                2.686
+Skew:                          -0.675   Prob(JB):                        0.261
+Kurtosis:                       3.274   Cond. No.                         466.
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 2 lags and without small sample correction
+
+VIF (slopes only):
+               variable      VIF
+          trade_pct_gdp 6.790855
+fdi_net_inflows_pct_gdp 1.833520
+                 year_t 7.020656
+
+Breusch–Pagan LM=7.6157, p=0.05466 (heteroskedasticity vs homoskedastic null)
+Ljung–Box on residuals (lag 5): Q=33.7705, p=2.645e-06
+
+=== OLS: log(gdp_pc) ~ trade_pct_gdp (bivariate) ===
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:             log_gdp_pc   R-squared:                       0.757
+Model:                            OLS   Adj. R-squared:                  0.749
+Method:                 Least Squares   F-statistic:                     99.54
+Date:                Fri, 10 Apr 2026   Prob (F-statistic):           2.40e-11
+Time:                        14:25:32   Log-Likelihood:                 43.009
+No. Observations:                  34   AIC:                            -82.02
+Df Residuals:                      32   BIC:                            -78.97
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+=================================================================================
+                    coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------
+const             7.8791      0.070    111.827      0.000       7.736       8.023
+trade_pct_gdp     0.0139      0.001      9.977      0.000       0.011       0.017
+==============================================================================
+Omnibus:                        3.048   Durbin-Watson:                   0.629
+Prob(Omnibus):                  0.218   Jarque-Bera (JB):                1.675
+Skew:                          -0.250   Prob(JB):                        0.433
+Kurtosis:                       2.034   Cond. No.                         296.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+=== Robustness: exclude 2020; unemployment ~ trade + fdi ===
+                             OLS Regression Results                             
+================================================================================
+Dep. Variable:     unemployment_ilo_pct   R-squared:                       0.373
+Model:                              OLS   Adj. R-squared:                  0.330
+Method:                   Least Squares   F-statistic:                     8.625
+Date:                  Fri, 10 Apr 2026   Prob (F-statistic):            0.00115
+Time:                          14:25:32   Log-Likelihood:                -74.588
+No. Observations:                    32   AIC:                             155.2
+Df Residuals:                        29   BIC:                             159.6
+Df Model:                             2                                         
+Covariance Type:              nonrobust                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+const                      15.8645      2.766      5.735      0.000      10.207      21.522
+trade_pct_gdp               0.1607      0.056      2.849      0.008       0.045       0.276
+fdi_net_inflows_pct_gdp     0.5075      0.268      1.897      0.068      -0.040       1.055
+==============================================================================
+Omnibus:                        1.094   Durbin-Watson:                   0.301
+Prob(Omnibus):                  0.579   Jarque-Bera (JB):                0.460
+Skew:                           0.280   Prob(JB):                        0.795
+Kurtosis:                       3.178   Cond. No.                         305.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+HAC:
+                             OLS Regression Results                             
+================================================================================
+Dep. Variable:     unemployment_ilo_pct   R-squared:                       0.373
+Model:                              OLS   Adj. R-squared:                  0.330
+Method:                   Least Squares   F-statistic:                     2.575
+Date:                  Fri, 10 Apr 2026   Prob (F-statistic):             0.0935
+Time:                          14:25:32   Log-Likelihood:                -74.588
+No. Observations:                    32   AIC:                             155.2
+Df Residuals:                        29   BIC:                             159.6
+Df Model:                             2                                         
+Covariance Type:                    HAC                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+const                      15.8645      3.975      3.991      0.000       7.734      23.995
+trade_pct_gdp               0.1607      0.085      1.880      0.070      -0.014       0.336
+fdi_net_inflows_pct_gdp     0.5075      0.346      1.466      0.153      -0.201       1.215
+==============================================================================
+Omnibus:                        1.094   Durbin-Watson:                   0.301
+Prob(Omnibus):                  0.579   Jarque-Bera (JB):                0.460
+Skew:                           0.280   Prob(JB):                        0.795
+Kurtosis:                       3.178   Cond. No.                         305.
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 2 lags and without small sample correction

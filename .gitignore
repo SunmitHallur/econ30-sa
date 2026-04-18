@@ -1,0 +1,23 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.mplcache/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# OS / local
+*.log
+.env
+.env.local
+
+# Obsidian app state (personal, not useful in repo)
+Knowledge Base/.obsidian/
+
+# PDFs of third-party papers — kept locally only, not redistributed publicly
+Knowledge Base/raw/readings/

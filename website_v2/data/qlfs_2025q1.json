@@ -1,0 +1,39 @@
+{
+  "quarter": "2025Q1",
+  "source": "Stats SA QLFS, P0211",
+  "national": {
+    "unemployment_rate": 32.9,
+    "expanded_unemployment_rate": 43.1,
+    "youth_unemployment_rate": 46.1,
+    "labour_force_millions": 25.3
+  },
+  "provinces": {
+    "Western Cape": {
+      "unemployment_rate": 20.9
+    },
+    "Eastern Cape": {
+      "unemployment_rate": 39.8
+    },
+    "Northern Cape": {
+      "unemployment_rate": 26.4
+    },
+    "Free State": {
+      "unemployment_rate": 36.6
+    },
+    "KwaZulu-Natal": {
+      "unemployment_rate": 29.2
+    },
+    "North West": {
+      "unemployment_rate": 34.2
+    },
+    "Gauteng": {
+      "unemployment_rate": 33.9
+    },
+    "Mpumalanga": {
+      "unemployment_rate": 35.3
+    },
+    "Limpopo": {
+      "unemployment_rate": 34.0
+    }
+  }
+}

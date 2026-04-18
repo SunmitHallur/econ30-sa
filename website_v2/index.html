@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The price of integration — South Africa after 1994</title>
+  <meta name="description" content="An exploratory, data-driven essay on South Africa's post-apartheid integration into the world economy, drawing on WDI, WID, WIID, and WGI data and a curated knowledge base of 14 primary sources." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#hero">
+        <span class="brand-dot"></span>
+        <span class="brand-text">Econ 30 · SA integration</span>
+      </a>
+      <nav class="topnav" aria-label="Primary">
+        <a href="#question">Question</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#macro">Macro</a>
+        <a href="#inequality">Inequality</a>
+        <a href="#governance">Governance</a>
+        <a href="#results">Results</a>
+        <a href="#map">Map</a>
+        <a href="#sources">Sources</a>
+      </nav>
+      <button id="theme-toggle" class="ghost-btn" aria-label="Toggle dark mode" title="Toggle theme">
+        <span class="theme-icon" aria-hidden="true">◐</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================================================ -->
+    <!-- 1. Hero                                                      -->
+    <!-- ============================================================ -->
+    <section id="hero" class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Final project · Economics 30 · Spring 2026</p>
+        <h1 class="title">The price of integration</h1>
+        <p class="subtitle">
+          When apartheid's sanctions fell away in 1994, South Africa re-entered
+          the world economy. Three decades later, GDP per capita has risen by a
+          third — and the top 10% now claim <strong>65% of pre-tax
+          national income</strong>. This page lets you interrogate that pairing.
+        </p>
+        <div class="pills">
+          <span class="pill pill-wdi">WDI · World Bank</span>
+          <span class="pill pill-wid">WID · inequality shares</span>
+          <span class="pill pill-wiid">WIID · UNU-WIDER</span>
+          <span class="pill pill-wgi">WGI · governance</span>
+          <span class="pill pill-qlfs">QLFS · Stats SA 2025Q1</span>
+        </div>
+        <div class="meta-row">
+          <a class="ghost-btn" href="#results">See headline regressions ↓</a>
+          <a class="ghost-btn" href="#sources">Knowledge base →</a>
+        </div>
+      </div>
+      <div class="hero-figure" aria-hidden="true">
+        <canvas id="chart-hero"></canvas>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 2. Question                                                  -->
+    <!-- ============================================================ -->
+    <section id="question" class="section">
+      <div class="section-head">
+        <h2>1 · The question</h2>
+        <p class="section-lede">
+          Did post-apartheid South Africa's rapid integration into world goods,
+          capital and norms markets buy growth at the cost of distribution?
+        </p>
+      </div>
+
+      <div class="prose">
+        <p>
+          In 1994 South Africa inherited an economy that had been deliberately
+          closed off for three decades: sanctions, divestment and autarkic
+          industrial policy had left trade at just
+          <strong>37% of GDP</strong> and the Johannesburg Stock Exchange largely
+          cut off from foreign capital. Two macro strategies defined the
+          transition. The <a class="kb-link" href="#sources" data-kb="reconstruction-and-development-programme">Reconstruction and Development Programme (RDP, 1994)</a>
+          promised redistribution, housing, electrification and a developmental
+          state. Twenty months later it was shelved in favour of
+          <a class="kb-link" href="#sources" data-kb="gear-strategy">Growth, Employment and Redistribution (GEAR, 1996)</a>:
+          a self-described orthodox macro framework — fiscal consolidation,
+          inflation targeting, trade liberalisation, capital account opening
+          and partial privatisation.
+        </p>
+        <p>
+          Three decades of data are now in. This page runs
+          <strong id="spec-count">hundreds</strong> of exploratory regressions
+          across four public datasets, flags every association that clears a
+          5% threshold, and adjusts for multiple testing. The aim is not to
+          declare a winner between RDP and GEAR — that debate is
+          <a class="kb-link" href="#sources" data-kb="political-economy-of-transition">genuinely political</a> — but to
+          put honest descriptive statistics next to the clearest causal
+          evidence from the literature.
+        </p>
+        <blockquote class="callout">
+          <strong>What this page is not.</strong> A single-country time series
+          with <span class="mono">T ≤ 35</span> cannot identify causal effects.
+          Coefficients here should be read as conditional correlations.
+          Causal claims in the prose rely on papers in the
+          <a href="#sources">knowledge base</a>: synthetic-control evidence
+          on sanctions (Evenett; Chatterjee-Czajka-Gethin), local-labour-market
+          designs on trade liberalisation (Erten-Leight-Tregenna), and
+          wealth-distribution accounts (Chatterjee et al., WIL 2021).
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 3. Timeline                                                  -->
+    <!-- ============================================================ -->
+    <section id="timeline" class="section">
+      <div class="section-head">
+        <h2>2 · Policy timeline</h2>
+        <p class="section-lede">
+          Hover a node to see what happened, and which knowledge-base source
+          covers it.
+        </p>
+      </div>
+
+      <ol class="timeline" id="timeline-list" aria-label="Post-1990 policy timeline"></ol>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 4. Macro                                                     -->
+    <!-- ============================================================ -->
+    <section id="macro" class="section">
+      <div class="section-head">
+        <h2>3 · Macro evidence</h2>
+        <p class="section-lede">
+          Integration, measured as (exports + imports) / GDP, more than doubled
+          between 1990 and 2022. FDI, always modest, rode the same wave with a
+          lag.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Indexed macro indicators, 1990 = 100</h3>
+            <p>GDP per capita, Trade/GDP and FDI/GDP, rebased to 1990. Source: World Development Indicators.</p>
+          </figcaption>
+          <canvas id="chart-indexed"></canvas>
+        </figure>
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Unemployment (ILO-modelled)</h3>
+            <p>The structural unemployment plateau is South Africa's defining fact. See <a class="kb-link" href="#sources" data-kb="quarterly-labour-force-survey">QLFS</a> and <a class="kb-link" href="#sources" data-kb="labour-market-south-africa">labour market</a>.</p>
+          </figcaption>
+          <canvas id="chart-unemployment"></canvas>
+        </figure>
+      </div>
+
+      <div class="prose narrow">
+        <p>
+          <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Trade liberalisation</a>
+          was rapid: tariffs fell from an average of roughly 23% in 1993 to
+          around 8% by 2005. In the headline OLS, a one-percentage-point
+          increase in Trade/GDP is associated with
+          <strong>+1.4% higher GDP per capita</strong> (HAC, p &lt; 0.001) —
+          but so is higher unemployment (+0.20pp, p = 0.036) and a higher
+          top-10% income share (+0.69pp, p &lt; 0.001). The direction of
+          association is unambiguous; the direction of causation is not.
+          Engle-Granger cointegration for log GDP pc and Trade/GDP fails to
+          reject the no-cointegration null
+          (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span>), so the
+          long-run relationship should be read cautiously.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 5. Inequality                                                -->
+    <!-- ============================================================ -->
+    <section id="inequality" class="section">
+      <div class="section-head">
+        <h2>4 · Inequality evidence</h2>
+        <p class="section-lede">
+          Three complementary lenses: pre-tax income shares (WID), wealth
+          shares (WID), and survey-based Gini (WIID / WDI).
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Pre-tax income shares (WID)</h3>
+            <p>Top-10% income share: 47% in 1990 → 65% in 2020. The bottom 50% receives &lt; 6%.</p>
+          </figcaption>
+          <canvas id="chart-income-shares"></canvas>
+        </figure>
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Wealth shares (WID)</h3>
+            <p>Wealth is even more skewed than income. See <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee-Czajka-Gethin (WIL, 2021)</a>.</p>
+          </figcaption>
+          <canvas id="chart-wealth-shares"></canvas>
+        </figure>
+      </div>
+
+      <div class="grid-2">
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Gini (WIID vs WDI)</h3>
+            <p>Survey-based Gini hovers near 0.63, with variation driven by survey design. See <a class="kb-link" href="#sources" data-kb="dataset-wiid-2025">WIID 2025</a>.</p>
+          </figcaption>
+          <canvas id="chart-gini"></canvas>
+        </figure>
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Top-10% income share vs Trade/GDP</h3>
+            <p>Each point is a year; hover to see which. The OLS fit is positive and highly significant (HAC, p &lt; 0.001).</p>
+          </figcaption>
+          <canvas id="chart-scatter-top10-trade"></canvas>
+        </figure>
+      </div>
+
+      <div class="prose narrow">
+        <p>
+          The central puzzle shows up in the <a class="kb-link" href="#sources" data-kb="inequality-in-south-africa">inequality</a> data:
+          opening the economy and slimming the state did not
+          compress the distribution as classical liberal theory would predict;
+          it widened it. From 1994 onwards, the top-decile income share rose
+          by <strong>roughly 18 percentage points</strong>. The bottom half's
+          share shrank by a third. Wealth is an even starker story:
+          the top 10% hold roughly 85% of household wealth.
+        </p>
+        <p>
+          The
+          <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna (2019)</a>
+          paper isolates the causal piece: districts more exposed to the
+          tariff cuts of 1994–2005 saw lower employment, formalisation and
+          wages — and the hit fell hardest on Black workers and women. That
+          evidence, not the correlations above, is what justifies the
+          "price of integration" framing.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 6. Governance                                                -->
+    <!-- ============================================================ -->
+    <section id="governance" class="section">
+      <div class="section-head">
+        <h2>5 · Governance evidence</h2>
+        <p class="section-lede">
+          The six Worldwide Governance Indicators pillars, normalised to 0–1
+          and averaged across underlying sources.
+        </p>
+      </div>
+
+      <figure class="card">
+        <figcaption class="card-head">
+          <h3>WGI pillars, South Africa (1996–2024)</h3>
+          <p>Voice &amp; accountability, political stability, government effectiveness, regulatory quality, rule of law, control of corruption. See <a class="kb-link" href="#sources" data-kb="dataset-wgi-underlying-sources">WGI underlying sources</a>.</p>
+        </figcaption>
+        <canvas id="chart-wgi"></canvas>
+      </figure>
+
+      <div class="prose narrow">
+        <p>
+          The WGI composite peaks around 2008 and slides during the Zuma
+          administration (2009–2018), with a partial recovery after. The
+          regression battery picks up a positive association between the WGI
+          composite and GDP growth
+          (<strong>β ≈ 40.5</strong>, HAC <span class="mono">p = 0.036</span>,
+          n = 26) — but this correlation does not identify the causal impact
+          of state capacity on growth, especially given the short panel and
+          the GFC shock embedded in it.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 7. Econometric results                                       -->
+    <!-- ============================================================ -->
+    <section id="results" class="section">
+      <div class="section-head">
+        <h2>6 · Econometric results</h2>
+        <p class="section-lede">
+          Every OLS specification was estimated with Newey-West HAC standard
+          errors (lag 3). The table below lists each spec whose most
+          significant non-intercept coefficient clears <span class="mono">p &lt; 0.05</span>.
+        </p>
+      </div>
+
+      <div class="results-toolbar card">
+        <div class="metric">
+          <span class="metric-label">Specs run</span>
+          <span class="metric-value" id="m-total">–</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Sig at 5% (raw)</span>
+          <span class="metric-value" id="m-raw">–</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Sig after Bonferroni</span>
+          <span class="metric-value" id="m-bonf">–</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Sig after BH</span>
+          <span class="metric-value" id="m-bh">–</span>
+        </div>
+        <label class="dw-filter">
+          <input type="checkbox" id="dw-filter" />
+          <span>Hide specs with DW &lt; 1.5 (likely autocorrelated)</span>
+        </label>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Headline specifications</h3>
+        <p class="card-sub">
+          Click a row to expand coefficients and diagnostics. Diagnostics:
+          Durbin-Watson (<span class="mono">DW</span>, ideal ≈ 2), Breusch-Pagan
+          p-value (<span class="mono">BP</span>, ideal &gt; 0.05), Ljung-Box
+          Q(4) p-value (<span class="mono">LB</span>, ideal &gt; 0.05).
+        </p>
+        <div class="table-wrap">
+          <table id="headline-table" class="results-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Outcome</th><th>Regressors</th>
+                <th>Sample</th><th>n</th><th>R²</th>
+                <th>min p (raw)</th><th>p (Bonf)</th><th>p (BH)</th>
+                <th>DW</th><th>BP</th><th>LB</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <details>
+          <summary><h3 class="card-title inline">All specifications (<span id="all-count">–</span>)</h3></summary>
+          <div class="table-wrap">
+            <table id="all-table" class="results-table">
+              <thead>
+                <tr>
+                  <th>Outcome</th><th>Regressors</th><th>Sample</th>
+                  <th>n</th><th>R²</th>
+                  <th>min p</th><th>Bonf</th><th>BH</th>
+                  <th>DW</th><th>BP</th><th>LB</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="card-title">Chow break at 1996 (GEAR)</h3>
+          <div class="table-wrap">
+            <table id="chow-table" class="results-table">
+              <thead>
+                <tr><th>Outcome</th><th>Regressors</th><th>n</th><th>F</th><th>p</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Engle-Granger cointegration</h3>
+          <div class="table-wrap">
+            <table id="coint-table" class="results-table">
+              <thead>
+                <tr><th>y</th><th>x</th><th>n</th><th>ADF y p</th><th>ADF x p</th><th>EG t</th><th>EG p</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Granger causality (p by lag)</h3>
+        <div class="table-wrap">
+          <table id="granger-table" class="results-table">
+            <thead>
+              <tr><th>Direction</th><th>n</th><th>lag 1</th><th>lag 2</th><th>lag 3</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 8. Map                                                       -->
+    <!-- ============================================================ -->
+    <section id="map" class="section">
+      <div class="section-head">
+        <h2>7 · Provincial unemployment, 2025 Q1</h2>
+        <p class="section-lede">
+          Hover a province for its narrow unemployment rate. Expanded
+          unemployment (discouraged job-seekers included) ran at
+          <strong>43.1%</strong> nationally in Q1 2025. Source:
+          <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
+        </p>
+      </div>
+      <div id="za-map" class="map-wrap" aria-label="South Africa provinces map"></div>
+      <p class="map-legend">
+        <span class="sw sw-1"></span> &lt; 25% &nbsp;
+        <span class="sw sw-2"></span> 25–32% &nbsp;
+        <span class="sw sw-3"></span> 32–37% &nbsp;
+        <span class="sw sw-4"></span> &gt; 37%
+      </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 9. Sources & caveats                                         -->
+    <!-- ============================================================ -->
+    <section id="sources" class="section">
+      <div class="section-head">
+        <h2>8 · Sources &amp; caveats</h2>
+        <p class="section-lede">
+          Every claim above is either a direct calculation on the linked
+          dataset or a citation to a knowledge-base summary.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3 class="card-title">Datasets</h3>
+          <ul class="link-list">
+            <li><a href="../Knowledge Base/wiki/summaries/dataset-sa-wdi-panel.md">WDI panel (1990–2023)</a> — World Bank.</li>
+            <li><a href="../Knowledge Base/wiki/summaries/dataset-wid-south-africa.md">WID — South Africa</a> — top/bottom shares of income and wealth.</li>
+            <li><a href="../Knowledge Base/wiki/summaries/dataset-wiid-2025.md">WIID 2025</a> — UNU-WIDER harmonised Gini/Palma.</li>
+            <li><a href="../Knowledge Base/wiki/summaries/dataset-wgi-underlying-sources.md">WGI underlying sources</a> — 6 pillars, 1996–2024.</li>
+            <li><a href="../Knowledge Base/wiki/summaries/stats-sa-qlfs-p0211-2025q1.md">Stats SA QLFS 2025Q1</a> — labour force snapshot.</li>
+            <li><a href="../Knowledge Base/wiki/summaries/stats-sa-qlfs-p0211-2023q3.md">Stats SA QLFS 2023Q3</a>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Policy history</h3>
+          <ul class="link-list">
+            <li><a href="../Knowledge Base/wiki/summaries/rdp-1994.md">RDP (1994)</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/gear-1996-macroeconomic-strategy.md">GEAR (1996)</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/rdp-to-gear-transition.md">RDP → GEAR transition</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/state-of-trade-policy-south-africa.md">State of trade policy</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/mayekiso-trade-liberalisation-privatisation.md">Mayekiso — liberalisation &amp; privatisation</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/political-economy-of-transition-handbook-part1.md">Political economy of transition</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/building-back-better-covid-jobs.md">Building back better — COVID jobs</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Causal evidence cited</h3>
+          <ul class="link-list">
+            <li><a href="../Knowledge Base/wiki/summaries/trade-liberalization-local-labor-markets-south-africa.md">Erten–Leight–Tregenna (local labour markets)</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/trade-liberalization-sa-manufacturing.md">Trade liberalisation &amp; manufacturing</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/sanctions-synthetic-control-south-africa.md">Sanctions synthetic-control</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/sanctions-impact-south-african-exports.md">Sanctions &amp; SA exports</a></li>
+            <li><a href="../Knowledge Base/wiki/summaries/wealth-inequality-lab-south-africa.md">Chatterjee–Czajka–Gethin (WIL 2021)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card callout-card">
+        <h3 class="card-title">Caveats, in order of severity</h3>
+        <ol>
+          <li>
+            <strong>Small n.</strong> At most 35 annual observations. Confidence
+            intervals are wide even when p-values look small.
+          </li>
+          <li>
+            <strong>Autocorrelation.</strong> Many specs have Durbin-Watson
+            below 1.5. HAC SEs partially mitigate this; the "DW &lt; 1.5 filter"
+            above removes those specs at the reader's request.
+          </li>
+          <li>
+            <strong>Multiple testing.</strong> We estimate
+            <span class="mono" id="m-total-inline">hundreds</span>
+            of specifications. Bonferroni and Benjamini-Hochberg adjusted
+            p-values are shown alongside raw p; a finding that survives BH is
+            more credible.
+          </li>
+          <li>
+            <strong>No identification.</strong> Correlations do not settle the
+            policy debate. For causal claims the paper relies on
+            synthetic-control (sanctions), local-labour-market designs
+            (trade liberalisation) and distributional accounts (WIL 2021).
+          </li>
+          <li>
+            <strong>Coverage gaps.</strong> WIID Gini drops out after 2017;
+            WDI Gini is sparser still. Comparisons across series must account
+            for survey design differences.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>
+        Built with Python (pandas, statsmodels, matplotlib), Chart.js and
+        Leaflet. All underlying data are in <span class="mono">Knowledge Base/raw/data/</span>.
+        Exploratory analysis pipeline in <span class="mono">analysis_v2/</span>.
+      </p>
+      <p>
+        Sunmith Hallur · Economics 30 · Spring 2026.
+      </p>
+    </footer>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

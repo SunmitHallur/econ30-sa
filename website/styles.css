@@ -1,0 +1,605 @@
+/* The Price of Integration — South Africa (Econ 30) */
+
+:root {
+  --bg: #0c0f14;
+  --bg-elevated: #121820;
+  --surface: #1a2332;
+  --surface2: #243044;
+  --text: #e8edf4;
+  --muted: #94a3b8;
+  --accent: #4da3ff;
+  --accent-dim: rgba(77, 163, 255, 0.14);
+  --accent2: #5ce0a8;
+  --warning: #f0b429;
+  --border: #2d3d56;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.25);
+  --font: "Source Serif 4", "Georgia", serif;
+  --sans: "DM Sans", system-ui, sans-serif;
+  --header-max: 920px;
+  --content-max: 42rem;
+  --tap: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.6rem 1rem;
+  background: var(--accent);
+  color: #0a0e14;
+  font-family: var(--sans);
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent2);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* —— Hero —— */
+.hero {
+  position: relative;
+  padding: 2.75rem 1.5rem 2.25rem;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(77, 163, 255, 0.12), transparent 55%),
+    linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+}
+
+.hero-inner {
+  max-width: var(--header-max);
+  margin: 0 auto;
+}
+
+.hero-kicker {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.65rem;
+}
+
+.hero h1 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(1.65rem, 4.2vw, 2.25rem);
+  line-height: 1.2;
+  margin: 0 0 0.85rem;
+  letter-spacing: -0.025em;
+  max-width: 18ch;
+}
+
+.hero .subtitle {
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  max-width: 48ch;
+  margin: 0;
+}
+
+/* —— Sticky nav —— */
+.toc-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(12, 15, 20, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+nav.toc {
+  max-width: var(--header-max);
+  margin: 0 auto;
+  padding: 0.65rem 1.5rem;
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.5rem;
+}
+
+nav.toc a {
+  margin-right: 0;
+  text-decoration: none;
+  color: var(--muted);
+  padding: 0.35rem 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+nav.toc a:hover {
+  color: var(--text);
+}
+
+nav.toc a:focus-visible {
+  outline: none;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* —— Essay —— */
+article.essay {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 3.5rem;
+}
+
+article.essay h2 {
+  font-family: var(--sans);
+  font-size: 1.28rem;
+  margin-top: 2.35rem;
+  margin-bottom: 1rem;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding-left: 0.9rem;
+  scroll-margin-top: 4rem;
+}
+
+article.essay h2:first-of-type {
+  margin-top: 0;
+}
+
+article.essay p {
+  margin: 0 0 1.1rem;
+}
+
+article.essay blockquote {
+  margin: 1.35rem 0;
+  padding: 1rem 1.15rem;
+  border-left: 3px solid var(--warning);
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+article.essay .source-note {
+  font-family: var(--sans);
+  font-size: 0.84rem;
+  color: var(--muted);
+  margin-top: 2.25rem;
+  padding: 1.25rem 1.15rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  line-height: 1.55;
+}
+
+article.essay .source-note code {
+  font-size: 0.8em;
+  padding: 0.12rem 0.35rem;
+  border-radius: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--accent2);
+}
+
+/* —— Interactive section —— */
+section.map-section {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg-elevated) 50%, var(--surface) 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2.75rem 1rem 3.5rem;
+  scroll-margin-top: 3.5rem;
+}
+
+section.map-section .wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  text-align: center;
+  margin: 0 0 0.5rem;
+}
+
+section.map-section h2 {
+  font-family: var(--sans);
+  font-size: clamp(1.35rem, 3vw, 1.65rem);
+  text-align: center;
+  margin: 0 0 0.65rem;
+  letter-spacing: -0.02em;
+}
+
+section.map-section .lead {
+  text-align: center;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.94rem;
+  line-height: 1.55;
+  max-width: 54ch;
+  margin: 0 auto 1.75rem;
+}
+
+.control-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  padding: 1rem 1.25rem;
+  max-width: 720px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+}
+
+.control-bar .btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.control-bar label.year-scrub {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--muted);
+  flex: 1 1 220px;
+  justify-content: center;
+  min-width: min(100%, 280px);
+}
+
+.control-bar .year-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 2.75ch;
+}
+
+input[type="range"] {
+  flex: 1;
+  max-width: 200px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+
+button.chart-mode {
+  background: var(--accent);
+  color: #0a0e14;
+  border: none;
+  padding: 0.5rem 1rem;
+  min-height: var(--tap);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+}
+
+button.chart-mode.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+button.chart-mode:hover {
+  filter: brightness(1.08);
+}
+
+button.chart-mode:active {
+  transform: scale(0.98);
+}
+
+button.chart-mode:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button.chart-mode.is-active:not(.secondary) {
+  box-shadow: 0 0 0 2px var(--accent-dim), 0 0 20px rgba(77, 163, 255, 0.25);
+}
+
+button.chart-mode.secondary.is-active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.year-readout {
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 52rem;
+  margin: 0 auto 1.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  min-height: 3.25rem;
+}
+
+.year-readout strong {
+  color: var(--text);
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 360px);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #map {
+    min-height: 360px;
+    height: 45vh;
+  }
+}
+
+#map {
+  height: 460px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #0a0d12;
+  box-shadow: var(--shadow);
+}
+
+.panel {
+  background: var(--surface2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.15rem 1.2rem;
+  font-family: var(--sans);
+  min-height: 200px;
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.12rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.panel-lead {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+}
+
+.panel-foot {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 0.85rem 0 0;
+  line-height: 1.5;
+}
+
+.panel .placeholder {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.panel dl {
+  margin: 0.85rem 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem 0;
+  font-size: 0.86rem;
+}
+
+@media (min-width: 400px) {
+  .panel dl {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.4rem 1rem;
+  }
+}
+
+.panel dt {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.panel dd {
+  margin: 0;
+  text-align: right;
+}
+
+@media (max-width: 399px) {
+  .panel dd {
+    text-align: left;
+    grid-column: 1 / -1;
+  }
+}
+
+.pills-heading {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 1.5rem 0 0.5rem;
+  text-align: center;
+}
+
+.province-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: center;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.province-pills button {
+  font-size: 0.78rem;
+  padding: 0.4rem 0.75rem;
+  min-height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.province-pills button:hover {
+  border-color: var(--muted);
+}
+
+.province-pills button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.province-pills button.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.15rem;
+  margin-top: 2rem;
+}
+
+.chart-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.15rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-card:hover {
+  border-color: rgba(77, 163, 255, 0.35);
+  box-shadow: var(--shadow);
+}
+
+.chart-card h4 {
+  margin: 0 0 0.85rem;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.chart-card .chart-canvas-wrap {
+  position: relative;
+  height: 240px;
+}
+
+.chart-card canvas {
+  max-height: 100%;
+}
+
+footer.site-footer {
+  padding: 2.25rem 1.5rem;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 52rem;
+  margin: 0 auto;
+  border-top: 1px solid var(--border);
+  line-height: 1.5;
+}
+
+.leaflet-container {
+  font-family: var(--sans);
+  border-radius: var(--radius);
+}
