@@ -85,8 +85,23 @@
   };
   setChartDefaults();
 
-  const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear" }) => {
+  const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear", yAxisType = "linear" }) => {
     const p = palette();
+    const yScale = {
+      type: yAxisType,
+      title: yTitle ? { display: true, text: yTitle, color: p.muted } : { display: false },
+      grid: { color: p.rule, drawBorder: false },
+      ticks: { color: p.muted },
+    };
+    if (yAxisType === "logarithmic") {
+      yScale.ticks.callback = function (value) {
+        if (value === 50 || value === 75 || value === 100 || value === 150 || value === 200 ||
+            value === 300 || value === 500 || value === 1000) {
+          return value;
+        }
+        return null;
+      };
+    }
     return new Chart(canvas, {
       type: "line",
       data: { labels, datasets },
@@ -105,11 +120,7 @@
             grid: { color: p.rule, drawBorder: false },
             ticks: { color: p.muted, maxRotation: 0 },
           },
-          y: {
-            title: yTitle ? { display: true, text: yTitle, color: p.muted } : { display: false },
-            grid: { color: p.rule, drawBorder: false },
-            ticks: { color: p.muted },
-          },
+          y: yScale,
         },
         elements: {
           line: { tension: 0.25, borderWidth: 2 },
@@ -158,7 +169,13 @@
     Object.entries(ts.indexed.series).forEach(([key, s]) => {
       ds.push(datasetFrom(years, s, colors[key] ?? p.fg, { borderWidth: 2.2 }));
     });
-    makeLineChart(canvas, { labels: years, datasets: ds, yTitle: "Index (1990 = 100)", xTitle: "Year" });
+    makeLineChart(canvas, {
+      labels: years,
+      datasets: ds,
+      yTitle: "Index (1990 = 100, log scale)",
+      xTitle: "Year",
+      yAxisType: "logarithmic",
+    });
   };
 
   const buildUnemploymentChart = (ts) => {
