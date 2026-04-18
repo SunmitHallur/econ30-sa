@@ -608,7 +608,7 @@
         }
       });
     }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
-    ["question", "timeline", "macro", "inequality", "governance", "results", "map", "sources"]
+    ["question", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"]
       .forEach(id => { const sec = document.getElementById(id); if (sec) obs.observe(sec); });
   };
 
