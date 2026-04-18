@@ -521,6 +521,50 @@ a:hover { border-bottom-color: currentColor; }
 }
 .p-sig-dot { background: var(--good); }
 .p-ns-dot  { background: var(--fg-muted); opacity: 0.55; }
+
+.results-legend .legend-glossary {
+  flex-basis: 100%;
+  margin-top: 2px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--rule);
+  gap: 10px;
+}
+#glossary-select {
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: 4px 26px 4px 10px;
+  min-width: 160px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--fg-muted) 50%),
+                    linear-gradient(135deg, var(--fg-muted) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 52%, calc(100% - 9px) 52%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: border-color 120ms ease;
+}
+#glossary-select:hover,
+#glossary-select:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+.glossary-def {
+  font-size: 12.5px;
+  color: var(--fg);
+  line-height: 1.5;
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.glossary-def:empty::before {
+  content: "Select a term to see its definition.";
+  color: var(--fg-faint);
+  font-style: italic;
+}
 .tier-pill {
   display: inline-flex;
   align-items: center;

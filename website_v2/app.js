@@ -513,6 +513,16 @@
       grBody.appendChild(tr);
     });
 
+    // Glossary dropdown
+    const glossarySel = $("#glossary-select");
+    const glossaryDef = $("#glossary-def");
+    if (glossarySel && glossaryDef) {
+      glossarySel.addEventListener("change", () => {
+        const opt = glossarySel.selectedOptions[0];
+        glossaryDef.textContent = opt?.dataset?.def ?? "";
+      });
+    }
+
     // DW filter
     $("#dw-filter")?.addEventListener("change", e => {
       const hide = e.target.checked;

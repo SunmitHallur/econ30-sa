@@ -362,6 +362,27 @@
                     <h4>Diag</h4>
                     <p><span class="mono">DW</span> ≈ 2 &nbsp;·&nbsp; <span class="mono">BP</span>, <span class="mono">LB</span> &gt; 0.05 &nbsp;·&nbsp; click a row for coefficients</p>
                   </div>
+                  <div class="legend-row legend-glossary">
+                    <h4>Glossary</h4>
+                    <select id="glossary-select" aria-label="Glossary of statistical terms">
+                      <option value="" selected>Pick a term…</option>
+                      <option data-def="Smallest uncorrected p-value across a spec's non-intercept regressors. Ignores the fact that many specs were tested.">Raw p</option>
+                      <option data-def="Bonferroni-corrected p-value: raw p multiplied by the number of specs tested. Controls the family-wise error rate; most conservative.">Bonf (Bonferroni)</option>
+                      <option data-def="Benjamini–Hochberg adjusted p-value: controls the false discovery rate across all specs. Less conservative than Bonferroni; surviving BH is the strongest evidence shown here.">BH (Benjamini–Hochberg)</option>
+                      <option data-def="‘Not significant’ at α = 0.05. The spec's best p-value does not clear the 5% threshold even before any correction.">n/s</option>
+                      <option data-def="Durbin–Watson statistic on residuals. ≈ 2 means no serial correlation. &lt; 1.5 indicates positive autocorrelation — p-values from those specs are less trustworthy.">DW (Durbin–Watson)</option>
+                      <option data-def="Breusch–Pagan p-value for heteroskedasticity. p &gt; 0.05 means we can't reject homoskedastic residuals (good).">BP (Breusch–Pagan)</option>
+                      <option data-def="Ljung–Box Q(4) p-value: joint test for autocorrelation at lags 1–4. p &gt; 0.05 means no strong higher-order serial correlation (good).">LB (Ljung–Box)</option>
+                      <option data-def="Newey–West heteroskedasticity- and autocorrelation-consistent standard errors (lag 3). Used on every OLS spec in this battery.">HAC (Newey–West)</option>
+                      <option data-def="Coefficient of determination: share of variance in the outcome explained by the regressors. Higher is better but can be inflated with more regressors.">R²</option>
+                      <option data-def="Variance Inflation Factor. VIF &gt; 10 signals multicollinearity between regressors; visible on row expand.">VIF</option>
+                      <option data-def="F-test p-value for the joint null that all non-intercept coefficients are zero. Shown in the row expander.">F-test</option>
+                      <option data-def="Engle–Granger cointegration test. A low EG p with both series non-stationary (ADF p &gt; 0.05) suggests a long-run equilibrium relationship.">Cointegration (EG)</option>
+                      <option data-def="Chow test for a structural break at a chosen year (1996, the GEAR adoption). A small p suggests the regression coefficients differ before vs. after.">Chow test</option>
+                      <option data-def="Granger causality: does past X help predict Y beyond Y's own past? Reports p-values at 1, 2 and 3 lags. Not causation in the economic sense — only forecast precedence.">Granger</option>
+                    </select>
+                    <span id="glossary-def" class="glossary-def" aria-live="polite"></span>
+                  </div>
                 </div>
               </div>
             </article>
