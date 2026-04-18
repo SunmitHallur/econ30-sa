@@ -357,13 +357,25 @@
   const dwClass = v => v == null ? "" : (v < 1.2 || v > 2.8 ? "dw-bad" : (v < 1.5 || v > 2.5 ? "" : "dw-ok"));
   const pClass = v => v == null ? "" : (v < 0.05 ? "p-sig" : "p-notsig");
 
+  const tierFor = (r) => {
+    const bh = r.min_p_bh, bf = r.min_p_bonf, raw = r.min_p_raw;
+    if (bh != null && bh < 0.05) return { cls: "tier-bh", label: "BH", title: "Survives Benjamini-Hochberg" };
+    if (bf != null && bf < 0.05) return { cls: "tier-bonf", label: "Bonf", title: "Survives Bonferroni" };
+    if (raw != null && raw < 0.05) return { cls: "tier-raw", label: "Raw", title: "Significant at raw 5% only" };
+    return { cls: "tier-ns", label: "n/s", title: "Not significant at 5%" };
+  };
+  const tierPill = (r) => {
+    const t = tierFor(r);
+    return `<span class="tier-pill ${t.cls}" title="${t.title}">${t.label}</span>`;
+  };
+
   const makeRow = (r, idx) => {
     const tr = document.createElement("tr");
     tr.dataset.specId = r.spec_id;
     tr.dataset.dw = r.diagnostics.dw ?? "";
     tr.innerHTML = `
       <td class="num">${idx}</td>
-      <td>${r.y_label}</td>
+      <td><span class="outcome-cell">${tierPill(r)}${r.y_label}</span></td>
       <td>${r.x_labels.join(" + ")}</td>
       <td>${r.sample}</td>
       <td class="num">${fmt.n(r.n)}</td>
@@ -383,7 +395,7 @@
     const tr = document.createElement("tr");
     tr.dataset.dw = r.diagnostics.dw ?? "";
     tr.innerHTML = `
-      <td>${r.y_label}</td>
+      <td><span class="outcome-cell">${tierPill(r)}${r.y_label}</span></td>
       <td>${r.x_labels.join(" + ")}</td>
       <td>${r.sample}</td>
       <td class="num">${fmt.n(r.n)}</td>

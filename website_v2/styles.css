@@ -429,8 +429,10 @@ a:hover { border-bottom-color: currentColor; }
   border-left-color: var(--accent);
 }
 .results-scrolly-panel {
-  min-height: clamp(320px, 52vh, 640px);
-  padding-bottom: clamp(1rem, 4vh, 2.5rem);
+  padding-block: clamp(12px, 2.4vh, 28px);
+}
+.results-scrolly-panel + .results-scrolly-panel {
+  border-top: 1px dashed var(--rule);
 }
 .results-scrolly-reveal {
   transform-origin: 50% 0%;
@@ -447,8 +449,81 @@ a:hover { border-bottom-color: currentColor; }
     display: none;
   }
   .results-scrolly-panel {
-    min-height: clamp(260px, 45vh, 520px);
+    padding-block: clamp(10px, 2vh, 20px);
   }
+}
+
+/* ---------------- Results legend + tier pills ---------------- */
+.results-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px 20px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  background: var(--bg-elev);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.results-legend h4 {
+  margin: 0 0 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-faint);
+}
+.results-legend .tier-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.tier-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.tier-pill.tier-bh {
+  color: var(--good);
+  background: var(--accent-soft);
+  border-color: color-mix(in oklab, var(--good) 55%, transparent);
+}
+.tier-pill.tier-bonf {
+  color: var(--accent-strong);
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+}
+.tier-pill.tier-raw {
+  color: var(--warn);
+  background: color-mix(in oklab, var(--warn) 14%, transparent);
+  border-color: color-mix(in oklab, var(--warn) 45%, transparent);
+}
+.tier-pill.tier-ns {
+  color: var(--fg-muted);
+  background: var(--bg-sunken);
+  border-color: var(--rule);
+}
+.results-table td .tier-pill {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.outcome-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* ---------------- Results toolbar & tables ---------------- */
