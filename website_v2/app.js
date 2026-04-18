@@ -403,6 +403,7 @@
     if (next && next.classList.contains("row-expander") && next.dataset.specId === r.spec_id) {
       next.remove();
       tr.classList.remove("row-open");
+      window.refreshResultsScrolly?.();
       return;
     }
     // remove any other expander in this table
@@ -434,6 +435,7 @@
       </div>`;
     ex.appendChild(td);
     tr.after(ex);
+    window.refreshResultsScrolly?.();
   };
 
   const renderRegressionTables = (payload) => {
@@ -612,6 +614,7 @@
       buildScatterTop10Trade(panel);
       buildWGIChart(gov);
       renderRegressionTables(reg);
+      window.refreshResultsScrolly?.();
       buildMap(qlfs);
     } catch (err) {
       console.error("website_v2 load failed", err);

@@ -296,11 +296,24 @@
         </p>
       </div>
 
-      <div class="results-toolbar card">
-        <div class="metric">
-          <span class="metric-label">Specs run</span>
-          <span class="metric-value" id="m-total">–</span>
-        </div>
+      <div class="results-scrolly">
+        <div class="results-scrolly-inner">
+          <nav class="results-scrolly-rail" aria-label="Results sections">
+            <span class="results-scrolly-rail-item is-active" data-step="0">Summary</span>
+            <span class="results-scrolly-rail-item" data-step="1">Headline</span>
+            <span class="results-scrolly-rail-item" data-step="2">Full battery</span>
+            <span class="results-scrolly-rail-item" data-step="3">Breaks &amp; coint.</span>
+            <span class="results-scrolly-rail-item" data-step="4">Granger</span>
+          </nav>
+
+          <div class="results-scrolly-panels">
+            <article class="results-scrolly-panel" id="results-panel-metrics" data-step="0">
+              <div class="results-scrolly-reveal">
+                <div class="results-toolbar card">
+                  <div class="metric">
+                    <span class="metric-label">Specs run</span>
+                    <span class="metric-value" id="m-total">–</span>
+                  </div>
         <div class="metric">
           <span class="metric-label">Sig at 5% (raw)</span>
           <span class="metric-value" id="m-raw">–</span>
@@ -317,10 +330,14 @@
           <input type="checkbox" id="dw-filter" />
           <span>Hide specs with DW &lt; 1.5 (likely autocorrelated)</span>
         </label>
-      </div>
+                </div>
+              </div>
+            </article>
 
-      <div class="card">
-        <h3 class="card-title">Headline specifications</h3>
+            <article class="results-scrolly-panel" id="results-panel-headline" data-step="1">
+              <div class="results-scrolly-reveal">
+                <div class="card">
+                  <h3 class="card-title">Headline specifications</h3>
         <p class="card-sub">
           Click a row to expand coefficients and diagnostics. Diagnostics:
           Durbin-Watson (<span class="mono">DW</span>, ideal ≈ 2), Breusch-Pagan
@@ -340,11 +357,15 @@
             <tbody></tbody>
           </table>
         </div>
-      </div>
+                </div>
+              </div>
+            </article>
 
-      <div class="card">
-        <details>
-          <summary><h3 class="card-title inline">All specifications (<span id="all-count">–</span>)</h3></summary>
+            <article class="results-scrolly-panel" id="results-panel-all" data-step="2">
+              <div class="results-scrolly-reveal">
+                <div class="card">
+                  <details>
+                    <summary><h3 class="card-title inline">All specifications (<span id="all-count">–</span>)</h3></summary>
           <div class="table-wrap">
             <table id="all-table" class="results-table">
               <thead>
@@ -358,12 +379,16 @@
               <tbody></tbody>
             </table>
           </div>
-        </details>
-      </div>
+                  </details>
+                </div>
+              </div>
+            </article>
 
-      <div class="grid-2">
-        <div class="card">
-          <h3 class="card-title">Chow break at 1996 (GEAR)</h3>
+            <article class="results-scrolly-panel" id="results-panel-structural" data-step="3">
+              <div class="results-scrolly-reveal">
+                <div class="grid-2">
+                  <div class="card">
+                    <h3 class="card-title">Chow break at 1996 (GEAR)</h3>
           <div class="table-wrap">
             <table id="chow-table" class="results-table">
               <thead>
@@ -372,29 +397,38 @@
               <tbody></tbody>
             </table>
           </div>
-        </div>
-        <div class="card">
-          <h3 class="card-title">Engle-Granger cointegration</h3>
-          <div class="table-wrap">
-            <table id="coint-table" class="results-table">
-              <thead>
-                <tr><th>y</th><th>x</th><th>n</th><th>ADF y p</th><th>ADF x p</th><th>EG t</th><th>EG p</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                  </div>
+                  <div class="card">
+                    <h3 class="card-title">Engle-Granger cointegration</h3>
+                    <div class="table-wrap">
+                      <table id="coint-table" class="results-table">
+                        <thead>
+                          <tr><th>y</th><th>x</th><th>n</th><th>ADF y p</th><th>ADF x p</th><th>EG t</th><th>EG p</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
 
-      <div class="card">
-        <h3 class="card-title">Granger causality (p by lag)</h3>
-        <div class="table-wrap">
-          <table id="granger-table" class="results-table">
-            <thead>
-              <tr><th>Direction</th><th>n</th><th>lag 1</th><th>lag 2</th><th>lag 3</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+            <article class="results-scrolly-panel" id="results-panel-granger" data-step="4">
+              <div class="results-scrolly-reveal">
+                <div class="card">
+                  <h3 class="card-title">Granger causality (p by lag)</h3>
+                  <div class="table-wrap">
+                    <table id="granger-table" class="results-table">
+                      <thead>
+                        <tr><th>Direction</th><th>n</th><th>lag 1</th><th>lag 2</th><th>lag 3</th></tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -516,6 +550,9 @@
 
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="scrolly-results.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>

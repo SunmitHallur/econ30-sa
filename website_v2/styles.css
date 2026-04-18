@@ -395,6 +395,62 @@ a:hover { border-bottom-color: currentColor; }
 }
 .timeline a.kb-link { font-size: 13px; }
 
+/* ---------------- Results scrolly (GSAP ScrollTrigger) ---------------- */
+.results-scrolly {
+  margin-top: 1.25rem;
+}
+.results-scrolly-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 148px) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 40px);
+  align-items: start;
+}
+.results-scrolly-rail {
+  position: sticky;
+  top: 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+}
+.results-scrolly-rail-item {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid transparent;
+  line-height: 1.35;
+}
+.results-scrolly-rail-item.is-active {
+  color: var(--fg);
+  background: var(--bg-sunken);
+  border-left-color: var(--accent);
+}
+.results-scrolly-panel {
+  min-height: clamp(320px, 52vh, 640px);
+  padding-bottom: clamp(1rem, 4vh, 2.5rem);
+}
+.results-scrolly-reveal {
+  transform-origin: 50% 0%;
+}
+.results-scrolly--reduced .results-scrolly-reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+@media (max-width: 899px) {
+  .results-scrolly-inner {
+    grid-template-columns: 1fr;
+  }
+  .results-scrolly-rail {
+    display: none;
+  }
+  .results-scrolly-panel {
+    min-height: clamp(260px, 45vh, 520px);
+  }
+}
+
 /* ---------------- Results toolbar & tables ---------------- */
 .results-toolbar {
   display: flex;
