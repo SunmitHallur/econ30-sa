@@ -612,6 +612,30 @@
   // ------------------------------------------------------------
   // TOC highlight via IntersectionObserver
   // ------------------------------------------------------------
+
+
+  /** Build Gini + scatter charts when user opens the collapsible inequality panel so Chart.js reads non-zero dimensions. */
+  const wireLazyInequalityCharts = (ineq, panel) => {
+    const dm = document.querySelector(".chart-more");
+    if (!dm) {
+      buildGiniChart(ineq);
+      buildScatterTop10Trade(panel);
+      return;
+    }
+    let ran = false;
+    const build = () => {
+      if (ran) return;
+      ran = true;
+      buildGiniChart(ineq);
+      buildScatterTop10Trade(panel);
+      requestAnimationFrame(() => {
+        Chart.getChart(document.getElementById("chart-gini"))?.resize();
+        Chart.getChart(document.getElementById("chart-scatter-top10-trade"))?.resize();
+      });
+    };
+    dm.addEventListener("toggle", () => { if (dm.open) build(); });
+    if (dm.open) build();
+  };
   const wireTOC = () => {
     const links = $$(".topnav a");
     if (!links.length) return;
@@ -625,7 +649,7 @@
         }
       });
     }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
-    ["question", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"]
+    ["question", "from-the-ground", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"]
       .forEach(id => { const sec = document.getElementById(id); if (sec) obs.observe(sec); });
   };
 
@@ -649,8 +673,7 @@
       buildUnemploymentChart(ts);
       buildIncomeChart(ineq);
       buildWealthChart(ineq);
-      buildGiniChart(ineq);
-      buildScatterTop10Trade(panel);
+      wireLazyInequalityCharts(ineq, panel);
       buildWGIChart(gov);
       renderRegressionTables(reg);
       window.refreshResultsScrolly?.();

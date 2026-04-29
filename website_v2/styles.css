@@ -785,3 +785,113 @@ details summary h3 { display: inline; }
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* ---------------- Narrative-forward (ground + hero + readable) ---------------- */
+.hero { align-items: start; }
+.hero-figure {
+  height: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+.hero-photo-card {
+  margin: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
+.hero-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(240px, 32vh);
+  object-fit: cover;
+  background: var(--bg-sunken);
+}
+.hero-photo-card figcaption {
+  font-size: 12px;
+  color: var(--fg-muted);
+  padding: 8px 10px;
+  line-height: 1.45;
+  background: var(--bg-sunken);
+}
+.hero-chart-stack {
+  position: relative;
+  flex: 1;
+  min-height: clamp(200px, 28vw, 300px);
+}
+.hero-chart-caption {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  margin: 0 0 8px;
+  font-family: var(--font-sans);
+}
+.hero-details {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--fg-muted);
+  max-width: 65ch;
+}
+.hero-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+.hero-details-note { margin-top: 10px; }
+.hero-details .pills { margin-bottom: 0; margin-top: 10px; }
+
+.prose-max { max-width: 74ch; }
+.section-ground .section-lede { max-width: 78ch; }
+.ground-grid { align-items: start; }
+.ground-photo { margin: 0; }
+.ground-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--rule);
+  background: var(--bg-sunken);
+}
+.ground-photo figcaption {
+  font-size: 12.5px;
+  color: var(--fg-muted);
+  margin-top: 8px;
+  line-height: 1.45;
+}
+.ground-notes h3, .ground-kicker {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.chart-more {
+  margin-top: 8px;
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius-md);
+  padding: 0 14px 14px;
+  background: var(--bg-sunken);
+}
+.chart-more > summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--fg-muted);
+}
+.chart-more-inner { margin-top: 4px; }
+
+.results-plain { margin-bottom: 1.5rem; }
+.results-plain-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-size: 15px;
+  line-height: 1.58;
+}
+.results-plain-list li { margin-bottom: 10px; }
+.results-plain .card-sub {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
