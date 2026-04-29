@@ -241,17 +241,6 @@ a:hover { border-bottom-color: currentColor; }
 
 .meta-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
-.hero-figure {
-  position: relative;
-  background: var(--bg-elev);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-lg);
-  padding: 18px;
-  box-shadow: var(--shadow-md);
-  height: clamp(260px, 36vw, 380px);
-}
-/* Hero chart size is constrained in .hero-chart-stack (narrow column stays landscape, not pillar-tall). */
-
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
 }
@@ -788,56 +777,70 @@ details summary h3 { display: inline; }
 
 /* ---------------- Narrative-forward (ground + hero + readable) ---------------- */
 .hero { align-items: start; }
+/* One shell: avoid outer card + inner framed photo + bare chart (triple-border look). */
 .hero-figure {
+  position: relative;
   height: auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 16px;
-}
-.hero-photo-card {
-  margin: 0;
-  border-radius: var(--radius-md);
+  gap: 0;
+  padding: 0;
   overflow: hidden;
-  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in oklab, var(--rule) 78%, var(--bg-elev));
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-elev);
 }
-.hero-photo {
+.hero-figure .hero-photo-card {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+.hero-figure .hero-photo {
   display: block;
   width: 100%;
   height: auto;
-  max-height: min(240px, 32vh);
+  max-height: min(220px, 30vh);
   object-fit: cover;
   background: var(--bg-sunken);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
-.hero-photo-card figcaption {
+.hero-figure .hero-photo-card figcaption {
   font-size: 12px;
   color: var(--fg-muted);
-  padding: 8px 10px;
+  padding: 8px 12px;
   line-height: 1.45;
   background: var(--bg-sunken);
+  border-top: 1px solid color-mix(in oklab, var(--rule) 65%, transparent);
 }
 .hero-chart-stack {
-  position: relative;
   flex: 0 0 auto;
   width: 100%;
-  /* Keep the plot readable but short: avoids a narrow-tall Chart.js pillar beside the headline. */
-  height: clamp(150px, 18vw, 200px);
-  max-height: min(200px, 32vh);
   min-height: 0;
+  padding: 10px 12px 12px;
+  background: color-mix(in oklab, var(--bg-sunken) 92%, var(--bg-elev));
+  border-top: 1px solid color-mix(in oklab, var(--rule) 55%, transparent);
 }
-.hero-chart-stack canvas {
+.hero-chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: clamp(132px, 15vw, 178px);
+  max-height: min(182px, 30vh);
+}
+.hero-chart-canvas-wrap canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
-  max-height: 100%;
 }
 .hero-chart-caption {
   font-size: 12.5px;
   font-weight: 600;
   color: var(--fg-muted);
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   font-family: var(--font-sans);
+  letter-spacing: 0.01em;
 }
 .hero-details {
   margin-top: 8px;
