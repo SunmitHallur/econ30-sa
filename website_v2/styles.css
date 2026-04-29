@@ -895,3 +895,19 @@ details summary h3 { display: inline; }
   font-size: 13px;
   color: var(--fg-muted);
 }
+
+.ground-row-2 { margin-top: 28px; }
+.ground-photo-wide img {
+  width: 100%;
+  max-height: min(420px, 55vh);
+  object-fit: cover;
+}
+.inequality-map-figure { margin-bottom: 28px; overflow: hidden; }
+.inequality-map-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(480px, 60vh);
+  object-fit: contain;
+  background: var(--bg-sunken);
+}
