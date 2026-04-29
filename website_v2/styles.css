@@ -250,7 +250,7 @@ a:hover { border-bottom-color: currentColor; }
   box-shadow: var(--shadow-md);
   height: clamp(260px, 36vw, 380px);
 }
-.hero-figure canvas { width: 100% !important; height: 100% !important; }
+/* Hero chart size is constrained in .hero-chart-stack (narrow column stays landscape, not pillar-tall). */
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
@@ -819,8 +819,18 @@ details summary h3 { display: inline; }
 }
 .hero-chart-stack {
   position: relative;
-  flex: 1;
-  min-height: clamp(200px, 28vw, 300px);
+  flex: 0 0 auto;
+  width: 100%;
+  /* Keep the plot readable but short: avoids a narrow-tall Chart.js pillar beside the headline. */
+  height: clamp(150px, 18vw, 200px);
+  max-height: min(200px, 32vh);
+  min-height: 0;
+}
+.hero-chart-stack canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100%;
 }
 .hero-chart-caption {
   font-size: 12.5px;
