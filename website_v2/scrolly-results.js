@@ -1,5 +1,5 @@
 /* =============================================================
-   Econometric results — GSAP ScrollTrigger scrolly panels
+  Econometric results - GSAP ScrollTrigger scrolly panels
    ============================================================= */
 
 (() => {

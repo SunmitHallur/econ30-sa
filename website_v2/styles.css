@@ -1,5 +1,5 @@
 /* ============================================================
-   Econ 30 · SA integration — website_v2 styles
+  Econ 30 · SA integration - website_v2 styles
    ============================================================ */
 
 :root {
@@ -253,6 +253,7 @@ a:hover { border-bottom-color: currentColor; }
   border-top: 1px solid var(--rule);
 }
 .section-head { margin-bottom: 28px; }
+.section-head { text-align: center; }
 .section-head h2 {
   font-family: var(--font-serif);
   font-size: clamp(26px, 3.2vw, 36px);
@@ -276,6 +277,12 @@ a:hover { border-bottom-color: currentColor; }
   color: var(--fg);
 }
 .prose.narrow { max-width: 70ch; margin-top: 24px; }
+.prose,
+.prose.narrow {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
 .prose p { margin: 0 0 18px; }
 .prose strong { font-weight: 600; color: var(--fg); }
 
@@ -759,7 +766,7 @@ details summary h3 { display: inline; }
 }
 .footer p { margin: 0 0 6px; }
 
-/* ---------------- KB links — subtle highlight ---------------- */
+/* ---------------- KB links - subtle highlight ---------------- */
 .kb-link {
   background: var(--accent-soft);
   padding: 0 4px;

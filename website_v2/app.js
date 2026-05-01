@@ -1,5 +1,5 @@
 /* =============================================================
-   Econ 30 · SA integration — website_v2 / app.js
+  Econ 30 · SA integration - website_v2 / app.js
    Chart.js + Leaflet + regression-table renderer + theme toggle.
    ============================================================= */
 
@@ -334,7 +334,7 @@
       body: "Resource prices and FDI flows surge; non-mineral manufacturing stagnates." },
     { year: "2008–09", title: "Global financial crisis", kb: "trade-liberalization-sa-manufacturing",
       body: "Manufacturing contracts sharply; unemployment ratchets up." },
-    { year: "2009–18", title: "Zuma era — state capture", kb: "political-economy-of-transition",
+    { year: "2009–18", title: "Zuma era: state capture", kb: "political-economy-of-transition",
       body: "Governance indicators slide; rule of law and control of corruption decline." },
     { year: "2020–22", title: "COVID-19 shock", kb: "building-back-better-covid-jobs",
       body: "Largest single-year employment loss on record; partial rebound 2021–22." },
@@ -575,7 +575,7 @@
   };
 
   // ------------------------------------------------------------
-  // Leaflet map — country outline + province centroid bubbles
+  // Leaflet map - country outline + province centroid bubbles
   // ------------------------------------------------------------
   const provColor = r => r < 25 ? "#c7e7d7" : r < 32 ? "#83ccae" : r < 37 ? "#3a9a78" : "#134e3a";
   const PROV_COORDS = {
