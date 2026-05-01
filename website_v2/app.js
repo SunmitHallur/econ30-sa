@@ -677,6 +677,66 @@
       .forEach(id => { const sec = document.getElementById(id); if (sec) obs.observe(sec); });
   };
 
+  const wireGlobalScrollMotion = () => {
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.utils.toArray(".section").forEach((section) => {
+      gsap.fromTo(
+        section,
+        { opacity: 0.45, y: 36 },
+        {
+          opacity: 1,
+          y: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 88%",
+            end: "top 56%",
+            scrub: 0.55,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+    });
+
+    gsap.utils.toArray(".section-head, .card, .ground-photo, .prose p, .quote-tile").forEach((el) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 34 },
+        {
+          opacity: 1,
+          y: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 92%",
+            end: "top 66%",
+            scrub: 0.45,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+    });
+
+    const heroPhoto = document.querySelector(".hero-photo");
+    if (heroPhoto) {
+      gsap.to(heroPhoto, {
+        yPercent: 10,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      });
+    }
+  };
+
   // ------------------------------------------------------------
   // Boot
   // ------------------------------------------------------------
@@ -684,6 +744,7 @@
     renderTimeline();
     wireKBLinks();
     wireTOC();
+    wireGlobalScrollMotion();
     try {
       const [ts, ineq, gov, panel, reg, qlfs] = await Promise.all([
         fetchJSON("data/timeseries.json"),
