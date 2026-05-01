@@ -4,7 +4,7 @@ You are managing a personal knowledge base. Your job is to compile raw sources i
 
 ## Directory structure
 
-- `raw/` — Source documents. **Never modify these.**
+- `raw/` — Source documents. **Never modify these unless absolutely necessary(such as changing the name for formatting).**
 - `wiki/` — Compiled wiki. **You maintain this entirely.**
 - `wiki/index.md` — Master index. **Update this whenever you create or modify any article.**
 - `wiki/concepts/` — Concept articles (one concept per file).
@@ -41,7 +41,7 @@ tags:
 
 ## Processing new sources
 
-When the user adds files to `raw/`, follow this sequence:
+When the user adds files to the Knowledge Base, follow this sequence:
 
 1. **Read** the new source document(s).
 2. **Summarize** each in `wiki/summaries/[source-name].md`.
@@ -88,7 +88,7 @@ When asked to lint the wiki:
 
 ## Rules
 
-- **Never modify `raw/`.**
+- **Never modify the raw data.**
 - **Always update `wiki/index.md`** after any wiki change.
 - Prefer updating existing articles over creating near-duplicates.
 - When uncertain about categorization, create the article and note the ambiguity.
