@@ -126,14 +126,11 @@
           <a class="kb-link" href="#sources" data-kb="political-economy-of-transition">genuinely political</a>.
         </p>
         <blockquote class="callout">
-          <strong>What this page is not.</strong> A single-country time series
-          with <span class="mono">T ≤ 35</span> cannot identify causal effects.
-          Coefficients here should be read as conditional correlations.
-          Causal claims in the prose rely on papers in the
-          <a href="#sources">knowledge base</a>: synthetic-control evidence
-          on sanctions (Evenett; Chatterjee-Czajka-Gethin), local-labour-market
-          designs on trade liberalisation (Erten-Leight-Tregenna), and
-          wealth-distribution accounts (Chatterjee et al., WIL 2021).
+          <strong>How to read this page.</strong> This is a short national time series
+          (<span class="mono">T ≤ 35</span>), so the coefficients here show patterns, not proof of causation.
+          Causal arguments in the narrative come from external studies in the
+          <a href="#sources">knowledge base</a> — especially synthetic-control work on sanctions,
+          local labour-market evidence on tariff liberalisation, and wealth-distribution research.
         </blockquote>
       </div>
     </section>
@@ -177,10 +174,6 @@
         </figure>
       </div>
 
-      <blockquote class="callout">
-        Caveat vignettes summarise journalistic geography; they qualify — not replace —
-        causal estimates pinned in the bibliography.
-      </blockquote>
     </section>
 
     <!-- ============================================================ -->
@@ -374,6 +367,13 @@
           Summary first; full OLS tables with HAC errors and tier labels if you want every coefficient.
         </p>
       </div>
+      <div class="results-jump" aria-label="Jump to econometric subsections">
+        <a class="ghost-btn" href="#results-panel-metrics">Summary</a>
+        <a class="ghost-btn" href="#results-panel-headline">Headline</a>
+        <a class="ghost-btn" href="#results-panel-all">Full battery</a>
+        <a class="ghost-btn" href="#results-panel-structural">Breaks &amp; coint.</a>
+        <a class="ghost-btn" href="#results-panel-granger">Granger</a>
+      </div>
 
       <div class="card results-plain">
         <h3 class="card-title">Takeaways</h3>
@@ -383,7 +383,6 @@
           <li><strong>Unemployment stays the brake.</strong> Macro charts and the provincial map underline that integration did not engineer a labour-market catch-up.</li>
           <li><strong>Use the tables sparingly.</strong> They are exploratory; BH / Bonf / Raw tiers flag how far each correlation survives sceptical testing.</li>
         </ul>
-        <p class="card-sub">Technical detail: Newey–West HAC (lag&nbsp;3); multiple testing via Bonferroni and Benjamini–Hochberg.</p>
       </div>
 
       <div class="results-scrolly">
@@ -670,23 +669,6 @@
         </div>
       </div>
 
-      <div class="card" style="margin-top: 1.5rem;">
-        <h3 class="card-title">What this project can and cannot claim</h3>
-        <p>
-          Every figure above is either a direct calculation on a linked
-          dataset or a citation to a summarised primary source. HAC standard
-          errors, Bonferroni and Benjamini-Hochberg corrections, Chow and
-          Granger tests, and Engle-Granger cointegration were applied to
-          guard against spurious findings.
-        </p>
-        <ul class="link-list" style="margin-top: 10px;">
-          <li><strong>Can claim:</strong> South Africa's post-1994 integration coincided with large, persistent increases in top-income and wealth shares — and the trade/top-1% link is the single finding that survives every correction applied here.</li>
-          <li><strong>Can claim:</strong> Structural unemployment has not been dented by integration on any provincial or national measure.</li>
-          <li><strong>Cannot claim:</strong> That trade <em>caused</em> inequality, that GEAR <em>caused</em> any particular outcome, or that governance <em>causes</em> growth in this sample. These require designs beyond a 26–35-year national time series.</li>
-          <li><strong>Cannot claim:</strong> Robustness to survey-design differences in the Gini or to the coverage gaps in WIID post-2017 and WDI Gini generally.</li>
-        </ul>
-      </div>
-
       <div class="prose narrow" style="margin-top: 1.5rem;">
         <p>
           The honest reading is that South Africa bought macro stability and
@@ -696,6 +678,19 @@
           wave of policy — industrial strategy, spatial redress, labour-market
           activation — has to take as its starting point.
         </p>
+      </div>
+      <div class="card" style="margin-top: 1.25rem;">
+        <h3 class="card-title">Voices from the record</h3>
+        <blockquote class="callout" style="margin-top: 8px;">
+          "Districts with larger tariff cuts experienced significant declines in both formal and informal employment, driven primarily by manufacturing job losses."
+          <br />
+          <span class="mono">— Erten, Leight &amp; Tregenna (2018), as summarised in the knowledge base</span>
+        </blockquote>
+        <blockquote class="callout">
+          "The top 10% of wealth holders own 85–86% of household wealth ... [and] no decline in wealth inequality since the end of apartheid."
+          <br />
+          <span class="mono">— Chatterjee, Czajka &amp; Gethin (2021), as summarised in the knowledge base</span>
+        </blockquote>
       </div>
     </section>
 
@@ -745,6 +740,15 @@
             <li><a href="https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki/summaries/wealth-inequality-lab-south-africa.md" target="_blank" rel="noopener noreferrer">Chatterjee–Czajka–Gethin (WIL 2021)</a></li>
           </ul>
         </div>
+      </div>
+      <div class="card" style="margin-top: 0.75rem;">
+        <h3 class="card-title">Scope of claims (short version)</h3>
+        <ul class="link-list" style="margin-top: 8px;">
+          <li><strong>Can claim:</strong> Post-1994 integration coincides with persistent concentration in income and wealth, plus entrenched unemployment.</li>
+          <li><strong>Can claim:</strong> In this battery, the trade/top-income relationship is the most statistically durable pattern.</li>
+          <li><strong>Cannot claim:</strong> Causation from this national time series alone (trade→inequality, GEAR→outcomes, governance→growth).</li>
+          <li><strong>Cannot claim:</strong> Full robustness to survey-design differences and data-coverage gaps in inequality series.</li>
+        </ul>
       </div>
 
       <div class="card callout-card">
