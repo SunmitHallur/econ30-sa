@@ -105,6 +105,28 @@
 
     document.querySelector("#results details")?.addEventListener("toggle", refreshResultsScrolly);
 
+    const openFullBatteryIfTargeted = () => {
+      if (window.location.hash !== "#results-panel-all") return;
+      const details = document.querySelector("#results-panel-all details");
+      if (details && !details.open) {
+        details.open = true;
+        requestAnimationFrame(refreshResultsScrolly);
+      }
+    };
+
+    document.querySelectorAll('a[href="#results-panel-all"]').forEach((link) => {
+      link.addEventListener("click", () => {
+        const details = document.querySelector("#results-panel-all details");
+        if (details && !details.open) {
+          details.open = true;
+          requestAnimationFrame(refreshResultsScrolly);
+        }
+      });
+    });
+
+    window.addEventListener("hashchange", openFullBatteryIfTargeted);
+    openFullBatteryIfTargeted();
+
     let resizeT;
     window.addEventListener("resize", () => {
       clearTimeout(resizeT);
