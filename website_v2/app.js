@@ -352,19 +352,43 @@
     "political-economy-of-transition": "concepts",
     "building-back-better-covid-jobs": "summaries",
     "stats-sa-qlfs-p0211-2025q1": "summaries",
+    "trade-liberalization-local-labor-markets-south-africa": "summaries",
+    "quarterly-labour-force-survey": "concepts",
+    "labour-market-south-africa": "concepts",
+    "trade-liberalisation-south-africa": "concepts",
+    "wealth-inequality-lab-south-africa": "summaries",
+    "dataset-wiid-2025": "summaries",
+    "inequality-in-south-africa": "concepts",
+    "dataset-wgi-underlying-sources": "summaries",
+  };
+  const KB_BASE = "https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki";
+  const kbHref = (slug) => {
+    const folder = KB_FOLDER[slug] ?? "concepts";
+    return `${KB_BASE}/${folder}/${slug}.md`;
   };
   const renderTimeline = () => {
     const list = $("#timeline-list");
     if (!list) return;
     TIMELINE.forEach(item => {
-      const folder = KB_FOLDER[item.kb] ?? "concepts";
       const li = document.createElement("li");
       li.innerHTML = `
         <span class="year">${item.year}</span>
         <h4>${item.title}</h4>
         <p>${item.body}</p>
-        <a class="kb-link" href="../Knowledge Base/wiki/${folder}/${item.kb}.md" data-kb="${item.kb}">View source →</a>`;
+        <a class="kb-link" href="${kbHref(item.kb)}" target="_blank" rel="noopener noreferrer" data-kb="${item.kb}">View source →</a>`;
       list.appendChild(li);
+    });
+  };
+
+  const wireKBLinks = () => {
+    $$("a.kb-link[data-kb]").forEach(link => {
+      const slug = link.dataset.kb;
+      if (!slug) return;
+      if (link.getAttribute("href") === "#sources") {
+        link.setAttribute("href", kbHref(slug));
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener noreferrer");
+      }
     });
   };
 
@@ -658,6 +682,7 @@
   // ------------------------------------------------------------
   const boot = async () => {
     renderTimeline();
+    wireKBLinks();
     wireTOC();
     try {
       const [ts, ineq, gov, panel, reg, qlfs] = await Promise.all([
