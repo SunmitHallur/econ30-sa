@@ -403,6 +403,7 @@ a:hover { border-bottom-color: currentColor; }
   padding-top: 4px;
 }
 .results-scrolly-rail-item {
+  display: block;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -411,6 +412,7 @@ a:hover { border-bottom-color: currentColor; }
   border-radius: var(--radius-sm);
   border-left: 3px solid transparent;
   line-height: 1.35;
+  border-bottom: 0;
 }
 .results-scrolly-rail-item.is-active {
   color: var(--fg);
@@ -896,12 +898,6 @@ details summary h3 { display: inline; }
 .chart-more-inner { margin-top: 4px; }
 
 .results-plain { margin-bottom: 1.5rem; }
-.results-jump {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 10px 0 14px;
-}
 .results-plain-list {
   margin: 0;
   padding-left: 1.15rem;
