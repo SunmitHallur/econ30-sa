@@ -121,7 +121,7 @@ a:hover { border-bottom-color: currentColor; }
   padding: 12px var(--gutter);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 .brand {
   display: inline-flex;
@@ -131,6 +131,7 @@ a:hover { border-bottom-color: currentColor; }
   font-weight: 600;
   font-size: 14px;
   border: 0;
+  flex-shrink: 0;
 }
 .brand-dot {
   width: 10px; height: 10px;
@@ -139,18 +140,34 @@ a:hover { border-bottom-color: currentColor; }
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 .topnav {
-  display: flex;
-  gap: 14px;
+  flex: 1;
+  min-width: 0;
   margin-left: auto;
-  flex-wrap: wrap;
+  margin-right: 4px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, transparent, #fff 12px, #fff calc(100% - 12px), transparent);
+}
+.topnav::-webkit-scrollbar {
+  display: none;
+  height: 0;
 }
 .topnav a {
   color: var(--fg-muted);
-  font-size: 14.5px;
+  font-size: 13px;
   font-weight: 500;
   border: 0;
-  padding: 4px 8px;
+  padding: 4px 7px;
   border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .topnav a.active,
 .topnav a:hover {
@@ -172,6 +189,7 @@ a:hover { border-bottom-color: currentColor; }
   font-family: inherit;
   cursor: pointer;
   transition: background 120ms ease, transform 60ms ease;
+  flex-shrink: 0;
 }
 .ghost-btn:hover {
   background: var(--bg-sunken);
@@ -184,11 +202,25 @@ a:hover { border-bottom-color: currentColor; }
 .hero {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: clamp(64px, 12vw, 132px) var(--gutter) clamp(44px, 8vw, 94px);
+  padding: clamp(48px, 9vw, 104px) var(--gutter) clamp(40px, 7vw, 88px);
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 40px;
   align-items: center;
+}
+.hero-inner {
+  text-align: center;
+}
+.hero-inner .meta-row {
+  justify-content: center;
+}
+.hero-inner .hero-details {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.hero-inner .hero-details .pills {
+  justify-content: center;
 }
 .eyebrow {
   text-transform: uppercase;
@@ -200,10 +232,10 @@ a:hover { border-bottom-color: currentColor; }
 }
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(48px, 8vw, 92px);
-  line-height: 1.02;
+  font-size: clamp(38px, 6.2vw, 76px);
+  line-height: 1.05;
   letter-spacing: -0.01em;
-  margin: 0 0 22px;
+  margin: 0 0 18px;
   font-weight: 600;
 }
 .subtitle {
@@ -211,7 +243,7 @@ a:hover { border-bottom-color: currentColor; }
   font-size: clamp(21px, 2.35vw, 30px);
   line-height: 1.45;
   color: var(--fg);
-  margin: 0 0 26px;
+  margin: 0 auto 26px;
   max-width: 60ch;
 }
 .subtitle strong { color: var(--accent-strong); font-weight: 600; }
@@ -256,11 +288,15 @@ a:hover { border-bottom-color: currentColor; }
 .section-head { text-align: center; }
 .section-head h2 {
   font-family: var(--font-serif);
-  font-size: clamp(34px, 5vw, 56px);
+  font-size: clamp(30px, 4.4vw, 50px);
   margin: 0 0 10px;
   line-height: 1.1;
   letter-spacing: -0.005em;
   font-weight: 600;
+}
+.section-head .section-lede {
+  margin-left: auto;
+  margin-right: auto;
 }
 .section-lede {
   color: var(--fg-muted);
@@ -306,7 +342,10 @@ a:hover { border-bottom-color: currentColor; }
   box-shadow: var(--shadow-md);
   margin-bottom: 24px;
 }
-.card-head { margin: 0 0 12px; }
+.card-head {
+  margin: 0 0 12px;
+  text-align: center;
+}
 .card-head h3,
 .card-title {
   font-family: var(--font-serif);
@@ -315,9 +354,16 @@ a:hover { border-bottom-color: currentColor; }
   margin: 0 0 6px;
   color: var(--fg);
 }
-.card-head p, .card-sub {
+.card-head p,
+.card-sub {
   color: var(--fg-muted);
   font-size: 16px;
+}
+.card-head p {
+  margin: 0 auto 6px;
+  max-width: 68ch;
+}
+.card-sub {
   margin: 0 0 6px;
 }
 .card-title.inline { display: inline; }
@@ -331,6 +377,7 @@ a:hover { border-bottom-color: currentColor; }
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+  align-items: stretch;
 }
 @media (max-width: 860px) {
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -355,17 +402,20 @@ a:hover { border-bottom-color: currentColor; }
   background: var(--bg-elev);
   border: 1px solid var(--rule);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 22px 20px 20px;
   position: relative;
+  text-align: center;
   transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
 }
 .timeline li::before {
   counter-increment: tline;
   content: counter(tline, decimal-leading-zero);
+  display: block;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--fg-faint);
   letter-spacing: 0.06em;
+  margin-bottom: 2px;
 }
 .timeline li:hover {
   transform: translateY(-2px);
@@ -376,7 +426,7 @@ a:hover { border-bottom-color: currentColor; }
   font-family: var(--font-serif);
   font-size: 22px;
   font-weight: 600;
-  margin: 4px 0 6px;
+  margin: 2px 0 6px;
 }
 .timeline .year {
   font-family: var(--font-mono);
@@ -387,9 +437,14 @@ a:hover { border-bottom-color: currentColor; }
 .timeline p {
   font-size: 16px;
   color: var(--fg-muted);
-  margin: 6px 0 0;
+  margin: 6px auto 0;
+  max-width: 36ch;
 }
-.timeline a.kb-link { font-size: 13px; }
+.timeline a.kb-link {
+  font-size: 13px;
+  display: inline-block;
+  margin-top: 8px;
+}
 
 /* ---------------- Results scrolly (GSAP ScrollTrigger) ---------------- */
 .results-scrolly {
@@ -746,11 +801,74 @@ details summary h3 { display: inline; }
 /* ---------------- Lists, footer ---------------- */
 .link-list { list-style: none; padding: 0; margin: 0; }
 .link-list li {
-  padding: 10px 0;
+  padding: 12px 6px;
   border-bottom: 1px dashed var(--rule);
   font-size: 16px;
 }
 .link-list li:last-child { border-bottom: 0; }
+
+/* Sources: match centered section rhythm; equal card rhythm */
+#sources .grid-3 .card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 0;
+  padding: 30px 26px 28px;
+}
+#sources .grid-3 .card .card-title {
+  margin: 0 0 4px;
+}
+#sources .link-list {
+  flex: 1;
+  text-align: center;
+}
+#sources .link-list li {
+  padding: 14px 10px;
+  text-align: center;
+  text-wrap: balance;
+}
+#sources .link-list a {
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
+}
+#sources .link-list a:hover {
+  border-bottom-color: currentColor;
+}
+#sources > .card {
+  text-align: center;
+  padding: 30px 26px 28px;
+}
+#sources > .card .card-title {
+  margin: 0 0 8px;
+}
+#sources > .card .link-list {
+  text-align: center;
+  max-width: 72ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+#sources > .card .link-list li {
+  text-align: center;
+  padding: 14px 10px;
+}
+#sources .callout-card {
+  text-align: center;
+  padding: 30px 26px 28px;
+}
+#sources .callout-card .card-title {
+  margin: 0 0 14px;
+}
+#sources .callout-card ol {
+  text-align: left;
+  max-width: 72ch;
+  margin: 0 auto;
+  padding-left: 1.25rem;
+}
+#sources .callout-card li {
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 1.55;
+}
 
 .callout-card { background: color-mix(in oklab, var(--accent-soft) 55%, var(--bg-elev)); }
 .callout-card ol { padding-left: 18px; margin: 4px 0 0; }
@@ -881,6 +999,10 @@ details summary h3 { display: inline; }
   color: var(--fg-muted);
   margin-top: 8px;
   line-height: 1.45;
+  text-align: center;
+  max-width: 72ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 .ground-notes h3, .ground-kicker {
   font-family: var(--font-serif);
@@ -953,6 +1075,7 @@ details summary h3 { display: inline; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  text-align: center;
 }
 .quote-text {
   margin: 0 0 16px;
@@ -960,6 +1083,7 @@ details summary h3 { display: inline; }
   font-size: 20px;
   line-height: 1.45;
   color: var(--fg);
+  text-wrap: balance;
 }
 .quote-source {
   margin: 0;
