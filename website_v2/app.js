@@ -336,6 +336,8 @@
       body: "Manufacturing contracts sharply; unemployment ratchets up." },
     { year: "2009–18", title: "Zuma era: state capture", kb: "political-economy-of-transition",
       body: "Governance indicators slide; rule of law and control of corruption decline." },
+    { year: "2017", title: "Sovereign rating downgrades", kb: "trade-liberalisation-south-africa",
+      body: "South Africa loses investment-grade status; borrowing costs rise amid weak trend growth." },
     { year: "2020–22", title: "COVID-19 shock", kb: "building-back-better-covid-jobs",
       body: "Largest single-year employment loss on record; partial rebound 2021–22." },
     { year: "2024–25", title: "QLFS Q1 2025: u = 32.9%", kb: "stats-sa-qlfs-p0211-2025q1",
@@ -369,15 +371,129 @@
   const renderTimeline = () => {
     const list = $("#timeline-list");
     if (!list) return;
-    TIMELINE.forEach(item => {
+    TIMELINE.forEach((item, idx) => {
       const li = document.createElement("li");
-      li.innerHTML = `
-        <span class="year">${item.year}</span>
-        <h4>${item.title}</h4>
-        <p>${item.body}</p>
-        <a class="kb-link" href="${kbHref(item.kb)}" target="_blank" rel="noopener noreferrer" data-kb="${item.kb}">View source →</a>`;
+      const above = idx % 2 === 0;
+      li.className = `timeline-node ${above ? "timeline-node--above" : "timeline-node--below"}`;
+      const cardInner = `
+          <span class="timeline-idx">${String(idx + 1).padStart(2, "0")}</span>
+          <span class="year">${item.year}</span>
+          <h4>${item.title}</h4>
+          <p>${item.body}</p>
+          <a class="kb-link" href="${kbHref(item.kb)}" target="_blank" rel="noopener noreferrer" data-kb="${item.kb}">View source →</a>`;
+      li.innerHTML = above
+        ? `<div class="timeline-card">${cardInner}</div>
+        <span class="timeline-stem timeline-stem--up" aria-hidden="true"></span>
+        <span class="timeline-dot" aria-hidden="true"></span>`
+        : `<span class="timeline-dot" aria-hidden="true"></span>
+        <span class="timeline-stem timeline-stem--down" aria-hidden="true"></span>
+        <div class="timeline-card">${cardInner}</div>`;
       list.appendChild(li);
     });
+  };
+
+  const wireTimelineAutoscroll = () => {
+    const scrollEl = $("#timeline-scroll");
+    const shell = $("#timeline-shell");
+    const label = $("#timeline-autoplay-label");
+    const resumeBtn = $("#timeline-resume");
+    if (!scrollEl || !shell) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let pausedByUser = false;
+    let sectionVisible = false;
+    let rafId = 0;
+    const speed = 0.35;
+
+    const syncChrome = () => {
+      scrollEl.classList.toggle("is-autoplay-paused", pausedByUser || reduceMotion);
+      if (label) {
+        if (reduceMotion) {
+          label.textContent = "Reduced motion is on: scroll the timeline manually.";
+        } else if (pausedByUser) {
+          label.textContent = "Autoplay paused. Drag or swipe the timeline, or tab to links.";
+        } else {
+          label.textContent = "Timeline scrolls automatically while this section is visible. Click or drag anywhere on the rail to pause.";
+        }
+      }
+      if (resumeBtn) {
+        resumeBtn.hidden = reduceMotion || !pausedByUser;
+      }
+    };
+
+    const pause = () => {
+      if (reduceMotion) return;
+      pausedByUser = true;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      syncChrome();
+    };
+
+    const resume = () => {
+      pausedByUser = false;
+      syncChrome();
+    };
+
+    const tick = () => {
+      if (reduceMotion || pausedByUser || !sectionVisible) {
+        rafId = 0;
+        return;
+      }
+      const max = scrollEl.scrollWidth - scrollEl.clientWidth;
+      if (max <= 0) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+      scrollEl.scrollLeft += speed;
+      if (scrollEl.scrollLeft >= max - 0.5) scrollEl.scrollLeft = 0;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const startIfNeeded = () => {
+      if (reduceMotion || pausedByUser || !sectionVisible) return;
+      if (rafId) return;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    resumeBtn?.addEventListener("click", () => {
+      resume();
+      startIfNeeded();
+    });
+
+    scrollEl.addEventListener(
+      "pointerdown",
+      (e) => {
+        if (e.button !== 0) return;
+        pause();
+      },
+      { passive: true }
+    );
+    scrollEl.addEventListener("wheel", () => pause(), { passive: true });
+    scrollEl.addEventListener("touchstart", pause, { passive: true });
+    scrollEl.addEventListener("focusin", pause);
+    window.addEventListener("resize", () => {
+      if (sectionVisible) startIfNeeded();
+    });
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          sectionVisible = en.isIntersecting;
+          if (sectionVisible) startIfNeeded();
+          else if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+        });
+      },
+      { root: null, threshold: 0.12 }
+    );
+    io.observe(shell);
+
+    syncChrome();
+    if (!reduceMotion) startIfNeeded();
   };
 
   const wireKBLinks = () => {
@@ -742,6 +858,7 @@
   // ------------------------------------------------------------
   const boot = async () => {
     renderTimeline();
+    wireTimelineAutoscroll();
     wireKBLinks();
     wireTOC();
     wireGlobalScrollMotion();

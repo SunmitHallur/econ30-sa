@@ -183,8 +183,7 @@
       <div class="section-head">
         <h2>3 · Policy timeline</h2>
         <p class="section-lede">
-          Hover a node to see what happened, and which source
-          covers it.
+          Scroll the rail to move through time. It scrolls on its own until you click or drag; use <strong>Resume autoplay</strong> to turn motion back on.
         </p>
       </div>
 
@@ -193,7 +192,24 @@
         <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005): Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo before the session "The G-8 and Africa: Rhetoric or Action?". Copyright World Economic Forum.</figcaption>
       </figure>
 
-      <ol class="timeline" id="timeline-list" aria-label="Post-1990 policy timeline"></ol>
+      <div class="timeline-scroll-shell" id="timeline-shell">
+        <div class="timeline-autoplay-bar">
+          <p class="timeline-autoplay-hint" id="timeline-autoplay-label" role="status">
+            Timeline scrolls automatically when this section is in view.
+          </p>
+          <button type="button" class="ghost-btn timeline-resume-btn" id="timeline-resume" hidden>
+            Resume autoplay
+          </button>
+        </div>
+        <div
+          class="timeline-h-scroll"
+          id="timeline-scroll"
+          tabindex="0"
+          aria-label="Policy timeline: drag or swipe horizontally"
+        >
+          <ol class="timeline timeline-rail" id="timeline-list"></ol>
+        </div>
+      </div>
     </section>
 
     <!-- ============================================================ -->
