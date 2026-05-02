@@ -439,7 +439,7 @@ figure.card .chart-canvas-wrap {
   z-index: 1;
 }
 
-/* Axis matches vertical centre of each column (grid row 2) */
+/* Axis: solid line the full width of the rail (gradients looked “broken” when scrolled into the fade zones). */
 .timeline-rail.timeline::before {
   content: "";
   position: absolute;
@@ -450,14 +450,9 @@ figure.card .chart-canvas-wrap {
   transform: translateY(-50%);
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(in oklab, var(--accent) 35%, var(--rule-strong)) 12%,
-    color-mix(in oklab, var(--accent) 35%, var(--rule-strong)) 88%,
-    transparent 100%
-  );
+  background: color-mix(in oklab, var(--accent) 42%, var(--rule-strong));
   border-radius: 2px;
+  opacity: 0.95;
 }
 
 .timeline-node {
