@@ -855,6 +855,26 @@
     }
   };
 
+  /** Chart.js bitmap must match CSS box size; call after layout settles (esp. after wrapper CSS fix). */
+  const resizeRegisteredCharts = () => {
+    if (typeof Chart === "undefined") return;
+    [
+      "chart-hero",
+      "chart-indexed",
+      "chart-unemployment",
+      "chart-income-shares",
+      "chart-wealth-shares",
+      "chart-gini",
+      "chart-scatter-top10-trade",
+      "chart-wgi",
+    ].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const c = Chart.getChart(el);
+      if (c) c.resize();
+    });
+  };
+
   // ------------------------------------------------------------
   // Boot
   // ------------------------------------------------------------
@@ -883,6 +903,9 @@
       renderRegressionTables(reg);
       window.refreshResultsScrolly?.();
       buildMap(qlfs);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(resizeRegisteredCharts);
+      });
     } catch (err) {
       console.error("website_v2 load failed", err);
       const warn = document.createElement("div");

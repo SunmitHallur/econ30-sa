@@ -383,9 +383,20 @@ a:hover { border-bottom-color: currentColor; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
 }
 
-.card canvas {
-  width: 100% !important;
-  height: clamp(290px, 30vw, 420px) !important;
+/* Chart.js: size the wrapper; never use !important on the canvas (overrides Chart.js inline size and stretches text). */
+.chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: clamp(300px, 32vw, 440px);
+  min-height: 280px;
+}
+figure.card .chart-canvas-wrap {
+  margin-top: 4px;
+}
+.chart-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* ---------------- Timeline (horizontal rail + axis) ---------------- */
@@ -1102,11 +1113,12 @@ details summary h3 { display: inline; }
   width: 100%;
   height: clamp(180px, 18vw, 240px);
   max-height: min(250px, 34vh);
+  min-height: 160px;
 }
 .hero-chart-canvas-wrap canvas {
   display: block;
-  width: 100% !important;
-  height: 100% !important;
+  width: 100%;
+  height: 100%;
 }
 .hero-chart-caption {
   font-size: 14.5px;
