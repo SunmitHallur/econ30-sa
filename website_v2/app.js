@@ -383,10 +383,16 @@
           <a class="kb-link" href="${kbHref(item.kb)}" target="_blank" rel="noopener noreferrer" data-kb="${item.kb}">View source →</a>`;
       li.innerHTML = above
         ? `<div class="timeline-card">${cardInner}</div>
-        <span class="timeline-stem timeline-stem--up" aria-hidden="true"></span>
-        <span class="timeline-dot" aria-hidden="true"></span>`
-        : `<span class="timeline-dot" aria-hidden="true"></span>
-        <span class="timeline-stem timeline-stem--down" aria-hidden="true"></span>
+        <div class="timeline-axis-slot" aria-hidden="true">
+          <span class="timeline-stem timeline-stem--up"></span>
+          <span class="timeline-dot"></span>
+        </div>
+        <div class="timeline-fill" aria-hidden="true"></div>`
+        : `<div class="timeline-fill" aria-hidden="true"></div>
+        <div class="timeline-axis-slot" aria-hidden="true">
+          <span class="timeline-dot"></span>
+          <span class="timeline-stem timeline-stem--down"></span>
+        </div>
         <div class="timeline-card">${cardInner}</div>`;
       list.appendChild(li);
     });
@@ -395,8 +401,6 @@
   const wireTimelineAutoscroll = () => {
     const scrollEl = $("#timeline-scroll");
     const shell = $("#timeline-shell");
-    const label = $("#timeline-autoplay-label");
-    const resumeBtn = $("#timeline-resume");
     if (!scrollEl || !shell) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -407,18 +411,6 @@
 
     const syncChrome = () => {
       scrollEl.classList.toggle("is-autoplay-paused", pausedByUser || reduceMotion);
-      if (label) {
-        if (reduceMotion) {
-          label.textContent = "Reduced motion is on: scroll the timeline manually.";
-        } else if (pausedByUser) {
-          label.textContent = "Autoplay paused. Drag or swipe the timeline, or tab to links.";
-        } else {
-          label.textContent = "Timeline scrolls automatically while this section is visible. Click or drag anywhere on the rail to pause.";
-        }
-      }
-      if (resumeBtn) {
-        resumeBtn.hidden = reduceMotion || !pausedByUser;
-      }
     };
 
     const pause = () => {
@@ -457,10 +449,13 @@
       rafId = requestAnimationFrame(tick);
     };
 
-    resumeBtn?.addEventListener("click", () => {
+    const onDocPointerDown = (e) => {
+      if (shell.contains(e.target)) return;
       resume();
       startIfNeeded();
-    });
+    };
+
+    document.addEventListener("pointerdown", onDocPointerDown, true);
 
     scrollEl.addEventListener(
       "pointerdown",
@@ -473,6 +468,13 @@
     scrollEl.addEventListener("wheel", () => pause(), { passive: true });
     scrollEl.addEventListener("touchstart", pause, { passive: true });
     scrollEl.addEventListener("focusin", pause);
+    shell.addEventListener("focusout", (e) => {
+      const next = e.relatedTarget;
+      if (next && shell.contains(next)) return;
+      resume();
+      startIfNeeded();
+    });
+
     window.addEventListener("resize", () => {
       if (sectionVisible) startIfNeeded();
     });
