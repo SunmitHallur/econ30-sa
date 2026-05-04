@@ -511,7 +511,8 @@
     if (!scrollEl || !shell) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const autoplay = scrollEl.dataset.autoplay === "true";
+    /* Autoplay unless explicitly opted out (attribute missing = on, matching original behaviour). */
+    const autoplay = scrollEl.dataset.autoplay !== "false";
     let pausedByUser = false;
     let sectionVisible = false;
     let rafId = 0;
