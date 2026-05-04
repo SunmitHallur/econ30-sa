@@ -46,8 +46,8 @@
     const cur = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     localStorage.setItem(themeKey, cur);
     applyTheme(cur);
-    // Chart.js does not auto-update; rebuild charts on theme flip.
-    Chart.helpers?.each?.(Chart.instances ?? {}, c => c.update());
+    // Chart.js snapshots palette at construction; v4 has no reliable global instances iterator.
+    refreshAllChartsForTheme();
   });
 
   // ------------------------------------------------------------
@@ -84,6 +84,29 @@
     Chart.defaults.plugins.tooltip.cornerRadius = 6;
   };
   setChartDefaults();
+
+  /** Chart.js merges defaults at build time; theme flip must push fresh CSS-derived colors into each instance. */
+  const applyPaletteToChart = chart => {
+    const p = palette();
+    const o = chart.options;
+    if (o.plugins?.legend?.labels) o.plugins.legend.labels.color = p.fg;
+    if (o.color !== undefined) o.color = p.muted;
+    Object.values(o.scales || {}).forEach(scale => {
+      if (!scale || typeof scale !== "object") return;
+      if (scale.ticks) scale.ticks.color = p.muted;
+      if (scale.grid) scale.grid.color = p.rule;
+      if (scale.title?.display) scale.title.color = p.muted;
+    });
+    chart.update();
+  };
+
+  const refreshAllChartsForTheme = () => {
+    setChartDefaults();
+    document.querySelectorAll("canvas").forEach(canvas => {
+      const c = typeof Chart !== "undefined" && Chart.getChart ? Chart.getChart(canvas) : null;
+      if (c) applyPaletteToChart(c);
+    });
+  };
 
   const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear", yAxisType = "linear" }) => {
     const p = palette();
@@ -1045,14 +1068,17 @@
     },
   ];
 
+  /** Horizontal offset for side faces; scales down on narrow rings (fixed 60px used to stack all slides). */
   const quoteOrbitCalcGap = width => {
-    const minWidth = 1024;
-    const maxWidth = 1456;
-    const minGap = 60;
+    const minW = 420;
+    const maxW = 1456;
+    const minGap = 20;
     const maxGap = 86;
-    if (width <= minWidth) return minGap;
-    if (width >= maxWidth) return Math.max(minGap, maxGap + 0.06018 * (width - maxWidth));
-    return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
+    const w = Math.max(0, width);
+    if (w <= minW) return minGap;
+    if (w >= maxW) return Math.max(minGap, maxGap + 0.06018 * (w - maxW));
+    const t = (w - minW) / (maxW - minW);
+    return minGap + (maxGap - minGap) * t;
   };
 
   const wireQuoteOrbit = () => {
@@ -1095,8 +1121,12 @@
     };
 
     const applyFaceStyles = () => {
-      const gap = quoteOrbitCalcGap(ring.offsetWidth || 1024);
-      const maxStickUp = gap * 0.8;
+      const rw = ring.offsetWidth || 400;
+      const gap = quoteOrbitCalcGap(rw);
+      /* Upward offset spilled over the section title on small stages; keep flat below ~720px. */
+      const maxStickUp =
+        rw >= 720 ? Math.min(gap * 0.5, rw * 0.045) : 0;
+      const singleSlide = rw < 420;
       const rot = reduce ? 0 : 15;
       const ease = "all 0.8s cubic-bezier(0.4, 2, 0.3, 1)";
 
@@ -1111,6 +1141,11 @@
           el.style.opacity = "1";
           el.style.pointerEvents = "auto";
           el.style.transform = "translateX(0) translateY(0) scale(1) rotateY(0deg)";
+        } else if (singleSlide) {
+          el.style.zIndex = "1";
+          el.style.opacity = "0";
+          el.style.pointerEvents = "none";
+          el.style.transform = "translateX(0) translateY(8px) scale(0.92) rotateY(0deg)";
         } else if (isLeft) {
           el.style.zIndex = "2";
           el.style.opacity = "1";

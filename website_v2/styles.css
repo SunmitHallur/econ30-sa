@@ -97,11 +97,13 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  color: var(--accent);
-  opacity: 0.1;
+  /* Neutral strokes — avoid a mint “green box” read in dark theme */
+  color: color-mix(in oklab, var(--fg-muted) 82%, var(--accent));
+  opacity: 0.055;
 }
 :root[data-theme="dark"] .ambient-paths {
-  opacity: 0.13;
+  color: var(--fg-muted);
+  opacity: 0.045;
 }
 .ambient-paths-svg {
   width: 100%;
@@ -1587,23 +1589,9 @@ details summary h3 { display: inline; }
   position: relative;
   min-width: 0;
 }
+/* Decorative slab behind charts — disabled (read as an unwanted green/grey blob). */
 .chart-mockup__charts-deco {
-  position: absolute;
-  left: 10%;
-  right: 6%;
-  top: 10%;
-  bottom: -4%;
-  border-radius: var(--radius-lg);
-  background: color-mix(in oklab, var(--bg-sunken) 88%, var(--fg));
-  filter: blur(2px);
-  opacity: 0.5;
-  z-index: 0;
-  transform: translateY(5%) scale(0.97);
-  pointer-events: none;
-}
-:root[data-theme="dark"] .chart-mockup__charts-deco {
-  opacity: 0.42;
-  background: color-mix(in oklab, var(--bg) 70%, var(--accent) 12%);
+  display: none;
 }
 .chart-mockup__charts-stack {
   position: relative;
@@ -1649,13 +1637,6 @@ details summary h3 { display: inline; }
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .chart-mockup__charts-deco {
-    filter: none;
-    transform: none;
-    opacity: 0.35;
-  }
-}
 .inequality-map-preface {
   margin-bottom: clamp(28px, 4vw, 44px);
 }
@@ -1772,6 +1753,8 @@ details summary h3 { display: inline; }
   width: 100%;
   min-height: 220px;
   height: clamp(220px, 48vw, 340px);
+  overflow: hidden;
+  border-radius: var(--radius-lg);
 }
 @media (min-width: 900px) {
   .quote-orbit__stage {
