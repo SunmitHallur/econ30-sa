@@ -513,7 +513,6 @@
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     /* Autoplay unless explicitly opted out (attribute missing = on, matching original behaviour). */
     const autoplay = scrollEl.dataset.autoplay !== "false";
-    let sectionVisible = false;
     let rafId = 0;
     const speed = 0.22;
 
@@ -522,7 +521,7 @@
     };
 
     const tick = () => {
-      if (reduceMotion || !sectionVisible) {
+      if (reduceMotion || !autoplay) {
         rafId = 0;
         return;
       }
@@ -537,32 +536,17 @@
     };
 
     const startIfNeeded = () => {
-      if (!autoplay || reduceMotion || !sectionVisible) return;
+      if (!autoplay || reduceMotion) return;
       if (rafId) return;
       rafId = requestAnimationFrame(tick);
     };
 
     window.addEventListener("resize", () => {
-      if (sectionVisible) startIfNeeded();
+      startIfNeeded();
     });
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((en) => {
-          sectionVisible = en.isIntersecting;
-          if (sectionVisible) startIfNeeded();
-          else if (rafId) {
-            cancelAnimationFrame(rafId);
-            rafId = 0;
-          }
-        });
-      },
-      { root: null, threshold: 0.12 }
-    );
-    io.observe(shell);
-
     syncChrome();
-    if (autoplay && !reduceMotion) startIfNeeded();
+    startIfNeeded();
   };
 
   const wireKBLinks = () => {
