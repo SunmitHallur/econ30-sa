@@ -513,32 +513,16 @@
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     /* Autoplay unless explicitly opted out (attribute missing = on, matching original behaviour). */
     const autoplay = scrollEl.dataset.autoplay !== "false";
-    let pausedByUser = false;
     let sectionVisible = false;
     let rafId = 0;
     const speed = 0.22;
 
     const syncChrome = () => {
-      scrollEl.classList.toggle("is-autoplay-paused", !autoplay || pausedByUser || reduceMotion);
-    };
-
-    const pause = () => {
-      if (reduceMotion) return;
-      pausedByUser = true;
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-        rafId = 0;
-      }
-      syncChrome();
-    };
-
-    const resume = () => {
-      pausedByUser = false;
-      syncChrome();
+      scrollEl.classList.toggle("is-autoplay-paused", !autoplay || reduceMotion);
     };
 
     const tick = () => {
-      if (reduceMotion || pausedByUser || !sectionVisible) {
+      if (reduceMotion || !sectionVisible) {
         rafId = 0;
         return;
       }
@@ -553,56 +537,10 @@
     };
 
     const startIfNeeded = () => {
-      if (!autoplay || reduceMotion || pausedByUser || !sectionVisible) return;
+      if (!autoplay || reduceMotion || !sectionVisible) return;
       if (rafId) return;
       rafId = requestAnimationFrame(tick);
     };
-
-    const onDocPointerDown = (e) => {
-      if (shell.contains(e.target)) return;
-      resume();
-      startIfNeeded();
-    };
-
-    document.addEventListener("pointerdown", onDocPointerDown, true);
-
-    scrollEl.addEventListener(
-      "pointerdown",
-      (e) => {
-        if (e.button !== 0) return;
-        pause();
-      },
-      { passive: true }
-    );
-    scrollEl.addEventListener("wheel", () => pause(), { passive: true });
-    scrollEl.addEventListener("touchstart", pause, { passive: true });
-    scrollEl.addEventListener("focusin", pause);
-    scrollEl.addEventListener("keydown", e => {
-      const step = Math.max(220, scrollEl.clientWidth * 0.72);
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        pause();
-        scrollEl.scrollBy({ left: step, behavior: reduceMotion ? "auto" : "smooth" });
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        pause();
-        scrollEl.scrollBy({ left: -step, behavior: reduceMotion ? "auto" : "smooth" });
-      } else if (e.key === "Home") {
-        e.preventDefault();
-        pause();
-        scrollEl.scrollTo({ left: 0, behavior: reduceMotion ? "auto" : "smooth" });
-      } else if (e.key === "End") {
-        e.preventDefault();
-        pause();
-        scrollEl.scrollTo({ left: scrollEl.scrollWidth, behavior: reduceMotion ? "auto" : "smooth" });
-      }
-    });
-    shell.addEventListener("focusout", (e) => {
-      const next = e.relatedTarget;
-      if (next && shell.contains(next)) return;
-      resume();
-      startIfNeeded();
-    });
 
     window.addEventListener("resize", () => {
       if (sectionVisible) startIfNeeded();
