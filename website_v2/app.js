@@ -970,7 +970,7 @@
 
   /**
    * Kokonut-style hand-drawn SVG loop (vanilla port of framer-motion pathLength).
-   * Fires once when #hand-scroll-ink enters the viewport; caption fades via CSS class.
+   * Fires once when #hand-scroll-ink enters the viewport; loop fades out after a short beat.
    */
   const wireHandScrollInk = () => {
     const root = document.getElementById("hand-scroll-ink");
@@ -984,13 +984,20 @@
       path.style.strokeDashoffset = String(len);
     }
 
+    const INK_HOLD_MS = 850;
+    const scheduleFadeOut = () => {
+      window.setTimeout(() => {
+        root.classList.add("hand-scroll-ink--fade-out");
+      }, INK_HOLD_MS);
+    };
+
     const finish = () => {
-      root.classList.add("hand-scroll-ink--done");
+      scheduleFadeOut();
     };
 
     if (reduce) {
       path.style.strokeDashoffset = "0";
-      finish();
+      root.classList.add("hand-scroll-ink--fade-out");
       return;
     }
 

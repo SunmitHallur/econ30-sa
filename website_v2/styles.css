@@ -528,6 +528,10 @@ a:hover { border-bottom-color: currentColor; }
   pointer-events: none;
   color: color-mix(in oklab, var(--accent) 55%, var(--fg-muted));
   opacity: 0.92;
+  transition: opacity 1.05s var(--ease-out);
+}
+.hand-scroll-ink--fade-out {
+  opacity: 0;
 }
 .hand-scroll-ink__svg {
   display: block;
@@ -537,26 +541,15 @@ a:hover { border-bottom-color: currentColor; }
 .hand-scroll-ink__path {
   vector-effect: non-scaling-stroke;
 }
-.hand-scroll-ink__caption {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(4px, 1.5vw, 14px);
-  transform: translateX(-50%) translateY(8px);
-  margin: 0;
+.section-head .section-question__themes {
+  margin: 0 auto clamp(14px, 2.2vw, 22px);
+  max-width: 65ch;
   font-family: var(--font-serif);
-  font-size: clamp(15px, 1.35vw, 18px);
+  font-size: clamp(14px, 1.25vw, 17px);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--fg-muted);
-  opacity: 0;
-  white-space: nowrap;
-  transition:
-    opacity 0.75s var(--ease-out) 0.35s,
-    transform 0.75s var(--ease-out) 0.35s;
-}
-.hand-scroll-ink--done .hand-scroll-ink__caption {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  line-height: 1.35;
 }
 .section-question .section-head {
   position: relative;
@@ -2036,14 +2029,19 @@ details summary h3 { display: inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hand-scroll-ink {
+    opacity: 0 !important;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    transition: none;
+  }
   .hand-scroll-ink__path {
     stroke-dashoffset: 0 !important;
     transition: none !important;
   }
-  .hand-scroll-ink__caption {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    transition: none;
+  .section-question .section-head {
+    padding-top: clamp(12px, 3vw, 28px);
   }
   .ambient-path {
     animation: none !important;
