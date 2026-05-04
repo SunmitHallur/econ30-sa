@@ -513,6 +513,7 @@
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     /* Autoplay unless explicitly opted out (attribute missing = on, matching original behaviour). */
     const autoplay = scrollEl.dataset.autoplay !== "false";
+    let sectionVisible = false;
     let rafId = 0;
     const speed = 0.22;
 
@@ -521,7 +522,7 @@
     };
 
     const tick = () => {
-      if (reduceMotion || !autoplay) {
+      if (reduceMotion || !autoplay || !sectionVisible) {
         rafId = 0;
         return;
       }
@@ -540,17 +541,41 @@
     };
 
     const startIfNeeded = () => {
-      if (!autoplay || reduceMotion) return;
+      if (!autoplay || reduceMotion || !sectionVisible) return;
+      const max = scrollEl.scrollWidth - scrollEl.clientWidth;
+      if (max > 0 && scrollEl.scrollLeft >= max - 0.5) {
+        /* If user re-enters after reaching the end, restart autoplay from the beginning. */
+        scrollEl.scrollLeft = 0;
+      }
       if (rafId) return;
       rafId = requestAnimationFrame(tick);
     };
 
     window.addEventListener("resize", () => {
-      startIfNeeded();
+      if (sectionVisible) startIfNeeded();
     });
 
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          sectionVisible = en.isIntersecting;
+          if (sectionVisible) {
+            startIfNeeded();
+          } else if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+        });
+      },
+      { root: null, threshold: 0.12 }
+    );
+    io.observe(shell);
+
     syncChrome();
-    startIfNeeded();
+    if (shell.getBoundingClientRect().top < window.innerHeight * 0.88) {
+      sectionVisible = true;
+      startIfNeeded();
+    }
   };
 
   const wireKBLinks = () => {
