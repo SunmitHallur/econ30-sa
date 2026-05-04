@@ -510,7 +510,6 @@
     const shell = $("#timeline-shell");
     if (!scrollEl || !shell) return;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     /* Autoplay unless explicitly opted out (attribute missing = on, matching original behaviour). */
     const autoplay = scrollEl.dataset.autoplay !== "false";
     let sectionVisible = false;
@@ -518,11 +517,11 @@
     const speed = 0.22;
 
     const syncChrome = () => {
-      scrollEl.classList.toggle("is-autoplay-paused", !autoplay || reduceMotion);
+      scrollEl.classList.toggle("is-autoplay-paused", !autoplay);
     };
 
     const tick = () => {
-      if (reduceMotion || !autoplay || !sectionVisible) {
+      if (!autoplay || !sectionVisible) {
         rafId = 0;
         return;
       }
@@ -541,7 +540,7 @@
     };
 
     const startIfNeeded = () => {
-      if (!autoplay || reduceMotion || !sectionVisible) return;
+      if (!autoplay || !sectionVisible) return;
       const max = scrollEl.scrollWidth - scrollEl.clientWidth;
       if (max > 0 && scrollEl.scrollLeft >= max - 0.5) {
         /* If user re-enters after reaching the end, restart autoplay from the beginning. */
