@@ -1254,25 +1254,27 @@
         const isRight = (active + 1) % n === i;
 
         if (isActive) {
-          el.style.zIndex = "3";
+          el.style.zIndex = "30";
           el.style.opacity = "1";
           el.style.pointerEvents = "auto";
-          el.style.transform = "translateX(0) translateY(0) scale(1) rotateY(0deg)";
+          /* translateZ last: moves along post-rotate local Z so center sits in front in 3D. */
+          el.style.transform =
+            "translateX(0) translateY(0) scale(1) rotateY(0deg) translateZ(72px)";
         } else if (singleSlide) {
           el.style.zIndex = "1";
           el.style.opacity = "0";
           el.style.pointerEvents = "none";
           el.style.transform = "translateX(0) translateY(8px) scale(0.92) rotateY(0deg)";
         } else if (isLeft) {
-          el.style.zIndex = "2";
+          el.style.zIndex = "4";
           el.style.opacity = "1";
           el.style.pointerEvents = "auto";
-          el.style.transform = `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(${rot}deg)`;
+          el.style.transform = `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(${rot}deg) translateZ(-40px)`;
         } else if (isRight) {
-          el.style.zIndex = "2";
+          el.style.zIndex = "4";
           el.style.opacity = "1";
           el.style.pointerEvents = "auto";
-          el.style.transform = `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-${rot}deg)`;
+          el.style.transform = `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-${rot}deg) translateZ(-40px)`;
         } else {
           el.style.zIndex = "1";
           el.style.opacity = "0";

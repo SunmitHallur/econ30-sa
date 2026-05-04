@@ -1878,7 +1878,8 @@ details summary h3 { display: inline; }
   position: absolute;
   inset: 0;
   perspective: 1000px;
-  transform-style: preserve-3d;
+  /* Siblings were compositing in 3D order over the center; flat + z-index keeps the active slide on top. */
+  transform-style: flat;
 }
 .quote-orbit__face {
   position: absolute;
