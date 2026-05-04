@@ -14,6 +14,15 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <div class="ambient-paths" aria-hidden="true">
+    <svg class="ambient-paths-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <path class="ambient-path ambient-path--1" d="M-80,520 C280,380 520,720 880,480 S1320,200 1520,420" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
+      <path class="ambient-path ambient-path--2" d="M-40,180 C360,320 440,80 780,240 S1180,520 1480,300" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.55" />
+      <path class="ambient-path ambient-path--3" d="M200,920 C420,640 900,860 1120,560 S1380,240 1560,480" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.45" />
+      <path class="ambient-path ambient-path--4" d="M100,360 Q520,120 980,400 T1420,200" fill="none" stroke="currentColor" stroke-width="0.85" stroke-linecap="round" opacity="0.5" />
+    </svg>
+  </div>
+
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="#hero">
@@ -32,13 +41,13 @@
         <a href="#conclusions">Conclusions</a>
         <a href="#sources">Sources</a>
       </nav>
-      <button id="theme-toggle" class="ghost-btn" aria-label="Toggle dark mode" title="Toggle theme">
-        <span class="theme-icon" aria-hidden="true">◐</span>
+      <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+        <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◐</span></span>
       </button>
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="main-stack">
 
     <!-- ============================================================ -->
     <!-- 1. Hero                                                      -->
@@ -52,12 +61,12 @@
           the world economy. Three decades on, incomes are higher on average,
           but unemployment stays crushing across provinces, while the top 10%
           claim <strong>65% of pre-tax national income</strong>.
-          Ground-level corridors and queues sit behind those lines on a spreadsheet.
-          Charts and regressions below corroborate the story where the data allow.
+          The Braamfontein skyline beside this page is the same Gauteng magnet that pulls migrants while national joblessness stays structurally high; the small chart pairs openness with concentration so you can hold the distributional question in view before the long evidence chain.
+          Ground-level corridors, port cranes, and settlement edges sit behind those lines on a spreadsheet—photographs and series below are meant to answer the same question from different distances.
         </p>
         <div class="meta-row">
-          <a class="ghost-btn" href="#from-the-ground">Start with places ↓</a>
-          <a class="ghost-btn" href="#macro">Jump to macro charts →</a>
+          <a class="ghost-btn" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
+          <a class="ghost-btn" href="#macro"><span class="ghost-btn__text">Jump to macro charts →</span></a>
         </div>
         <details class="hero-details">
           <summary>Dataset codes &amp; regression scope</summary>
@@ -91,13 +100,32 @@
     <!-- ============================================================ -->
     <!-- 2. Question                                                  -->
     <!-- ============================================================ -->
-    <section id="question" class="section">
-      <div class="section-head">
-        <h2>1 · The Question</h2>
-        <p class="section-lede">
-          Did post-apartheid South Africa's rapid integration into world goods,
-          capital and norms markets buy growth at the cost of distribution?
-        </p>
+    <section id="question" class="section section-question">
+      <div class="question-head-cluster">
+        <!-- Kokonut-style hand-drawn curve (vanilla port of framer-motion path draw; triggers on scroll). -->
+        <div id="hand-scroll-ink" class="hand-scroll-ink" aria-hidden="true">
+          <svg class="hand-scroll-ink__svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <path
+              class="hand-scroll-ink__path"
+              d="M 950 90 C 1250 300, 1050 480, 600 520 C 250 520, 150 480, 150 300 C 150 120, 350 80, 600 80 C 850 80, 950 180, 950 180"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="12"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <p class="hand-scroll-ink__caption">Goods · capital · norms</p>
+        </div>
+        <div class="section-head">
+          <h2>1 · The Question</h2>
+          <p class="section-lede">
+            Did post-apartheid South Africa's rapid integration into world goods,
+            capital and norms markets buy growth at the cost of distribution—and
+            if so, through which channels (labour markets, asset prices, geography, institutions)
+            rather than through a single headline coefficient?
+          </p>
+        </div>
       </div>
 
       <div class="prose">
@@ -106,7 +134,8 @@
           closed off for three decades: sanctions, divestment and autarkic
           industrial policy had left trade at just
           <strong>37% of GDP</strong> and the Johannesburg Stock Exchange largely
-          cut off from foreign capital. Two macro strategies defined the
+          cut off from foreign capital. The 1893 print below is not mere ornament: it marks how early South Africa was wired into imperial finance and commodity markets, so the post-1994 reopening was layered onto a long history of external price discovery and domestic concentration—not a blank slate.
+          Two macro strategies defined the
           transition. The <a class="kb-link" href="#sources" data-kb="reconstruction-and-development-programme">Reconstruction and Development Programme (RDP, 1994)</a>
           promised redistribution, housing, electrification and a developmental
           state. Twenty months later it was shelved in favour of
@@ -125,6 +154,7 @@
           Ordinary experience in commuter corridors, shack-side growth circles,
           port towns, and Gauteng influx does not show up directly in GDP per capita,
           yet it motivates why redistribution and geography matter politically.
+          The Durban harbour and stack photography in §2 is the physical face of the import and export ratios you will see in §4; the Gugulethu and Cato Crest frames remind you that openness is felt unevenly across neighbourhoods, not as a uniform national mean.
           The charts and regressions summarise whether openness lines up with output,
           shares and governance; causal claims cite papers in Sources alongside the correlations printed here, not replacing them,
           notably <a href="#sources">synthetic-control, local labour-market, and inequality accounting work</a> linked below.
@@ -144,12 +174,19 @@
     <!-- ============================================================ -->
     <!-- 2 · Ground                                                   -->
     <!-- ============================================================ -->
-    <section id="from-the-ground" class="section section-ground">
+    <section id="from-the-ground" class="section section-ground section-visual-panel">
+      <div class="section-bg-film" aria-hidden="true">
+        <div class="section-bg-film__slide section-bg-film__slide--a"></div>
+        <div class="section-bg-film__slide section-bg-film__slide--b"></div>
+        <div class="section-bg-film__slide section-bg-film__slide--c"></div>
+      </div>
+      <div class="section-visual-panel-inner">
       <div class="section-head">
         <h2>2 · From the Ground</h2>
         <p class="section-lede">
           Short vignettes beside the spreadsheets: trade routes, labour corridors and governance episodes that the national series compress into one GDP line.
-          Not exhaustive. Each points to fuller sources.
+          The wide harbour frame is the same coastline the indexed trade series later abstracts into a ratio; read the two together.
+          Not exhaustive—each photograph points to fuller sources.
         </p>
       </div>
       <div class="grid-2 ground-grid">
@@ -162,23 +199,25 @@
           <p>
             South Africa's inland hub concentrates formal vacancies and informal gigs alike,
             aligning with stagnant national unemployment measured in Macro and sharper provincial spreads on the Map.
+            Pair this settlement texture with the hero skyline: the same province registers both glittering stock listings and long queues at the labour centre.
             Erten-Leight-Tregenna link tariff exposure to harmed Black employment in exposed districts.
             <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">see their design</a>.
           </p>
           <h3>Ports &amp; Rail</h3>
           <p>
             Durban and Richards Bay embody goods-market integration.
-            Cranes, trucking and coal corridors sit underneath the soaring trade/National Account ratios charted upstream.
-            The harbour and container terminals below are the visible counterpart to the import and export lines in Macro.
+            Cranes, trucking and coal corridors sit underneath the soaring trade/National Account ratios charted in §4.
+            The sequence below moves from the open roadstead to the box terminal to a berthed bulker—three scales of the same integration story.
           </p>
         </div>
       </div>
 
-      <div class="ground-ports-grid" aria-label="Durban harbour and container terminal photographs">
-        <figure class="ground-photo">
-          <img src="assets/ground/durban-harbour-philippn.jpg" width="1600" height="981" loading="lazy" decoding="async" alt="Wide view of the harbour at Durban" />
-          <figcaption>Harbour of Durban (Aug 2006; author: User:PhilippN, own work). <a href="https://commons.wikimedia.org/wiki/Special:Search?search=Durban+harbour+PhilippN">Wikimedia Commons search</a> (local copy in repo matches uploaded description).</figcaption>
-        </figure>
+      <figure class="ground-photo ground-photo-bleed ground-port-hero" aria-label="Durban harbour and container terminal photographs">
+        <img src="assets/ground/durban-harbour-philippn.jpg" width="1600" height="981" loading="lazy" decoding="async" alt="Wide view of the harbour at Durban" />
+        <figcaption>Harbour of Durban (Aug 2006; author: User:PhilippN, own work). <a href="https://commons.wikimedia.org/wiki/Special:Search?search=Durban+harbour+PhilippN">Wikimedia Commons search</a> (local copy in repo matches uploaded description).</figcaption>
+      </figure>
+
+      <div class="ground-ports-pair" aria-label="Durban container terminal detail photographs">
         <figure class="ground-photo">
           <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container terminal at the Port of Durban" />
           <figcaption>Container terminal at the Port of Durban, eThekwini (photo dated 6 Aug 2010 on Commons; Flickr upload by Media Club South Africa). <a href="https://commons.wikimedia.org/wiki/File:Durban_container_port_(24747434937).jpg">Wikimedia Commons</a>. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</figcaption>
@@ -195,6 +234,7 @@
           <figcaption>Cato Crest pre-clean-up picture (16 Sep 2017; author: Siphosamin), from the "African people at work" image context in South Africa. <a href="https://commons.wikimedia.org/wiki/File:Township_Slums_04.jpg">Wikimedia Commons · File:Township Slums 04.jpg</a>.</figcaption>
         </figure>
       </div>
+      </div>
 
     </section>
 
@@ -209,9 +249,9 @@
         </p>
       </div>
 
-      <figure class="ground-photo ground-photo-wide">
+      <figure class="ground-photo ground-photo-wide timeline-photo-bleed">
         <img src="assets/ground/wef-davos-2005.jpg" width="3072" height="1856" loading="lazy" decoding="async" alt="World Economic Forum Annual Meeting, Davos 2005, with Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo" />
-        <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005): Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo before the session "The G-8 and Africa: Rhetoric or Action?". Copyright World Economic Forum.</figcaption>
+        <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005): Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo before the session "The G-8 and Africa: Rhetoric or Action?". Copyright World Economic Forum. Read this tableau against the indexed FDI line in §4—summits broker norms and capital flows that later show up as small denominators in national accounts.</figcaption>
       </figure>
 
       <div class="timeline-scroll-shell" id="timeline-shell">
@@ -229,60 +269,125 @@
     <!-- ============================================================ -->
     <!-- 4. Macro                                                     -->
     <!-- ============================================================ -->
-    <section id="macro" class="section">
+    <section id="macro" class="section section-macro">
       <div class="section-head">
         <h2>4 · Macro Evidence</h2>
         <p class="section-lede">
           Integration, measured as (exports + imports) / GDP, more than doubled
           between 1990 and 2022. FDI, always modest, rode the same wave with a
-          lag.
+          lag. The charts are spaced here so you can pause on each line before reading the regression paragraph.
         </p>
       </div>
 
-      <div class="grid-2">
-        <figure class="card">
-          <figcaption class="card-head">
-            <h3>Indexed macro indicators, 1990 = 100 (log scale)</h3>
-            <p>GDP per capita, Trade/GDP and FDI/GDP, rebased to 1990. Plotted on a log y-axis so GDP's roughly one-third rise stays visible alongside the much larger swings in Trade/GDP and FDI/GDP. Source: World Development Indicators.</p>
-          </figcaption>
-          <div class="chart-canvas-wrap"><canvas id="chart-indexed"></canvas></div>
-        </figure>
-        <figure class="card">
-          <figcaption class="card-head">
-            <h3>Unemployment (ILO-modelled)</h3>
-            <p>The structural unemployment plateau is South Africa's defining fact. See <a class="kb-link" href="#sources" data-kb="quarterly-labour-force-survey">QLFS</a> and <a class="kb-link" href="#sources" data-kb="labour-market-south-africa">labour market</a>.</p>
-          </figcaption>
-          <div class="chart-canvas-wrap"><canvas id="chart-unemployment"></canvas></div>
-        </figure>
-      </div>
-
-      <div class="prose narrow">
-        <p>
-          <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Trade liberalisation</a>
-          was rapid: tariffs fell from an average of roughly 23% in 1993 to
-          around 8% by 2005. In the headline OLS, a one-percentage-point
-          increase in Trade/GDP is associated with
-          <strong>+1.4% higher GDP per capita</strong> (HAC, p &lt; 0.001),
-          but so is higher unemployment (+0.20pp, p = 0.036) and a higher
-          top-10% income share (+0.69pp, p &lt; 0.001). The direction of
-          association is unambiguous; the direction of causation is not.
-          Engle-Granger cointegration for log GDP pc and Trade/GDP fails to
-          reject the no-cointegration null
-          (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span>), so the
-          long-run relationship should be read cautiously.
-        </p>
+      <div class="chart-mockup chart-mockup--macro">
+        <div class="chart-mockup__accent" aria-hidden="true"></div>
+        <div class="chart-mockup__grid">
+          <div class="chart-mockup__copy prose chart-mockup__copy--macro">
+            <figure class="chart-mockup__context-fig">
+              <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Stacked shipping containers at Durban port" />
+              <figcaption>Port of Durban container stacks (2010 file date on Commons)—the throughput behind rising Trade/GDP.</figcaption>
+            </figure>
+            <h3 class="chart-mockup__title">From throughput to lines on a page</h3>
+            <p>
+              National openness ratios stay abstract until you pair them with a berth full of boxes.
+              When Trade/GDP climbs in the indexed panel, picture the gantry cranes and yard reach stackers from §2: the same integration episode lifts measured flows while labour-market and distributional outcomes can diverge sharply by district and skill group.
+            </p>
+            <p>
+              <strong>Indexed macro (log scale).</strong> GDP per capita, Trade/GDP and FDI/GDP are rebased to 1990 = 100. The log <span class="mono">y</span>-axis keeps GDP’s roughly one-third rise legible next to the much larger swings in openness and FDI. Source: World Development Indicators.
+            </p>
+            <p>
+              <strong>Unemployment (ILO-modelled).</strong> The plateau is the defining macro fact beneath the openness story. Cross-check with <a class="kb-link" href="#sources" data-kb="quarterly-labour-force-survey">QLFS</a> and the <a class="kb-link" href="#sources" data-kb="labour-market-south-africa">labour-market</a> notes in Sources.
+            </p>
+            <p>
+              <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Trade liberalisation</a>
+              was rapid: tariffs fell from an average of roughly 23% in 1993 to
+              around 8% by 2005. In the headline OLS, a one-percentage-point
+              increase in Trade/GDP is associated with
+              <strong>+1.4% higher GDP per capita</strong> (HAC, p &lt; 0.001),
+              but so is higher unemployment (+0.20pp, p = 0.036) and a higher
+              top-10% income share (+0.69pp, p &lt; 0.001). The direction of
+              association is unambiguous; the direction of causation is not.
+              Engle-Granger cointegration for log GDP pc and Trade/GDP fails to
+              reject the no-cointegration null
+              (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span>), so the
+              long-run relationship should be read cautiously.
+            </p>
+          </div>
+          <div class="chart-mockup__charts">
+            <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
+            <div class="chart-mockup__charts-stack">
+              <figure class="card macro-chart-solo chart-mockup__card">
+                <figcaption class="card-head">
+                  <h3>Indexed macro indicators, 1990 = 100 (log scale)</h3>
+                  <p class="chart-mockup__card-lede">GDP per capita, Trade/GDP and FDI/GDP, rebased to 1990. Plotted on a log y-axis so GDP's roughly one-third rise stays visible alongside the much larger swings in Trade/GDP and FDI/GDP. Source: World Development Indicators.</p>
+                </figcaption>
+                <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-indexed"></canvas></div>
+              </figure>
+              <figure class="card macro-chart-solo chart-mockup__card">
+                <figcaption class="card-head">
+                  <h3>Unemployment (ILO-modelled)</h3>
+                  <p class="chart-mockup__card-lede">The structural unemployment plateau is South Africa's defining fact. See <a class="kb-link" href="#sources" data-kb="quarterly-labour-force-survey">QLFS</a> and <a class="kb-link" href="#sources" data-kb="labour-market-south-africa">labour market</a>.</p>
+                </figcaption>
+                <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-unemployment"></canvas></div>
+              </figure>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
     <!-- 5. Inequality                                                -->
     <!-- ============================================================ -->
-    <section id="inequality" class="section">
+    <section id="inequality" class="section section-inequality">
       <div class="section-head">
         <h2>5 · Inequality Evidence</h2>
         <p class="section-lede">
           Three complementary lenses: pre-tax income shares (WID), wealth
-          shares (WID), and survey-based Gini (WIID / WDI).
+          shares (WID), and survey-based Gini (WIID / WDI)—with geography brought in after the aggregate curves so you can read the map as a spatial translation of the same skew.
+        </p>
+      </div>
+
+      <div class="chart-mockup chart-mockup--inequality">
+        <div class="chart-mockup__accent" aria-hidden="true"></div>
+        <div class="chart-mockup__grid">
+          <div class="chart-mockup__copy prose narrow chart-mockup__copy--inequality">
+            <h3 class="chart-mockup__title">Two WID ladders before the map</h3>
+            <p>
+              <strong>Pre-tax income shares.</strong> The top 10% of adults claim about <strong>47%</strong> of pre-tax national income in 1990 and about <strong>65%</strong> by 2020, while the bottom half receives under <strong>6%</strong>. The curve is a national compression of every pay negotiation and dividend flow in the sample.
+            </p>
+            <p>
+              <strong>Wealth shares.</strong> The stock view is starker than the flow view: concentration in asset markets and housing stock matters for persistence. See <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee-Czajka-Gethin (WIL, 2021)</a> for how the top decile’s wealth share sits versus the bottom half.
+            </p>
+            <p>
+              The decile lines on the right compress the country into a single ladder; the choropleth further down makes the same skew legible in space (Cape Town inset, generalized entropy layer)—coastal metros, former homeland boundaries, and peri-urban rings colour differently even when survey Gini barely moves year to year. Treat that map as a companion to the Gugulethu and Cato Crest photographs: satellite distance versus street distance.
+            </p>
+          </div>
+          <div class="chart-mockup__charts">
+            <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
+            <div class="chart-mockup__charts-stack chart-mockup__charts-stack--split-md">
+              <figure class="card chart-mockup__card">
+                <figcaption class="card-head">
+                  <h3>Pre-tax income shares (WID)</h3>
+                  <p class="chart-mockup__card-lede">Top-10% income share: 47% in 1990 → 65% in 2020. The bottom 50% receives &lt; 6%.</p>
+                </figcaption>
+                <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-income-shares"></canvas></div>
+              </figure>
+              <figure class="card chart-mockup__card">
+                <figcaption class="card-head">
+                  <h3>Wealth shares (WID)</h3>
+                  <p class="chart-mockup__card-lede">Wealth is even more skewed than income. See <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee-Czajka-Gethin (WIL, 2021)</a>.</p>
+                </figcaption>
+                <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-wealth-shares"></canvas></div>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose narrow inequality-map-preface">
+        <p>
+          The panels above set the national shares; the figure below freezes one spatial slice of the same inequality geography.
         </p>
       </div>
 
@@ -293,23 +398,6 @@
         </figcaption>
         <img class="inequality-map-img" src="assets/ground/sa-inequality-1.jpg" width="1600" height="1023" loading="lazy" alt="Map illustrating inequality across South Africa" />
       </figure>
-
-      <div class="grid-2">
-        <figure class="card">
-          <figcaption class="card-head">
-            <h3>Pre-tax income shares (WID)</h3>
-            <p>Top-10% income share: 47% in 1990 → 65% in 2020. The bottom 50% receives &lt; 6%.</p>
-          </figcaption>
-          <div class="chart-canvas-wrap"><canvas id="chart-income-shares"></canvas></div>
-        </figure>
-        <figure class="card">
-          <figcaption class="card-head">
-            <h3>Wealth shares (WID)</h3>
-            <p>Wealth is even more skewed than income. See <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee-Czajka-Gethin (WIL, 2021)</a>.</p>
-          </figcaption>
-          <div class="chart-canvas-wrap"><canvas id="chart-wealth-shares"></canvas></div>
-        </figure>
-      </div>
 
       <details class="chart-more">
         <summary>More charts: survey Gini and scatter vs trade openness</summary>
@@ -331,7 +419,7 @@
         </div>
       </details>
 
-      <div class="prose narrow">
+      <div class="prose narrow inequality-closing">
         <p>
           The central puzzle shows up in the <a class="kb-link" href="#sources" data-kb="inequality-in-south-africa">inequality</a> data:
           opening the economy and slimming the state did not
@@ -347,8 +435,8 @@
           paper isolates the causal piece: districts more exposed to the
           tariff cuts of 1994–2005 saw lower employment, formalisation and
           wages, and the hit fell hardest on Black workers and women. That
-          evidence, not the correlations above, is what justifies the
-          "price of integration" framing.
+          evidence, not the scatter plots in the exploratory correlation panel, is what justifies the
+          "price of integration" framing when you move from pattern to mechanism.
         </p>
       </div>
     </section>
@@ -369,7 +457,8 @@
         <figcaption class="card-head">
           <h3>Constitution Hill in brick and glass</h3>
           <p>
-            The Constitutional Court sits in Johannesburg as the institutional face of the post-1994 legal order that the WGI &quot;rule of law&quot; and &quot;voice &amp; accountability&quot; pillars try to capture in numbers.
+            The Constitutional Court building in the photograph is the institutional face of the post-1994 legal order—public interest standing, socioeconomic rights jurisprudence, and the explicit break with parliamentary sovereignty under apartheid.
+            The WGI &quot;rule of law&quot; and &quot;voice &amp; accountability&quot; series below are coarse annual indices; they cannot read the docket, but they do track whether outside observers still perceived those commitments as credible as patronage politics returned in the 2010s.
           </p>
         </figcaption>
         <img class="constitutional-court-img" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa, Johannesburg" />
@@ -627,6 +716,7 @@
           National averages hide apartheid-era spatial hierarchies persisting thirty years later: former homeland regions and peri-urban belts still register the worst narrow-unemployment burdens,
           Gauteng notwithstanding its relative formal employment density documented above.
           The choropleth is a blunt instrument. Intra-provincial inequality remains large, yet it reinforces that joblessness is geographically concentrated, not uniformly distributed beneath macro openness figures.
+          Read KwaZulu-Natal beside the Durban harbour photographs in §2, and the Western Cape beside Gugulethu—the map is the same country at administrative scale.
         </p>
       </div>
 
@@ -711,25 +801,41 @@
           strategy, spatial redress, and labour market activation at the center.
         </p>
       </div>
-      <div class="card quote-showcase" style="margin-top: 1.25rem;">
+      <div class="card quote-showcase quote-orbit-card" style="margin-top: 1.25rem;">
         <h3 class="card-title">Voices from the record</h3>
-        <div class="quote-grid">
-          <article class="quote-tile">
-            <p class="quote-text">"Districts with larger tariff cuts experienced significant declines in both formal and informal employment, driven primarily by manufacturing job losses."</p>
-            <p class="quote-source">Erten, Leight &amp; Tregenna (2018)</p>
-          </article>
-          <article class="quote-tile">
-            <p class="quote-text">"No wage effects for those who remain employed; wages are too rigid to absorb the shock."</p>
-            <p class="quote-source">Erten, Leight &amp; Tregenna (2018)</p>
-          </article>
-          <article class="quote-tile">
-            <p class="quote-text">"The top 10% of wealth holders own 85–86% of household wealth ... [and] no decline in wealth inequality since the end of apartheid."</p>
-            <p class="quote-source">Chatterjee, Czajka &amp; Gethin (2021)</p>
-          </article>
-          <article class="quote-tile">
-            <p class="quote-text">"Growth and redistribution are parts of a single process."</p>
-            <p class="quote-source">ANC Reconstruction and Development Programme (1994)</p>
-          </article>
+        <div
+          id="quote-orbit"
+          class="quote-orbit"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Voices from the record — selected quotations"
+          tabindex="0"
+          data-autoplay="true"
+        >
+          <div class="quote-orbit__stage">
+            <div class="quote-orbit__ring" id="quote-orbit-ring">
+              <img class="quote-orbit__face" data-orbit-index="0" src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container stacks at Durban port" />
+              <img class="quote-orbit__face" data-orbit-index="1" src="assets/ground/township-slums.jpg" width="1600" height="900" loading="lazy" decoding="async" alt="Informal settlement housing" />
+              <img class="quote-orbit__face" data-orbit-index="2" src="assets/ground/sa-inequality-1.jpg" width="1600" height="1023" loading="lazy" decoding="async" alt="Map layer illustrating inequality across South Africa" />
+              <img class="quote-orbit__face" data-orbit-index="3" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa building" />
+            </div>
+          </div>
+          <div class="quote-orbit__panel">
+            <div class="quote-orbit__copy" id="quote-orbit-copy" aria-live="polite">
+              <h4 class="quote-orbit__name" id="quote-orbit-name"></h4>
+              <p class="quote-orbit__designation" id="quote-orbit-designation"></p>
+              <blockquote class="quote-orbit__quote" id="quote-orbit-quote"></blockquote>
+            </div>
+            <div class="quote-orbit__controls">
+              <button type="button" class="quote-orbit__arrow quote-orbit__arrow--prev" id="quote-orbit-prev" aria-label="Previous quotation">
+                <span aria-hidden="true">&#10094;</span>
+              </button>
+              <button type="button" class="quote-orbit__arrow quote-orbit__arrow--next" id="quote-orbit-next" aria-label="Next quotation">
+                <span aria-hidden="true">&#10095;</span>
+              </button>
+            </div>
+            <div class="quote-orbit__dots" id="quote-orbit-dots" aria-label="Select quotation"></div>
+          </div>
         </div>
       </div>
     </section>

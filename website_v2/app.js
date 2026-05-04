@@ -805,10 +805,18 @@
       if (!el || el.nodeType !== 1) continue;
       if (el.matches(".grid-2, .grid-3")) {
         acc.push(...el.children);
+      } else if (el.matches(".chart-mockup")) {
+        const copy = el.querySelector(".chart-mockup__copy");
+        const charts = el.querySelector(".chart-mockup__charts");
+        if (copy) acc.push(copy);
+        if (charts) acc.push(charts);
+        if (!copy && !charts) acc.push(el);
       } else if (el.matches("details.chart-more")) {
         const inner = el.querySelector(".chart-more-inner");
         if (inner) acc.push(...inner.children);
         else acc.push(el);
+      } else if (el.classList.contains("card") && el.querySelector(":scope > .quote-orbit")) {
+        acc.push(el.querySelector(".quote-orbit"));
       } else if (el.classList.contains("card") && el.querySelector(":scope > .quote-grid")) {
         const tiles = el.querySelectorAll(".quote-tile");
         if (tiles.length) acc.push(...tiles);
@@ -818,6 +826,79 @@
       }
     }
     return acc.filter(Boolean);
+  };
+
+  /**
+   * Kokonut-style hand-drawn SVG loop (vanilla port of framer-motion pathLength).
+   * Fires once when #hand-scroll-ink enters the viewport; caption fades via CSS class.
+   */
+  const wireHandScrollInk = () => {
+    const root = document.getElementById("hand-scroll-ink");
+    const path = root?.querySelector?.(".hand-scroll-ink__path");
+    if (!root || !path) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const len = path.getTotalLength?.() ?? 0;
+    if (len > 0) {
+      path.style.strokeDasharray = String(len);
+      path.style.strokeDashoffset = String(len);
+    }
+
+    const finish = () => {
+      root.classList.add("hand-scroll-ink--done");
+    };
+
+    if (reduce) {
+      path.style.strokeDashoffset = "0";
+      finish();
+      return;
+    }
+
+    const play = () => {
+      if (root.dataset.inkPlayed === "1") return;
+      root.dataset.inkPlayed = "1";
+      if (len <= 0) {
+        path.style.strokeDashoffset = "0";
+        finish();
+        return;
+      }
+      if (typeof gsap !== "undefined") {
+        if (typeof ScrollTrigger !== "undefined") gsap.registerPlugin(ScrollTrigger);
+        gsap.to(path, {
+          strokeDashoffset: 0,
+          duration: 2.5,
+          ease: "power2.inOut",
+          onComplete: finish,
+        });
+        return;
+      }
+      path.style.transition =
+        "stroke-dashoffset 2.5s cubic-bezier(0.43, 0.13, 0.23, 0.96)";
+      requestAnimationFrame(() => {
+        path.style.strokeDashoffset = "0";
+        path.addEventListener("transitionend", finish, { once: true });
+      });
+    };
+
+    if (typeof ScrollTrigger !== "undefined" && typeof gsap !== "undefined") {
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.create({
+        trigger: root,
+        start: "top 80%",
+        once: true,
+        onEnter: play,
+      });
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          io.disconnect();
+          play();
+        },
+        { root: null, rootMargin: "0px 0px -12% 0px", threshold: 0.05 }
+      );
+      io.observe(root);
+    }
   };
 
   const wireGlobalScrollMotion = () => {
@@ -935,11 +1016,190 @@
   // ------------------------------------------------------------
   // Boot
   // ------------------------------------------------------------
+  // ------------------------------------------------------------
+  // Conclusions: circular quote carousel (theme-matched vanilla port)
+  // ------------------------------------------------------------
+  const QUOTE_ORBIT_SLIDES = [
+    {
+      quote:
+        "Districts with larger tariff cuts experienced significant declines in both formal and informal employment, driven primarily by manufacturing job losses.",
+      name: "Erten, Leight & Tregenna",
+      designation: "2018 · trade liberalisation and local labour markets",
+    },
+    {
+      quote:
+        "No wage effects for those who remain employed; wages are too rigid to absorb the shock.",
+      name: "Erten, Leight & Tregenna",
+      designation: "2018 · same study, wage rigidity",
+    },
+    {
+      quote:
+        "The top 10% of wealth holders own 85–86% of household wealth … [and] no decline in wealth inequality since the end of apartheid.",
+      name: "Chatterjee, Czajka & Gethin",
+      designation: "2021 · WIL wealth inequality for South Africa",
+    },
+    {
+      quote: "Growth and redistribution are parts of a single process.",
+      name: "ANC",
+      designation: "1994 · Reconstruction and Development Programme",
+    },
+  ];
+
+  const quoteOrbitCalcGap = width => {
+    const minWidth = 1024;
+    const maxWidth = 1456;
+    const minGap = 60;
+    const maxGap = 86;
+    if (width <= minWidth) return minGap;
+    if (width >= maxWidth) return Math.max(minGap, maxGap + 0.06018 * (width - maxWidth));
+    return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
+  };
+
+  const wireQuoteOrbit = () => {
+    const root = document.getElementById("quote-orbit");
+    const ring = document.getElementById("quote-orbit-ring");
+    if (!root || !ring) return;
+
+    const faces = [...root.querySelectorAll(".quote-orbit__face")];
+    const n = faces.length;
+    if (n !== QUOTE_ORBIT_SLIDES.length) return;
+
+    const nameEl = document.getElementById("quote-orbit-name");
+    const desigEl = document.getElementById("quote-orbit-designation");
+    const quoteEl = document.getElementById("quote-orbit-quote");
+    const dotsEl = document.getElementById("quote-orbit-dots");
+    const btnPrev = document.getElementById("quote-orbit-prev");
+    const btnNext = document.getElementById("quote-orbit-next");
+    if (!nameEl || !desigEl || !quoteEl || !dotsEl || !btnPrev || !btnNext) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const autoplayOn = root.dataset.autoplay === "true" && !reduce;
+
+    let active = 0;
+    let timer = null;
+
+    const clearTimer = () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
+
+    const startTimer = () => {
+      clearTimer();
+      if (!autoplayOn) return;
+      timer = setInterval(() => {
+        active = (active + 1) % n;
+        render();
+      }, 5000);
+    };
+
+    const applyFaceStyles = () => {
+      const gap = quoteOrbitCalcGap(ring.offsetWidth || 1024);
+      const maxStickUp = gap * 0.8;
+      const rot = reduce ? 0 : 15;
+      const ease = "all 0.8s cubic-bezier(0.4, 2, 0.3, 1)";
+
+      for (let i = 0; i < n; i++) {
+        const el = faces[i];
+        const isActive = i === active;
+        const isLeft = (active - 1 + n) % n === i;
+        const isRight = (active + 1) % n === i;
+
+        if (isActive) {
+          el.style.zIndex = "3";
+          el.style.opacity = "1";
+          el.style.pointerEvents = "auto";
+          el.style.transform = "translateX(0) translateY(0) scale(1) rotateY(0deg)";
+        } else if (isLeft) {
+          el.style.zIndex = "2";
+          el.style.opacity = "1";
+          el.style.pointerEvents = "auto";
+          el.style.transform = `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(${rot}deg)`;
+        } else if (isRight) {
+          el.style.zIndex = "2";
+          el.style.opacity = "1";
+          el.style.pointerEvents = "auto";
+          el.style.transform = `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-${rot}deg)`;
+        } else {
+          el.style.zIndex = "1";
+          el.style.opacity = "0";
+          el.style.pointerEvents = "none";
+          el.style.transform = "translateX(0) translateY(12px) scale(0.75) rotateY(0deg)";
+        }
+        el.style.transition = reduce ? "none" : ease;
+      }
+    };
+
+    const render = () => {
+      const s = QUOTE_ORBIT_SLIDES[active];
+      nameEl.textContent = s.name;
+      desigEl.textContent = s.designation;
+      quoteEl.textContent = `“${s.quote}”`;
+
+      dotsEl.querySelectorAll(".quote-orbit__dot").forEach((dot, i) => {
+        const on = i === active;
+        dot.classList.toggle("is-active", on);
+        dot.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+
+      root.setAttribute("aria-label", `Voices from the record, slide ${active + 1} of ${n}: ${s.name}`);
+      applyFaceStyles();
+    };
+
+    dotsEl.innerHTML = "";
+    QUOTE_ORBIT_SLIDES.forEach((_, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "quote-orbit__dot";
+      b.setAttribute("aria-label", `Show quotation ${i + 1}`);
+      b.addEventListener("click", () => {
+        active = i;
+        clearTimer();
+        render();
+        startTimer();
+      });
+      dotsEl.appendChild(b);
+    });
+
+    const go = delta => {
+      active = (active + delta + n) % n;
+      clearTimer();
+      render();
+      startTimer();
+    };
+
+    btnPrev.addEventListener("click", () => go(-1));
+    btnNext.addEventListener("click", () => go(1));
+
+    root.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        go(-1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        go(1);
+      }
+    });
+
+    let ro;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => applyFaceStyles());
+      ro.observe(ring);
+    }
+    window.addEventListener("resize", applyFaceStyles);
+
+    render();
+    startTimer();
+  };
+
   const boot = async () => {
     renderTimeline();
     wireTimelineAutoscroll();
     wireKBLinks();
     wireTOC();
+    wireQuoteOrbit();
+    wireHandScrollInk();
     wireGlobalScrollMotion();
     try {
       const [ts, ineq, gov, panel, reg, qlfs] = await Promise.all([

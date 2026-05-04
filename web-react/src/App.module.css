@@ -1,0 +1,45 @@
+.wrap {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+  font-family: system-ui, sans-serif;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: #0f766e;
+}
+
+:global(html[data-theme='dark']) .icon {
+  color: #4ad7a3;
+}
+
+.lede {
+  margin: 0;
+  line-height: 1.6;
+  color: #374151;
+}
+
+:global(html[data-theme='dark']) .lede {
+  color: #d1d5db;
+}
+
+code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: #f3f4f6;
+}
+
+:global(html[data-theme='dark']) code {
+  background: #1f2937;
+  color: #e5e7eb;
+}
