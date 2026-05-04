@@ -508,13 +508,17 @@
   const wireTimelineAutoscroll = () => {
     const scrollEl = $("#timeline-scroll");
     const shell = $("#timeline-shell");
+    const listEl = $("#timeline-list");
+    const sectionEl = document.getElementById("timeline");
     if (!scrollEl || !shell) return;
 
     /* Autoplay unless explicitly opted out (attribute missing = on, matching original behaviour). */
     const autoplay = scrollEl.dataset.autoplay !== "false";
     let sectionVisible = false;
     let rafId = 0;
-    const speed = 0.22;
+    /* Visible drift at ~27px/s @ 60fps; small values were easy to dismiss as “not moving”. */
+    const speed = 0.45;
+    const ioTarget = sectionEl || shell;
 
     const syncChrome = () => {
       scrollEl.classList.toggle("is-autoplay-paused", !autoplay);
@@ -527,7 +531,8 @@
       }
       const max = scrollEl.scrollWidth - scrollEl.clientWidth;
       if (max <= 0) {
-        rafId = requestAnimationFrame(tick);
+        /* Do not RAF-spin: wait for ResizeObserver/fonts when rail width catches up with layout. */
+        rafId = 0;
         return;
       }
       if (scrollEl.scrollLeft >= max - 0.5) {
@@ -554,6 +559,20 @@
       if (sectionVisible) startIfNeeded();
     });
 
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(() => {
+        if (sectionVisible) startIfNeeded();
+      });
+      ro.observe(scrollEl);
+      if (listEl) ro.observe(listEl);
+    }
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        if (sectionVisible) startIfNeeded();
+      });
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
@@ -566,15 +585,25 @@
           }
         });
       },
-      { root: null, threshold: 0.12 }
+      /* Whole section covers the hero→rail span; threshold 0 matches “any overlap”. */
+      { root: null, threshold: 0 }
     );
-    io.observe(shell);
+    io.observe(ioTarget);
 
     syncChrome();
-    if (shell.getBoundingClientRect().top < window.innerHeight * 0.88) {
+    const wr = ioTarget.getBoundingClientRect();
+    if (wr.top < window.innerHeight && wr.bottom > 0) {
       sectionVisible = true;
-      startIfNeeded();
+      requestAnimationFrame(() => startIfNeeded());
     }
+
+    /* After charts + ScrollTrigger.refresh(), layout can shift; production CDNs also cache JS. */
+    window.refreshTimelineAutoplay = () => {
+      requestAnimationFrame(() => startIfNeeded());
+    };
+    window.addEventListener("load", () => {
+      window.refreshTimelineAutoplay();
+    });
   };
 
   const wireKBLinks = () => {
@@ -1358,6 +1387,7 @@
         requestAnimationFrame(() => {
           resizeRegisteredCharts();
           if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+          window.refreshTimelineAutoplay?.();
         });
       });
     } catch (err) {
