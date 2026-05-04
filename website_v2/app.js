@@ -795,61 +795,118 @@
       .forEach(id => { const sec = document.getElementById(id); if (sec) obs.observe(sec); });
   };
 
+  /**
+   * Collect section children for staggered reveals: unwrap grids and quote tiles
+   * so motion feels intentional instead of one heavy block.
+   */
+  const flattenSectionBlocks = (section) => {
+    const acc = [];
+    for (const el of section.children) {
+      if (!el || el.nodeType !== 1) continue;
+      if (el.matches(".grid-2, .grid-3")) {
+        acc.push(...el.children);
+      } else if (el.matches("details.chart-more")) {
+        const inner = el.querySelector(".chart-more-inner");
+        if (inner) acc.push(...inner.children);
+        else acc.push(el);
+      } else if (el.classList.contains("card") && el.querySelector(":scope > .quote-grid")) {
+        const tiles = el.querySelectorAll(".quote-tile");
+        if (tiles.length) acc.push(...tiles);
+        else acc.push(el);
+      } else {
+        acc.push(el);
+      }
+    }
+    return acc.filter(Boolean);
+  };
+
   const wireGlobalScrollMotion = () => {
     if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.utils.toArray(".section").forEach((section) => {
-      gsap.fromTo(
-        section,
-        { opacity: 0.45, y: 36 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 88%",
-            end: "top 56%",
-            scrub: 0.55,
-            invalidateOnRefresh: true,
-          },
-        }
-      );
-    });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("reduce-motion");
+      return;
+    }
 
-    gsap.utils.toArray(".section-head, .card, .ground-photo, .prose p, .quote-tile").forEach((el) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0, y: 34 },
-        {
+    document.documentElement.classList.add("motion-ready");
+
+    const easeOut = "power3.out";
+    const easeSoft = "power2.out";
+
+    // Hero: short load timeline (no scroll scrub).
+    const heroTargets = gsap.utils.toArray(".hero-inner > *, .hero .hero-figure");
+    if (heroTargets.length) {
+      gsap.set(heroTargets, { opacity: 0, y: 26 });
+      gsap
+        .timeline({ defaults: { ease: easeOut } })
+        .to(heroTargets, {
           opacity: 1,
           y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 92%",
-            end: "top 66%",
-            scrub: 0.45,
-            invalidateOnRefresh: true,
+          duration: 0.62,
+          stagger: { each: 0.1, amount: 0.55 },
+          onComplete: () => {
+            gsap.set(heroTargets, { clearProps: "transform" });
           },
-        }
-      );
-    });
+        }, 0.12);
+    }
 
     const heroPhoto = document.querySelector(".hero-photo");
     if (heroPhoto) {
       gsap.to(heroPhoto, {
-        yPercent: 10,
+        yPercent: 4,
         ease: "none",
         scrollTrigger: {
           trigger: "#hero",
           start: "top top",
           end: "bottom top",
-          scrub: true,
+          scrub: 1.25,
           invalidateOnRefresh: true,
+        },
+      });
+    }
+
+    gsap.utils.toArray("main#main > section.section").forEach((section) => {
+      const blocks = flattenSectionBlocks(section);
+      if (!blocks.length) return;
+      gsap.set(blocks, { opacity: 0, y: 36 });
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 78%",
+        once: true,
+        onEnter: () => {
+          gsap.to(blocks, {
+            opacity: 1,
+            y: 0,
+            duration: 0.72,
+            ease: easeOut,
+            stagger: { each: 0.08, amount: 0.48 },
+            onComplete: () => {
+              gsap.set(blocks, { clearProps: "transform" });
+            },
+          });
+        },
+      });
+    });
+
+    const footer = document.querySelector("footer.footer");
+    if (footer) {
+      gsap.set(footer, { opacity: 0, y: 20 });
+      ScrollTrigger.create({
+        trigger: footer,
+        start: "top 94%",
+        once: true,
+        onEnter: () => {
+          gsap.to(footer, {
+            opacity: 1,
+            y: 0,
+            duration: 0.58,
+            ease: easeSoft,
+            onComplete: () => {
+              gsap.set(footer, { clearProps: "transform" });
+            },
+          });
         },
       });
     }
@@ -904,7 +961,10 @@
       window.refreshResultsScrolly?.();
       buildMap(qlfs);
       requestAnimationFrame(() => {
-        requestAnimationFrame(resizeRegisteredCharts);
+        requestAnimationFrame(() => {
+          resizeRegisteredCharts();
+          if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+        });
       });
     } catch (err) {
       console.error("website_v2 load failed", err);

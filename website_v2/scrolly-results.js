@@ -36,30 +36,30 @@
     const panels = gsap.utils.toArray(".results-scrolly-panel");
     const mm = gsap.matchMedia();
 
-    mm.add("(min-width: 900px)", () => {
+    const wirePanelReveal = (startPct, yFrom) => {
       panels.forEach((panel) => {
         const reveal = panel.querySelector(".results-scrolly-reveal");
         if (!reveal) return;
 
-        gsap.set(reveal, { opacity: 0, y: 56, scale: 0.985 });
+        gsap.set(reveal, { opacity: 0, y: yFrom, clearProps: "scale" });
 
-        gsap.fromTo(
-          reveal,
-          { opacity: 0, y: 56, scale: 0.985 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: panel,
-              start: "top 82%",
-              end: "top 38%",
-              scrub: 0.65,
-              invalidateOnRefresh: true,
-            },
-          }
-        );
+        ScrollTrigger.create({
+          trigger: panel,
+          start: `top ${startPct}%`,
+          once: true,
+          invalidateOnRefresh: true,
+          onEnter: () => {
+            gsap.to(reveal, {
+              opacity: 1,
+              y: 0,
+              duration: 0.58,
+              ease: "power3.out",
+              onComplete: () => {
+                gsap.set(reveal, { clearProps: "transform" });
+              },
+            });
+          },
+        });
 
         const step = panel.dataset.step ?? "0";
         ScrollTrigger.create({
@@ -71,35 +71,15 @@
           invalidateOnRefresh: true,
         });
       });
+    };
 
+    mm.add("(min-width: 900px)", () => {
+      wirePanelReveal(82, 40);
       return () => {};
     });
 
     mm.add("(max-width: 899px)", () => {
-      panels.forEach((panel) => {
-        const reveal = panel.querySelector(".results-scrolly-reveal");
-        if (!reveal) return;
-
-        gsap.set(reveal, { opacity: 0, y: 40 });
-
-        gsap.fromTo(
-          reveal,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: panel,
-              start: "top 88%",
-              end: "top 50%",
-              scrub: 0.5,
-              invalidateOnRefresh: true,
-            },
-          }
-        );
-      });
-
+      wirePanelReveal(88, 32);
       return () => {};
     });
 
