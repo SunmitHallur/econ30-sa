@@ -932,27 +932,14 @@
   // ------------------------------------------------------------
 
 
-  /** Build Gini + scatter charts when user opens the collapsible inequality panel so Chart.js reads non-zero dimensions. */
+  /** Build Gini + scatter charts for the always-visible inequality subsection. */
   const wireLazyInequalityCharts = (ineq, panel) => {
-    const dm = document.querySelector(".chart-more");
-    if (!dm) {
-      buildGiniChart(ineq);
-      buildScatterTop10Trade(panel);
-      return;
-    }
-    let ran = false;
-    const build = () => {
-      if (ran) return;
-      ran = true;
-      buildGiniChart(ineq);
-      buildScatterTop10Trade(panel);
-      requestAnimationFrame(() => {
-        Chart.getChart(document.getElementById("chart-gini"))?.resize();
-        Chart.getChart(document.getElementById("chart-scatter-top10-trade"))?.resize();
-      });
-    };
-    dm.addEventListener("toggle", () => { if (dm.open) build(); });
-    if (dm.open) build();
+    buildGiniChart(ineq);
+    buildScatterTop10Trade(panel);
+    requestAnimationFrame(() => {
+      Chart.getChart(document.getElementById("chart-gini"))?.resize();
+      Chart.getChart(document.getElementById("chart-scatter-top10-trade"))?.resize();
+    });
   };
   const wireTOC = () => {
     const links = $$(".topnav a");
@@ -987,7 +974,7 @@
         if (copy) acc.push(copy);
         if (charts) acc.push(charts);
         if (!copy && !charts) acc.push(el);
-      } else if (el.matches("details.chart-more")) {
+      } else if (el.matches(".chart-more")) {
         const inner = el.querySelector(".chart-more-inner");
         if (inner) acc.push(...inner.children);
         else acc.push(el);

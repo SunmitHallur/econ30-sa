@@ -1780,15 +1780,19 @@ details summary h3 { display: inline; }
   margin-top: 8px;
   border: 1px dashed var(--rule);
   border-radius: var(--radius-md);
-  padding: 0 14px 14px;
+  padding: 14px;
   background: var(--bg-sunken);
 }
-.chart-more > summary {
-  cursor: pointer;
-  font-weight: 600;
-  padding: 12px 0;
-  font-size: 16px;
+.chart-more-title {
+  margin: 0 0 8px;
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2vw, 28px);
+}
+.chart-more-lede {
+  margin: 0 0 12px;
   color: var(--fg-muted);
+  font-size: 16px;
+  line-height: 1.5;
 }
 .chart-more-inner { margin-top: 4px; }
 
