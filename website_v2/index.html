@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Price of Integration: South Africa after 1994</title>
-  <meta name="description" content="Essay on South Africa after 1994: narrative on trade, unemployment and inequality, with charts and exploratory econometrics keyed to curated sources (WDI, WID, WIID, WGI, Stats SA)." />
+  <meta name="description" content="South Africa after 1994: opening to trade and global rules, jobs, inequality, and what the data show—with clear charts and cautious statistics, linked to sources." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -33,7 +33,7 @@
         <a href="#question">Question</a>
         <a href="#from-the-ground">Ground</a>
         <a href="#timeline">Timeline</a>
-        <a href="#macro">Macro</a>
+        <a href="#macro">Economy</a>
         <a href="#inequality">Inequality</a>
         <a href="#governance">Governance</a>
         <a href="#results">Evidence</a>
@@ -57,23 +57,25 @@
         <p class="eyebrow">Final project · Economics 30 · Spring 2026</p>
         <h1 class="title">The Price of Integration</h1>
         <p class="subtitle">
-          South Africa re-entered the world economy after 1994. Average incomes
-          rose, trade opened, and institutions gained global legitimacy; yet the
-          top 10% now claim <strong>about 65% of pre-tax national income</strong>
-          while unemployment remains structurally high.
+          After apartheid, South Africa tied itself more tightly to world trade,
+          investment, and international rules. Average income rose and trade grew,
+          yet the richest <strong>roughly 10% of people received about 65% of
+          pre-tax national income</strong> in recent years—and unemployment has
+          stayed very high.
         </p>
         <p class="hero-thesis">
-          This essay argues that integration bought real macro gains without
-          solving distribution. The defensible causal channel is narrower than
-          the national charts: tariff-exposed local labour markets absorbed much
-          of the cost.
+          The country did get some real national-economy gains from opening up,
+          but everyday pay and opportunity did not spread widely. The strongest
+          story in the research is also the most local: areas hit harder by tariff
+          cuts often lost more jobs and formal work—especially for Black workers and
+          women—not the entire country in one clean line on a chart.
         </p>
         <div class="meta-row">
           <a class="ghost-btn" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
-          <a class="ghost-btn" href="#macro"><span class="ghost-btn__text">Jump to macro charts →</span></a>
+          <a class="ghost-btn" href="#macro"><span class="ghost-btn__text">Jump to national charts →</span></a>
         </div>
         <details class="hero-details">
-          <summary>Dataset codes &amp; regression scope</summary>
+          <summary>What data and tests are behind this?</summary>
           <div class="pills">
             <span class="pill pill-wdi">WDI · World Bank</span>
             <span class="pill pill-wid">WID · inequality shares</span>
@@ -82,8 +84,9 @@
             <span class="pill pill-qlfs">QLFS · Stats SA 2025Q1</span>
           </div>
           <p class="hero-details-note">
-            The Evidence section aggregates <strong id="spec-count">many</strong> exploratory OLS
-            specifications with HAC errors and Bonferroni/BH corrections.
+            The Evidence section runs <strong id="spec-count">many</strong> regression
+            tests on the same years of data, with standard errors adjusted for year-to-year
+            patterns and with stricter checks when many tests are run at once.
           </p>
         </details>
       </div>
@@ -93,9 +96,9 @@
           <figcaption>Looking out over Johannesburg from Braamfontein, with Nelson Mandela Bridge over the train station and the CBD in the background (4 Dec 2009; author: Evan Bench). <a href="https://commons.wikimedia.org/wiki/File:Johannesburg_CBD.jpg">Wikimedia Commons · File:Johannesburg CBD.jpg</a>.</figcaption>
         </figure>
         <div class="hero-chart-stack">
-          <p class="hero-chart-caption">Chart: top-10% income share and Trade/GDP, rescaled to the same share axis.</p>
+          <p class="hero-chart-caption">Chart: top-10% income share and trade openness (Trade/GDP), shown on the same scale for comparison.</p>
           <div class="hero-chart-canvas-wrap">
-            <canvas id="chart-hero" aria-label="Inequality vs trade openness chart"></canvas>
+            <canvas id="chart-hero" aria-label="Chart comparing top-10% income share with trade openness"></canvas>
           </div>
         </div>
       </div>
@@ -124,35 +127,35 @@
           <h2>1 · The Question</h2>
           <p class="section-question__themes">Goods · capital · norms</p>
           <p class="section-lede">
-            Did post-apartheid South Africa's rapid integration into world goods,
-            capital and norms markets buy growth at the cost of distribution—and
-            if so, through which channels (labour markets, asset prices, geography, institutions)
-            rather than through a single headline coefficient?
+            After 1994, did South Africa&apos;s opening to trade, foreign investment,
+            and global rules buy higher growth while leaving most people behind—and
+            if so, through jobs, prices, place, and institutions, not through one
+            magic number on a chart? In plain terms: did the country connect to the
+            world faster than it created broad opportunity at home?
           </p>
         </div>
       </div>
 
       <div class="prose">
         <p>
-          In 1994 South Africa inherited an economy that had been deliberately
-          closed off for three decades: sanctions, divestment and autarkic
-          industrial policy had left trade at just
-          <strong>37% of GDP</strong> and the Johannesburg Stock Exchange largely
-          cut off from foreign capital. The 1893 print below is not mere ornament:
-          it marks how early South Africa was wired into imperial finance and
-          commodity markets, so the post-1994 reopening was layered onto a long
-          history of external price discovery and domestic concentration, not a blank slate.
-          Two macro strategies defined the
-          transition. The <a class="kb-link" href="#sources" data-kb="reconstruction-and-development-programme">Reconstruction and Development Programme (RDP, 1994)</a>
-          promised redistribution, housing, electrification and a developmental
-          state. Twenty months later it was shelved in favour of
+          In 1994 South Africa took over an economy that had been partly cut off
+          for decades: sanctions and closed policy had left trade at only
+          <strong>37% of GDP</strong> and foreign money largely shut out of the
+          stock market. The 1893 print below is a reminder that South Africa was
+          already tied to global finance and commodity markets long before 1994—so
+          the post-1994 opening built on old patterns of who held power and wealth,
+          not a clean start.
+          Two broad economic strategies shaped the transition.
+          The <a class="kb-link" href="#sources" data-kb="reconstruction-and-development-programme">Reconstruction and Development Programme (RDP, 1994)</a>
+          promised redistribution, housing, electrification and a more active state.
+          About twenty months later, policy shifted toward
           <a class="kb-link" href="#sources" data-kb="gear-strategy">Growth, Employment and Redistribution (GEAR, 1996)</a>:
-          a self-described orthodox macro framework with fiscal consolidation,
-          inflation targeting, trade liberalisation, capital account opening
-          and partial privatisation. Here, <em>norms markets</em> means entry
-          into global expectations about liberalisation, credible courts,
-          investor confidence and governance benchmarks, not merely the exchange
-          of goods or portfolio capital.
+          tighter budgets, inflation targets, lower trade barriers, easier rules
+          for money to move across borders, and some privatization. By
+          <em>“norms markets”</em> this essay means more than buying and selling goods
+          or stocks: it means being judged by global rules—credible courts, investor
+          trust, and benchmarks for how government behaves—not only by what ships
+          dock at a port.
         </p>
         <figure class="ground-photo question-jse-figure">
           <img src="assets/ground/johannesburg-jse-exchange-1893.jpg" width="1600" height="1240" loading="lazy" decoding="async" alt="1893 print of the first Johannesburg Stock Exchange building, titled The Exchange" />
@@ -161,25 +164,24 @@
           </figcaption>
         </figure>
         <p>
-          Ordinary experience in commuter corridors, shack-side growth circles,
-          port towns, and Gauteng influx does not show up directly in GDP per capita,
-          yet it motivates why redistribution and geography matter politically.
-          The Durban harbour and stack photography in §2 put physical form around
-          the import and export ratios in §4; the Gugulethu and Cato Crest frames
-          show that openness is lived unevenly across neighbourhoods, not as a
-          uniform national mean. The charts and regressions test whether openness
-          tracks output, shares and governance; causal claims cite papers in
-          Sources alongside the correlations printed here,
-          notably <a href="#sources">synthetic-control, local labour-market, and inequality accounting work</a> linked below.
-          Winning the RDP–GEAR debate was always
-          <a class="kb-link" href="#sources" data-kb="political-economy-of-transition">genuinely political</a>.
+          Daily life—commuting, informal housing, port towns, migration to Gauteng—does
+          not show up as one line in GDP per person, but it explains why place and
+          politics matter. The photos in §2 put a face on the trade numbers in §4;
+          Gugulethu and Cato Crest show that “openness” lands very differently in
+          different neighbourhoods. The charts and statistics on this page trace
+          patterns in the national data; stronger claims about cause and effect rely
+          on outside research listed in <a href="#sources">Sources</a>,
+          including <a href="#sources">studies of sanctions, local labour markets after tariff cuts,
+          and who holds income and wealth</a>.
+          The fight over RDP versus GEAR was always
+          <a class="kb-link" href="#sources" data-kb="political-economy-of-transition">deeply political</a>, not only technical.
         </p>
         <blockquote class="callout">
-          <strong>How to read this page.</strong> This is a short national time series
-          (<span class="mono">T ≤ 35</span>), so the coefficients here show patterns, not proof of causation.
-          Causal arguments in the narrative come from external studies in the
-          <a href="#sources">sources section</a>, especially synthetic-control work on sanctions,
-          local labour-market evidence on tariff liberalisation, and wealth-distribution research.
+          <strong>How to read this page.</strong> You are looking at about
+          <span class="mono">35</span> years of national data at most. Numbers from
+          those regressions show associations, not proof that one thing caused
+          another. Where the essay makes a cause-and-effect argument, it points to
+          outside studies in the <a href="#sources">sources section</a>.
         </blockquote>
       </div>
     </section>
@@ -193,28 +195,29 @@
         <div class="section-head">
           <h2>2 · From the Ground</h2>
           <p class="section-lede">
-            Read these photographs as a sequence, not a gallery: labour settlement,
-            port corridor, container throughput, and the informal edge that macro
-            averages leave behind.
+            Read these photos in order: where people live and work, how goods move
+            through ports, what “more trade” looks like on the water, and why
+            national averages can hide who is left out.
           </p>
         </div>
 
         <div class="ground-sequence" aria-label="Ground-level sequence of integration channels">
           <article class="ground-step ground-step--settlement">
             <div class="ground-step__text">
-              <p class="ground-step__label">01 · Labour geography</p>
-              <h3>Townships before ratios</h3>
+              <p class="ground-step__label">01 · Where people work</p>
+              <h3>Townships before national averages</h3>
               <p>
-                Openness does not enter a neutral labour market. Gugulethu and the
-                hero skyline belong to the same migration economy: one registers
-                formal opportunity, the other the queue outside it.
+                Opening up does not hit a single, fair job market. The city skyline
+                and a township like Gugulethu sit in the same story: people move for
+                work, but opportunity is not shared the same way everywhere.
               </p>
               <p>
-                This is why the later macro unemployment line matters. The causal
-                paper to keep in mind is
+                That is why the national unemployment chart later matters. A key
+                paper is
                 <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna</a>:
-                tariff-exposed districts lost employment and formalisation,
-                especially for Black workers and women.
+                it compares districts more exposed to tariff cuts with districts
+                less exposed, and finds weaker jobs and formal work where exposure
+                was higher—especially for Black workers and women.
               </p>
             </div>
             <figure class="ground-photo">
@@ -226,19 +229,18 @@
           <article class="ground-step ground-step--reverse ground-step--port">
             <figure class="ground-photo ground-photo-bleed ground-port-hero">
               <img src="assets/ground/durban-harbour-philippn.jpg" width="1600" height="981" loading="lazy" decoding="async" alt="Wide view of the harbour at Durban" />
-              <figcaption>Durban harbour: the coastline that becomes Trade/GDP in the indexed macro panel. Source: Wikimedia Commons.</figcaption>
+              <figcaption>Durban harbour: the coast behind the “trade as a share of the economy” lines in §4. Source: Wikimedia Commons.</figcaption>
             </figure>
             <div class="ground-step__text">
-              <p class="ground-step__label">02 · Goods corridor</p>
-              <h3>The coastline becomes a denominator</h3>
+              <p class="ground-step__label">02 · Moving goods</p>
+              <h3>From water to the national trade line</h3>
               <p>
-                Ports translate policy into movement: tariff schedules, WTO
-                commitments, containers, rail, trucking and customs capacity all
-                collapse into the national openness ratio.
+                Ports turn policy into motion: import taxes, international
+                commitments (like the WTO), containers, rails, trucks and customs
+                all feed into one national “how open is trade?” measure.
               </p>
               <p>
-                The visual move is deliberate: before reading the line chart in
-                §4, hold the physical corridor in view.
+                Keep this corridor in mind before you read the line charts in §4.
               </p>
             </div>
           </article>
@@ -246,11 +248,11 @@
           <article class="ground-step ground-step--stack">
             <div class="ground-step__text">
               <p class="ground-step__label">03 · Throughput</p>
-              <h3>Boxes are not distribution</h3>
+              <h3>Boxes are not paychecks</h3>
               <p>
-                Container stacks show integration working as a flow measure. They
-                do not tell us whether the gains became wages, jobs, profits or
-                asset income. That distinction is the hinge between §4 and §5.
+                Stacked containers show trade moving. They do not say who captured
+                the benefit—wages, jobs, profits, or asset prices. That jump from
+                “more flow” to “who gains” is what §4 and §5 are about.
               </p>
             </div>
             <div class="ground-ports-pair" aria-label="Durban container terminal detail photographs">
@@ -271,13 +273,13 @@
               <figcaption>Cato Crest, Durban: the settlement edge beside the port economy. Source: Wikimedia Commons.</figcaption>
             </figure>
             <div class="ground-step__text">
-              <p class="ground-step__label">04 · Distributional edge</p>
-              <h3>Return to the question</h3>
+              <p class="ground-step__label">04 · Who is left at the edge?</p>
+              <h3>Back to the main question</h3>
               <p>
-                The ground story ends where the data question begins: trade can
-                rise while employment, housing and spatial access remain uneven.
-                The next sections test that tension with national series, then
-                bring the causal evidence back in.
+                Trade can rise while jobs, housing and access to opportunity stay
+                deeply uneven. The next sections use national data to trace that
+                tension, then point to research that speaks more directly to cause
+                and effect.
               </p>
             </div>
           </article>
@@ -293,15 +295,16 @@
       <div class="section-head">
         <h2>3 · Policy Timeline</h2>
         <p class="section-lede">
-          The sequence matters: sanctions lift, RDP gives way to GEAR, WTO
-          commitments bind tariff cuts, commodity capital arrives, and governance
-          later weakens. The timeline explains when integration became policy.
+          Order matters: sanctions ease, RDP shifts to GEAR, lower import taxes
+          get locked in (including through the WTO), commodity money surges, and
+          later years bring governance stress. The cards below show when policy
+          turns made that path concrete.
         </p>
       </div>
 
       <figure class="ground-photo ground-photo-wide timeline-photo-bleed">
         <img src="assets/ground/wef-davos-2005.jpg" width="3072" height="1856" loading="lazy" decoding="async" alt="World Economic Forum Annual Meeting, Davos 2005, with Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo" />
-        <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005). Read this tableau against the FDI line in §4: global legitimacy and capital access were part of integration, even when the measured flows stayed modest.</figcaption>
+        <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005). Compare the scene to the foreign-investment line in §4: being seen as a “normal” economy mattered, even when money from abroad stayed modest in the data.</figcaption>
       </figure>
 
       <div class="timeline-scroll-shell" id="timeline-shell">
@@ -322,12 +325,13 @@
     <!-- ============================================================ -->
     <section id="macro" class="section section-macro">
       <div class="section-head">
-        <h2>4 · Macro Evidence</h2>
+        <h2>4 · National economy</h2>
         <p class="section-lede">
-          Integration, measured as (exports + imports) / GDP, more than doubled
-          between 1990 and 2022. FDI, always modest, rode the same wave with a
-          lag. Read the charts as a trade-off: measured openness and output rise,
-          while labour-market absorption does not.
+          <em>Trade openness</em> here means (exports + imports) ÷ GDP—it more than
+          doubled between 1990 and 2022. Foreign direct investment (money from abroad
+          used to build or buy businesses) stayed small but moved with the same
+          broader story. The charts show a tension: trade and average income rose,
+          yet the economy still did not generate enough jobs for everyone.
         </p>
       </div>
 
@@ -339,17 +343,17 @@
               <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Stacked shipping containers at Durban port" />
               <figcaption>Port of Durban container stacks (2010 file date on Commons)—the throughput behind rising Trade/GDP.</figcaption>
             </figure>
-            <h3 class="chart-mockup__title">From throughput to lines on a page</h3>
+            <h3 class="chart-mockup__title">From docks to national lines</h3>
             <p class="chart-claim">
-              Integration is visible in flows before it is visible in lives:
-              Trade/GDP rises sharply, average income rises more modestly, and
-              unemployment remains the stubborn counter-line.
+              You can see openness in trade flows before you feel it in paychecks:
+              trade as a share of the economy shoots up, income per person rises more
+              slowly, and unemployment stays painfully high.
             </p>
             <div class="annotation-list">
-              <p><span>How to read</span> GDP per capita, Trade/GDP and FDI/GDP are rebased to 1990 = 100 on a log scale, so relative changes stay comparable.</p>
-              <p><span>Caution</span> The headline OLS links Trade/GDP with higher GDP per capita, unemployment and top-income share, but the national series does not identify causation.</p>
-              <p><span>Test</span> Engle-Granger for log GDP pc and Trade/GDP fails to reject no cointegration (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span>).</p>
-              <p><span>Source</span> World Development Indicators; trade-policy details in <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Sources</a>.</p>
+              <p><span>How to read</span> Income per person, trade/GDP and FDI/GDP are set so 1990 = 100; the vertical axis uses a log scale so large swings in trade do not hide slower moves in income.</p>
+              <p><span>Caution</span> In these national data, higher trade lines up with higher income per person, higher unemployment, and a higher top-income share—but that does not prove trade caused any of them.</p>
+              <p><span>Technical note</span> A formal “long-run link” test between log income per person and trade/GDP does not find a stable long-run pairing here (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span> for Engle–Granger).</p>
+              <p><span>Source</span> World Development Indicators; trade-policy context in <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Sources</a>.</p>
             </div>
           </div>
           <div class="chart-mockup__charts">
@@ -357,15 +361,15 @@
             <div class="chart-mockup__charts-stack">
               <figure class="card macro-chart-solo chart-mockup__card">
                 <figcaption class="card-head">
-                  <h3>Indexed macro indicators, 1990 = 100 (log scale)</h3>
-                  <p class="chart-mockup__card-lede">GDP per capita, Trade/GDP and FDI/GDP, rebased to 1990. The log axis keeps GDP's modest rise visible beside larger openness swings.</p>
+                  <h3>Indexed national indicators, 1990 = 100 (log scale)</h3>
+                  <p class="chart-mockup__card-lede">Income per person, trade/GDP and FDI/GDP, all set to 100 in 1990. The log scale keeps the clearer picture: trade moved a lot; income per person moved less.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-indexed"></canvas></div>
               </figure>
               <figure class="card macro-chart-solo chart-mockup__card">
                 <figcaption class="card-head">
-                  <h3>Unemployment (ILO-modelled)</h3>
-                  <p class="chart-mockup__card-lede">The structural unemployment plateau is the macro fact that prevents average-income gains from becoming broad labour absorption.</p>
+                  <h3>Unemployment (ILO-style measure)</h3>
+                  <p class="chart-mockup__card-lede">High, persistent unemployment is the reason higher average income does not translate into jobs for everyone.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-unemployment"></canvas></div>
               </figure>
@@ -380,10 +384,11 @@
     <!-- ============================================================ -->
     <section id="inequality" class="section section-inequality">
       <div class="section-head">
-        <h2>5 · Inequality Evidence</h2>
+        <h2>5 · Inequality</h2>
         <p class="section-lede">
-          Distribution is read in layers: income flows, wealth stocks, survey
-          Gini, and spatial inequality. The order is national first, then geographic.
+          Who gets what unfolds in steps: income shares, wealth, survey inequality
+          (Gini), and then place. This section starts with the whole country, then
+          zooms to geography.
         </p>
       </div>
 
@@ -391,16 +396,16 @@
         <div class="chart-mockup__accent" aria-hidden="true"></div>
         <div class="chart-mockup__grid">
           <div class="chart-mockup__copy chart-annotations chart-mockup__copy--inequality">
-            <h3 class="chart-mockup__title">Two WID ladders before the map</h3>
+            <h3 class="chart-mockup__title">Who holds income and wealth</h3>
             <p class="chart-claim">
-              The distributional story is not hidden in a small residual: by
-              2020 the top decile claims about 65% of pre-tax income, while the
-              bottom half receives under 6%.
+              The pattern is not subtle: by 2020 the best-off tenth of people held
+              about 65% of pre-tax national income, while the bottom half received
+              under 6%.
             </p>
             <div class="annotation-list">
-              <p><span>Income</span> The top-10% share rises from roughly 47% in 1990 to about 65% by 2020.</p>
-              <p><span>Wealth</span> Stocks are more concentrated than flows: the top decile holds roughly 85% of household wealth.</p>
-              <p><span>Spatial read</span> The map below translates the same skew into place; read it beside Gugulethu and Cato Crest.</p>
+              <p><span>Income</span> The top 10%’s share of income rose from roughly 47% in 1990 to about 65% by 2020.</p>
+              <p><span>Wealth</span> Wealth is more concentrated than yearly income: the top 10% held roughly 85% of household wealth.</p>
+              <p><span>Place</span> The map image below shows inequality in space—read it next to Gugulethu and Cato Crest in §2.</p>
               <p><span>Source</span> WID and <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee–Czajka–Gethin</a>.</p>
             </div>
           </div>
@@ -428,32 +433,33 @@
 
       <div class="prose narrow inequality-map-preface">
         <p>
-          The panels above set the national shares; the figure below freezes one spatial slice of the same inequality geography.
+          The charts above show national shares; the still image below captures
+          inequality as a map—one snapshot of the same geography.
         </p>
       </div>
 
       <figure class="card inequality-map-figure">
         <figcaption class="card-head">
           <h3>Inequality in national space</h3>
-          <p>Land disparities in Cape Town (6 Nov 2017), sourced from Exploring Africa (2017) and Sayer (2016), used here as a visual prompt on spatial inequality alongside the survey Gini series below. <a href="https://commons.wikimedia.org/wiki/File:South_Africa_Inequality_(Generalized_Entropy_Measure,_Parameter_0)_(5457977786).jpg">Wikimedia Commons · File:South Africa Inequality (Generalized Entropy Measure, Parameter 0) (5457977786)</a>. Resized locally; see <a href="assets/CREDITS.md">CREDITS.md</a>.</p>
+          <p>Land patterns in Cape Town (6 Nov 2017), from Exploring Africa (2017) and Sayer (2016), used here alongside the Gini chart as a picture of inequality across space. <a href="https://commons.wikimedia.org/wiki/File:South_Africa_Inequality_(Generalized_Entropy_Measure,_Parameter_0)_(5457977786).jpg">Wikimedia Commons</a>. Resized locally; see <a href="assets/CREDITS.md">CREDITS.md</a>.</p>
         </figcaption>
         <img class="inequality-map-img" src="assets/ground/sa-inequality-1.jpg" width="1600" height="1023" loading="lazy" alt="Map illustrating inequality across South Africa" />
       </figure>
 
       <details class="chart-more">
-        <summary>More charts: survey Gini and scatter vs trade openness</summary>
+        <summary>More charts: survey inequality (Gini) and income share vs trade</summary>
         <div class="grid-2 chart-more-inner">
         <figure class="card">
           <figcaption class="card-head">
             <h3>Gini (WIID vs WDI)</h3>
-            <p>Survey-based Gini hovers near 0.63, with variation driven by survey design. See <a class="kb-link" href="#sources" data-kb="dataset-wiid-2025">WIID 2025</a>.</p>
+            <p>The Gini index summarizes inequality in one number (higher = more unequal). Survey-based series sit near 0.63 but can shift with how surveys are built. See <a class="kb-link" href="#sources" data-kb="dataset-wiid-2025">WIID 2025</a>.</p>
           </figcaption>
           <div class="chart-canvas-wrap"><canvas id="chart-gini"></canvas></div>
         </figure>
         <figure class="card">
           <figcaption class="card-head">
             <h3>Top-10% income share vs Trade/GDP</h3>
-            <p>Each point is a year; hover to see which. The OLS fit is positive and highly significant (HAC, p &lt; 0.001).</p>
+            <p>Each dot is a year (hover for the year). The best-fit line slopes up and is statistically tight in this sample—but that still does not prove trade caused higher top shares.</p>
           </figcaption>
           <div class="chart-canvas-wrap"><canvas id="chart-scatter-top10-trade"></canvas></div>
         </figure>
@@ -462,21 +468,22 @@
 
       <div class="prose narrow inequality-closing">
         <p>
-          The central puzzle shows up in the <a class="kb-link" href="#sources" data-kb="inequality-in-south-africa">inequality</a> data:
-          the post-1994 openness episode did not coincide with distributional
-          compression. From 1994 onwards, the top-decile income share rose by
-          <strong>roughly 18 percentage points</strong>. The bottom half's share
-          shrank by a third. Wealth is starker: the top 10% hold roughly 85% of
-          household wealth.
+          The core tension shows up in <a class="kb-link" href="#sources" data-kb="inequality-in-south-africa">inequality</a> data:
+          after 1994, openness did not coincide with a clearly fairer split of income.
+          From 1994 on, the top tenth’s income share rose by
+          <strong>roughly 18 percentage points</strong>. The bottom half’s share
+          fell by about a third. Wealth is even sharper: the top 10% hold roughly
+          85% of household wealth.
         </p>
         <p>
-          The
-          <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna (2019)</a>
-          paper isolates the causal piece: districts more exposed to the
-          tariff cuts of 1994–2005 saw lower employment, formalisation and
-          wages, and the hit fell hardest on Black workers and women. That
-          evidence, not the scatter plots in the exploratory correlation panel, is what justifies the
-          "price of integration" framing when you move from pattern to mechanism.
+          For a clearer cause-and-effect picture than national correlation charts,
+          see
+          <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna (2019)</a>:
+          districts more exposed to tariff cuts from 1994–2005 tended to see weaker
+          jobs, formal work, and wages, with the worst outcomes for Black workers
+          and women. That district-level evidence—not the scatter plot above—is what
+          best supports the “price of integration” idea when you move from pattern
+          to mechanism.
         </p>
       </div>
     </section>
@@ -486,11 +493,12 @@
     <!-- ============================================================ -->
     <section id="governance" class="section">
       <div class="section-head">
-        <h2>6 · Governance Evidence</h2>
+        <h2>6 · Governance</h2>
         <p class="section-lede">
-          This is the norms channel: courts, accountability, rule-of-law
-          credibility and global governance benchmarks. The series are coarse,
-          but they test whether institutional legitimacy moved with growth.
+          This section asks how far courts, accountability, and trust in rules
+          moved alongside the economy. The World Bank’s governance scores are rough
+          annual summaries, but they help test whether outside observers still saw
+          those commitments as credible over time.
         </p>
       </div>
 
@@ -498,8 +506,13 @@
         <figcaption class="card-head">
           <h3>Constitution Hill in brick and glass</h3>
           <p>
-            The Constitutional Court building in the photograph is the institutional face of the post-1994 legal order—public interest standing, socioeconomic rights jurisprudence, and the explicit break with parliamentary sovereignty under apartheid.
-            The WGI &quot;rule of law&quot; and &quot;voice &amp; accountability&quot; series below are coarse annual indices; they cannot read the docket, but they do track whether outside observers still perceived those commitments as credible as patronage politics returned in the 2010s.
+            The Constitutional Court in the photo stands for the post-1994 legal
+            order—public-interest cases, socioeconomic rights, and a break with
+            unchecked parliamentary power under apartheid. The “rule of law” and
+            “voice and accountability” scores in the chart below are only rough
+            yearly ratings; they cannot describe every court case, but they track
+            whether outside observers still saw those promises as credible when
+            patronage politics hardened in the 2010s.
           </p>
         </figcaption>
         <img class="constitutional-court-img" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa, Johannesburg" />
@@ -508,23 +521,22 @@
 
       <figure class="card">
         <figcaption class="card-head">
-          <h3>WGI focus series, South Africa (1996–2024)</h3>
-          <p>Average governance, rule of law, and control of corruption carry the norms-market claim; the remaining pillars stay as faint context. See <a class="kb-link" href="#sources" data-kb="dataset-wgi-underlying-sources">WGI underlying sources</a>.</p>
+          <h3>WGI (World Governance Indicators), South Africa (1996–2024)</h3>
+          <p>Average governance, rule of law, and control of corruption carry the main story; lighter lines show the other pillars for context. See <a class="kb-link" href="#sources" data-kb="dataset-wgi-underlying-sources">how WGI is built</a>.</p>
         </figcaption>
         <div class="chart-canvas-wrap"><canvas id="chart-wgi"></canvas></div>
       </figure>
 
       <div class="prose narrow">
         <p>
-          The WGI composite peaks around 2008 and slides during the Zuma
-          administration (2009–2018), with a partial recovery after. This is
-          suggestive evidence for the norms channel, not a direct causal
-          estimate. The regression battery picks up a positive association
-          between the WGI composite and GDP growth
-          (<strong>β ≈ 40.5</strong>, HAC <span class="mono">p = 0.036</span>,
-          n = 26), but this correlation does not identify the causal impact
-          of state capacity on growth, especially given the short panel and
-          the GFC shock embedded in it.
+          The overall WGI score peaks around 2008 and weakens during the Zuma
+          years (2009–2018), with a partial bounce later. That timing lines up with
+          the “rules and trust” story, but it does not prove governance caused growth.
+          In the statistical battery, a higher WGI score lines up with faster GDP
+          growth in one specification (<strong>slope ≈ 40.5</strong>,
+          <span class="mono">p = 0.036</span> with adjusted errors, 26 years)—yet
+          that remains an association in a short, shock-filled sample, not proof that
+          better governance caused faster growth.
         </p>
       </div>
     </section>
@@ -534,18 +546,25 @@
     <!-- ============================================================ -->
     <section id="results" class="section">
       <div class="section-head">
-        <h2>7 · Econometric Evidence</h2>
+        <h2>7 · Statistical evidence</h2>
         <p class="section-lede">
-          Summary first; full OLS tables with HAC errors and tier labels if you want every coefficient.
+          Summary first; full regression tables below if you want every estimate and diagnostic.
+        </p>
+      </div>
+      <div class="card">
+        <p class="card-sub">
+          <strong>Regression in plain English.</strong> Each test asks how variables moved together across years.
+          That helps spot patterns; it does <em>not</em> by itself prove cause and effect—especially with only a few
+          decades of annual data.
         </p>
       </div>
       <div class="card results-plain">
         <h3 class="card-title">Takeaways</h3>
         <ul class="results-plain-list">
-          <li><strong>Trade and top incomes move together.</strong> The relationship between trade openness and the top-1% share is the single association that survives the strictest multiple-testing correction. It is not a causal license, but a consistent pattern worth reading next to Erten–Leight–Tregenna's district evidence.</li>
-          <li><strong>No clean "GEAR growth break."</strong> Chow tests around 1996 do not pick up a statistically sharp growth-regime shift at conventional levels. Alignment with the qualitative GEAR narrative is subtler.</li>
-          <li><strong>Unemployment stays the brake.</strong> Macro charts and the provincial map underline that integration did not engineer a labour-market catch-up.</li>
-          <li><strong>Use the tables sparingly.</strong> They are exploratory; BH / Bonf / Raw tiers flag how far each correlation survives sceptical testing.</li>
+          <li><strong>Trade and top incomes move together.</strong> In this project’s many tests, the link between trade openness and the richest 1%’s income share is the one pattern that still clears the strictest “many-tests” checks. That is not proof that trade caused higher top incomes—but it matches what you see on the charts and fits alongside Erten–Leight–Tregenna’s district-level evidence.</li>
+          <li><strong>No simple “GEAR changed growth overnight” break.</strong> Formal break tests around 1996 do not show a sharp statistical regime shift at usual cutoffs; the story of GEAR is still clearer in policy history than in one clean break line.</li>
+          <li><strong>Unemployment stays the limiting factor.</strong> National charts and the provincial map both show opening up did not automatically produce enough jobs.</li>
+          <li><strong>Use the tables as reference, not scripture.</strong> They are exploratory; the BH / Bonf / Raw labels tell you how skeptical to be after accounting for running lots of tests.</li>
         </ul>
       </div>
 
@@ -553,10 +572,10 @@
         <div class="results-scrolly-inner">
           <nav class="results-scrolly-rail" aria-label="Results sections">
             <a class="results-scrolly-rail-item is-active" data-step="0" href="#results-panel-metrics">Summary</a>
-            <a class="results-scrolly-rail-item" data-step="1" href="#results-panel-headline">Headline</a>
-            <a class="results-scrolly-rail-item" data-step="2" href="#results-panel-all">Full battery</a>
-            <a class="results-scrolly-rail-item" data-step="3" href="#results-panel-structural">Breaks &amp; coint.</a>
-            <a class="results-scrolly-rail-item" data-step="4" href="#results-panel-granger">Granger</a>
+            <a class="results-scrolly-rail-item" data-step="1" href="#results-panel-headline">Main tests</a>
+            <a class="results-scrolly-rail-item" data-step="2" href="#results-panel-all">All tests</a>
+            <a class="results-scrolly-rail-item" data-step="3" href="#results-panel-structural">Break tests</a>
+            <a class="results-scrolly-rail-item" data-step="4" href="#results-panel-granger">Forecast tests</a>
           </nav>
 
           <div class="results-scrolly-panels">
@@ -564,24 +583,24 @@
               <div class="results-scrolly-reveal">
                 <div class="results-toolbar card">
                   <div class="metric">
-                    <span class="metric-label">Specs run</span>
+                    <span class="metric-label">Tests run</span>
                     <span class="metric-value" id="m-total">–</span>
                   </div>
         <div class="metric">
-          <span class="metric-label">Sig at 5% (raw)</span>
+          <span class="metric-label">Passed basic 5% cutoff</span>
           <span class="metric-value" id="m-raw">–</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Sig after Bonferroni</span>
+          <span class="metric-label">Still passes Bonferroni</span>
           <span class="metric-value" id="m-bonf">–</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Sig after BH</span>
+          <span class="metric-label">Still passes BH (strictest here)</span>
           <span class="metric-value" id="m-bh">–</span>
         </div>
                   <label class="dw-filter">
                     <input type="checkbox" id="dw-filter" />
-                    <span>Hide specs with DW &lt; 1.5 (likely autocorrelated)</span>
+                    <span>Hide rows with DW &lt; 1.5 (year-to-year pattern in errors; less trustworthy)</span>
                   </label>
                 </div>
 
@@ -591,15 +610,15 @@
                     <div class="legend-pills">
                       <span class="tier-def">
                         <span class="tier-pill tier-bh">BH</span>
-                        <span class="tier-def-label">Benjamini–Hochberg</span>
+                        <span class="tier-def-label">BH · strict many-test adjustment</span>
                       </span>
                       <span class="tier-def">
                         <span class="tier-pill tier-bonf">Bonf</span>
-                        <span class="tier-def-label">Bonferroni</span>
+                        <span class="tier-def-label">Bonferroni · very conservative adjustment</span>
                       </span>
                       <span class="tier-def">
                         <span class="tier-pill tier-raw">Raw</span>
-                        <span class="tier-def-label">raw p &lt; 0.05</span>
+                        <span class="tier-def-label">raw · basic cutoff only</span>
                       </span>
                       <span class="tier-def">
                         <span class="tier-pill tier-ns">n/s</span>
@@ -613,26 +632,26 @@
                   </div>
                   <div class="legend-row">
                     <h4>Diag</h4>
-                    <p><span class="mono">DW</span> ≈ 2 &nbsp;·&nbsp; <span class="mono">BP</span>, <span class="mono">LB</span> &gt; 0.05 &nbsp;·&nbsp; click a row for coefficients</p>
+                    <p><span class="mono">DW</span> near 2 is healthy · <span class="mono">BP</span>, <span class="mono">LB</span> &gt; 0.05 suggests fewer technical red flags · click a row for estimates</p>
                   </div>
                   <div class="legend-row legend-glossary">
                     <h4>Glossary</h4>
                     <select id="glossary-select" aria-label="Glossary of statistical terms">
                       <option value="" selected>Pick a term…</option>
-                      <option data-def="Smallest uncorrected p-value across a spec's non-intercept regressors. Ignores the fact that many specs were tested.">Raw p</option>
-                      <option data-def="Bonferroni-corrected p-value: raw p multiplied by the number of specs tested. Controls the family-wise error rate; most conservative.">Bonf (Bonferroni)</option>
-                      <option data-def="Benjamini–Hochberg adjusted p-value: controls the false discovery rate across all specs. Less conservative than Bonferroni; surviving BH is the strongest evidence shown here.">BH (Benjamini–Hochberg)</option>
-                      <option data-def="‘Not significant’ at α = 0.05. The spec's best p-value does not clear the 5% threshold even before any correction.">n/s</option>
-                      <option data-def="Durbin-Watson statistic on residuals. ≈ 2 means no serial correlation. &lt; 1.5 indicates positive autocorrelation, and p-values from those specs are less trustworthy.">DW (Durbin-Watson)</option>
-                      <option data-def="Breusch–Pagan p-value for heteroskedasticity. p &gt; 0.05 means we can't reject homoskedastic residuals (good).">BP (Breusch–Pagan)</option>
-                      <option data-def="Ljung–Box Q(4) p-value: joint test for autocorrelation at lags 1–4. p &gt; 0.05 means no strong higher-order serial correlation (good).">LB (Ljung–Box)</option>
-                      <option data-def="Newey–West heteroskedasticity- and autocorrelation-consistent standard errors (lag 3). Used on every OLS spec in this battery.">HAC (Newey–West)</option>
-                      <option data-def="Coefficient of determination: share of variance in the outcome explained by the regressors. Higher is better but can be inflated with more regressors.">R²</option>
-                      <option data-def="Variance Inflation Factor. VIF &gt; 10 signals multicollinearity between regressors; visible on row expand.">VIF</option>
-                      <option data-def="F-test p-value for the joint null that all non-intercept coefficients are zero. Shown in the row expander.">F-test</option>
-                      <option data-def="Engle–Granger cointegration test. A low EG p with both series non-stationary (ADF p &gt; 0.05) suggests a long-run equilibrium relationship.">Cointegration (EG)</option>
-                      <option data-def="Chow test for a structural break at a chosen year (1996, the GEAR adoption). A small p suggests the regression coefficients differ before vs. after.">Chow test</option>
-                      <option data-def="Granger causality: does past X help predict Y beyond Y's own past? Reports p-values at 1, 2 and 3 lags. This is not causation in the economic sense; it only shows forecast precedence.">Granger</option>
+                      <option data-def="Smallest standard p-value in that row before any correction. Because hundreds of tests were run, some raw “hits” can appear by chance.">Raw p</option>
+                      <option data-def="Multiply the raw p-value by the number of tests run—very harsh. If a row still clears 5%, treat it seriously.">Bonf (Bonferroni)</option>
+                      <option data-def="A middle-ground correction when many tests are run. Surviving BH is the strongest bar used on this page; it means the pattern looks less like luck from testing everything at once.">BH (Benjamini–Hochberg)</option>
+                      <option data-def="Not statistically distinguishable from zero at the usual 5% bar—even before extra corrections.">n/s</option>
+                      <option data-def="Durbin–Watson checks whether errors line up year after year in a suspicious way. Near 2 is fine; below about 1.5 raises doubt about the printed p-values for that row.">DW (Durbin-Watson)</option>
+                      <option data-def="Breusch–Pagan checks whether the scatter of errors looks uneven across observations. A value above 0.05 is usually read as “no strong warning flag.”">BP (Breusch–Pagan)</option>
+                      <option data-def="Ljung–Box checks leftover patterns in errors across short lags. Above 0.05 is usually read as “no strong leftover year-to-year pattern.”">LB (Ljung–Box)</option>
+                      <option data-def="Newey–West: standard errors widened to account for uneven spread and year-to-year persistence in the errors. Used on every regression here.">HAC (Newey–West)</option>
+                      <option data-def="R-squared: fraction of ups and downs in the outcome year-by-year that line up with the regressors in this sample. Higher is better but can rise just from adding more controls.">R²</option>
+                      <option data-def="Variance inflation factor: warns when explanatory variables move almost in lockstep; above ~10 is worrying. Shown when you expand a row.">VIF</option>
+                      <option data-def="Joint test asking whether all explanatory variables together look like noise; low p means they jointly matter in this sample. Shown when you expand a row.">F-test</option>
+                      <option data-def="Engle–Granger: a formal check for a stable long-run pairing between two drifting series. Technical but listed for readers who want the formal footnote; low EG p can suggest a long-run link under assumptions.">Cointegration (EG)</option>
+                      <option data-def="Chow test: asks whether the relationship looks different before vs. after a chosen year (here 1996, when GEAR arrived). A small p suggests a break; a large p suggests continuity.">Chow test</option>
+                      <option data-def="Granger test: asks whether past values of one series help forecast another beyond its own past. “Forecast help” is not the same as proving policy causation in real life.">Granger</option>
                     </select>
                     <span id="glossary-def" class="glossary-def" aria-live="polite"></span>
                   </div>
@@ -643,12 +662,11 @@
             <article class="results-scrolly-panel" id="results-panel-headline" data-step="1">
               <div class="results-scrolly-reveal">
                 <div class="card">
-                  <h3 class="card-title">Headline specifications</h3>
+                  <h3 class="card-title">Main regression table</h3>
         <p class="card-sub">
-          Click a row to expand coefficients and diagnostics. Diagnostics:
-          Durbin-Watson (<span class="mono">DW</span>, ideal ≈ 2), Breusch-Pagan
-          p-value (<span class="mono">BP</span>, ideal &gt; 0.05), Ljung-Box
-          Q(4) p-value (<span class="mono">LB</span>, ideal &gt; 0.05).
+          Click a row to expand estimates and technical checks. Quick guide:
+          <span class="mono">DW</span> near 2 is healthy;
+          <span class="mono">BP</span> and <span class="mono">LB</span> above 0.05 usually mean fewer warning lights.
         </p>
         <div class="table-wrap">
           <table id="headline-table" class="results-table">
@@ -671,7 +689,7 @@
               <div class="results-scrolly-reveal">
                 <div class="card">
                   <details>
-                    <summary><h3 class="card-title inline">All specifications (<span id="all-count">–</span>)</h3></summary>
+                    <summary><h3 class="card-title inline">All tests (<span id="all-count">–</span>), first 400 rows</h3></summary>
           <div class="table-wrap">
             <table id="all-table" class="results-table">
               <thead>
@@ -694,7 +712,7 @@
               <div class="results-scrolly-reveal">
                 <div class="grid-2">
                   <div class="card">
-                    <h3 class="card-title">Chow break at 1996 (GEAR)</h3>
+                    <h3 class="card-title">Did relationships shift when GEAR arrived (1996)?</h3>
           <div class="table-wrap">
             <table id="chow-table" class="results-table">
               <thead>
@@ -705,7 +723,7 @@
           </div>
                   </div>
                   <div class="card">
-                    <h3 class="card-title">Engle-Granger cointegration</h3>
+                    <h3 class="card-title">Long-run pairing tests (Engle–Granger)</h3>
                     <div class="table-wrap">
                       <table id="coint-table" class="results-table">
                         <thead>
@@ -722,7 +740,7 @@
             <article class="results-scrolly-panel" id="results-panel-granger" data-step="4">
               <div class="results-scrolly-reveal">
                 <div class="card">
-                  <h3 class="card-title">Granger causality (p by lag)</h3>
+                  <h3 class="card-title">Forecast-style tests (Granger; p by lag)</h3>
                   <div class="table-wrap">
                     <table id="granger-table" class="results-table">
                       <thead>
@@ -744,21 +762,26 @@
     <!-- ============================================================ -->
     <section id="map" class="section">
       <div class="section-head">
-        <h2>8 · Provincial Unemployment, 2025 Q1</h2>
+        <h2>8 · Provincial unemployment, 2025 Q1</h2>
         <p class="section-lede">
-          Hover a province for its narrow unemployment rate. Expanded
-          unemployment (discouraged job-seekers included) ran at
-          <strong>43.1%</strong> nationally in Q1 2025. Source:
-          <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
+          Hover a province for its <em>narrow</em> unemployment rate—people actively
+          looking for work who cannot find it. The broader measure that counts
+          discouraged job-seekers too was <strong>43.1%</strong> nationally in Q1 2025.
+          Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
         </p>
       </div>
 
       <div class="prose narrow">
         <p>
-          National averages hide apartheid-era spatial hierarchies persisting thirty years later: former homeland regions and peri-urban belts still register the worst narrow-unemployment burdens,
-          Gauteng notwithstanding its relative formal employment density documented above.
-          The choropleth is a blunt instrument. Intra-provincial inequality remains large, yet it reinforces that joblessness is geographically concentrated, not uniformly distributed beneath macro openness figures.
-          Read KwaZulu-Natal beside the Durban harbour photographs in §2, and the Western Cape beside Gugulethu—the map is the same country at administrative scale.
+          One national unemployment number hides large differences between places.
+          Apartheid left a geography where jobs, housing, and former homeland regions
+          still line up with worse outcomes today. Gauteng may offer more formal work
+          on average, yet pockets of deep joblessness remain everywhere.
+          This color-coded map is crude—each province holds rich and poor communities—but
+          it still shows the main point: joblessness is concentrated, not evenly spread,
+          and high trade on paper does not erase those gaps.
+          Pair KwaZulu-Natal with the Durban harbour photos in §2 and the Western Cape
+          with Gugulethu: same country, different realities at province scale.
         </p>
       </div>
 
@@ -778,57 +801,56 @@
       <div class="section-head">
         <h2>9 · Conclusions</h2>
         <p class="section-lede">
-          What the 630-spec battery, the governance panel, and the cited studies
-          show together, and what they do not.
+          What hundreds of statistical tests, governance scores, and outside studies
+          agree on—and what they still cannot settle from national numbers alone.
         </p>
       </div>
 
       <div class="grid-2 conclusion-grid">
         <div class="card">
-          <h3 class="card-title">1 · What integration bought</h3>
+          <h3 class="card-title">1 · What opening up achieved</h3>
           <p>
-            Re-entry bought macro normalisation: trade rose, sanctions faded,
-            capital and governance signals improved, and GDP per capita ended
-            higher than in 1994. The evidence for that gain is descriptive but
-            visible across the macro panel.
+            Trade rose, sanctions faded, outside ratings of institutions improved for a
+            time, and income per person ended higher than in 1994. Those gains show up
+            clearly in the national charts—they describe “what happened,” not automatic
+            proof of why.
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">2 · Where distribution failed</h3>
+          <h3 class="card-title">2 · Where gains did not reach most people</h3>
           <p>
-            The gains did not become broad labour absorption or distributional
-            compression. Top-income and wealth concentration remain extreme, and
-            narrow unemployment is still <strong>32.9%</strong> in Q1 2025.
+            Jobs did not scale up for everyone; income and wealth stayed concentrated at
+            the top. Narrow unemployment (actively searching, no job) was still
+            <strong>32.9%</strong> in Q1 2025.
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">3 · The causal mechanism we can defend</h3>
+          <h3 class="card-title">3 · Strongest cause-and-effect evidence cited here</h3>
           <p>
-            The national OLS battery shows correlations. The sharper causal
-            claim comes from <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna</a>:
-            districts more exposed to tariff cuts saw lower employment,
-            formalisation and wages, with the burden falling hardest on Black
-            workers and women.
+            The national regressions show correlations only. The sharper story comes from
+            <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna</a>:
+            districts more exposed to tariff cuts saw weaker employment, formal jobs,
+            and wages, with the worst hits on Black workers and women.
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">4 · What remains uncertain</h3>
+          <h3 class="card-title">4 · What remains unclear from this page alone</h3>
           <p>
-            The strongest trade/top-income association survives the correction
-            battery, but it is still not identification. Governance also tracks
-            growth only suggestively (n = 26), and GEAR does not produce a clean
-            growth break in the Chow tests.
+            Even the durable trade/top-income pattern in the battery is not airtight proof
+            of causation. Governance lines up with growth only weakly in a short sample
+            (26 years), and formal break tests around GEAR do not show a neat statistical
+            growth hinge.
           </p>
         </div>
       </div>
 
       <div class="prose narrow conclusion-prose">
         <p>
-          The answer, stated cautiously, is yes: integration bought growth and
-          macro credibility, while distributional repair failed to follow. The
-          national series show the pattern; local labour-market evidence explains
-          the mechanism. The next policy wave should begin there, with industrial
-          strategy, spatial redress, and labour-market activation at the center.
+          Answering carefully: yes—South Africa grew more connected and somewhat richer on
+          average, yet everyday security in jobs and fair shares lagged. National charts
+          paint the pattern; district-level labour-market research points to the pathway
+          worth taking seriously next—pairing industrial policy with fixing spatial unfairness
+          and activating labour markets where people actually live.
         </p>
       </div>
       <div class="card quote-showcase quote-orbit-card">
@@ -911,7 +933,7 @@
           <ul class="link-list">
             <li><a href="https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki/summaries/trade-liberalization-local-labor-markets-south-africa.md" target="_blank" rel="noopener noreferrer">Erten–Leight–Tregenna (local labour markets)</a></li>
             <li><a href="https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki/summaries/trade-liberalization-sa-manufacturing.md" target="_blank" rel="noopener noreferrer">Trade liberalisation &amp; manufacturing</a></li>
-            <li><a href="https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki/summaries/sanctions-synthetic-control-south-africa.md" target="_blank" rel="noopener noreferrer">Sanctions synthetic-control</a></li>
+            <li><a href="https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki/summaries/sanctions-synthetic-control-south-africa.md" target="_blank" rel="noopener noreferrer">Sanctions (synthetic-control method)</a></li>
             <li><a href="https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki/summaries/sanctions-impact-south-african-exports.md" target="_blank" rel="noopener noreferrer">Sanctions &amp; SA exports</a></li>
             <li><a href="https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki/summaries/wealth-inequality-lab-south-africa.md" target="_blank" rel="noopener noreferrer">Chatterjee–Czajka–Gethin (WIL 2021)</a></li>
           </ul>
@@ -920,42 +942,39 @@
       <div class="card sources-scope-card">
         <h3 class="card-title">Scope of claims (short version)</h3>
         <ul class="link-list sources-scope-list">
-          <li><strong>Can claim:</strong> Post-1994 integration coincides with persistent concentration in income and wealth, plus entrenched unemployment.</li>
-          <li><strong>Can claim:</strong> In this battery, the trade/top-income relationship is the most statistically durable pattern.</li>
-          <li><strong>Cannot claim:</strong> Causation from this national time series alone (trade→inequality, GEAR→outcomes, governance→growth).</li>
-          <li><strong>Cannot claim:</strong> Full robustness to survey-design differences and data-coverage gaps in inequality series.</li>
+          <li><strong>Fair to say:</strong> After 1994, South Africa opened more while income and wealth stayed highly concentrated and unemployment stayed high.</li>
+          <li><strong>Fair to say:</strong> Among this project’s many regressions, the trade/top-income pattern is the hardest to dismiss after strict corrections.</li>
+          <li><strong>Not fair to claim:</strong> That these national charts alone prove trade caused inequality, or GEAR caused growth paths, or governance caused GDP.</li>
+          <li><strong>Not fair to claim:</strong> Perfect comparability across inequality surveys that were built in different ways or stop in different years.</li>
         </ul>
       </div>
 
       <div class="card callout-card">
-        <h3 class="card-title">Caveats, in order of severity</h3>
+        <h3 class="card-title">Limits of the evidence (most important first)</h3>
         <ol>
           <li>
-            <strong>Small n.</strong> At most 35 annual observations. Confidence
-            intervals are wide even when p-values look small.
+            <strong>Few years per series.</strong> At most about 35 annual points.
+            Statistical precision is limited even when p-values look tiny.
           </li>
           <li>
-            <strong>Autocorrelation.</strong> Many specs have Durbin-Watson
-            below 1.5. HAC SEs partially mitigate this; the "DW &lt; 1.5 filter"
-            above removes those specs at the reader's request.
+            <strong>Year follows year.</strong> Many rows fail the Durbin–Watson check
+            (below 1.5), meaning errors cluster over time. Adjusted standard errors help,
+            but filtering those rows is wise when you want cleaner reads.
           </li>
           <li>
-            <strong>Multiple testing.</strong> We estimate
+            <strong>Many tests, many chances.</strong> This page estimates
             <span class="mono" id="m-total-inline">hundreds</span>
-            of specifications. Bonferroni and Benjamini-Hochberg adjusted
-            p-values are shown alongside raw p; a finding that survives BH is
-            more credible.
+            of equations. Bonferroni and BH adjustments punish that; surviving BH is the
+            credibility bar used here.
           </li>
           <li>
-            <strong>No identification.</strong> Correlations do not settle the
-            policy debate. For causal claims the paper relies on
-            synthetic-control (sanctions), local-labour-market designs
-            (trade liberalisation) and distributional accounts (WIL 2021).
+            <strong>Correlation is not policy proof.</strong> For stronger causal claims,
+            this essay leans on outside work—sanctions synthetic controls, district labour
+            markets after tariff cuts, and wealth distribution accounting (WIL 2021).
           </li>
           <li>
-            <strong>Coverage gaps.</strong> WIID Gini drops out after 2017;
-            WDI Gini is sparser still. Comparisons across series must account
-            for survey design differences.
+            <strong>Survey gaps.</strong> WIID-based Gini fades after 2017; WDI Gini is thin.
+            Treat cross-series comparisons as suggestive, not exact.
           </li>
         </ol>
       </div>

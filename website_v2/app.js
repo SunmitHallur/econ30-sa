@@ -229,9 +229,9 @@
       labels: years,
       datasets: [
         datasetFrom(years, inequality.series.top10_inc, "wid", { borderWidth: 2.5 }),
-        datasetFrom(timeseries.years, { label: "Trade / GDP (rescaled)", values: timeseries.series.trade_gdp.values.map(v => v == null ? null : v / 100) }, "wdi", { borderDash: [4, 4] }),
+        datasetFrom(timeseries.years, { label: "Trade / GDP (scaled to match income axis)", values: timeseries.series.trade_gdp.values.map(v => v == null ? null : v / 100) }, "wdi", { borderDash: [4, 4] }),
       ],
-      yTitle: "share (0–1)",
+      yTitle: "Share of income (0–1)",
       xTitle: "Year",
     });
   };
@@ -248,7 +248,7 @@
     makeLineChart(canvas, {
       labels: years,
       datasets: ds,
-      yTitle: "Index (1990 = 100, log scale)",
+      yTitle: "Index, 1990 = 100 (log axis)",
       xTitle: "Year",
       yAxisType: "logarithmic",
     });
@@ -261,7 +261,7 @@
     makeLineChart(canvas, {
       labels: years,
       datasets: [datasetFrom(years, ts.series.unemployment, "danger", { borderWidth: 2.5 })],
-      yTitle: "% labour force",
+      yTitle: "% of labour force",
       xTitle: "Year",
     });
   };
@@ -277,7 +277,7 @@
         datasetFrom(years, ineq.series.top1_inc, "danger"),
         datasetFrom(years, ineq.series.bottom50_inc, "wgi"),
       ],
-      yTitle: "Share of pre-tax income",
+      yTitle: "Share of national income (pre-tax)",
       xTitle: "Year",
     });
   };
@@ -292,7 +292,7 @@
         datasetFrom(years, ineq.series.top10_wealth, "wid"),
         datasetFrom(years, ineq.series.top1_wealth, "danger"),
       ],
-      yTitle: "Share of wealth",
+      yTitle: "Share of household wealth",
       xTitle: "Year",
     });
   };
@@ -307,7 +307,7 @@
         datasetFrom(years, ineq.series.wiid_gini, "wiid", { pointRadius: 4 }),
         datasetFrom(years, ineq.series.wdi_gini, "wdi", { pointRadius: 4, borderDash: [4, 4] }),
       ],
-      yTitle: "Gini",
+      yTitle: "Gini index (higher = more unequal)",
       xTitle: "Year",
     });
   };
@@ -336,7 +336,7 @@
         datasets: [
           {
             type: "scatter",
-            label: "Year",
+            label: "Years (each dot)",
             data: points,
             backgroundColor: p.wid,
             borderColor: p.wid,
@@ -347,7 +347,7 @@
           },
           {
             type: "line",
-            label: `OLS fit (β=${slope.toFixed(4)})`,
+            label: `Best-fit line (slope=${slope.toFixed(4)})`,
             data: line,
             borderColor: p.danger,
             backgroundColor: `${p.danger}33`,
@@ -422,7 +422,7 @@
     ds.push(datasetFrom(years, { ...gov.series.rl, label: labels.rl }, "accent", { borderWidth: 2.4 }));
     ds.push(datasetFrom(years, { ...gov.series.cc, label: labels.cc }, "danger", { borderWidth: 2.4 }));
     ds.push(datasetFrom(years, { ...gov.series.avg, label: "Average governance" }, "fg", { borderWidth: 3.2 }));
-    makeLineChart(canvas, { labels: years, datasets: ds, yTitle: "Normalised (0–1)", xTitle: "Year" });
+    makeLineChart(canvas, { labels: years, datasets: ds, yTitle: "Score (0 = weak, 1 = strong)", xTitle: "Year" });
   };
 
   // ------------------------------------------------------------
@@ -430,25 +430,25 @@
   // ------------------------------------------------------------
   const TIMELINE = [
     { year: "1989–93", title: "Apartheid sanctions unravel", kb: "apartheid-era-sanctions",
-      body: "Trade and financial sanctions lifted gradually as CODESA negotiations progressed." },
+      body: "Trade and banking sanctions eased step by step while multiparty talks (CODESA) moved forward." },
     { year: "1994", title: "Democratic elections · RDP", kb: "reconstruction-and-development-programme",
-      body: "RDP launched as a redistributive development programme; tariffs still high." },
-    { year: "1995", title: "WTO accession", kb: "state-of-trade-policy-south-africa",
-      body: "Binding commitments lock in large tariff reductions through 2005." },
+      body: "RDP emphasised redistribution and basic services; import taxes (tariffs) were still relatively high." },
+    { year: "1995", title: "Joining the WTO", kb: "state-of-trade-policy-south-africa",
+      body: "Membership committed South Africa to phase down import taxes through about 2005." },
     { year: "1996", title: "GEAR adopted", kb: "gear-strategy",
-      body: "Fiscal consolidation, liberalisation, partial privatisation and inflation targeting." },
-    { year: "2000s", title: "Commodity supercycle", kb: "minerals-energy-complex",
-      body: "Resource prices and FDI flows surge; non-mineral manufacturing stagnates." },
+      body: "Tighter budgets, lower trade barriers, some privatisation, and inflation targets became the main macro recipe." },
+    { year: "2000s", title: "Commodity boom years", kb: "minerals-energy-complex",
+      body: "Resource prices and foreign investment jumped; factory jobs outside mining often struggled." },
     { year: "2008–09", title: "Global financial crisis", kb: "trade-liberalization-sa-manufacturing",
-      body: "Manufacturing contracts sharply; unemployment ratchets up." },
+      body: "Manufacturing shrank sharply; unemployment stepped up." },
     { year: "2009–18", title: "Zuma era: state capture", kb: "political-economy-of-transition",
-      body: "Governance indicators slide; rule of law and control of corruption decline." },
+      body: "Outside ratings of rule of law and corruption control weakened." },
     { year: "2017", title: "Sovereign rating downgrades", kb: "trade-liberalisation-south-africa",
-      body: "South Africa loses investment-grade status; borrowing costs rise amid weak trend growth." },
+      body: "Credit-rating agencies moved South Africa below top investment grades; borrowing became costlier." },
     { year: "2020–22", title: "COVID-19 shock", kb: "building-back-better-covid-jobs",
-      body: "Largest single-year employment loss on record; partial rebound 2021–22." },
-    { year: "2024–25", title: "QLFS Q1 2025: u = 32.9%", kb: "stats-sa-qlfs-p0211-2025q1",
-      body: "Expanded unemployment at 43.1%; youth unemployment at 46.1%." },
+      body: "Record single-year job losses; only partial recovery through 2021–22." },
+    { year: "2024–25", title: "QLFS Q1 2025: narrow u = 32.9%", kb: "stats-sa-qlfs-p0211-2025q1",
+      body: "Broader unemployment (including discouraged seekers) at 43.1%; youth unemployment at 46.1%." },
   ];
   // wiki links: map slugs to their sub-folder
   const KB_FOLDER = {
@@ -647,9 +647,9 @@
 
   const tierFor = (r) => {
     const bh = r.min_p_bh, bf = r.min_p_bonf, raw = r.min_p_raw;
-    if (bh != null && bh < 0.05) return { cls: "tier-bh", label: "BH", title: "Survives Benjamini-Hochberg" };
-    if (bf != null && bf < 0.05) return { cls: "tier-bonf", label: "Bonf", title: "Survives Bonferroni" };
-    if (raw != null && raw < 0.05) return { cls: "tier-raw", label: "Raw", title: "Significant at raw 5% only" };
+    if (bh != null && bh < 0.05) return { cls: "tier-bh", label: "BH", title: "Passes strict BH many-test check" };
+    if (bf != null && bf < 0.05) return { cls: "tier-bonf", label: "Bonf", title: "Passes very harsh Bonferroni check" };
+    if (raw != null && raw < 0.05) return { cls: "tier-raw", label: "Raw", title: "Passes basic 5% bar only" };
     return { cls: "tier-ns", label: "n/s", title: "Not significant at 5%" };
   };
   const tierPill = (r) => {
@@ -664,7 +664,7 @@
     tr.tabIndex = 0;
     tr.setAttribute("role", "button");
     tr.setAttribute("aria-expanded", "false");
-    tr.setAttribute("aria-label", `Expand coefficients for ${r.y_label}`);
+    tr.setAttribute("aria-label", `Expand estimates for ${r.y_label}`);
     tr.innerHTML = `
       <td class="num">${idx}</td>
       <td><span class="outcome-cell">${tierPill(r)}${r.y_label}</span></td>
@@ -731,7 +731,7 @@
     td.colSpan = 12;
     const coefRows = r.coefficients.map(c => `
       <span class="var">${c.label}</span>
-      <span class="c">β = ${fmt.coef(c.coef)}</span>
+      <span class="c">Estimate = ${fmt.coef(c.coef)}</span>
       <span class="s">SE = ${fmt.coef(c.se)}</span>
       <span class="c">t = ${c.t.toFixed(2)}</span>
       <span class="p ${c.p < 0.05 ? "" : "notsig"}">p = ${fmt.p(c.p)}</span>
@@ -741,7 +741,7 @@
       : "n/a (univariate)";
     td.innerHTML = `
       <div class="coef-grid">
-        <span class="h">Variable</span><span class="h">Coef</span><span class="h">SE</span><span class="h">t</span><span class="h">p</span>
+        <span class="h">Variable</span><span class="h">Estimate</span><span class="h">SE</span><span class="h">t</span><span class="h">p</span>
         ${coefRows}
       </div>
       <div class="expander-meta">
@@ -903,7 +903,7 @@
       const entry = { marker, rate, hover: false };
       markerEntries.push(entry);
       marker.bindTooltip(
-        `<strong>${name}</strong><br>Unemployment: ${rate.toFixed(1)}%`,
+        `<strong>${name}</strong><br>Narrow unemployment: ${rate.toFixed(1)}%`,
         { sticky: true, direction: "top", offset: [0, -4] }
       );
       marker.on("mouseover", () => {
@@ -1207,13 +1207,13 @@
       quote:
         "Districts with larger tariff cuts experienced significant declines in both formal and informal employment, driven primarily by manufacturing job losses.",
       name: "Erten, Leight & Tregenna",
-      designation: "2018 · trade liberalisation and local labour markets",
+      designation: "2018 · tariff cuts and local labour markets",
     },
     {
       quote:
         "No wage effects for those who remain employed; wages are too rigid to absorb the shock.",
       name: "Erten, Leight & Tregenna",
-      designation: "2018 · same study, wage rigidity",
+      designation: "2018 · same study (wages did not flex enough)",
     },
     {
       quote:
