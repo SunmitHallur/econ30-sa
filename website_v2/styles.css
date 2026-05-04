@@ -341,6 +341,10 @@ a:hover { border-bottom-color: currentColor; }
 }
 .prose p { margin: 0 0 18px; }
 .prose strong { font-weight: 600; color: var(--fg); }
+#question .prose .question-jse-figure {
+  max-width: min(920px, 100%);
+  margin: 28px auto 12px;
+}
 
 .callout {
   border-left: 3px solid var(--accent);
@@ -1193,6 +1197,38 @@ details summary h3 { display: inline; }
   max-width: 72ch;
   margin-left: auto;
   margin-right: auto;
+}
+.ground-ports-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.5vw, 22px);
+  margin-top: 28px;
+}
+@media (max-width: 900px) {
+  .ground-ports-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.constitutional-court-figure {
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.constitutional-court-figure .constitutional-court-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(420px, 50vh);
+  object-fit: cover;
+  object-position: center 35%;
+  background: var(--bg-sunken);
+  border-radius: var(--radius-md);
+}
+.constitutional-court-figure .court-photo-credit {
+  margin-top: 14px;
+  margin-bottom: 0;
+  text-align: center;
+  font-size: 14px;
 }
 .ground-notes h3, .ground-kicker {
   font-family: var(--font-serif);
