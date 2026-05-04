@@ -127,6 +127,16 @@
     });
   };
 
+  /** Axis & tooltip numbers without locale grouping (years read as 1990 not 1,990). */
+  const formatChartTickPlain = value => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return String(value);
+    if (Number.isInteger(n)) return String(n);
+    const r = Math.round(n);
+    if (Math.abs(n - r) < 1e-9) return String(r);
+    return n.toLocaleString(undefined, { useGrouping: false, maximumFractionDigits: 8 });
+  };
+
   const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear", yAxisType = "linear" }) => {
     const p = palette();
     const yScale = {
@@ -139,10 +149,12 @@
       yScale.ticks.callback = function (value) {
         if (value === 50 || value === 75 || value === 100 || value === 150 || value === 200 ||
             value === 300 || value === 500 || value === 1000) {
-          return value;
+          return formatChartTickPlain(value);
         }
         return null;
       };
+    } else {
+      yScale.ticks.callback = formatChartTickPlain;
     }
     return new Chart(canvas, {
       type: "line",
@@ -153,14 +165,31 @@
         interaction: { intersect: false, mode: "index" },
         plugins: {
           legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8 } },
-          tooltip: { enabled: true },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              title(items) {
+                if (!items.length) return "";
+                const x = items[0].parsed?.x;
+                if (x != null && Number.isFinite(x)) return formatChartTickPlain(x);
+                return items[0].label ?? "";
+              },
+              label(ctx) {
+                const name = ctx.dataset.label ?? "";
+                const y = ctx.parsed?.y;
+                if (y == null || !Number.isFinite(y)) return name;
+                const v = formatChartTickPlain(y);
+                return name ? `${name}: ${v}` : v;
+              },
+            },
+          },
         },
         scales: {
           x: {
             type: xAxisType,
             title: xTitle ? { display: true, text: xTitle, color: p.muted } : { display: false },
             grid: { color: p.rule, drawBorder: false },
-            ticks: { color: p.muted, maxRotation: 0 },
+            ticks: { color: p.muted, maxRotation: 0, callback: formatChartTickPlain },
           },
           y: yScale,
         },
@@ -339,7 +368,13 @@
             callbacks: {
               label: ctx => {
                 const pt = ctx.raw;
-                if (pt.year != null) return `${pt.year}: trade=${pt.x}, top10=${(pt.y * 100).toFixed(1)}%`;
+                if (pt.year != null) {
+                  const yr = pt.year != null && Number.isFinite(Number(pt.year))
+                    ? formatChartTickPlain(pt.year)
+                    : String(pt.year);
+                  const x = formatChartTickPlain(pt.x);
+                  return `${yr}: trade=${x}, top10=${(pt.y * 100).toFixed(1)}%`;
+                }
                 return `${ctx.dataset.label}`;
               },
             },
@@ -349,12 +384,12 @@
           x: {
             title: { display: true, text: "Trade / GDP (%)", color: p.muted },
             grid: { color: p.rule },
-            ticks: { color: p.muted },
+            ticks: { color: p.muted, callback: formatChartTickPlain },
           },
           y: {
             title: { display: true, text: "Top-10% share", color: p.muted },
             grid: { color: p.rule },
-            ticks: { color: p.muted },
+            ticks: { color: p.muted, callback: formatChartTickPlain },
           },
         },
       },
