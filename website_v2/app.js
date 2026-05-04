@@ -31,10 +31,16 @@
   // Theme toggle (light ↔ dark, persisted)
   // ------------------------------------------------------------
   const themeKey = "econ30-theme";
+  const mapThemeRefreshers = [];
   const applyTheme = t => {
     document.documentElement.dataset.theme = t;
-    const btn = $("#theme-toggle .theme-icon");
-    if (btn) btn.textContent = t === "dark" ? "◑" : "◐";
+    const icon = $("#theme-toggle .theme-icon");
+    const btn = $("#theme-toggle");
+    if (icon) icon.textContent = t === "dark" ? "◑" : "◐";
+    if (btn) {
+      btn.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
+      btn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+    }
   };
   const initialTheme = () => {
     const saved = localStorage.getItem(themeKey);
@@ -48,6 +54,7 @@
     applyTheme(cur);
     // Chart.js snapshots palette at construction; v4 has no reliable global instances iterator.
     refreshAllChartsForTheme();
+    mapThemeRefreshers.forEach(fn => fn());
   });
 
   // ------------------------------------------------------------
@@ -55,10 +62,14 @@
   // ------------------------------------------------------------
   const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const palette = () => ({
+    bg: cssVar("--bg"),
+    bgElev: cssVar("--bg-elev"),
+    bgSunken: cssVar("--bg-sunken"),
     fg: cssVar("--fg"),
     muted: cssVar("--fg-muted"),
     rule: cssVar("--rule"),
     accent: cssVar("--accent"),
+    accentSoft: cssVar("--accent-soft"),
     wdi: cssVar("--c-wdi"),
     wid: cssVar("--c-wid"),
     wiid: cssVar("--c-wiid"),
@@ -91,6 +102,14 @@
     const o = chart.options;
     if (o.plugins?.legend?.labels) o.plugins.legend.labels.color = p.fg;
     if (o.color !== undefined) o.color = p.muted;
+    chart.data.datasets.forEach(ds => {
+      if (!ds.paletteKey || !p[ds.paletteKey]) return;
+      const color = p[ds.paletteKey];
+      const border = `${color}${ds.colorAlpha ?? ""}`;
+      ds.borderColor = border;
+      ds.backgroundColor = `${color}${ds.backgroundAlpha ?? "33"}`;
+      ds.pointBackgroundColor = border;
+    });
     Object.values(o.scales || {}).forEach(scale => {
       if (!scale || typeof scale !== "object") return;
       if (scale.ticks) scale.ticks.color = p.muted;
@@ -156,26 +175,32 @@
   // ------------------------------------------------------------
   // Macro / inequality / governance / hero charts
   // ------------------------------------------------------------
-  const datasetFrom = (years, series, color, style = {}) => ({
-    label: series.label,
-    data: series.values.map((v, i) => ({ x: years[i], y: v })),
-    borderColor: color,
-    backgroundColor: color + "33",
-    pointBackgroundColor: color,
-    spanGaps: true,
-    ...style,
-  });
+  const colorFrom = keyOrColor => palette()[keyOrColor] ?? keyOrColor;
+  const datasetFrom = (years, series, colorKey, style = {}) => {
+    const color = colorFrom(colorKey);
+    const paletteKey = palette()[colorKey] ? colorKey : style.paletteKey;
+    const border = `${color}${style.colorAlpha ?? ""}`;
+    return {
+      label: series.label,
+      data: series.values.map((v, i) => ({ x: years[i], y: v })),
+      borderColor: border,
+      backgroundColor: `${color}${style.backgroundAlpha ?? "33"}`,
+      pointBackgroundColor: border,
+      spanGaps: true,
+      paletteKey,
+      ...style,
+    };
+  };
 
   const buildHeroChart = (inequality, timeseries) => {
     const canvas = $("#chart-hero");
     if (!canvas) return;
-    const p = palette();
     const years = inequality.years;
     makeLineChart(canvas, {
       labels: years,
       datasets: [
-        datasetFrom(years, inequality.series.top10_inc, p.wid, { borderWidth: 2.5 }),
-        datasetFrom(timeseries.years, { label: "Trade / GDP (rescaled)", values: timeseries.series.trade_gdp.values.map(v => v == null ? null : v / 100) }, p.wdi, { borderDash: [4, 4] }),
+        datasetFrom(years, inequality.series.top10_inc, "wid", { borderWidth: 2.5 }),
+        datasetFrom(timeseries.years, { label: "Trade / GDP (rescaled)", values: timeseries.series.trade_gdp.values.map(v => v == null ? null : v / 100) }, "wdi", { borderDash: [4, 4] }),
       ],
       yTitle: "share (0–1)",
       xTitle: "Year",
@@ -185,12 +210,11 @@
   const buildIndexedChart = (ts) => {
     const canvas = $("#chart-indexed");
     if (!canvas) return;
-    const p = palette();
     const years = ts.indexed.years;
     const ds = [];
-    const colors = { gdp_pc_usd: p.wdi, trade_gdp: p.accent, fdi_gdp: p.wgi };
+    const colors = { gdp_pc_usd: "wdi", trade_gdp: "accent", fdi_gdp: "wgi" };
     Object.entries(ts.indexed.series).forEach(([key, s]) => {
-      ds.push(datasetFrom(years, s, colors[key] ?? p.fg, { borderWidth: 2.2 }));
+      ds.push(datasetFrom(years, s, colors[key] ?? "fg", { borderWidth: 2.2 }));
     });
     makeLineChart(canvas, {
       labels: years,
@@ -204,11 +228,10 @@
   const buildUnemploymentChart = (ts) => {
     const canvas = $("#chart-unemployment");
     if (!canvas) return;
-    const p = palette();
     const years = ts.years;
     makeLineChart(canvas, {
       labels: years,
-      datasets: [datasetFrom(years, ts.series.unemployment, p.danger, { borderWidth: 2.5 })],
+      datasets: [datasetFrom(years, ts.series.unemployment, "danger", { borderWidth: 2.5 })],
       yTitle: "% labour force",
       xTitle: "Year",
     });
@@ -217,14 +240,13 @@
   const buildIncomeChart = (ineq) => {
     const canvas = $("#chart-income-shares");
     if (!canvas) return;
-    const p = palette();
     const years = ineq.years;
     makeLineChart(canvas, {
       labels: years,
       datasets: [
-        datasetFrom(years, ineq.series.top10_inc, p.wid),
-        datasetFrom(years, ineq.series.top1_inc, p.danger),
-        datasetFrom(years, ineq.series.bottom50_inc, p.wgi),
+        datasetFrom(years, ineq.series.top10_inc, "wid"),
+        datasetFrom(years, ineq.series.top1_inc, "danger"),
+        datasetFrom(years, ineq.series.bottom50_inc, "wgi"),
       ],
       yTitle: "Share of pre-tax income",
       xTitle: "Year",
@@ -234,13 +256,12 @@
   const buildWealthChart = (ineq) => {
     const canvas = $("#chart-wealth-shares");
     if (!canvas) return;
-    const p = palette();
     const years = ineq.years;
     makeLineChart(canvas, {
       labels: years,
       datasets: [
-        datasetFrom(years, ineq.series.top10_wealth, p.wid),
-        datasetFrom(years, ineq.series.top1_wealth, p.danger),
+        datasetFrom(years, ineq.series.top10_wealth, "wid"),
+        datasetFrom(years, ineq.series.top1_wealth, "danger"),
       ],
       yTitle: "Share of wealth",
       xTitle: "Year",
@@ -250,13 +271,12 @@
   const buildGiniChart = (ineq) => {
     const canvas = $("#chart-gini");
     if (!canvas) return;
-    const p = palette();
     const years = ineq.years;
     makeLineChart(canvas, {
       labels: years,
       datasets: [
-        datasetFrom(years, ineq.series.wiid_gini, p.wiid, { pointRadius: 4 }),
-        datasetFrom(years, ineq.series.wdi_gini, p.wdi, { pointRadius: 4, borderDash: [4, 4] }),
+        datasetFrom(years, ineq.series.wiid_gini, "wiid", { pointRadius: 4 }),
+        datasetFrom(years, ineq.series.wdi_gini, "wdi", { pointRadius: 4, borderDash: [4, 4] }),
       ],
       yTitle: "Gini",
       xTitle: "Year",
@@ -270,6 +290,7 @@
     const points = panel
       .filter(r => r.wdi_trade_gdp != null && r.wid_top10_inc != null)
       .map(r => ({ x: r.wdi_trade_gdp, y: r.wid_top10_inc, year: r.year }));
+    if (points.length < 2) return;
     // OLS fit
     const n = points.length;
     const mx = points.reduce((s, p) => s + p.x, 0) / n;
@@ -290,6 +311,8 @@
             data: points,
             backgroundColor: p.wid,
             borderColor: p.wid,
+            pointBackgroundColor: p.wid,
+            paletteKey: "wid",
             pointRadius: 5,
             pointHoverRadius: 7,
           },
@@ -298,6 +321,9 @@
             label: `OLS fit (β=${slope.toFixed(4)})`,
             data: line,
             borderColor: p.danger,
+            backgroundColor: `${p.danger}33`,
+            pointBackgroundColor: p.danger,
+            paletteKey: "danger",
             borderDash: [4, 4],
             pointRadius: 0,
             borderWidth: 2,
@@ -308,7 +334,7 @@
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: "bottom" },
+          legend: { position: "bottom", labels: { color: p.fg } },
           tooltip: {
             callbacks: {
               label: ctx => {
@@ -320,8 +346,16 @@
           },
         },
         scales: {
-          x: { title: { display: true, text: "Trade / GDP (%)" }, grid: { color: p.rule } },
-          y: { title: { display: true, text: "Top-10% share" }, grid: { color: p.rule } },
+          x: {
+            title: { display: true, text: "Trade / GDP (%)", color: p.muted },
+            grid: { color: p.rule },
+            ticks: { color: p.muted },
+          },
+          y: {
+            title: { display: true, text: "Top-10% share", color: p.muted },
+            grid: { color: p.rule },
+            ticks: { color: p.muted },
+          },
         },
       },
     });
@@ -330,14 +364,29 @@
   const buildWGIChart = (gov) => {
     const canvas = $("#chart-wgi");
     if (!canvas) return;
-    const p = palette();
     const years = gov.years;
-    const colors = { va: p.wdi, pv: p.wid, ge: p.wgi, rq: p.wiid, rl: p.accent, cc: p.danger };
+    const colors = { va: "wdi", pv: "wid", ge: "wgi", rq: "wiid", rl: "accent", cc: "danger" };
+    const labels = {
+      va: "Voice & accountability",
+      pv: "Political stability",
+      ge: "Government effectiveness",
+      rq: "Regulatory quality",
+      rl: "Rule of law",
+      cc: "Control of corruption",
+    };
     const ds = [];
-    ["va", "pv", "ge", "rq", "rl", "cc"].forEach(k => {
-      ds.push(datasetFrom(years, gov.series[k], colors[k], { borderWidth: 1.5 }));
+    ["va", "pv", "ge", "rq"].forEach(k => {
+      ds.push(datasetFrom(years, { ...gov.series[k], label: labels[k] }, colors[k], {
+        borderWidth: 1,
+        colorAlpha: "66",
+        backgroundAlpha: "18",
+        pointRadius: 0,
+        borderDash: [3, 4],
+      }));
     });
-    ds.push(datasetFrom(years, gov.series.avg, p.fg, { borderWidth: 3 }));
+    ds.push(datasetFrom(years, { ...gov.series.rl, label: labels.rl }, "accent", { borderWidth: 2.4 }));
+    ds.push(datasetFrom(years, { ...gov.series.cc, label: labels.cc }, "danger", { borderWidth: 2.4 }));
+    ds.push(datasetFrom(years, { ...gov.series.avg, label: "Average governance" }, "fg", { borderWidth: 3.2 }));
     makeLineChart(canvas, { labels: years, datasets: ds, yTitle: "Normalised (0–1)", xTitle: "Year" });
   };
 
@@ -427,13 +476,14 @@
     if (!scrollEl || !shell) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const autoplay = scrollEl.dataset.autoplay === "true";
     let pausedByUser = false;
     let sectionVisible = false;
     let rafId = 0;
-    const speed = 0.35;
+    const speed = 0.22;
 
     const syncChrome = () => {
-      scrollEl.classList.toggle("is-autoplay-paused", pausedByUser || reduceMotion);
+      scrollEl.classList.toggle("is-autoplay-paused", !autoplay || pausedByUser || reduceMotion);
     };
 
     const pause = () => {
@@ -467,7 +517,7 @@
     };
 
     const startIfNeeded = () => {
-      if (reduceMotion || pausedByUser || !sectionVisible) return;
+      if (!autoplay || reduceMotion || pausedByUser || !sectionVisible) return;
       if (rafId) return;
       rafId = requestAnimationFrame(tick);
     };
@@ -491,6 +541,26 @@
     scrollEl.addEventListener("wheel", () => pause(), { passive: true });
     scrollEl.addEventListener("touchstart", pause, { passive: true });
     scrollEl.addEventListener("focusin", pause);
+    scrollEl.addEventListener("keydown", e => {
+      const step = Math.max(220, scrollEl.clientWidth * 0.72);
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        pause();
+        scrollEl.scrollBy({ left: step, behavior: reduceMotion ? "auto" : "smooth" });
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        pause();
+        scrollEl.scrollBy({ left: -step, behavior: reduceMotion ? "auto" : "smooth" });
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        pause();
+        scrollEl.scrollTo({ left: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      } else if (e.key === "End") {
+        e.preventDefault();
+        pause();
+        scrollEl.scrollTo({ left: scrollEl.scrollWidth, behavior: reduceMotion ? "auto" : "smooth" });
+      }
+    });
     shell.addEventListener("focusout", (e) => {
       const next = e.relatedTarget;
       if (next && shell.contains(next)) return;
@@ -518,7 +588,7 @@
     io.observe(shell);
 
     syncChrome();
-    if (!reduceMotion) startIfNeeded();
+    if (autoplay && !reduceMotion) startIfNeeded();
   };
 
   const wireKBLinks = () => {
@@ -555,6 +625,10 @@
     const tr = document.createElement("tr");
     tr.dataset.specId = r.spec_id;
     tr.dataset.dw = r.diagnostics.dw ?? "";
+    tr.tabIndex = 0;
+    tr.setAttribute("role", "button");
+    tr.setAttribute("aria-expanded", "false");
+    tr.setAttribute("aria-label", `Expand coefficients for ${r.y_label}`);
     tr.innerHTML = `
       <td class="num">${idx}</td>
       <td><span class="outcome-cell">${tierPill(r)}${r.y_label}</span></td>
@@ -570,6 +644,11 @@
       <td class="num">${fmt.p3(r.diagnostics.lb_pvalue)}</td>
     `;
     tr.addEventListener("click", () => toggleExpand(tr, r));
+    tr.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      toggleExpand(tr, r);
+    });
     return tr;
   };
 
@@ -597,13 +676,18 @@
     if (next && next.classList.contains("row-expander") && next.dataset.specId === r.spec_id) {
       next.remove();
       tr.classList.remove("row-open");
+      tr.setAttribute("aria-expanded", "false");
       window.refreshResultsScrolly?.();
       return;
     }
     // remove any other expander in this table
     $$("tr.row-expander", tr.parentElement).forEach(n => n.remove());
-    $$("tr.row-open", tr.parentElement).forEach(n => n.classList.remove("row-open"));
+    $$("tr.row-open", tr.parentElement).forEach(n => {
+      n.classList.remove("row-open");
+      n.setAttribute("aria-expanded", "false");
+    });
     tr.classList.add("row-open");
+    tr.setAttribute("aria-expanded", "true");
     const ex = document.createElement("tr");
     ex.classList.add("row-expander");
     ex.dataset.specId = r.spec_id;
@@ -624,7 +708,7 @@
         <span class="h">Variable</span><span class="h">Coef</span><span class="h">SE</span><span class="h">t</span><span class="h">p</span>
         ${coefRows}
       </div>
-      <div style="margin-top:10px;color:var(--fg-muted);">
+      <div class="expander-meta">
         HAC lags = ${r.hac_lags} · F-test p = ${fmt.p(r.f_pvalue)} · VIF: ${vif}
       </div>`;
     ex.appendChild(td);
@@ -736,14 +820,37 @@
     const gj = await fetchJSON("zaf-outline.geojson");
     const map = L.map(el, { zoomControl: true, attributionControl: true, scrollWheelZoom: false })
       .setView([-28.8, 25.0], 5.2);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    const tile = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 10,
       attribution: "© OpenStreetMap",
       opacity: 0.35,
     }).addTo(map);
     const layer = L.geoJSON(gj, {
-      style: { weight: 1.4, color: "#1f2937", fillColor: "#e8eef2", fillOpacity: 0.35 },
+      style: { weight: 1.4, color: palette().fg, fillColor: palette().bgSunken, fillOpacity: 0.35 },
     }).addTo(map);
+    const markerEntries = [];
+    const applyMarkerStyle = entry => {
+      const p = palette();
+      entry.marker.setStyle({
+        radius: 10 + Math.min(14, entry.rate / 3),
+        color: entry.hover ? p.accent : p.fg,
+        weight: entry.hover ? 2.2 : 1.2,
+        fillColor: provColor(entry.rate),
+        fillOpacity: 0.9,
+      });
+    };
+    const applyMapTheme = () => {
+      const p = palette();
+      const dark = document.documentElement.dataset.theme === "dark";
+      tile.setOpacity(dark ? 0.22 : 0.35);
+      layer.setStyle({
+        weight: 1.4,
+        color: p.fg,
+        fillColor: p.bgSunken,
+        fillOpacity: dark ? 0.28 : 0.36,
+      });
+      markerEntries.forEach(applyMarkerStyle);
+    };
 
     // Province centroid bubbles sized by labour force, coloured by unemployment
     Object.entries(qlfs.provinces).forEach(([name, info]) => {
@@ -752,19 +859,29 @@
       const rate = info.unemployment_rate;
       const marker = L.circleMarker([coord.lat, coord.lon], {
         radius: 10 + Math.min(14, rate / 3),
-        color: "#1f2937",
+        color: palette().fg,
         weight: 1.2,
         fillColor: provColor(rate),
         fillOpacity: 0.9,
       });
+      const entry = { marker, rate, hover: false };
+      markerEntries.push(entry);
       marker.bindTooltip(
         `<strong>${name}</strong><br>Unemployment: ${rate.toFixed(1)}%`,
         { sticky: true, direction: "top", offset: [0, -4] }
       );
-      marker.on("mouseover", () => marker.setStyle({ weight: 2.2, color: "#0f5f46" }));
-      marker.on("mouseout", () => marker.setStyle({ weight: 1.2, color: "#1f2937" }));
+      marker.on("mouseover", () => {
+        entry.hover = true;
+        applyMarkerStyle(entry);
+      });
+      marker.on("mouseout", () => {
+        entry.hover = false;
+        applyMarkerStyle(entry);
+      });
       marker.addTo(map);
     });
+    mapThemeRefreshers.push(applyMapTheme);
+    applyMapTheme();
 
     map.fitBounds(layer.getBounds(), { padding: [20, 20] });
     const obs = new IntersectionObserver(entries => {
@@ -1128,7 +1245,7 @@
         rw >= 720 ? Math.min(gap * 0.5, rw * 0.045) : 0;
       const singleSlide = rw < 420;
       const rot = reduce ? 0 : 15;
-      const ease = "all 0.8s cubic-bezier(0.4, 2, 0.3, 1)";
+      const ease = "all 0.55s cubic-bezier(0.22, 1, 0.36, 1)";
 
       for (let i = 0; i < n; i++) {
         const el = faces[i];

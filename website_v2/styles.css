@@ -263,7 +263,7 @@ a:hover { border-bottom-color: currentColor; }
   overflow: hidden;
   flex-shrink: 0;
   transition:
-    transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 2.2),
+    transform 0.28s var(--ease-out),
     box-shadow 0.38s var(--ease-out),
     color 0.22s var(--ease-out);
   box-shadow:
@@ -337,7 +337,7 @@ a:hover { border-bottom-color: currentColor; }
 }
 
 .ghost-btn:hover {
-  transform: scale(1.045) translateY(-1px);
+  transform: translateY(-1px);
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--accent) 28%, var(--rule)),
     0 4px 12px color-mix(in oklab, var(--fg) 8%, transparent),
@@ -426,10 +426,18 @@ a:hover { border-bottom-color: currentColor; }
   font-size: clamp(21px, 2.35vw, 30px);
   line-height: 1.45;
   color: var(--fg);
-  margin: 0 auto 26px;
+  margin: 0 auto 16px;
   max-width: 60ch;
 }
 .subtitle strong { color: var(--accent-strong); font-weight: 600; }
+.hero-thesis {
+  max-width: 58ch;
+  margin: 0 auto 26px;
+  color: var(--fg-muted);
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.45vw, 22px);
+  line-height: 1.55;
+}
 
 .pills {
   display: flex;
@@ -494,13 +502,14 @@ a:hover { border-bottom-color: currentColor; }
   font-size: clamp(20px, 1.8vw, 25px);
   line-height: 1.7;
   color: var(--fg);
+  max-width: 70ch;
 }
 .prose.narrow { max-width: 62ch; margin-top: 30px; }
 .prose,
 .prose.narrow {
   margin-left: auto;
   margin-right: auto;
-  text-align: center;
+  text-align: left;
 }
 .prose p { margin: 0 0 18px; }
 .prose strong { font-weight: 600; color: var(--fg); }
@@ -586,9 +595,9 @@ a:hover { border-bottom-color: currentColor; }
 }
 figure.card:hover,
 .card:not(.timeline-card):hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 36px color-mix(in oklab, var(--fg) 10%, transparent);
-  border-color: color-mix(in oklab, var(--accent) 35%, var(--rule));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px color-mix(in oklab, var(--fg) 8%, transparent);
+  border-color: color-mix(in oklab, var(--accent) 24%, var(--rule));
 }
 .card-head {
   margin: 0 0 12px;
@@ -1132,6 +1141,11 @@ figure.card .chart-canvas-wrap {
   vertical-align: top;
 }
 .results-table tbody tr:hover { background: var(--bg-sunken); }
+.results-table tbody tr[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: var(--bg-sunken);
+}
 .results-table tbody tr.row-open { background: var(--accent-soft); }
 .results-table td.num { font-family: var(--font-mono); }
 .results-table td.p-sig { color: var(--good); font-weight: 600; }
@@ -1146,6 +1160,10 @@ figure.card .chart-canvas-wrap {
   padding: 14px 16px;
   font-family: var(--font-mono);
   font-size: 12.5px;
+}
+.expander-meta {
+  margin-top: 10px;
+  color: var(--fg-muted);
 }
 .coef-grid {
   display: grid;
@@ -1243,6 +1261,9 @@ details summary h3 { display: inline; }
   text-align: center;
   padding: 30px 26px 28px;
 }
+#sources > .sources-scope-card {
+  margin-top: 0.75rem;
+}
 #sources > .card .card-title {
   margin: 0 0 8px;
 }
@@ -1255,6 +1276,9 @@ details summary h3 { display: inline; }
 #sources > .card .link-list li {
   text-align: center;
   padding: 14px 10px;
+}
+#sources .sources-scope-list {
+  margin-top: 8px;
 }
 #sources .callout-card {
   text-align: center;
@@ -1390,14 +1414,14 @@ details summary h3 { display: inline; }
 .hero-details .pills { margin-bottom: 0; margin-top: 10px; }
 
 .prose-max { max-width: 74ch; }
-.section-ground .section-lede { max-width: 78ch; }
+.section-ground .section-lede { max-width: 72ch; }
 .ground-grid { align-items: start; }
 .ground-photo {
   margin: 0;
-  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+  transition: transform 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out);
 }
 .ground-photo:hover {
-  transform: translateY(-3px);
+  transform: translateY(-1px);
 }
 .ground-photo img {
   width: 100%;
@@ -1411,12 +1435,12 @@ details summary h3 { display: inline; }
   color: var(--fg-muted);
   margin-top: 8px;
   line-height: 1.45;
-  text-align: center;
-  max-width: 72ch;
+  text-align: left;
+  max-width: 66ch;
   margin-left: auto;
   margin-right: auto;
 }
-/* Ground: cross-fading Durban stills behind prose (smooth opacity cycle). */
+/* Ground: quiet texture, not duplicated photography behind the foreground sequence. */
 .section-visual-panel {
   position: relative;
   isolation: isolate;
@@ -1427,6 +1451,10 @@ details summary h3 { display: inline; }
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  opacity: 0.62;
+  background:
+    radial-gradient(circle at 16% 18%, color-mix(in oklab, var(--accent-soft) 44%, transparent) 0, transparent 28%),
+    radial-gradient(circle at 82% 72%, color-mix(in oklab, var(--bg-sunken) 82%, transparent) 0, transparent 34%);
 }
 .section-bg-film__slide {
   position: absolute;
@@ -1476,15 +1504,64 @@ details summary h3 { display: inline; }
   pointer-events: none;
   background: linear-gradient(
     165deg,
-    color-mix(in oklab, var(--bg) 86%, transparent) 0%,
-    color-mix(in oklab, var(--bg) 78%, transparent) 38%,
-    color-mix(in oklab, var(--bg) 94%, transparent) 100%
+    color-mix(in oklab, var(--bg) 93%, transparent) 0%,
+    color-mix(in oklab, var(--bg) 88%, transparent) 42%,
+    color-mix(in oklab, var(--bg) 96%, transparent) 100%
   );
 }
 
+.ground-sequence {
+  display: grid;
+  gap: clamp(34px, 6vw, 72px);
+}
+.ground-step {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(24px, 4vw, 54px);
+  align-items: center;
+}
+.ground-step--reverse {
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+}
+.ground-step--stack {
+  grid-template-columns: 1fr;
+  gap: clamp(18px, 3vw, 34px);
+}
+.ground-step__text {
+  max-width: 44rem;
+}
+.ground-step__label,
+.annotation-list span {
+  display: inline-flex;
+  margin: 0 0 8px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+.ground-step__text h3 {
+  margin: 0 0 10px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 2.6vw, 2.25rem);
+  line-height: 1.15;
+  color: var(--fg);
+}
+.ground-step__text p {
+  margin: 0 0 13px;
+  color: var(--fg);
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.45vw, 22px);
+  line-height: 1.62;
+}
+.ground-step__text p:last-child {
+  margin-bottom: 0;
+}
 .ground-port-hero {
-  margin-top: clamp(36px, 5vw, 56px);
-  margin-bottom: clamp(8px, 2vw, 12px);
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .ground-photo-bleed img {
   max-height: min(480px, 56vh);
@@ -1494,9 +1571,16 @@ details summary h3 { display: inline; }
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(22px, 3.5vw, 44px);
-  margin-top: clamp(28px, 4vw, 48px);
+  margin-top: 0;
 }
 @media (max-width: 900px) {
+  .ground-step,
+  .ground-step--reverse {
+    grid-template-columns: 1fr;
+  }
+  .ground-step--reverse .ground-step__text {
+    order: -1;
+  }
   .ground-ports-pair {
     grid-template-columns: 1fr;
   }
@@ -1539,19 +1623,14 @@ details summary h3 { display: inline; }
     align-items: stretch;
   }
 }
-.chart-mockup__copy {
-  text-align: left;
-}
-.chart-mockup__copy.prose,
-.chart-mockup__copy.narrow {
+.chart-mockup__copy,
+.chart-annotations {
   margin-left: 0;
   margin-right: auto;
-  max-width: 58ch;
+  max-width: 44rem;
   text-align: left;
 }
-.chart-mockup__copy p {
-  margin: 0 0 1.05rem;
-}
+.chart-mockup__copy p { margin: 0 0 1.05rem; }
 .chart-mockup__title {
   font-family: var(--font-serif);
   font-size: clamp(1.45rem, 2.35vw, 1.9rem);
@@ -1560,6 +1639,32 @@ details summary h3 { display: inline; }
   color: var(--fg);
   letter-spacing: -0.02em;
   line-height: 1.2;
+}
+.chart-claim {
+  margin: 0 0 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(19px, 1.65vw, 24px);
+  line-height: 1.52;
+  color: var(--fg);
+}
+.annotation-list {
+  display: grid;
+  gap: 10px;
+}
+.annotation-list p {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--bg-elev) 78%, transparent);
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.annotation-list span {
+  margin: 0 8px 0 0;
+  vertical-align: 0.08em;
 }
 .chart-mockup__context-fig {
   margin: 0 0 18px;
@@ -1711,6 +1816,12 @@ details summary h3 { display: inline; }
   font-size: 13px;
   color: var(--fg-muted);
 }
+.conclusion-grid .card {
+  margin-bottom: 0;
+}
+.conclusion-prose {
+  margin-top: 1.5rem;
+}
 
 .ground-row-2 { margin-top: 28px; }
 .ground-photo-wide img {
@@ -1731,6 +1842,7 @@ details summary h3 { display: inline; }
 /* ---------------- Quote showcase (circular orbit carousel) ---------------- */
 .quote-showcase {
   background: color-mix(in oklab, var(--bg-elev) 90%, var(--bg-sunken));
+  margin-top: 1.25rem;
 }
 .quote-orbit-card {
   overflow: hidden;
@@ -1922,52 +2034,6 @@ details summary h3 { display: inline; }
   border-color: var(--accent);
 }
 
-/* Legacy grid tiles (unused on current page; kept if reintroduced) */
-.quote-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 10px;
-}
-.quote-tile {
-  border-radius: 20px;
-  border: 1px solid color-mix(in oklab, var(--rule) 70%, transparent);
-  background: color-mix(in oklab, var(--bg-sunken) 88%, var(--bg-elev));
-  padding: 18px 18px 16px;
-  min-height: 190px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  transition:
-    transform 0.28s var(--ease-out),
-    box-shadow 0.28s var(--ease-out),
-    border-color 0.22s var(--ease-out);
-}
-.quote-tile:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in oklab, var(--accent) 45%, var(--rule));
-  box-shadow: 0 10px 32px color-mix(in oklab, var(--fg) 9%, transparent);
-}
-.quote-text {
-  margin: 0 0 16px;
-  font-family: var(--font-sans);
-  font-size: 20px;
-  line-height: 1.45;
-  color: var(--fg);
-  text-wrap: balance;
-}
-.quote-source {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--fg-muted);
-}
-@media (max-width: 860px) {
-  .quote-grid { grid-template-columns: 1fr; }
-  .quote-tile { min-height: 0; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hand-scroll-ink__path {
     stroke-dashoffset: 0 !important;
@@ -1996,7 +2062,6 @@ details summary h3 { display: inline; }
   .ghost-btn,
   .topnav a,
   .ground-photo,
-  .quote-tile,
   .quote-orbit__face,
   .quote-orbit__arrow,
   .topbar {
@@ -2006,7 +2071,7 @@ details summary h3 { display: inline; }
   figure.card:hover,
   .ghost-btn:hover,
   .ground-photo:hover,
-  .quote-tile:hover {
+  .quote-orbit__face:hover {
     transform: none !important;
     box-shadow: var(--shadow-md);
   }

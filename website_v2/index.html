@@ -41,7 +41,7 @@
         <a href="#conclusions">Conclusions</a>
         <a href="#sources">Sources</a>
       </nav>
-      <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+      <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Toggle theme">
         <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◐</span></span>
       </button>
     </div>
@@ -57,12 +57,16 @@
         <p class="eyebrow">Final project · Economics 30 · Spring 2026</p>
         <h1 class="title">The Price of Integration</h1>
         <p class="subtitle">
-          When apartheid's sanctions fell away in 1994, South Africa re-entered
-          the world economy. Three decades on, incomes are higher on average,
-          but unemployment stays crushing across provinces, while the top 10%
-          claim <strong>65% of pre-tax national income</strong>.
-          The Braamfontein skyline beside this page is the same Gauteng magnet that pulls migrants while national joblessness stays structurally high; the small chart pairs openness with concentration so you can hold the distributional question in view before the long evidence chain.
-          Ground-level corridors, port cranes, and settlement edges sit behind those lines on a spreadsheet—photographs and series below are meant to answer the same question from different distances.
+          South Africa re-entered the world economy after 1994. Average incomes
+          rose, trade opened, and institutions gained global legitimacy; yet the
+          top 10% now claim <strong>about 65% of pre-tax national income</strong>
+          while unemployment remains structurally high.
+        </p>
+        <p class="hero-thesis">
+          This essay argues that integration bought real macro gains without
+          solving distribution. The defensible causal channel is narrower than
+          the national charts: tariff-exposed local labour markets absorbed much
+          of the cost.
         </p>
         <div class="meta-row">
           <a class="ghost-btn" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
@@ -89,7 +93,7 @@
           <figcaption>Looking out over Johannesburg from Braamfontein, with Nelson Mandela Bridge over the train station and the CBD in the background (4 Dec 2009; author: Evan Bench). <a href="https://commons.wikimedia.org/wiki/File:Johannesburg_CBD.jpg">Wikimedia Commons · File:Johannesburg CBD.jpg</a>.</figcaption>
         </figure>
         <div class="hero-chart-stack">
-          <p class="hero-chart-caption">Chart: openness vs concentration (indexed series).</p>
+          <p class="hero-chart-caption">Chart: top-10% income share and Trade/GDP, rescaled to the same share axis.</p>
           <div class="hero-chart-canvas-wrap">
             <canvas id="chart-hero" aria-label="Inequality vs trade openness chart"></canvas>
           </div>
@@ -134,7 +138,10 @@
           closed off for three decades: sanctions, divestment and autarkic
           industrial policy had left trade at just
           <strong>37% of GDP</strong> and the Johannesburg Stock Exchange largely
-          cut off from foreign capital. The 1893 print below is not mere ornament: it marks how early South Africa was wired into imperial finance and commodity markets, so the post-1994 reopening was layered onto a long history of external price discovery and domestic concentration—not a blank slate.
+          cut off from foreign capital. The 1893 print below is not mere ornament:
+          it marks how early South Africa was wired into imperial finance and
+          commodity markets, so the post-1994 reopening was layered onto a long
+          history of external price discovery and domestic concentration, not a blank slate.
           Two macro strategies defined the
           transition. The <a class="kb-link" href="#sources" data-kb="reconstruction-and-development-programme">Reconstruction and Development Programme (RDP, 1994)</a>
           promised redistribution, housing, electrification and a developmental
@@ -142,7 +149,10 @@
           <a class="kb-link" href="#sources" data-kb="gear-strategy">Growth, Employment and Redistribution (GEAR, 1996)</a>:
           a self-described orthodox macro framework with fiscal consolidation,
           inflation targeting, trade liberalisation, capital account opening
-          and partial privatisation.
+          and partial privatisation. Here, <em>norms markets</em> means entry
+          into global expectations about liberalisation, credible courts,
+          investor confidence and governance benchmarks, not merely the exchange
+          of goods or portfolio capital.
         </p>
         <figure class="ground-photo question-jse-figure">
           <img src="assets/ground/johannesburg-jse-exchange-1893.jpg" width="1600" height="1240" loading="lazy" decoding="async" alt="1893 print of the first Johannesburg Stock Exchange building, titled The Exchange" />
@@ -154,9 +164,12 @@
           Ordinary experience in commuter corridors, shack-side growth circles,
           port towns, and Gauteng influx does not show up directly in GDP per capita,
           yet it motivates why redistribution and geography matter politically.
-          The Durban harbour and stack photography in §2 is the physical face of the import and export ratios you will see in §4; the Gugulethu and Cato Crest frames remind you that openness is felt unevenly across neighbourhoods, not as a uniform national mean.
-          The charts and regressions summarise whether openness lines up with output,
-          shares and governance; causal claims cite papers in Sources alongside the correlations printed here, not replacing them,
+          The Durban harbour and stack photography in §2 put physical form around
+          the import and export ratios in §4; the Gugulethu and Cato Crest frames
+          show that openness is lived unevenly across neighbourhoods, not as a
+          uniform national mean. The charts and regressions test whether openness
+          tracks output, shares and governance; causal claims cite papers in
+          Sources alongside the correlations printed here,
           notably <a href="#sources">synthetic-control, local labour-market, and inequality accounting work</a> linked below.
           Winning the RDP–GEAR debate was always
           <a class="kb-link" href="#sources" data-kb="political-economy-of-transition">genuinely political</a>.
@@ -175,65 +188,100 @@
     <!-- 2 · Ground                                                   -->
     <!-- ============================================================ -->
     <section id="from-the-ground" class="section section-ground section-visual-panel">
-      <div class="section-bg-film" aria-hidden="true">
-        <div class="section-bg-film__slide section-bg-film__slide--a"></div>
-        <div class="section-bg-film__slide section-bg-film__slide--b"></div>
-        <div class="section-bg-film__slide section-bg-film__slide--c"></div>
-      </div>
+      <div class="section-bg-film" aria-hidden="true"></div>
       <div class="section-visual-panel-inner">
-      <div class="section-head">
-        <h2>2 · From the Ground</h2>
-        <p class="section-lede">
-          Short vignettes beside the spreadsheets: trade routes, labour corridors and governance episodes that the national series compress into one GDP line.
-          The wide harbour frame is the same coastline the indexed trade series later abstracts into a ratio; read the two together.
-          Not exhaustive—each photograph points to fuller sources.
-        </p>
-      </div>
-      <div class="grid-2 ground-grid">
-        <figure class="ground-photo">
-          <img src="assets/ground/gugulethu-township.jpg" width="1600" height="1200" loading="lazy" alt="Dense housing in Gugulethu township, Western Cape" />
-          <figcaption>Gugulethu Township, South Africa (4 Sep 2013; author: Bernard303), photographed on an average day and often cited in discussions of informal infrastructure and illegal electricity connections. <a href="https://commons.wikimedia.org/wiki/File:Gugulethu_Township_South_Africa.jpg">Wikimedia Commons · File:Gugulethu Township South Africa.jpg</a>.</figcaption>
-        </figure>
-        <div class="prose ground-notes">
-          <h3>Gauteng as a Job Magnet</h3>
-          <p>
-            South Africa's inland hub concentrates formal vacancies and informal gigs alike,
-            aligning with stagnant national unemployment measured in Macro and sharper provincial spreads on the Map.
-            Pair this settlement texture with the hero skyline: the same province registers both glittering stock listings and long queues at the labour centre.
-            Erten-Leight-Tregenna link tariff exposure to harmed Black employment in exposed districts.
-            <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">see their design</a>.
-          </p>
-          <h3>Ports &amp; Rail</h3>
-          <p>
-            Durban and Richards Bay embody goods-market integration.
-            Cranes, trucking and coal corridors sit underneath the soaring trade/National Account ratios charted in §4.
-            The sequence below moves from the open roadstead to the box terminal to a berthed bulker—three scales of the same integration story.
+        <div class="section-head">
+          <h2>2 · From the Ground</h2>
+          <p class="section-lede">
+            Read these photographs as a sequence, not a gallery: labour settlement,
+            port corridor, container throughput, and the informal edge that macro
+            averages leave behind.
           </p>
         </div>
-      </div>
 
-      <figure class="ground-photo ground-photo-bleed ground-port-hero" aria-label="Durban harbour and container terminal photographs">
-        <img src="assets/ground/durban-harbour-philippn.jpg" width="1600" height="981" loading="lazy" decoding="async" alt="Wide view of the harbour at Durban" />
-        <figcaption>Harbour of Durban (Aug 2006; author: User:PhilippN, own work). <a href="https://commons.wikimedia.org/wiki/Special:Search?search=Durban+harbour+PhilippN">Wikimedia Commons search</a> (local copy in repo matches uploaded description).</figcaption>
-      </figure>
+        <div class="ground-sequence" aria-label="Ground-level sequence of integration channels">
+          <article class="ground-step ground-step--settlement">
+            <div class="ground-step__text">
+              <p class="ground-step__label">01 · Labour geography</p>
+              <h3>Townships before ratios</h3>
+              <p>
+                Openness does not enter a neutral labour market. Gugulethu and the
+                hero skyline belong to the same migration economy: one registers
+                formal opportunity, the other the queue outside it.
+              </p>
+              <p>
+                This is why the later macro unemployment line matters. The causal
+                paper to keep in mind is
+                <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna</a>:
+                tariff-exposed districts lost employment and formalisation,
+                especially for Black workers and women.
+              </p>
+            </div>
+            <figure class="ground-photo">
+              <img src="assets/ground/gugulethu-township.jpg" width="1600" height="1200" loading="lazy" alt="Dense housing in Gugulethu township, Western Cape" />
+              <figcaption>Gugulethu Township, Western Cape: the labour-market geography behind a national unemployment rate. Source: Wikimedia Commons.</figcaption>
+            </figure>
+          </article>
 
-      <div class="ground-ports-pair" aria-label="Durban container terminal detail photographs">
-        <figure class="ground-photo">
-          <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container terminal at the Port of Durban" />
-          <figcaption>Container terminal at the Port of Durban, eThekwini (photo dated 6 Aug 2010 on Commons; Flickr upload by Media Club South Africa). <a href="https://commons.wikimedia.org/wiki/File:Durban_container_port_(24747434937).jpg">Wikimedia Commons</a>. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</figcaption>
-        </figure>
-        <figure class="ground-photo">
-          <img src="assets/ground/durban-container-mv-ever-refine.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Durban container terminal with ship MV Ever Refine" />
-          <figcaption>Durban container terminal and MV <i>Ever Refine</i> (17 Oct 2014). Source: <a href="https://web.archive.org/web/20161102170325/http://www.panoramio.com/photo/115080480">Panoramio via Wayback Machine</a> (archived Nov 2016). Verify licence if you reuse outside this educational project.</figcaption>
-        </figure>
-      </div>
+          <article class="ground-step ground-step--reverse ground-step--port">
+            <figure class="ground-photo ground-photo-bleed ground-port-hero">
+              <img src="assets/ground/durban-harbour-philippn.jpg" width="1600" height="981" loading="lazy" decoding="async" alt="Wide view of the harbour at Durban" />
+              <figcaption>Durban harbour: the coastline that becomes Trade/GDP in the indexed macro panel. Source: Wikimedia Commons.</figcaption>
+            </figure>
+            <div class="ground-step__text">
+              <p class="ground-step__label">02 · Goods corridor</p>
+              <h3>The coastline becomes a denominator</h3>
+              <p>
+                Ports translate policy into movement: tariff schedules, WTO
+                commitments, containers, rail, trucking and customs capacity all
+                collapse into the national openness ratio.
+              </p>
+              <p>
+                The visual move is deliberate: before reading the line chart in
+                §4, hold the physical corridor in view.
+              </p>
+            </div>
+          </article>
 
-      <div class="ground-row-2">
-        <figure class="ground-photo ground-photo-wide">
-          <img src="assets/ground/township-slums.jpg" width="1600" height="900" loading="lazy" alt="Informal housing in a South African township" />
-          <figcaption>Cato Crest pre-clean-up picture (16 Sep 2017; author: Siphosamin), from the "African people at work" image context in South Africa. <a href="https://commons.wikimedia.org/wiki/File:Township_Slums_04.jpg">Wikimedia Commons · File:Township Slums 04.jpg</a>.</figcaption>
-        </figure>
-      </div>
+          <article class="ground-step ground-step--stack">
+            <div class="ground-step__text">
+              <p class="ground-step__label">03 · Throughput</p>
+              <h3>Boxes are not distribution</h3>
+              <p>
+                Container stacks show integration working as a flow measure. They
+                do not tell us whether the gains became wages, jobs, profits or
+                asset income. That distinction is the hinge between §4 and §5.
+              </p>
+            </div>
+            <div class="ground-ports-pair" aria-label="Durban container terminal detail photographs">
+              <figure class="ground-photo">
+                <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container terminal at the Port of Durban" />
+                <figcaption>Container terminal at the Port of Durban: throughput behind rising trade intensity. Source: Wikimedia Commons.</figcaption>
+              </figure>
+              <figure class="ground-photo">
+                <img src="assets/ground/durban-container-mv-ever-refine.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Durban container terminal with ship MV Ever Refine" />
+                <figcaption>MV <i>Ever Refine</i> at Durban: integration at ship scale. Source: Panoramio via Wayback Machine.</figcaption>
+              </figure>
+            </div>
+          </article>
+
+          <article class="ground-step ground-step--settlement ground-step--reverse">
+            <figure class="ground-photo ground-photo-wide">
+              <img src="assets/ground/township-slums.jpg" width="1600" height="900" loading="lazy" alt="Informal housing in a South African township" />
+              <figcaption>Cato Crest, Durban: the settlement edge beside the port economy. Source: Wikimedia Commons.</figcaption>
+            </figure>
+            <div class="ground-step__text">
+              <p class="ground-step__label">04 · Distributional edge</p>
+              <h3>Return to the question</h3>
+              <p>
+                The ground story ends where the data question begins: trade can
+                rise while employment, housing and spatial access remain uneven.
+                The next sections test that tension with national series, then
+                bring the causal evidence back in.
+              </p>
+            </div>
+          </article>
+        </div>
       </div>
 
     </section>
@@ -245,13 +293,15 @@
       <div class="section-head">
         <h2>3 · Policy Timeline</h2>
         <p class="section-lede">
-          Drag the rail to explore; autoplay runs while this section is in view and resumes when you click elsewhere on the page.
+          The sequence matters: sanctions lift, RDP gives way to GEAR, WTO
+          commitments bind tariff cuts, commodity capital arrives, and governance
+          later weakens. The timeline explains when integration became policy.
         </p>
       </div>
 
       <figure class="ground-photo ground-photo-wide timeline-photo-bleed">
         <img src="assets/ground/wef-davos-2005.jpg" width="3072" height="1856" loading="lazy" decoding="async" alt="World Economic Forum Annual Meeting, Davos 2005, with Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo" />
-        <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005): Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo before the session "The G-8 and Africa: Rhetoric or Action?". Copyright World Economic Forum. Read this tableau against the indexed FDI line in §4—summits broker norms and capital flows that later show up as small denominators in national accounts.</figcaption>
+        <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005). Read this tableau against the FDI line in §4: global legitimacy and capital access were part of integration, even when the measured flows stayed modest.</figcaption>
       </figure>
 
       <div class="timeline-scroll-shell" id="timeline-shell">
@@ -259,7 +309,7 @@
           class="timeline-h-scroll"
           id="timeline-scroll"
           tabindex="0"
-          aria-label="Policy timeline: drag or swipe horizontally"
+          aria-label="Policy timeline: drag, swipe, or use arrow keys horizontally"
         >
           <ol class="timeline timeline-rail" id="timeline-list"></ol>
         </div>
@@ -275,43 +325,31 @@
         <p class="section-lede">
           Integration, measured as (exports + imports) / GDP, more than doubled
           between 1990 and 2022. FDI, always modest, rode the same wave with a
-          lag. The charts are spaced here so you can pause on each line before reading the regression paragraph.
+          lag. Read the charts as a trade-off: measured openness and output rise,
+          while labour-market absorption does not.
         </p>
       </div>
 
       <div class="chart-mockup chart-mockup--macro">
         <div class="chart-mockup__accent" aria-hidden="true"></div>
         <div class="chart-mockup__grid">
-          <div class="chart-mockup__copy prose chart-mockup__copy--macro">
+          <div class="chart-mockup__copy chart-annotations chart-mockup__copy--macro">
             <figure class="chart-mockup__context-fig">
               <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Stacked shipping containers at Durban port" />
               <figcaption>Port of Durban container stacks (2010 file date on Commons)—the throughput behind rising Trade/GDP.</figcaption>
             </figure>
             <h3 class="chart-mockup__title">From throughput to lines on a page</h3>
-            <p>
-              National openness ratios stay abstract until you pair them with a berth full of boxes.
-              When Trade/GDP climbs in the indexed panel, picture the gantry cranes and yard reach stackers from §2: the same integration episode lifts measured flows while labour-market and distributional outcomes can diverge sharply by district and skill group.
+            <p class="chart-claim">
+              Integration is visible in flows before it is visible in lives:
+              Trade/GDP rises sharply, average income rises more modestly, and
+              unemployment remains the stubborn counter-line.
             </p>
-            <p>
-              <strong>Indexed macro (log scale).</strong> GDP per capita, Trade/GDP and FDI/GDP are rebased to 1990 = 100. The log <span class="mono">y</span>-axis keeps GDP’s roughly one-third rise legible next to the much larger swings in openness and FDI. Source: World Development Indicators.
-            </p>
-            <p>
-              <strong>Unemployment (ILO-modelled).</strong> The plateau is the defining macro fact beneath the openness story. Cross-check with <a class="kb-link" href="#sources" data-kb="quarterly-labour-force-survey">QLFS</a> and the <a class="kb-link" href="#sources" data-kb="labour-market-south-africa">labour-market</a> notes in Sources.
-            </p>
-            <p>
-              <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Trade liberalisation</a>
-              was rapid: tariffs fell from an average of roughly 23% in 1993 to
-              around 8% by 2005. In the headline OLS, a one-percentage-point
-              increase in Trade/GDP is associated with
-              <strong>+1.4% higher GDP per capita</strong> (HAC, p &lt; 0.001),
-              but so is higher unemployment (+0.20pp, p = 0.036) and a higher
-              top-10% income share (+0.69pp, p &lt; 0.001). The direction of
-              association is unambiguous; the direction of causation is not.
-              Engle-Granger cointegration for log GDP pc and Trade/GDP fails to
-              reject the no-cointegration null
-              (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span>), so the
-              long-run relationship should be read cautiously.
-            </p>
+            <div class="annotation-list">
+              <p><span>How to read</span> GDP per capita, Trade/GDP and FDI/GDP are rebased to 1990 = 100 on a log scale, so relative changes stay comparable.</p>
+              <p><span>Caution</span> The headline OLS links Trade/GDP with higher GDP per capita, unemployment and top-income share, but the national series does not identify causation.</p>
+              <p><span>Test</span> Engle-Granger for log GDP pc and Trade/GDP fails to reject no cointegration (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span>).</p>
+              <p><span>Source</span> World Development Indicators; trade-policy details in <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Sources</a>.</p>
+            </div>
           </div>
           <div class="chart-mockup__charts">
             <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
@@ -319,14 +357,14 @@
               <figure class="card macro-chart-solo chart-mockup__card">
                 <figcaption class="card-head">
                   <h3>Indexed macro indicators, 1990 = 100 (log scale)</h3>
-                  <p class="chart-mockup__card-lede">GDP per capita, Trade/GDP and FDI/GDP, rebased to 1990. Plotted on a log y-axis so GDP's roughly one-third rise stays visible alongside the much larger swings in Trade/GDP and FDI/GDP. Source: World Development Indicators.</p>
+                  <p class="chart-mockup__card-lede">GDP per capita, Trade/GDP and FDI/GDP, rebased to 1990. The log axis keeps GDP's modest rise visible beside larger openness swings.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-indexed"></canvas></div>
               </figure>
               <figure class="card macro-chart-solo chart-mockup__card">
                 <figcaption class="card-head">
                   <h3>Unemployment (ILO-modelled)</h3>
-                  <p class="chart-mockup__card-lede">The structural unemployment plateau is South Africa's defining fact. See <a class="kb-link" href="#sources" data-kb="quarterly-labour-force-survey">QLFS</a> and <a class="kb-link" href="#sources" data-kb="labour-market-south-africa">labour market</a>.</p>
+                  <p class="chart-mockup__card-lede">The structural unemployment plateau is the macro fact that prevents average-income gains from becoming broad labour absorption.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-unemployment"></canvas></div>
               </figure>
@@ -343,25 +381,27 @@
       <div class="section-head">
         <h2>5 · Inequality Evidence</h2>
         <p class="section-lede">
-          Three complementary lenses: pre-tax income shares (WID), wealth
-          shares (WID), and survey-based Gini (WIID / WDI)—with geography brought in after the aggregate curves so you can read the map as a spatial translation of the same skew.
+          Distribution is read in layers: income flows, wealth stocks, survey
+          Gini, and spatial inequality. The order is national first, then geographic.
         </p>
       </div>
 
       <div class="chart-mockup chart-mockup--inequality">
         <div class="chart-mockup__accent" aria-hidden="true"></div>
         <div class="chart-mockup__grid">
-          <div class="chart-mockup__copy prose narrow chart-mockup__copy--inequality">
+          <div class="chart-mockup__copy chart-annotations chart-mockup__copy--inequality">
             <h3 class="chart-mockup__title">Two WID ladders before the map</h3>
-            <p>
-              <strong>Pre-tax income shares.</strong> The top 10% of adults claim about <strong>47%</strong> of pre-tax national income in 1990 and about <strong>65%</strong> by 2020, while the bottom half receives under <strong>6%</strong>. The curve is a national compression of every pay negotiation and dividend flow in the sample.
+            <p class="chart-claim">
+              The distributional story is not hidden in a small residual: by
+              2020 the top decile claims about 65% of pre-tax income, while the
+              bottom half receives under 6%.
             </p>
-            <p>
-              <strong>Wealth shares.</strong> The stock view is starker than the flow view: concentration in asset markets and housing stock matters for persistence. See <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee-Czajka-Gethin (WIL, 2021)</a> for how the top decile’s wealth share sits versus the bottom half.
-            </p>
-            <p>
-              The decile lines on the right compress the country into a single ladder; the choropleth further down makes the same skew legible in space (Cape Town inset, generalized entropy layer)—coastal metros, former homeland boundaries, and peri-urban rings colour differently even when survey Gini barely moves year to year. Treat that map as a companion to the Gugulethu and Cato Crest photographs: satellite distance versus street distance.
-            </p>
+            <div class="annotation-list">
+              <p><span>Income</span> The top-10% share rises from roughly 47% in 1990 to about 65% by 2020.</p>
+              <p><span>Wealth</span> Stocks are more concentrated than flows: the top decile holds roughly 85% of household wealth.</p>
+              <p><span>Spatial read</span> The map below translates the same skew into place; read it beside Gugulethu and Cato Crest.</p>
+              <p><span>Source</span> WID and <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee–Czajka–Gethin</a>.</p>
+            </div>
           </div>
           <div class="chart-mockup__charts">
             <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
@@ -422,12 +462,11 @@
       <div class="prose narrow inequality-closing">
         <p>
           The central puzzle shows up in the <a class="kb-link" href="#sources" data-kb="inequality-in-south-africa">inequality</a> data:
-          opening the economy and slimming the state did not
-          compress the distribution as classical liberal theory would predict;
-          it widened it. From 1994 onwards, the top-decile income share rose
-          by <strong>roughly 18 percentage points</strong>. The bottom half's
-          share shrank by a third. Wealth is an even starker story:
-          the top 10% hold roughly 85% of household wealth.
+          the post-1994 openness episode did not coincide with distributional
+          compression. From 1994 onwards, the top-decile income share rose by
+          <strong>roughly 18 percentage points</strong>. The bottom half's share
+          shrank by a third. Wealth is starker: the top 10% hold roughly 85% of
+          household wealth.
         </p>
         <p>
           The
@@ -448,8 +487,9 @@
       <div class="section-head">
         <h2>6 · Governance Evidence</h2>
         <p class="section-lede">
-          The six Worldwide Governance Indicators pillars, normalised to 0–1
-          and averaged across underlying sources.
+          This is the norms channel: courts, accountability, rule-of-law
+          credibility and global governance benchmarks. The series are coarse,
+          but they test whether institutional legitimacy moved with growth.
         </p>
       </div>
 
@@ -467,8 +507,8 @@
 
       <figure class="card">
         <figcaption class="card-head">
-          <h3>WGI pillars, South Africa (1996–2024)</h3>
-          <p>Voice &amp; accountability, political stability, government effectiveness, regulatory quality, rule of law, control of corruption. See <a class="kb-link" href="#sources" data-kb="dataset-wgi-underlying-sources">WGI underlying sources</a>.</p>
+          <h3>WGI focus series, South Africa (1996–2024)</h3>
+          <p>Average governance, rule of law, and control of corruption carry the norms-market claim; the remaining pillars stay as faint context. See <a class="kb-link" href="#sources" data-kb="dataset-wgi-underlying-sources">WGI underlying sources</a>.</p>
         </figcaption>
         <div class="chart-canvas-wrap"><canvas id="chart-wgi"></canvas></div>
       </figure>
@@ -476,9 +516,10 @@
       <div class="prose narrow">
         <p>
           The WGI composite peaks around 2008 and slides during the Zuma
-          administration (2009–2018), with a partial recovery after. The
-          regression battery picks up a positive association between the WGI
-          composite and GDP growth
+          administration (2009–2018), with a partial recovery after. This is
+          suggestive evidence for the norms channel, not a direct causal
+          estimate. The regression battery picks up a positive association
+          between the WGI composite and GDP growth
           (<strong>β ≈ 40.5</strong>, HAC <span class="mono">p = 0.036</span>,
           n = 26), but this correlation does not identify the causal impact
           of state capacity on growth, especially given the short panel and
@@ -500,7 +541,7 @@
       <div class="card results-plain">
         <h3 class="card-title">Takeaways</h3>
         <ul class="results-plain-list">
-          <li><strong>Trade and top incomes move together.</strong> The relationship between trade openness and the top-1% share is the single association that survives the strictest multiple-testing correction. It is not a causal license, but a consistent pattern worth reading next to Erten-Leight-Tregenna's district evidence.</li>
+          <li><strong>Trade and top incomes move together.</strong> The relationship between trade openness and the top-1% share is the single association that survives the strictest multiple-testing correction. It is not a causal license, but a consistent pattern worth reading next to Erten–Leight–Tregenna's district evidence.</li>
           <li><strong>No clean "GEAR growth break."</strong> Chow tests around 1996 do not pick up a statistically sharp growth-regime shift at conventional levels. Alignment with the qualitative GEAR narrative is subtler.</li>
           <li><strong>Unemployment stays the brake.</strong> Macro charts and the provincial map underline that integration did not engineer a labour-market catch-up.</li>
           <li><strong>Use the tables sparingly.</strong> They are exploratory; BH / Bonf / Raw tiers flag how far each correlation survives sceptical testing.</li>
@@ -730,7 +771,7 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 8. Conclusions                                               -->
+    <!-- 9. Conclusions                                               -->
     <!-- ============================================================ -->
     <section id="conclusions" class="section">
       <div class="section-head">
@@ -741,67 +782,55 @@
         </p>
       </div>
 
-      <div class="grid-2">
+      <div class="grid-2 conclusion-grid">
         <div class="card">
-          <h3 class="card-title">1 · Integration and inequality moved together</h3>
+          <h3 class="card-title">1 · What integration bought</h3>
           <p>
-            The single most robust relationship in the full battery is
-            between trade openness and the top-1% income share: BH-adjusted
-            <span class="mono">p ≈ 10⁻⁶⁶</span>, DW ≈ 1.65, n = 34. It is the
-            only headline spec that survives both the DW ≥ 1.5 autocorrelation
-            filter and Benjamini-Hochberg correction across all 630
-            specifications. Correlation is not causation, but this is the
-            pattern the <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna (2019)</a>
-            local-labour-market design identifies causally at the district
-            level.
+            Re-entry bought macro normalisation: trade rose, sanctions faded,
+            capital and governance signals improved, and GDP per capita ended
+            higher than in 1994. The evidence for that gain is descriptive but
+            visible across the macro panel.
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">2 · GEAR did not produce a visible growth break</h3>
+          <h3 class="card-title">2 · Where distribution failed</h3>
           <p>
-            The Chow test at the 1996 <a class="kb-link" href="#sources" data-kb="gear-strategy">GEAR</a>
-            adoption year fails to reject a structural break in
-            GDP-per-capita growth at 5% (F ≈ 1.89, p ≈ 0.168). Fiscal
-            consolidation, partial privatisation and tariff binding delivered
-            macro stability and a roughly one-third rise in GDP per capita,
-            but no measurable discontinuity in the growth process itself.
+            The gains did not become broad labour absorption or distributional
+            compression. Top-income and wealth concentration remain extreme, and
+            narrow unemployment is still <strong>32.9%</strong> in Q1 2025.
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">3 · Unemployment is the structural failure</h3>
+          <h3 class="card-title">3 · The causal mechanism we can defend</h3>
           <p>
-            Stats SA's Q1 2025 QLFS puts narrow unemployment at
-            <strong>32.9%</strong> and the expanded rate at
-            <strong>43.1%</strong>, with youth unemployment at 46.1%. No
-            province falls below 25%. Three decades of integration have not
-            absorbed the labour supply that apartheid's homeland system
-            stranded; this is the outcome on which the "price of integration"
-            framing rests.
+            The national OLS battery shows correlations. The sharper causal
+            claim comes from <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna</a>:
+            districts more exposed to tariff cuts saw lower employment,
+            formalisation and wages, with the burden falling hardest on Black
+            workers and women.
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">4 · Governance matters, but the evidence is thin</h3>
+          <h3 class="card-title">4 · What remains uncertain</h3>
           <p>
-            The WGI composite correlates positively with GDP growth
-            (β ≈ 40.5, HAC p ≈ 0.036, n = 26), consistent with the slide in
-            rule-of-law and control-of-corruption indicators during the Zuma
-            era. But 26 annual observations cannot identify the causal impact
-            of state capacity on growth, and the global financial crisis sits
-            inside the sample. Treat this as suggestive, not conclusive.
+            The strongest trade/top-income association survives the correction
+            battery, but it is still not identification. Governance also tracks
+            growth only suggestively (n = 26), and GEAR does not produce a clean
+            growth break in the Chow tests.
           </p>
         </div>
       </div>
 
-      <div class="prose narrow" style="margin-top: 1.5rem;">
+      <div class="prose narrow conclusion-prose">
         <p>
-          Opening to trade brought South Africa increased macroeconomic stability
-          and a modest rise in average incomes. However, this came at the price
-          of higher income inequality and severe domestic employment pressures.
-          The next wave of policy should start from that reality, with industrial
-          strategy, spatial redress, and labour market activation at the center.
+          The answer, stated cautiously, is yes: integration bought growth and
+          macro credibility, while distributional repair failed to follow. The
+          national series show the pattern; local labour-market evidence explains
+          the mechanism. The next policy wave should begin there, with industrial
+          strategy, spatial redress, and labour-market activation at the center.
         </p>
       </div>
-      <div class="card quote-showcase quote-orbit-card" style="margin-top: 1.25rem;">
+      <div class="card quote-showcase quote-orbit-card">
         <h3 class="card-title">Voices from the record</h3>
         <div
           id="quote-orbit"
@@ -810,7 +839,7 @@
           aria-roledescription="carousel"
           aria-label="Voices from the record — selected quotations"
           tabindex="0"
-          data-autoplay="true"
+          data-autoplay="false"
         >
           <div class="quote-orbit__stage">
             <div class="quote-orbit__ring" id="quote-orbit-ring">
@@ -841,7 +870,7 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 9. Sources & caveats                                         -->
+    <!-- 10. Sources & caveats                                        -->
     <!-- ============================================================ -->
     <section id="sources" class="section">
       <div class="section-head">
@@ -887,9 +916,9 @@
           </ul>
         </div>
       </div>
-      <div class="card" style="margin-top: 0.75rem;">
+      <div class="card sources-scope-card">
         <h3 class="card-title">Scope of claims (short version)</h3>
-        <ul class="link-list" style="margin-top: 8px;">
+        <ul class="link-list sources-scope-list">
           <li><strong>Can claim:</strong> Post-1994 integration coincides with persistent concentration in income and wealth, plus entrenched unemployment.</li>
           <li><strong>Can claim:</strong> In this battery, the trade/top-income relationship is the most statistically durable pattern.</li>
           <li><strong>Cannot claim:</strong> Causation from this national time series alone (trade→inequality, GEAR→outcomes, governance→growth).</li>
