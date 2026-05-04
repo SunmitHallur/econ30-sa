@@ -530,8 +530,12 @@
         rafId = requestAnimationFrame(tick);
         return;
       }
-      scrollEl.scrollLeft += speed;
-      if (scrollEl.scrollLeft >= max - 0.5) scrollEl.scrollLeft = 0;
+      if (scrollEl.scrollLeft >= max - 0.5) {
+        scrollEl.scrollLeft = max;
+        rafId = 0;
+        return;
+      }
+      scrollEl.scrollLeft = Math.min(max, scrollEl.scrollLeft + speed);
       rafId = requestAnimationFrame(tick);
     };
 
