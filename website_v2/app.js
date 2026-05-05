@@ -178,7 +178,7 @@
     },
   };
 
-  const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear", yAxisType = "linear", annotations = [] }) => {
+  const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear", yAxisType = "linear", annotations = [], xMin = null }) => {
     const p = palette();
     if (Chart.registry && !Chart.registry.plugins.get("essayAnnotation")) {
       Chart.register(annotationPlugin);
@@ -232,6 +232,7 @@
         scales: {
           x: {
             type: xAxisType,
+            ...(xMin == null ? {} : { min: xMin }),
             title: xTitle ? { display: true, text: xTitle, color: p.muted } : { display: false },
             grid: { color: p.rule, drawBorder: false },
             ticks: { color: p.muted, maxRotation: 0, callback: formatChartTickPlain },
@@ -480,6 +481,7 @@
       datasets: ds,
       yTitle: "Score (0 = weak, 1 = strong)",
       xTitle: "Year",
+      xMin: 1995,
       annotations: [{ type: "marker", x: 2009, label: "Zuma-era decline", color: "rgba(255,255,255,0.42)", dash: [4, 4] }],
     });
     chart.options.plugins.legend.labels.filter = (item) => showContext || !contextLabels.has(item.text);
