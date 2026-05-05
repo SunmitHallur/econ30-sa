@@ -5,11 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Price of Integration: South Africa after 1994</title>
   <meta name="description" content="South Africa after 1994: opening to trade and global rules, jobs, inequality, and what the data show—with clear charts and cautious statistics, linked to sources." />
+  <meta property="og:title" content="The Price of Integration" />
+  <meta property="og:description" content="South Africa after 1994: integration succeeded, inclusion did not." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="print.css" media="print" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ScholarlyArticle",
+      "headline": "The Price of Integration: South Africa after 1994",
+      "author": {
+        "@type": "Person",
+        "name": "Sunmit Hallur"
+      },
+      "datePublished": "2026-05-05",
+      "about": "Trade liberalization, labor outcomes, and inequality in South Africa",
+      "isAccessibleForFree": true,
+      "citation": [
+        "Erten, B., Leight, J., & Tregenna, F. (2019). Trade liberalization and local labor market outcomes in South Africa.",
+        "Chatterjee, A., Czajka, L., & Gethin, A. (2021). Wealth Inequality in South Africa, 1993–2017.",
+        "World Bank. World Development Indicators.",
+        "UNU-WIDER. World Income Inequality Database 2025."
+      ]
+    }
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -41,12 +68,31 @@
         <a href="#conclusions">Conclusions</a>
         <a href="#sources">Sources</a>
       </nav>
+      <details class="topnav-more">
+        <summary>More</summary>
+        <div class="topnav-more-menu">
+          <a href="#timeline">Timeline</a>
+          <a href="#governance">Governance</a>
+          <a href="#map">Map</a>
+        </div>
+      </details>
       <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Toggle theme">
         <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◐</span></span>
       </button>
     </div>
     <div class="top-progress" aria-hidden="true"><span id="top-progress-fill"></span></div>
   </header>
+  <div class="arg-breadcrumb" aria-label="Argument path">
+    <ol>
+      <li data-step="question">Question</li>
+      <li data-step="ground">People</li>
+      <li data-step="timeline">History</li>
+      <li data-step="numbers">Numbers</li>
+      <li data-step="results">Evidence</li>
+      <li data-step="conclusions">Answer</li>
+      <li data-step="sources">Sources</li>
+    </ol>
+  </div>
   <div class="section-indicator" aria-live="polite">
     <span class="section-indicator__kicker">You are here</span>
     <span class="section-indicator__text" id="section-indicator-text">Intro</span>
@@ -61,51 +107,40 @@
       <div class="hero-inner">
         <p class="eyebrow">Final Project · Economics 30 · Spring 2026</p>
         <h1 class="title">The Price of Integration</h1>
-        <p class="subtitle">
-          After apartheid, South Africa tied itself more tightly to world trade,
-          investment, and international rules. Average income rose and trade grew,
-          yet the richest <strong>roughly 10% of people received about 65% of
-          pre-tax national income</strong> in recent years, all while unemployment has
-          remained high.
-        </p>
-        <p class="hero-thesis">
-          Opening to trade boosted the national economy but failed to create broad opportunity, instead triggering localized job losses for marginalized workers.
+        <p class="hero-thesis-pull">
+          South Africa's post-1994 opening <em>reconnected the economy</em>, but did not
+          broaden opportunity: growth rose while jobs and income stayed concentrated.
         </p>
         <div class="meta-row">
           <a class="ghost-btn hero-cta-primary" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
-          <a class="ghost-btn" href="#macro"><span class="ghost-btn__text">Jump to national charts →</span></a>
+          <a class="hero-text-link" href="#macro">Jump to national charts →</a>
         </div>
-        <details class="hero-details">
-          <summary>What data and tests are behind this?</summary>
-          <div class="pills">
-            <span class="pill pill-wdi">WDI · World Bank</span>
-            <span class="pill pill-wid">WID · inequality shares</span>
-            <span class="pill pill-wiid">WIID · UNU-WIDER</span>
-            <span class="pill pill-wgi">WGI · governance</span>
-            <span class="pill pill-qlfs">QLFS · Stats SA 2025Q1</span>
-          </div>
-          <p class="hero-details-note">
-            The Evidence section runs <strong id="spec-count">many</strong> regression
-            tests on the same years of data, with standard errors adjusted for year-to-year
-            patterns and with stricter checks when many tests are run at once.
-          </p>
-        </details>
+        <p class="hero-data-note">Built on WDI, WID, WIID, WGI, and QLFS data — <a href="#sources">see sources</a>.</p>
       </div>
       <div class="hero-figure">
-        <figure class="hero-photo-card">
-          <img class="hero-photo" src="assets/ground/johannesburg-cbd.jpg" width="1600" height="1200" alt="Skyline of Johannesburg central business district" loading="eager" decoding="async" />
-          <figcaption>View of Johannesburg from Braamfontein (4 Dec 2009; author: Evan Bench). <a href="https://commons.wikimedia.org/wiki/File:Johannesburg_CBD.jpg">Wikimedia Commons · File:Johannesburg CBD.jpg</a>.</figcaption>
-        </figure>
         <div class="hero-chart-stack">
           <p class="hero-chart-caption">Top-10% income share and trade openness (Trade/GDP)</p>
           <div class="hero-chart-canvas-wrap">
             <canvas id="chart-hero" aria-label="Chart comparing top-10% income share with trade openness"></canvas>
+            <p class="chart-caveat">This is a year-by-year national pattern, not proof of direct causation.</p>
           </div>
         </div>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#question">Continue to The Question ↓</a>
+    <section class="argument-summary" aria-label="What this essay argues">
+      <h2>What this essay argues</h2>
+      <p>
+        South Africa's democratic transition reintegrated the economy faster than it
+        built broad labor-market inclusion. The strongest pattern in these data is that
+        trade openness rises alongside top-income concentration while unemployment remains high.
+        National correlations are suggestive, not causal proof, so the essay pairs them with
+        district-level evidence and policy history. The sections below move from lived places
+        to macro trends to statistical checks, then return to a policy conclusion.
+      </p>
+    </section>
+    <div class="section-bridge" aria-label="Transition to question">
+      <p class="section-bridge__from">Start with the claim.</p>
+      <p class="section-bridge__to"><a href="#question">Next: frame the core question ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -128,8 +163,10 @@
           </svg>
         </div>
         <div class="section-head">
-          <h2>1 · The Question</h2>
+          <p class="section-step">Section 01</p>
+          <h2>Did opening up the country open it up for everyone?</h2>
           <p class="section-question__themes">Goods · Capital · Norms</p>
+          <p class="question-big">Short answer: not enough — and the rest of this essay shows why.</p>
           <p class="section-lede">
             After 1994, did South Africa integrate into the global economy faster
             than it created broad domestic opportunity, driving aggregate growth
@@ -156,7 +193,13 @@
           for money to move across borders, and some privatization.
         </p>
         <figure class="ground-photo question-jse-figure">
-          <img src="assets/ground/johannesburg-jse-exchange-1893.jpg" width="1600" height="1240" loading="lazy" decoding="async" alt="1893 print of the first Johannesburg Stock Exchange building, titled The Exchange" />
+          <picture>
+
+            <source srcset="assets/ground/johannesburg-jse-exchange-1893.webp" type="image/webp" />
+
+            <img src="assets/ground/johannesburg-jse-exchange-1893.jpg" width="1600" height="1240" loading="lazy" decoding="async" alt="1893 print of the first Johannesburg Stock Exchange building, titled The Exchange"  />
+
+          </picture>
           <figcaption>
             <i>(Johannesburg) The Exchange</i>—the first Johannesburg Stock Exchange building (founded 8 Nov 1887 by B.M. Woollan; at the time the oldest stock-exchange facility in the subcontinent). Print dated <strong>1893</strong>; illustrators <strong>Gannon &amp; Hawskey</strong>. Extracted from p.&nbsp;24 of Henry Longland, <cite>The Golden Transvaal: an illustrated review, descriptive, historical, etc.</cite> (British Library HMNTS 10096.g.12.; held and digitised by the British Library, via Flickr). <a href="https://commons.wikimedia.org/wiki/File:JOBURG_(1893)_The_Exchange.jpg">Wikimedia Commons</a> · <a href="https://creativecommons.org/publicdomain/mark/1.0/">Public Domain Mark 1.0</a>. <a href="https://www.flickr.com/photos/britishlibrary/11220451725">British Library on Flickr</a>.
           </figcaption>
@@ -183,8 +226,9 @@
         </blockquote>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#from-the-ground">Continue to From the Ground ↓</a>
+    <div class="section-bridge" aria-label="Transition to ground">
+      <p class="section-bridge__from">Question set.</p>
+      <p class="section-bridge__to"><a href="#from-the-ground">Next: the places behind the aggregates ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -194,7 +238,8 @@
       <div class="section-bg-film" aria-hidden="true"></div>
       <div class="section-visual-panel-inner">
         <div class="section-head">
-          <h2>2 · From the Ground</h2>
+          <p class="section-step">Section 02</p>
+          <h2>Before the charts, the places.</h2>
           <p class="section-lede">
             These photos show where people live and work, how goods move
             through ports, what “more trade” looks like on the water, and why
@@ -204,6 +249,16 @@
 
         <div class="ground-sequence" aria-label="Ground-level sequence of integration channels">
           <article class="ground-step ground-step--settlement">
+            <figure class="ground-photo">
+              <picture>
+
+                <source srcset="assets/ground/johannesburg-cbd.webp" type="image/webp" />
+
+                <img src="assets/ground/johannesburg-cbd.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Skyline of Johannesburg central business district"  />
+
+              </picture>
+              <figcaption>Johannesburg CBD (2009), where the post-1994 growth narrative is most visible. Source: Wikimedia Commons.</figcaption>
+            </figure>
             <div class="ground-step__text">
               <p class="ground-step__label">01 · Where people work</p>
               <h3>Townships before national averages</h3>
@@ -222,14 +277,26 @@
               </p>
             </div>
             <figure class="ground-photo">
-              <img src="assets/ground/gugulethu-township.jpg" width="1600" height="1200" loading="lazy" alt="Dense housing in Gugulethu township, Western Cape" />
+              <picture>
+
+                <source srcset="assets/ground/gugulethu-township.webp" type="image/webp" />
+
+                <img src="assets/ground/gugulethu-township.jpg" width="1600" height="1200" loading="lazy" alt="Dense housing in Gugulethu township, Western Cape"  />
+
+              </picture>
               <figcaption>Gugulethu Township, Western Cape: the labour-market geography behind a national unemployment rate. Source: Wikimedia Commons.</figcaption>
             </figure>
           </article>
 
           <article class="ground-step ground-step--reverse ground-step--port">
             <figure class="ground-photo ground-photo-bleed ground-port-hero">
-              <img src="assets/ground/durban-harbour-philippn.jpg" width="1600" height="981" loading="lazy" decoding="async" alt="Wide view of the harbour at Durban" />
+              <picture>
+
+                <source srcset="assets/ground/durban-harbour-philippn.webp" type="image/webp" />
+
+                <img src="assets/ground/durban-harbour-philippn.jpg" width="1600" height="981" loading="lazy" decoding="async" alt="Wide view of the harbour at Durban"  />
+
+              </picture>
               <figcaption>Durban harbour: the coast behind the “trade as a share of the economy” lines in §4. Source: Wikimedia Commons.</figcaption>
             </figure>
             <div class="ground-step__text">
@@ -242,6 +309,13 @@
               </p>
             </div>
           </article>
+          <aside class="inline-voice card">
+            <p class="inline-voice__kicker">Voice from the record</p>
+            <blockquote>
+              "After liberalization, districts more exposed to tariff cuts experienced weaker labor outcomes, especially for Black workers and women."
+            </blockquote>
+            <p class="inline-voice__source">Erten, Leight, and Tregenna (2019)</p>
+          </aside>
 
           <article class="ground-step ground-step--stack">
             <div class="ground-step__text">
@@ -255,11 +329,23 @@
             </div>
             <div class="ground-ports-pair" aria-label="Durban container terminal detail photographs">
               <figure class="ground-photo">
-                <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container terminal at the Port of Durban" />
+                <picture>
+
+                  <source srcset="assets/ground/durban-container-port-mediaclub.webp" type="image/webp" />
+
+                  <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container terminal at the Port of Durban"  />
+
+                </picture>
                 <figcaption>Container terminal at the Port of Durban: throughput behind rising trade intensity. Source: Wikimedia Commons.</figcaption>
               </figure>
               <figure class="ground-photo">
-                <img src="assets/ground/durban-container-mv-ever-refine.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Durban container terminal with ship MV Ever Refine" />
+                <picture>
+
+                  <source srcset="assets/ground/durban-container-mv-ever-refine.webp" type="image/webp" />
+
+                  <img src="assets/ground/durban-container-mv-ever-refine.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Durban container terminal with ship MV Ever Refine"  />
+
+                </picture>
                 <figcaption>MV <i>Ever Refine</i> at Durban: integration at ship scale. Source: Panoramio via Wayback Machine.</figcaption>
               </figure>
             </div>
@@ -267,7 +353,13 @@
 
           <article class="ground-step ground-step--settlement ground-step--reverse">
             <figure class="ground-photo ground-photo-wide">
-              <img src="assets/ground/township-slums.jpg" width="1600" height="900" loading="lazy" alt="Informal housing in a South African township" />
+              <picture>
+
+                <source srcset="assets/ground/township-slums.webp" type="image/webp" />
+
+                <img src="assets/ground/township-slums.jpg" width="1600" height="900" loading="lazy" alt="Informal housing in a South African township"  />
+
+              </picture>
               <figcaption>Cato Crest, Durban: the settlement edge beside the port economy. Source: Wikimedia Commons.</figcaption>
             </figure>
             <div class="ground-step__text">
@@ -285,8 +377,9 @@
       </div>
 
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#timeline">Continue to Policy Timeline ↓</a>
+    <div class="section-bridge" aria-label="Transition to timeline">
+      <p class="section-bridge__from">Places reveal uneven opportunity.</p>
+      <p class="section-bridge__to"><a href="#timeline">Next: the policy moments that shaped opening ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -294,14 +387,21 @@
     <!-- ============================================================ -->
     <section id="timeline" class="section">
       <div class="section-head">
-        <h2>3 · Policy Timeline</h2>
+        <p class="section-step">Section 03</p>
+        <h2>Twelve moments that opened the economy.</h2>
         <p class="section-lede">
           Tracing the path: sanctions end, RDP becomes GEAR, global trade locks in, commodities surge, and governance stalls. The cards below map these turning points.
         </p>
       </div>
 
       <figure class="ground-photo ground-photo-wide timeline-photo-bleed">
-        <img src="assets/ground/wef-davos-2005.jpg" width="3072" height="1856" loading="lazy" decoding="async" alt="World Economic Forum Annual Meeting, Davos 2005, with Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo" />
+        <picture>
+
+          <source srcset="assets/ground/wef-davos-2005.webp" type="image/webp" />
+
+          <img src="assets/ground/wef-davos-2005.jpg" width="3072" height="1856" loading="lazy" decoding="async" alt="World Economic Forum Annual Meeting, Davos 2005, with Bill Clinton, Bill Gates, Thabo Mbeki, Tony Blair, Bono, and Olusegun Obasanjo"  />
+
+        </picture>
         <figcaption>World Economic Forum Annual Meeting, Davos (27 Jan 2005). Compare the scene to the foreign-investment line in §4: being seen as a “normal” economy mattered, even when money from abroad stayed modest in the data.</figcaption>
       </figure>
 
@@ -325,8 +425,9 @@
         </div>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#macro">Continue to National economy ↓</a>
+    <div class="section-bridge" aria-label="Transition to economy">
+      <p class="section-bridge__from">History sets the sequence.</p>
+      <p class="section-bridge__to"><a href="#macro">Next: national lines for growth, trade, and jobs ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -334,7 +435,8 @@
     <!-- ============================================================ -->
     <section id="macro" class="section section-macro">
       <div class="section-head">
-        <h2>4 · National economy</h2>
+        <p class="section-step">Section 04</p>
+        <h2>Trade rose faster than what people earned.</h2>
         <p class="section-lede">
           <em>Trade openness</em> here means (exports + imports) ÷ GDP. GDP more than
           doubled between 1990 and 2022. Foreign direct investment (money from abroad
@@ -349,7 +451,13 @@
         <div class="chart-mockup__grid">
           <div class="chart-mockup__copy chart-annotations chart-mockup__copy--macro">
             <figure class="chart-mockup__context-fig">
-              <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Stacked shipping containers at Durban port" />
+              <picture>
+
+                <source srcset="assets/ground/durban-container-port-mediaclub.webp" type="image/webp" />
+
+                <img src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Stacked shipping containers at Durban port"  />
+
+              </picture>
               <figcaption>Port of Durban container stacks (2010 file date on Commons)—the throughput behind rising Trade/GDP.</figcaption>
             </figure>
             <h3 class="chart-mockup__title">From docks to national lines</h3>
@@ -386,8 +494,9 @@
         </div>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#inequality">Continue to Inequality ↓</a>
+    <div class="section-bridge" aria-label="Transition to inequality">
+      <p class="section-bridge__from">Macro gains are visible.</p>
+      <p class="section-bridge__to"><a href="#inequality">Next: who captured those gains ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -395,7 +504,8 @@
     <!-- ============================================================ -->
     <section id="inequality" class="section section-inequality">
       <div class="section-head">
-        <h2>5 · Inequality</h2>
+        <p class="section-step">Section 05</p>
+        <h2>The gains went to the top tenth.</h2>
         <p class="section-lede">
           Who gets what unfolds in steps: income shares, wealth, survey inequality
           (Gini), and then place. This section starts with the whole country, then
@@ -454,7 +564,13 @@
           <h3>Inequality in national space</h3>
           <p>Land patterns in Cape Town (6 Nov 2017), from Exploring Africa (2017) and Sayer (2016), used here alongside the Gini chart as a picture of inequality across space. <a href="https://commons.wikimedia.org/wiki/File:South_Africa_Inequality_(Generalized_Entropy_Measure,_Parameter_0)_(5457977786).jpg">Wikimedia Commons</a>. Resized locally; see <a href="assets/CREDITS.md">CREDITS.md</a>.</p>
         </figcaption>
-        <img class="inequality-map-img" src="assets/ground/sa-inequality-1.jpg" width="1600" height="1023" loading="lazy" alt="Map illustrating inequality across South Africa" />
+        <picture>
+
+          <source srcset="assets/ground/sa-inequality-1.webp" type="image/webp" />
+
+          <img class="inequality-map-img" src="assets/ground/sa-inequality-1.jpg" width="1600" height="1023" loading="lazy" alt="Map illustrating inequality across South Africa"  />
+
+        </picture>
       </figure>
 
       <div class="chart-more" aria-label="Additional inequality charts">
@@ -467,6 +583,7 @@
             <p>The Gini index summarizes inequality in one number (higher = more unequal). Survey-based series sit near 0.63 but can shift with how surveys are built. See <a class="kb-link" href="#sources" data-kb="dataset-wiid-2025">WIID 2025</a>.</p>
           </figcaption>
           <div class="chart-canvas-wrap"><canvas id="chart-gini"></canvas></div>
+          <p class="chart-caveat">Survey design changes across years; use this as directional context.</p>
         </figure>
         <figure class="card">
           <figcaption class="card-head">
@@ -474,9 +591,17 @@
             <p>Each dot is a year (hover for the year). The best-fit line slopes up and is statistically tight in this sample—but that still does not prove trade caused higher top shares.</p>
           </figcaption>
           <div class="chart-canvas-wrap"><canvas id="chart-scatter-top10-trade"></canvas></div>
+          <p class="chart-caveat">Each dot is one year, not a person or district-level estimate.</p>
         </figure>
         </div>
       </div>
+      <aside class="inline-voice card">
+        <p class="inline-voice__kicker">Voice from the record</p>
+        <blockquote>
+          "Wealth concentration remained extraordinarily high despite the democratic transition and post-apartheid policy reform."
+        </blockquote>
+        <p class="inline-voice__source">Chatterjee, Czajka, and Gethin (2021)</p>
+      </aside>
 
       <div class="prose narrow inequality-closing">
         <p>
@@ -499,8 +624,9 @@
         </p>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#governance">Continue to Governance ↓</a>
+    <div class="section-bridge" aria-label="Transition to governance">
+      <p class="section-bridge__from">Distribution remains concentrated.</p>
+      <p class="section-bridge__to"><a href="#governance">Next: what happened to institutions and trust ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -508,7 +634,8 @@
     <!-- ============================================================ -->
     <section id="governance" class="section">
       <div class="section-head">
-        <h2>6 · Governance</h2>
+        <p class="section-step">Section 06</p>
+        <h2>Institutions wobbled when patronage hardened.</h2>
         <p class="section-lede">
           This section asks how far courts, accountability, and trust in rules
           moved alongside the economy. The World Bank’s governance scores are rough
@@ -530,7 +657,13 @@
             patronage politics hardened in the 2010s.
           </p>
         </figcaption>
-        <img class="constitutional-court-img" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa, Johannesburg" />
+        <picture>
+
+          <source srcset="assets/ground/constitutional-court-johannesburg.webp" type="image/webp" />
+
+          <img class="constitutional-court-img" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa, Johannesburg"  />
+
+        </picture>
         <p class="card-sub court-photo-credit">Photo: Alex Southgate (image dated 26 Aug 2009; uploaded 1 Nov 2009). Licence not stated in supplied metadata—confirm on the original host before reuse. See <a href="assets/CREDITS.md">CREDITS.md</a>.</p>
       </figure>
 
@@ -546,6 +679,7 @@
           </label>
         </div>
         <div class="chart-canvas-wrap"><canvas id="chart-wgi"></canvas></div>
+        <p class="chart-caveat">WGI reflects external governance assessments, not direct legal outcomes.</p>
         <p class="card-sub wgi-callouts">
           Quick read: peaks around 2008, weakens through much of 2009–2018, then partially recovers after 2019.
         </p>
@@ -564,8 +698,9 @@
         </p>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#results">Continue to Statistical evidence ↓</a>
+    <div class="section-bridge" aria-label="Transition to evidence">
+      <p class="section-bridge__from">Patterns are visible in the charts.</p>
+      <p class="section-bridge__to"><a href="#results">Next: which patterns survive stricter tests ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -573,10 +708,29 @@
     <!-- ============================================================ -->
     <section id="results" class="section">
       <div class="section-head">
-        <h2>7 · Statistical evidence</h2>
+        <p class="section-step">Section 07</p>
+        <h2>What survives a strict statistical test.</h2>
         <p class="section-lede">
           Summary first; full regression tables below if you want every estimate and diagnostic.
         </p>
+      </div>
+      <div class="result-chips" aria-label="Headline statistical outcomes">
+        <button class="result-chip result-chip--bh" type="button" data-target="row-trade-top1">
+          <span class="result-chip__tier">BH-significant</span>
+          <span class="result-chip__claim">Trade openness moves with top-income concentration.</span>
+        </button>
+        <button class="result-chip result-chip--ns" type="button" data-target="row-gear-break">
+          <span class="result-chip__tier">Not significant</span>
+          <span class="result-chip__claim">No clean structural break at the 1996 GEAR pivot.</span>
+        </button>
+        <button class="result-chip result-chip--raw" type="button" data-target="row-wgi-gdp">
+          <span class="result-chip__tier">Raw-only</span>
+          <span class="result-chip__claim">Governance aligns with GDP growth in one specification.</span>
+        </button>
+        <button class="result-chip result-chip--ns" type="button" data-target="row-trade-unemp">
+          <span class="result-chip__tier">Not significant</span>
+          <span class="result-chip__claim">Trade does not robustly explain unemployment levels.</span>
+        </button>
       </div>
       <div class="card">
         <p class="card-sub">
@@ -783,8 +937,9 @@
         </div>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#map">Continue to Provincial unemployment map ↓</a>
+    <div class="section-bridge" aria-label="Transition to map">
+      <p class="section-bridge__from">Evidence narrows the core claims.</p>
+      <p class="section-bridge__to"><a href="#map">Next: where unemployment is concentrated ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -792,7 +947,8 @@
     <!-- ============================================================ -->
     <section id="map" class="section">
       <div class="section-head">
-        <h2>8 · Provincial unemployment, 2025 Q1</h2>
+        <p class="section-step">Section 08</p>
+        <h2>One number hides nine very different provinces.</h2>
         <p class="section-lede">
           Hover a province for its <em>narrow</em> unemployment rate—people actively
           looking for work who cannot find it. The broader measure that counts
@@ -823,8 +979,9 @@
         <span class="sw sw-4"></span> &gt; 37%
       </p>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#conclusions">Continue to Conclusions ↓</a>
+    <div class="section-bridge" aria-label="Transition to conclusions">
+      <p class="section-bridge__from">Unemployment is spatially uneven.</p>
+      <p class="section-bridge__to"><a href="#conclusions">Next: put the full argument together ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -832,7 +989,8 @@
     <!-- ============================================================ -->
     <section id="conclusions" class="section">
       <div class="section-head">
-        <h2>9 · Conclusions</h2>
+        <p class="section-step">Section 09</p>
+        <h2>Integration succeeded. Inclusion didn't.</h2>
         <p class="section-lede">
           After 1994, South Africa successfully rejoined the world economy. The unresolved
           question is distribution: why those gains did not become broad employment and
@@ -842,7 +1000,7 @@
 
       <div class="grid-2 conclusion-grid">
         <div class="card">
-          <h3 class="card-title">1 · What integration achieved</h3>
+          <h3 class="card-title">Aggregate gains → uneven access</h3>
           <p>
             Trade rose, sanctions-era isolation ended, and average income per person
             finished higher than in the early 1990s. On macro terms, integration
@@ -850,7 +1008,7 @@
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">2 · Where it broke down</h3>
+          <h3 class="card-title">Macro progress → labor-market bottlenecks</h3>
           <p>
             Those gains did not diffuse widely through the labor market. Unemployment
             remained structurally high, and income and wealth stayed heavily concentrated
@@ -858,7 +1016,7 @@
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">3 · Strongest evidence on mechanism</h3>
+          <h3 class="card-title">Correlation patterns → causal evidence</h3>
           <p>
             National regressions here are correlational. The sharper causal signal comes
             from district-level evidence
@@ -868,7 +1026,7 @@
           </p>
         </div>
         <div class="card">
-          <h3 class="card-title">4 · The policy takeaway</h3>
+          <h3 class="card-title">Past reintegration → next-phase inclusion</h3>
           <p>
             The lesson is not to retreat from global integration. It is to pair openness
             with employment-centered industrial policy, labor-market activation, and
@@ -899,10 +1057,10 @@
         >
           <div class="quote-orbit__stage">
             <div class="quote-orbit__ring" id="quote-orbit-ring">
-              <img class="quote-orbit__face" data-orbit-index="0" src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container stacks at Durban port" />
-              <img class="quote-orbit__face" data-orbit-index="1" src="assets/ground/township-slums.jpg" width="1600" height="900" loading="lazy" decoding="async" alt="Informal settlement housing" />
-              <img class="quote-orbit__face" data-orbit-index="2" src="assets/ground/sa-inequality-1.jpg" width="1600" height="1023" loading="lazy" decoding="async" alt="Map layer illustrating inequality across South Africa" />
-              <img class="quote-orbit__face" data-orbit-index="3" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa building" />
+              <img class="quote-orbit__face" data-orbit-index="0" src="assets/ground/durban-container-port-mediaclub.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Container stacks at Durban port"  />
+              <img class="quote-orbit__face" data-orbit-index="1" src="assets/ground/township-slums.jpg" width="1600" height="900" loading="lazy" decoding="async" alt="Informal settlement housing"  />
+              <img class="quote-orbit__face" data-orbit-index="2" src="assets/ground/sa-inequality-1.jpg" width="1600" height="1023" loading="lazy" decoding="async" alt="Map layer illustrating inequality across South Africa"  />
+              <img class="quote-orbit__face" data-orbit-index="3" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa building"  />
             </div>
           </div>
           <div class="quote-orbit__panel">
@@ -924,8 +1082,9 @@
         </div>
       </div>
     </section>
-    <div class="section-next" aria-label="Continue reading">
-      <a href="#sources">Continue to Sources &amp; Caveats ↓</a>
+    <div class="section-bridge" aria-label="Transition to sources">
+      <p class="section-bridge__from">Argument complete.</p>
+      <p class="section-bridge__to"><a href="#sources">Next: evidence, caveats, and citations ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -933,7 +1092,8 @@
     <!-- ============================================================ -->
     <section id="sources" class="section">
       <div class="section-head">
-        <h2>10 · Sources &amp; Caveats</h2>
+        <p class="section-step">Section 10</p>
+        <h2>How to check this essay.</h2>
         <p class="section-lede">
           Every claim above is either a direct calculation on the linked
           dataset or a citation to a source listed below.
@@ -1014,6 +1174,18 @@
           </li>
         </ol>
       </div>
+      <details class="card citation-card">
+        <summary><h3 class="card-title inline">How to cite this page</h3></summary>
+        <p><strong>APA:</strong> Hallur, S. (2026). <em>The Price of Integration: South Africa after 1994</em>. Economics 30 final project.</p>
+        <p><strong>BibTeX:</strong></p>
+        <pre class="mono">@misc{hallur2026integration,
+  author = {Hallur, Sunmit},
+  title = {The Price of Integration: South Africa after 1994},
+  year = {2026},
+  note = {Economics 30 final project},
+  url = {https://example.com}
+}</pre>
+      </details>
     </section>
 
     <footer class="footer">

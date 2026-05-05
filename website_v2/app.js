@@ -137,8 +137,39 @@
     return n.toLocaleString(undefined, { useGrouping: false, maximumFractionDigits: 8 });
   };
 
-  const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear", yAxisType = "linear" }) => {
+  const annotationPlugin = {
+    id: "essayAnnotation",
+    afterDraw(chart, _args, opts) {
+      const items = opts?.items;
+      if (!Array.isArray(items) || !items.length || !chart?.scales?.x || !chart?.scales?.y) return;
+      const { ctx, chartArea, scales } = chart;
+      ctx.save();
+      items.forEach((item) => {
+        if (item.type === "band") {
+          const x1 = scales.x.getPixelForValue(item.x1);
+          const x2 = scales.x.getPixelForValue(item.x2);
+          ctx.fillStyle = item.fill || "rgba(15,95,70,0.08)";
+          ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.bottom - chartArea.top);
+          ctx.fillStyle = item.color || palette().fg;
+          ctx.font = "600 12px Inter, sans-serif";
+          ctx.fillText(item.label || "", x1 + 6, chartArea.top + 14);
+        } else if (item.type === "label") {
+          const x = scales.x.getPixelForValue(item.x);
+          const y = scales.y.getPixelForValue(item.y);
+          ctx.fillStyle = item.color || palette().fg;
+          ctx.font = "600 12px Inter, sans-serif";
+          ctx.fillText(item.label || "", x + 6, y - 6);
+        }
+      });
+      ctx.restore();
+    },
+  };
+
+  const makeLineChart = (canvas, { labels, datasets, yTitle, xTitle, xAxisType = "linear", yAxisType = "linear", annotations = [] }) => {
     const p = palette();
+    if (Chart.registry && !Chart.registry.plugins.get("essayAnnotation")) {
+      Chart.register(annotationPlugin);
+    }
     const yScale = {
       type: yAxisType,
       title: yTitle ? { display: true, text: yTitle, color: p.muted } : { display: false },
@@ -165,6 +196,7 @@
         interaction: { intersect: false, mode: "index" },
         plugins: {
           legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8 } },
+          essayAnnotation: { items: annotations },
           tooltip: {
             enabled: true,
             callbacks: {
@@ -233,6 +265,7 @@
       ],
       yTitle: "Share of income (0–1)",
       xTitle: "Year",
+      annotations: [{ type: "label", x: 2020, y: 0.65, label: "Top 10% ≈ 65%" }],
     });
   };
 
@@ -251,6 +284,7 @@
       yTitle: "Index, 1990 = 100 (log axis)",
       xTitle: "Year",
       yAxisType: "logarithmic",
+      annotations: [{ type: "label", x: 2002, y: 320, label: "Trade rises faster than income" }],
     });
   };
 
@@ -263,6 +297,7 @@
       datasets: [datasetFrom(years, ts.series.unemployment, "danger", { borderWidth: 2.5 })],
       yTitle: "% of labour force",
       xTitle: "Year",
+      annotations: [{ type: "band", x1: 2019, x2: 2021.5, label: "COVID shock" }],
     });
   };
 
@@ -279,6 +314,7 @@
       ],
       yTitle: "Share of national income (pre-tax)",
       xTitle: "Year",
+      annotations: [{ type: "label", x: 2020, y: 0.65, label: "≈65%" }],
     });
   };
 
@@ -294,6 +330,7 @@
       ],
       yTitle: "Share of household wealth",
       xTitle: "Year",
+      annotations: [{ type: "label", x: 2020, y: 0.85, label: "≈85%" }],
     });
   };
 
@@ -309,6 +346,7 @@
       ],
       yTitle: "Gini index (higher = more unequal)",
       xTitle: "Year",
+      annotations: [{ type: "label", x: 2017, y: 0.63, label: "Coverage thins here" }],
     });
   };
 
@@ -423,7 +461,13 @@
     ds.push(datasetFrom(years, { ...gov.series.rl, label: labels.rl }, "accent", { borderWidth: 2.4 }));
     ds.push(datasetFrom(years, { ...gov.series.cc, label: labels.cc }, "danger", { borderWidth: 2.4 }));
     ds.push(datasetFrom(years, { ...gov.series.avg, label: "Average governance" }, "fg", { borderWidth: 3.2 }));
-    const chart = makeLineChart(canvas, { labels: years, datasets: ds, yTitle: "Score (0 = weak, 1 = strong)", xTitle: "Year" });
+    const chart = makeLineChart(canvas, {
+      labels: years,
+      datasets: ds,
+      yTitle: "Score (0 = weak, 1 = strong)",
+      xTitle: "Year",
+      annotations: [{ type: "band", x1: 2009, x2: 2018.5, label: "Zuma years" }],
+    });
     const contextToggle = $("#wgi-show-context");
     if (contextToggle) {
       const contextLabels = new Set([
@@ -455,11 +499,11 @@
       body: "RDP emphasised redistribution and basic services; import taxes (tariffs) were still relatively high." },
     { year: "1995", title: "Joining the WTO", kb: "state-of-trade-policy-south-africa",
       body: "Membership committed South Africa to phase down import taxes through about 2005." },
-    { year: "1996", title: "GEAR adopted", kb: "gear-strategy",
+    { year: "1996", title: "GEAR adopted", kb: "gear-strategy", chartHref: "#results",
       body: "Tighter budgets, lower trade barriers, some privatisation, and inflation targets became the main macro recipe." },
     { year: "2000s", title: "Commodity boom years", kb: "minerals-energy-complex",
       body: "Resource prices and foreign investment jumped; factory jobs outside mining often struggled." },
-    { year: "2008–09", title: "Global financial crisis", kb: "trade-liberalization-sa-manufacturing",
+    { year: "2008–09", title: "Global financial crisis", kb: "trade-liberalization-sa-manufacturing", chartHref: "#chart-unemployment",
       body: "Manufacturing shrank sharply; unemployment stepped up." },
     { year: "2009–18", title: "Zuma era: state capture", kb: "political-economy-of-transition",
       body: "Outside ratings of rule of law and corruption control weakened." },
@@ -507,7 +551,8 @@
           <span class="year">${item.year}</span>
           <h4>${item.title}</h4>
           <p>${item.body}</p>
-          <a class="kb-link" href="${kbHref(item.kb)}" target="_blank" rel="noopener noreferrer" data-kb="${item.kb}">View source →</a>`;
+          <a class="kb-link" href="${kbHref(item.kb)}" target="_blank" rel="noopener noreferrer" data-kb="${item.kb}">View source →</a>
+          ${item.chartHref ? `<a class="timeline-see-chart" href="${item.chartHref}">See this in the data →</a>` : ""}`;
       li.innerHTML = above
         ? `<div class="timeline-card">${cardInner}</div>
         <div class="timeline-axis-slot" aria-hidden="true">
@@ -730,6 +775,11 @@
     tr.setAttribute("role", "button");
     tr.setAttribute("aria-expanded", "false");
     tr.setAttribute("aria-label", `Expand estimates for ${r.y_label}`);
+    const joined = `${r.y_label} ${r.x_labels.join(" ")}`.toLowerCase();
+    if (joined.includes("top 1") && joined.includes("trade")) tr.id = "row-trade-top1";
+    if (joined.includes("wgi") && joined.includes("gdp")) tr.id = "row-wgi-gdp";
+    if (joined.includes("unemployment") && joined.includes("trade")) tr.id = "row-trade-unemp";
+    if (joined.includes("gear") || joined.includes("1996")) tr.id = "row-gear-break";
     tr.innerHTML = `
       <td class="num">${idx}</td>
       <td><span class="outcome-cell">${tierPill(r)}${r.y_label}</span></td>
@@ -1006,6 +1056,35 @@
       Chart.getChart(document.getElementById("chart-scatter-top10-trade"))?.resize();
     });
   };
+  const wireResultChips = () => {
+    $$(".result-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const row = document.getElementById(chip.dataset.target || "");
+        if (!row) return;
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
+        row.classList.add("flash-target");
+        setTimeout(() => row.classList.remove("flash-target"), 1200);
+      });
+    });
+  };
+  const updateArgumentBreadcrumb = (activeId) => {
+    const stepMap = {
+      question: "question",
+      "from-the-ground": "ground",
+      timeline: "timeline",
+      macro: "numbers",
+      inequality: "numbers",
+      governance: "numbers",
+      results: "results",
+      map: "results",
+      conclusions: "conclusions",
+      sources: "sources",
+    };
+    const activeStep = stepMap[activeId];
+    $$(".arg-breadcrumb [data-step]").forEach((el) => {
+      el.classList.toggle("is-active", el.dataset.step === activeStep);
+    });
+  };
   const wireTOC = () => {
     const links = $$(".topnav a");
     const progressFill = document.getElementById("top-progress-fill");
@@ -1061,6 +1140,7 @@
             ? "Intro"
             : sectionLabelById.get(activeId) ?? activeId;
       }
+      updateArgumentBreadcrumb(activeId);
     };
 
     const onScroll = () => {
@@ -1497,6 +1577,7 @@
     wireTimelineAutoscroll();
     wireKBLinks();
     wireTOC();
+    wireResultChips();
     wireQuoteOrbit();
     wireHandScrollInk();
     wireGlobalScrollMotion();
@@ -1510,15 +1591,54 @@
         fetchJSON("data/qlfs_2025q1.json"),
       ]);
       buildHeroChart(ineq, ts);
-      buildIndexedChart(ts);
-      buildUnemploymentChart(ts);
-      buildIncomeChart(ineq);
-      buildWealthChart(ineq);
-      wireLazyInequalityCharts(ineq, panel);
-      buildWGIChart(gov);
+      const lazySections = new Map([
+        ["macro", () => { buildIndexedChart(ts); buildUnemploymentChart(ts); }],
+        ["inequality", () => { buildIncomeChart(ineq); buildWealthChart(ineq); wireLazyInequalityCharts(ineq, panel); }],
+        ["governance", () => buildWGIChart(gov)],
+      ]);
+      const lazyObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const id = entry.target.id;
+          if (entry.target.dataset.chartBuilt === "1") return;
+          const run = lazySections.get(id);
+          if (!run) return;
+          run();
+          entry.target.dataset.chartBuilt = "1";
+        });
+      }, { rootMargin: "120px 0px" });
+      ["macro", "inequality", "governance"].forEach((id) => {
+        const section = document.getElementById(id);
+        if (section) lazyObserver.observe(section);
+      });
       renderRegressionTables(reg);
       window.refreshResultsScrolly?.();
       buildMap(qlfs);
+      const seenCharts = new Set();
+      const chartObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target.id) seenCharts.add(entry.target.id);
+        });
+      }, { threshold: 0.35 });
+      $$("canvas[id]").forEach((canvas) => chartObserver.observe(canvas));
+      const telemetryEndpoint = document.documentElement.dataset.telemetryEndpoint || "";
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState !== "hidden") return;
+        const sectionIds = ["hero", "question", "from-the-ground", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"];
+        let reached = "hero";
+        sectionIds.forEach((id) => {
+          const section = document.getElementById(id);
+          if (!section) return;
+          const rect = section.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.66) reached = id;
+        });
+        const payload = JSON.stringify({ reached, charts: [...seenCharts], ts: Date.now() });
+        if (!telemetryEndpoint) {
+          console.info("essay telemetry (local)", payload);
+          return;
+        }
+        if (navigator.sendBeacon) navigator.sendBeacon(telemetryEndpoint, payload);
+      });
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           resizeRegisteredCharts();
