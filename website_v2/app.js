@@ -278,7 +278,7 @@
       ],
       yTitle: "Share of income (0–1)",
       xTitle: "Year",
-      annotations: [{ type: "label", x: 2020, y: 0.65, label: "Top 10% ≈ 65%" }],
+      annotations: [{ type: "label", x: 2014, y: 0.64, label: "Top 10% ≈ 65%" }],
     });
   };
 
@@ -1603,7 +1603,7 @@
     wireTOC();
     wireResultChips();
     wireQuoteOrbit();
-    wireHandScrollInk();
+    // Disabled outdated hand-drawn intro effect per UX cleanup.
     wireGlobalScrollMotion();
     try {
       const [ts, ineq, gov, panel, reg, qlfs] = await Promise.all([
