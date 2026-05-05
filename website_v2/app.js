@@ -460,6 +460,8 @@
       rl: "Courts/rules reliability",
       cc: "Corruption control",
     };
+    const contextLabels = new Set([labels.va, labels.pv, labels.ge, labels.rq]);
+    let showContext = false;
     const ds = [];
     ["va", "pv", "ge", "rq"].forEach(k => {
       ds.push(datasetFrom(years, { ...gov.series[k], label: labels[k] }, colors[k], {
@@ -479,22 +481,18 @@
       datasets: ds,
       yTitle: "Score (0 = weak, 1 = strong)",
       xTitle: "Year",
-      annotations: [{ type: "band", x1: 2009, x2: 2018.5, label: "Zuma years" }],
+      annotations: [{ type: "marker", x: 2009, label: "Zuma-era decline", color: "rgba(255,255,255,0.42)", dash: [4, 4] }],
     });
+    chart.options.plugins.legend.labels.filter = (item) => showContext || !contextLabels.has(item.text);
+    chart.update();
     const contextToggle = $("#wgi-show-context");
     if (contextToggle) {
-      const contextLabels = new Set([
-        labels.va,
-        labels.pv,
-        labels.ge,
-        labels.rq,
-      ]);
       contextToggle.checked = false;
       contextToggle.addEventListener("change", () => {
-        const show = contextToggle.checked;
+        showContext = contextToggle.checked;
         chart.data.datasets.forEach((set) => {
           if (contextLabels.has(set.label)) {
-            set.hidden = !show;
+            set.hidden = !showContext;
           }
         });
         chart.update();
