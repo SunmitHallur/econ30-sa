@@ -869,13 +869,17 @@
 
   const renderRegressionTables = (payload) => {
     const meta = payload.meta;
-    $("#m-total").textContent = meta.n_specs;
-    $("#m-raw").textContent = meta.n_sig_raw;
-    $("#m-bonf").textContent = meta.n_sig_bonf;
-    $("#m-bh").textContent = meta.n_sig_bh;
-    $("#spec-count").textContent = meta.n_specs.toLocaleString();
-    $("#m-total-inline").textContent = meta.n_specs.toLocaleString();
-    $("#all-count").textContent = meta.n_specs;
+    const setText = (sel, val) => {
+      const el = $(sel);
+      if (el) el.textContent = String(val);
+    };
+    setText("#m-total", meta.n_specs);
+    setText("#m-raw", meta.n_sig_raw);
+    setText("#m-bonf", meta.n_sig_bonf);
+    setText("#m-bh", meta.n_sig_bh);
+    setText("#spec-count", meta.n_specs.toLocaleString());
+    setText("#m-total-inline", meta.n_specs.toLocaleString());
+    setText("#all-count", meta.n_specs);
 
     const headlineBody = $("#headline-table tbody");
     payload.headline.forEach((r, i) => headlineBody.appendChild(makeRow(r, i + 1)));
