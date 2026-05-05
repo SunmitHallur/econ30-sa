@@ -153,6 +153,19 @@
           ctx.fillStyle = item.color || palette().fg;
           ctx.font = "600 12px Inter, sans-serif";
           ctx.fillText(item.label || "", x1 + 6, chartArea.top + 14);
+        } else if (item.type === "marker") {
+          const x = scales.x.getPixelForValue(item.x);
+          ctx.strokeStyle = item.color || "rgba(255,255,255,0.45)";
+          ctx.lineWidth = item.width || 1.5;
+          ctx.setLineDash(item.dash || [5, 5]);
+          ctx.beginPath();
+          ctx.moveTo(x, chartArea.top);
+          ctx.lineTo(x, chartArea.bottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = item.color || palette().fg;
+          ctx.font = "600 12px Inter, sans-serif";
+          ctx.fillText(item.label || "", x + 6, chartArea.top + 16);
         } else if (item.type === "label") {
           const x = scales.x.getPixelForValue(item.x);
           const y = scales.y.getPixelForValue(item.y);
@@ -297,7 +310,7 @@
       datasets: [datasetFrom(years, ts.series.unemployment, "danger", { borderWidth: 2.5 })],
       yTitle: "% of labour force",
       xTitle: "Year",
-      annotations: [{ type: "band", x1: 2019, x2: 2021.5, label: "COVID shock" }],
+      annotations: [{ type: "marker", x: 2020, label: "COVID shock", color: "rgba(255,255,255,0.48)", dash: [4, 4] }],
     });
   };
 
