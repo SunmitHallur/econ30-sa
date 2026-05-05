@@ -36,7 +36,7 @@
     const panels = gsap.utils.toArray(".results-scrolly-panel");
     const mm = gsap.matchMedia();
 
-    const wirePanelReveal = (startPct, yFrom) => {
+    const wirePanelReveal = (startPct, yFrom, duration) => {
       panels.forEach((panel) => {
         const reveal = panel.querySelector(".results-scrolly-reveal");
         if (!reveal) return;
@@ -52,7 +52,7 @@
             gsap.to(reveal, {
               opacity: 1,
               y: 0,
-              duration: 0.58,
+              duration,
               ease: "power3.out",
               onComplete: () => {
                 gsap.set(reveal, { clearProps: "transform" });
@@ -74,12 +74,12 @@
     };
 
     mm.add("(min-width: 900px)", () => {
-      wirePanelReveal(82, 40);
+      wirePanelReveal(80, 24, 0.46);
       return () => {};
     });
 
     mm.add("(max-width: 899px)", () => {
-      wirePanelReveal(88, 32);
+      wirePanelReveal(86, 18, 0.4);
       return () => {};
     });
 

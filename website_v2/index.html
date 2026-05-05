@@ -45,7 +45,12 @@
         <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◐</span></span>
       </button>
     </div>
+    <div class="top-progress" aria-hidden="true"><span id="top-progress-fill"></span></div>
   </header>
+  <div class="section-indicator" aria-live="polite">
+    <span class="section-indicator__kicker">You are here</span>
+    <span class="section-indicator__text" id="section-indicator-text">Intro</span>
+  </div>
 
   <main id="main" class="main-stack">
 
@@ -67,7 +72,7 @@
           Opening to trade boosted the national economy but failed to create broad opportunity, instead triggering localized job losses for marginalized workers.
         </p>
         <div class="meta-row">
-          <a class="ghost-btn" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
+          <a class="ghost-btn hero-cta-primary" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
           <a class="ghost-btn" href="#macro"><span class="ghost-btn__text">Jump to national charts →</span></a>
         </div>
         <details class="hero-details">
@@ -99,6 +104,9 @@
         </div>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#question">Continue to The Question ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 2. Question                                                  -->
@@ -175,6 +183,9 @@
         </blockquote>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#from-the-ground">Continue to From the Ground ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 2 · Ground                                                   -->
@@ -274,6 +285,9 @@
       </div>
 
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#timeline">Continue to Policy Timeline ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 3. Timeline                                                  -->
@@ -292,10 +306,18 @@
       </figure>
 
       <div class="timeline-scroll-shell" id="timeline-shell">
+        <div class="timeline-controls" aria-label="Timeline controls">
+          <button id="timeline-play-toggle" class="ghost-btn timeline-btn" type="button" aria-pressed="false">
+            <span class="ghost-btn__text">Play timeline</span>
+          </button>
+          <button id="timeline-restart" class="ghost-btn timeline-btn timeline-btn--subtle" type="button">
+            <span class="ghost-btn__text">Restart</span>
+          </button>
+        </div>
         <div
           class="timeline-h-scroll"
           id="timeline-scroll"
-          data-autoplay="true"
+          data-autoplay="false"
           tabindex="0"
           aria-label="Policy timeline: drag, swipe, or use arrow keys horizontally"
         >
@@ -303,6 +325,9 @@
         </div>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#macro">Continue to National economy ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 4. Macro                                                     -->
@@ -361,6 +386,9 @@
         </div>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#inequality">Continue to Inequality ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 5. Inequality                                                -->
@@ -471,6 +499,9 @@
         </p>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#governance">Continue to Governance ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 6. Governance                                                -->
@@ -524,6 +555,9 @@
         </p>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#results">Continue to Statistical evidence ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 7. Econometric results                                       -->
@@ -740,6 +774,9 @@
         </div>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#map">Continue to Provincial unemployment map ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 8. Map                                                       -->
@@ -777,6 +814,9 @@
         <span class="sw sw-4"></span> &gt; 37%
       </p>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#conclusions">Continue to Conclusions ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 9. Conclusions                                               -->
@@ -875,6 +915,9 @@
         </div>
       </div>
     </section>
+    <div class="section-next" aria-label="Continue reading">
+      <a href="#sources">Continue to Sources &amp; Caveats ↓</a>
+    </div>
 
     <!-- ============================================================ -->
     <!-- 10. Sources & caveats                                        -->

@@ -510,10 +510,15 @@
     const shell = $("#timeline-shell");
     const listEl = $("#timeline-list");
     const sectionEl = document.getElementById("timeline");
+    const playToggleBtn = $("#timeline-play-toggle");
+    const restartBtn = $("#timeline-restart");
     if (!scrollEl || !shell) return;
 
+    const mqVerticalRail = window.matchMedia("(max-width: 860px)");
+
     /* Autoplay unless explicitly opted out (attribute missing = on, matching original behaviour). */
-    const autoplay = scrollEl.dataset.autoplay !== "false";
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let autoplay = !reduceMotion && scrollEl.dataset.autoplay === "true";
     let sectionVisible = false;
     let rafId = 0;
     /* Visible drift at ~27px/s @ 60fps; small values were easy to dismiss as “not moving”. */
@@ -522,6 +527,44 @@
 
     const syncChrome = () => {
       scrollEl.classList.toggle("is-autoplay-paused", !autoplay);
+      if (!playToggleBtn) return;
+      playToggleBtn.setAttribute("aria-pressed", autoplay ? "true" : "false");
+      const text = playToggleBtn.querySelector(".ghost-btn__text");
+      if (text) text.textContent = autoplay ? "Pause timeline" : "Play timeline";
+    };
+
+    const applyTimelineLayoutMode = () => {
+      const stacked = mqVerticalRail.matches;
+      scrollEl.classList.toggle("timeline-h-scroll--stacked", stacked);
+      [playToggleBtn, restartBtn].forEach((btn) => {
+        if (!btn) return;
+        if (stacked) {
+          btn.disabled = true;
+          btn.setAttribute("aria-disabled", "true");
+        } else {
+          btn.disabled = false;
+          btn.removeAttribute("aria-disabled");
+        }
+      });
+      if (stacked) {
+        autoplay = false;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+        playToggleBtn?.setAttribute(
+          "title",
+          "Autoplay applies to the horizontal timeline on wider screens."
+        );
+        restartBtn?.setAttribute(
+          "title",
+          "Restart applies to the horizontal timeline on wider screens."
+        );
+      } else {
+        playToggleBtn?.removeAttribute("title");
+        restartBtn?.removeAttribute("title");
+      }
+      syncChrome();
     };
 
     const tick = () => {
@@ -553,6 +596,21 @@
       }
       if (rafId) return;
       rafId = requestAnimationFrame(tick);
+    };
+    const toggleAutoplay = () => {
+      if (playToggleBtn?.disabled) return;
+      autoplay = !autoplay;
+      if (!autoplay && rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      syncChrome();
+      startIfNeeded();
+    };
+    const restartTimeline = () => {
+      if (restartBtn?.disabled) return;
+      scrollEl.scrollLeft = 0;
+      startIfNeeded();
     };
 
     window.addEventListener("resize", () => {
@@ -589,6 +647,14 @@
       { root: null, threshold: 0 }
     );
     io.observe(ioTarget);
+    playToggleBtn?.addEventListener("click", toggleAutoplay);
+    restartBtn?.addEventListener("click", restartTimeline);
+
+    mqVerticalRail.addEventListener("change", () => {
+      applyTimelineLayoutMode();
+      requestAnimationFrame(() => startIfNeeded());
+    });
+    applyTimelineLayoutMode();
 
     syncChrome();
     const wr = ioTarget.getBoundingClientRect();
@@ -922,19 +988,63 @@
   };
   const wireTOC = () => {
     const links = $$(".topnav a");
+    const progressFill = document.getElementById("top-progress-fill");
+    const indicatorText = document.getElementById("section-indicator-text");
     if (!links.length) return;
-    const byId = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          const id = en.target.id;
-          links.forEach(l => l.classList.remove("active"));
-          byId.get(id)?.classList.add("active");
+    const sectionOrder = ["question", "from-the-ground", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"];
+    const spyIds = ["hero", ...sectionOrder];
+    const spySections = spyIds.map(id => document.getElementById(id)).filter(Boolean);
+    const sectionLabelById = new Map(sectionOrder.map((id, idx) => {
+      const h = document.querySelector(`#${id} h2`);
+      const title = h ? h.textContent.replace(/^\d+\s*[·.-]\s*/, "").trim() : id;
+      return [id, `${idx + 1}/${sectionOrder.length} · ${title}`];
+    }));
+
+    const readingLineY = () => window.scrollY + window.innerHeight * 0.34;
+
+    const syncProgress = () => {
+      if (!progressFill) return;
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0;
+      progressFill.style.width = `${pct.toFixed(2)}%`;
+    };
+
+    const syncActiveNav = () => {
+      const doc = document.documentElement;
+      const nearBottom = window.scrollY + window.innerHeight >= doc.scrollHeight - 6;
+      const y = readingLineY();
+      let activeId = spySections[0]?.id ?? "hero";
+      if (nearBottom && spySections.length) {
+        activeId = spySections[spySections.length - 1].id;
+      } else {
+        for (const sec of spySections) {
+          const top = sec.getBoundingClientRect().top + window.scrollY;
+          if (top <= y) activeId = sec.id;
         }
+      }
+
+      links.forEach((l) => {
+        const href = l.getAttribute("href");
+        l.classList.toggle("active", href === `#${activeId}` && activeId !== "hero");
       });
-    }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
-    ["question", "from-the-ground", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"]
-      .forEach(id => { const sec = document.getElementById(id); if (sec) obs.observe(sec); });
+
+      if (indicatorText) {
+        indicatorText.textContent =
+          activeId === "hero"
+            ? "Intro"
+            : sectionLabelById.get(activeId) ?? activeId;
+      }
+    };
+
+    const onScroll = () => {
+      syncProgress();
+      syncActiveNav();
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
   };
 
   /**
@@ -1068,14 +1178,14 @@
     // Hero: short load timeline (no scroll scrub).
     const heroTargets = gsap.utils.toArray(".hero-inner > *, .hero .hero-figure");
     if (heroTargets.length) {
-      gsap.set(heroTargets, { opacity: 0, y: 26 });
+      gsap.set(heroTargets, { opacity: 0, y: 16 });
       gsap
         .timeline({ defaults: { ease: easeOut } })
         .to(heroTargets, {
           opacity: 1,
           y: 0,
-          duration: 0.62,
-          stagger: { each: 0.1, amount: 0.55 },
+          duration: 0.5,
+          stagger: { each: 0.08, amount: 0.34 },
           onComplete: () => {
             gsap.set(heroTargets, { clearProps: "transform" });
           },
@@ -1100,18 +1210,18 @@
     gsap.utils.toArray("main#main > section.section").forEach((section) => {
       const blocks = flattenSectionBlocks(section);
       if (!blocks.length) return;
-      gsap.set(blocks, { opacity: 0, y: 36 });
+      gsap.set(blocks, { opacity: 0, y: 20 });
       ScrollTrigger.create({
         trigger: section,
-        start: "top 78%",
+        start: "top 82%",
         once: true,
         onEnter: () => {
           gsap.to(blocks, {
             opacity: 1,
             y: 0,
-            duration: 0.72,
+            duration: 0.52,
             ease: easeOut,
-            stagger: { each: 0.08, amount: 0.48 },
+            stagger: { each: 0.05, amount: 0.28 },
             onComplete: () => {
               gsap.set(blocks, { clearProps: "transform" });
             },
