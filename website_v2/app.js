@@ -278,7 +278,7 @@
       ],
       yTitle: "Share of income (0–1)",
       xTitle: "Year",
-      annotations: [{ type: "label", x: 2014, y: 0.64, label: "Top 10% ≈ 65%" }],
+      annotations: [{ type: "label", x: 2010, y: 0.615, label: "≈65%" }],
     });
   };
 
