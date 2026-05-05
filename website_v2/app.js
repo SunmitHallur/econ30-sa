@@ -278,7 +278,6 @@
       ],
       yTitle: "Share of income (0–1)",
       xTitle: "Year",
-      annotations: [{ type: "label", x: 2010, y: 0.615, label: "≈65%" }],
     });
   };
 
