@@ -524,31 +524,34 @@
     { year: "2024–25", title: "QLFS Q1 2025: narrow u = 32.9%", kb: "stats-sa-qlfs-p0211-2025q1",
       body: "Broader unemployment (including discouraged seekers) at 43.1%; youth unemployment at 46.1%." },
   ];
-  // wiki links: map slugs to their sub-folder
-  const KB_FOLDER = {
-    "apartheid-era-sanctions": "concepts",
-    "reconstruction-and-development-programme": "concepts",
-    "gear-strategy": "concepts",
-    "state-of-trade-policy-south-africa": "summaries",
-    "minerals-energy-complex": "concepts",
-    "trade-liberalization-sa-manufacturing": "summaries",
-    "political-economy-of-transition": "concepts",
-    "building-back-better-covid-jobs": "summaries",
-    "stats-sa-qlfs-p0211-2025q1": "summaries",
-    "trade-liberalization-local-labor-markets-south-africa": "summaries",
-    "quarterly-labour-force-survey": "concepts",
-    "labour-market-south-africa": "concepts",
-    "trade-liberalisation-south-africa": "concepts",
-    "wealth-inequality-lab-south-africa": "summaries",
-    "dataset-wiid-2025": "summaries",
-    "inequality-in-south-africa": "concepts",
-    "dataset-wgi-underlying-sources": "summaries",
+  /* Primary sources (publishers, datasets, DOIs) — not course wiki mirrors. */
+  const KB_SOURCE_URL = {
+    "apartheid-era-sanctions": "https://doi.org/10.1111/1467-9485.00248",
+    "reconstruction-and-development-programme": "https://www.gov.za/documents/reconstruction-and-development-programme-white-paper",
+    "gear-strategy": "https://www.treasury.gov.za/publications/other/gear/chapters.pdf",
+    "state-of-trade-policy-south-africa": "https://www.wto.org/english/tratop_e/tpr_e/tp547_e.htm",
+    "minerals-energy-complex": "https://doi.org/10.1080/03056248808403756",
+    "trade-liberalization-sa-manufacturing": "https://hdl.handle.net/10419/211260",
+    "political-economy-of-transition": "https://ilrigsa.org.za/the-political-economy-of-the-south-african-transition/",
+    "building-back-better-covid-jobs":
+      "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/368961522944196494/south-africa-economic-update-jobs-and-inequality",
+    "stats-sa-qlfs-p0211-2025q1": "https://www.statssa.gov.za/?page_id=1854&PPN=P0211",
+    "stats-sa-qlfs-p0211-2023q3": "https://www.statssa.gov.za/?page_id=1854&PPN=P0211",
+    "trade-liberalization-local-labor-markets-south-africa": "https://doi.org/10.1016/j.jinteco.2019.02.006",
+    "quarterly-labour-force-survey": "https://www.statssa.gov.za/?page_id=1854&PPN=P0211",
+    "labour-market-south-africa": "https://ilostat.ilo.org/data/country/?ccode=ZAF&lang=en",
+    "trade-liberalisation-south-africa": "https://www.wto.org/english/tratop_e/tpr_e/tp547_e.htm",
+    "wealth-inequality-lab-south-africa": "https://doi.org/10.1093/wber/lhab012",
+    "dataset-wiid-2025": "https://www.wider.unu.edu/project/wiid-world-income-inequality-database",
+    "inequality-in-south-africa": "https://www.worldbank.org/en/country/southafrica/overview",
+    "dataset-wgi-underlying-sources": "https://www.worldbank.org/en/publication/worldwide-governance-indicators",
+    "sanctions-synthetic-control-south-africa": "https://open.uct.ac.za/items/57c851e3-bd2e-4b04-9626-7778d529137e",
+    "sanctions-impact-south-african-exports": "https://doi.org/10.1111/1467-9485.00248",
+    "mayekiso-trade-liberalisation-privatisation": "https://doi.org/10.70132/j4269338243",
+    "dataset-sa-wdi-panel": "https://databank.worldbank.org/source/world-development-indicators",
+    "dataset-wid-south-africa": "https://wid.world/country/south-africa/",
   };
-  const KB_BASE = "https://github.com/SunmitHallur/econ30-sa/blob/main/Knowledge%20Base/wiki";
-  const kbHref = (slug) => {
-    const folder = KB_FOLDER[slug] ?? "concepts";
-    return `${KB_BASE}/${folder}/${slug}.md`;
-  };
+  const kbHref = (slug) => KB_SOURCE_URL[slug] ?? "https://www.worldbank.org/en/country/southafrica";
   const renderTimeline = () => {
     const list = $("#timeline-list");
     if (!list) return;
