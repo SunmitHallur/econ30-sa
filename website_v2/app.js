@@ -882,38 +882,42 @@
     setText("#all-count", meta.n_specs);
 
     const headlineBody = $("#headline-table tbody");
-    payload.headline.forEach((r, i) => headlineBody.appendChild(makeRow(r, i + 1)));
+    if (headlineBody) payload.headline.forEach((r, i) => headlineBody.appendChild(makeRow(r, i + 1)));
 
     const allBody = $("#all-table tbody");
-    payload.all_specs.slice(0, 400).forEach(r => allBody.appendChild(makeRowAll(r)));
+    if (allBody) payload.all_specs.slice(0, 400).forEach(r => allBody.appendChild(makeRowAll(r)));
 
     // Chow
     const chowBody = $("#chow-table tbody");
-    payload.chow.filter(r => r.status === "ok").forEach(r => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${r.y_label}</td>
-        <td>${r.x_labels.join(" + ")}</td>
-        <td class="num">${r.n}</td>
-        <td class="num">${r.F.toFixed(3)}</td>
-        <td class="num ${pClass(r.p)}">${fmt.p(r.p)}</td>`;
-      chowBody.appendChild(tr);
-    });
+    if (chowBody) {
+      payload.chow.filter(r => r.status === "ok").forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.y_label}</td>
+          <td>${r.x_labels.join(" + ")}</td>
+          <td class="num">${r.n}</td>
+          <td class="num">${r.F.toFixed(3)}</td>
+          <td class="num ${pClass(r.p)}">${fmt.p(r.p)}</td>`;
+        chowBody.appendChild(tr);
+      });
+    }
 
     // Cointegration
     const coiBody = $("#coint-table tbody");
-    payload.cointegration.filter(r => r.status === "ok").forEach(r => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${r.y_label}</td>
-        <td>${r.x_label}</td>
-        <td class="num">${r.n}</td>
-        <td class="num">${fmt.p3(r.adf_y_p)}</td>
-        <td class="num">${fmt.p3(r.adf_x_p)}</td>
-        <td class="num">${r.eg_stat.toFixed(3)}</td>
-        <td class="num ${pClass(r.eg_p)}">${fmt.p(r.eg_p)}</td>`;
-      coiBody.appendChild(tr);
-    });
+    if (coiBody) {
+      payload.cointegration.filter(r => r.status === "ok").forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.y_label}</td>
+          <td>${r.x_label}</td>
+          <td class="num">${r.n}</td>
+          <td class="num">${fmt.p3(r.adf_y_p)}</td>
+          <td class="num">${fmt.p3(r.adf_x_p)}</td>
+          <td class="num">${r.eg_stat.toFixed(3)}</td>
+          <td class="num ${pClass(r.eg_p)}">${fmt.p(r.eg_p)}</td>`;
+        coiBody.appendChild(tr);
+      });
+    }
     const egGdpTrade = payload.cointegration.find(r => r.y === "log_gdp_pc" && r.x === "wdi_trade_gdp");
     if (egGdpTrade && egGdpTrade.status === "ok") {
       const el = $("#coint-gdp-trade");
@@ -922,17 +926,19 @@
 
     // Granger
     const grBody = $("#granger-table tbody");
-    payload.granger.filter(r => r.status === "ok").forEach(r => {
-      const p = r.p_by_lag;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${r.description}</td>
-        <td class="num">${r.n}</td>
-        <td class="num ${pClass(p["1"])}">${fmt.p3(p["1"])}</td>
-        <td class="num ${pClass(p["2"])}">${fmt.p3(p["2"])}</td>
-        <td class="num ${pClass(p["3"])}">${fmt.p3(p["3"])}</td>`;
-      grBody.appendChild(tr);
-    });
+    if (grBody) {
+      payload.granger.filter(r => r.status === "ok").forEach(r => {
+        const p = r.p_by_lag;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.description}</td>
+          <td class="num">${r.n}</td>
+          <td class="num ${pClass(p["1"])}">${fmt.p3(p["1"])}</td>
+          <td class="num ${pClass(p["2"])}">${fmt.p3(p["2"])}</td>
+          <td class="num ${pClass(p["3"])}">${fmt.p3(p["3"])}</td>`;
+        grBody.appendChild(tr);
+      });
+    }
 
     // Glossary dropdown
     const glossarySel = $("#glossary-select");
@@ -1072,6 +1078,7 @@
     });
   };
   const updateArgumentBreadcrumb = (activeId) => {
+    if (!$(".arg-breadcrumb")) return;
     const stepMap = {
       question: "question",
       "from-the-ground": "ground",
@@ -1594,11 +1601,18 @@
         fetchJSON("data/regressions.json"),
         fetchJSON("data/qlfs_2025q1.json"),
       ]);
-      buildHeroChart(ineq, ts);
+      const safeRun = (name, fn) => {
+        try {
+          fn();
+        } catch (e) {
+          console.error(`website_v2 block failed: ${name}`, e);
+        }
+      };
+      safeRun("hero chart", () => buildHeroChart(ineq, ts));
       const lazySections = new Map([
-        ["macro", () => { buildIndexedChart(ts); buildUnemploymentChart(ts); }],
-        ["inequality", () => { buildIncomeChart(ineq); buildWealthChart(ineq); wireLazyInequalityCharts(ineq, panel); }],
-        ["governance", () => buildWGIChart(gov)],
+        ["macro", () => safeRun("macro charts", () => { buildIndexedChart(ts); buildUnemploymentChart(ts); })],
+        ["inequality", () => safeRun("inequality charts", () => { buildIncomeChart(ineq); buildWealthChart(ineq); wireLazyInequalityCharts(ineq, panel); })],
+        ["governance", () => safeRun("governance chart", () => buildWGIChart(gov))],
       ]);
       const lazyObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -1615,9 +1629,9 @@
         const section = document.getElementById(id);
         if (section) lazyObserver.observe(section);
       });
-      renderRegressionTables(reg);
+      safeRun("regression tables", () => renderRegressionTables(reg));
       window.refreshResultsScrolly?.();
-      buildMap(qlfs);
+      safeRun("map", () => buildMap(qlfs));
       const seenCharts = new Set();
       const chartObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
