@@ -1000,7 +1000,7 @@
       return [id, `${idx + 1}/${sectionOrder.length} · ${title}`];
     }));
 
-    const readingLineY = () => window.scrollY + window.innerHeight * 0.34;
+    const readingLineY = () => window.scrollY + window.innerHeight * 0.55;
 
     const syncProgress = () => {
       if (!progressFill) return;
@@ -1019,7 +1019,13 @@
         activeId = spySections[spySections.length - 1].id;
       } else {
         for (const sec of spySections) {
-          const top = sec.getBoundingClientRect().top + window.scrollY;
+          const rect = sec.getBoundingClientRect();
+          const top = rect.top + window.scrollY;
+          const bottom = top + rect.height;
+          if (top <= y && bottom > y) {
+            activeId = sec.id;
+            break;
+          }
           if (top <= y) activeId = sec.id;
         }
       }
