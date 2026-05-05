@@ -527,7 +527,7 @@
   /* Primary sources (publishers, datasets, DOIs) — not course wiki mirrors. */
   const KB_SOURCE_URL = {
     "apartheid-era-sanctions": "https://doi.org/10.1111/1467-9485.00248",
-    "reconstruction-and-development-programme": "https://www.gov.za/documents/reconstruction-and-development-programme-white-paper",
+    "reconstruction-and-development-programme": "https://www.gov.za/sites/default/files/16085.pdf",
     "gear-strategy": "https://www.treasury.gov.za/publications/other/gear/chapters.pdf",
     "state-of-trade-policy-south-africa": "https://www.wto.org/english/tratop_e/tpr_e/tp547_e.htm",
     "minerals-energy-complex": "https://doi.org/10.1080/03056248808403756",
