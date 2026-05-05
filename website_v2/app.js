@@ -402,27 +402,47 @@
     const years = gov.years;
     const colors = { va: "wdi", pv: "wid", ge: "wgi", rq: "wiid", rl: "accent", cc: "danger" };
     const labels = {
-      va: "Voice & accountability",
-      pv: "Political stability",
-      ge: "Government effectiveness",
-      rq: "Regulatory quality",
-      rl: "Rule of law",
-      cc: "Control of corruption",
+      va: "Voice & accountability (context)",
+      pv: "Political stability (context)",
+      ge: "Government effectiveness (context)",
+      rq: "Regulatory quality (context)",
+      rl: "Courts/rules reliability",
+      cc: "Corruption control",
     };
     const ds = [];
     ["va", "pv", "ge", "rq"].forEach(k => {
       ds.push(datasetFrom(years, { ...gov.series[k], label: labels[k] }, colors[k], {
         borderWidth: 1,
-        colorAlpha: "66",
+        colorAlpha: "44",
         backgroundAlpha: "18",
         pointRadius: 0,
         borderDash: [3, 4],
+        hidden: true,
       }));
     });
     ds.push(datasetFrom(years, { ...gov.series.rl, label: labels.rl }, "accent", { borderWidth: 2.4 }));
     ds.push(datasetFrom(years, { ...gov.series.cc, label: labels.cc }, "danger", { borderWidth: 2.4 }));
     ds.push(datasetFrom(years, { ...gov.series.avg, label: "Average governance" }, "fg", { borderWidth: 3.2 }));
-    makeLineChart(canvas, { labels: years, datasets: ds, yTitle: "Score (0 = weak, 1 = strong)", xTitle: "Year" });
+    const chart = makeLineChart(canvas, { labels: years, datasets: ds, yTitle: "Score (0 = weak, 1 = strong)", xTitle: "Year" });
+    const contextToggle = $("#wgi-show-context");
+    if (contextToggle) {
+      const contextLabels = new Set([
+        labels.va,
+        labels.pv,
+        labels.ge,
+        labels.rq,
+      ]);
+      contextToggle.checked = false;
+      contextToggle.addEventListener("change", () => {
+        const show = contextToggle.checked;
+        chart.data.datasets.forEach((set) => {
+          if (contextLabels.has(set.label)) {
+            set.hidden = !show;
+          }
+        });
+        chart.update();
+      });
+    }
   };
 
   // ------------------------------------------------------------

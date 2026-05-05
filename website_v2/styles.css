@@ -1989,6 +1989,26 @@ details summary h3 { display: inline; }
   text-align: center;
   font-size: 14px;
 }
+.wgi-controls {
+  display: flex;
+  justify-content: center;
+  margin: 2px 0 10px;
+}
+.wgi-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+.wgi-toggle input {
+  accent-color: var(--accent);
+}
+.wgi-callouts {
+  margin-top: 10px;
+  text-align: center;
+}
 .ground-notes h3, .ground-kicker {
   font-family: var(--font-serif);
   font-size: 24px;
