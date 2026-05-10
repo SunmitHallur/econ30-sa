@@ -185,6 +185,18 @@ a:hover { border-bottom-color: currentColor; }
 
 .mono { font-family: var(--font-mono); font-size: 0.92em; }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------------- Top bar ---------------- */
 .topbar {
   position: sticky;
@@ -1435,6 +1447,39 @@ details summary h3 { display: inline; }
   border: 1px solid var(--rule);
   background: var(--bg-elev);
 }
+.map-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--rule);
+  background: var(--bg-elev);
+}
+.map-controls__play {
+  flex-shrink: 0;
+}
+.map-controls__period {
+  font-size: 14px;
+  color: var(--fg);
+  font-weight: 600;
+  min-width: 0;
+  flex: 1 1 200px;
+}
+.map-controls__scrub {
+  flex: 1 1 220px;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+.map-controls__scrub input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
 .map-legend {
   margin-top: 12px;
   color: var(--fg-muted);
@@ -1448,6 +1493,56 @@ details summary h3 { display: inline; }
   display: inline-block;
   width: 14px; height: 14px; border-radius: 3px;
   margin-right: 2px;
+}
+.map-methodology {
+  margin-top: 1rem !important;
+  font-size: clamp(15px, 1.35vw, 17px) !important;
+  color: var(--fg-muted);
+  line-height: 1.55 !important;
+}
+.map-methodology > p:first-child {
+  margin-top: 0;
+}
+.map-methodology strong {
+  color: var(--fg);
+}
+.map-data-citation {
+  margin: 0.75rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  background: var(--bg-sunken);
+}
+.map-citation-apa {
+  margin: 0;
+  font-style: normal;
+}
+.map-citation-apa cite {
+  font-style: italic;
+  color: var(--fg-muted);
+  font-size: 0.96em;
+  line-height: 1.5;
+}
+.map-citation-urls {
+  margin: 0.65rem 0 0 !important;
+  padding: 0 !important;
+}
+.map-citation-urls li {
+  padding: 6px 0 !important;
+  border-bottom: none !important;
+  font-size: 14px !important;
+}
+.map-citation-urls a {
+  word-break: break-all;
+}
+.map-method-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.92em;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.map-methodology-sources {
+  margin: 0.85rem 0 0;
 }
 .sw-1 { background: #c7e7d7; }
 .sw-2 { background: #83ccae; }

@@ -79,20 +79,40 @@
     warn: cssVar("--warn"),
   });
 
+  /** Tooltip chrome follows light/dark page theme (readable on both). */
+  const tooltipThemeColors = () => {
+    const dark = document.documentElement.dataset.theme === "dark";
+    return dark
+      ? {
+          backgroundColor: "rgba(22, 26, 34, 0.96)",
+          titleColor: "#f4f4f5",
+          bodyColor: "#e4e4e7",
+          borderColor: "rgba(255,255,255,0.12)",
+        }
+      : {
+          backgroundColor: "rgba(255, 255, 255, 0.97)",
+          titleColor: "#18181b",
+          bodyColor: "#3f3f46",
+          borderColor: "rgba(15, 23, 42, 0.12)",
+        };
+  };
+
   const setChartDefaults = () => {
     const p = palette();
+    const tt = tooltipThemeColors();
     Chart.defaults.font.family = "Inter, -apple-system, system-ui, sans-serif";
     Chart.defaults.color = p.muted;
     Chart.defaults.borderColor = p.rule;
     Chart.defaults.plugins.legend.labels.color = p.fg;
-    Chart.defaults.plugins.tooltip.backgroundColor = "rgba(15, 23, 42, 0.92)";
-    Chart.defaults.plugins.tooltip.titleColor = "#fff";
-    Chart.defaults.plugins.tooltip.bodyColor = "#fff";
-    Chart.defaults.plugins.tooltip.borderColor = "rgba(255,255,255,0.08)";
-    Chart.defaults.plugins.tooltip.borderWidth = 1;
-    Chart.defaults.plugins.tooltip.boxPadding = 6;
-    Chart.defaults.plugins.tooltip.padding = 8;
-    Chart.defaults.plugins.tooltip.cornerRadius = 6;
+    if (!Chart.defaults.plugins.tooltip) Chart.defaults.plugins.tooltip = {};
+    Object.assign(Chart.defaults.plugins.tooltip, {
+      ...tt,
+      borderWidth: 1,
+      boxPadding: 6,
+      padding: 10,
+      cornerRadius: 8,
+      displayColors: true,
+    });
   };
   setChartDefaults();
 
@@ -101,6 +121,7 @@
     const p = palette();
     const o = chart.options;
     if (o.plugins?.legend?.labels) o.plugins.legend.labels.color = p.fg;
+    if (o.plugins?.tooltip) Object.assign(o.plugins.tooltip, tooltipThemeColors());
     if (o.color !== undefined) o.color = p.muted;
     chart.data.datasets.forEach(ds => {
       if (!ds.paletteKey || !p[ds.paletteKey]) return;
@@ -206,11 +227,13 @@
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: { duration: 420, easing: "easeOutQuart" },
         interaction: { intersect: false, mode: "index" },
         plugins: {
           legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8 } },
           essayAnnotation: { items: annotations },
           tooltip: {
+            ...tooltipThemeColors(),
             enabled: true,
             callbacks: {
               title(items) {
@@ -413,9 +436,11 @@
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: { duration: 380, easing: "easeOutQuart" },
         plugins: {
           legend: { position: "bottom", labels: { color: p.fg } },
           tooltip: {
+            ...tooltipThemeColors(),
             callbacks: {
               label: ctx => {
                 const pt = ctx.raw;
@@ -990,9 +1015,55 @@
     "Mpumalanga":     { lat: -25.80, lon: 30.60 },
     "Limpopo":        { lat: -23.90, lon: 29.40 },
   };
-  const buildMap = async (qlfs) => {
+  const buildMap = async (series) => {
     const el = $("#za-map");
     if (!el || typeof L === "undefined") return;
+    const waves = series?.waves;
+    if (!waves?.length) {
+      console.warn("map: no wave data");
+      return;
+    }
+
+    const citeRoot = $("#map-data-citation");
+    if (citeRoot && (series.citation_apa || series.method_note || (series.citation_urls && series.citation_urls.length))) {
+      citeRoot.replaceChildren();
+      if (series.citation_apa) {
+        const p = document.createElement("p");
+        p.className = "map-citation-apa";
+        const cite = document.createElement("cite");
+        cite.textContent = series.citation_apa;
+        p.appendChild(cite);
+        citeRoot.appendChild(p);
+      }
+      if (Array.isArray(series.citation_urls) && series.citation_urls.length) {
+        const ul = document.createElement("ul");
+        ul.className = "map-citation-urls link-list";
+        series.citation_urls.forEach((url) => {
+          if (!url || typeof url !== "string") return;
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = url;
+          a.rel = "noopener noreferrer";
+          a.target = "_blank";
+          try {
+            const u = new URL(url);
+            a.textContent = `${u.hostname}${u.pathname}${u.search}` || url;
+          } catch {
+            a.textContent = url.replace(/^https?:\/\//u, "");
+          }
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+        if (ul.childElementCount) citeRoot.appendChild(ul);
+      }
+      if (series.method_note) {
+        const mn = document.createElement("p");
+        mn.className = "map-method-note";
+        mn.textContent = series.method_note;
+        citeRoot.appendChild(mn);
+      }
+    }
+
     const gj = await fetchJSON("zaf-outline.geojson");
     const map = L.map(el, { zoomControl: true, attributionControl: true, scrollWheelZoom: false })
       .setView([-28.8, 25.0], 5.2);
@@ -1028,11 +1099,65 @@
       markerEntries.forEach(applyMarkerStyle);
     };
 
-    // Province centroid bubbles sized by labour force, coloured by unemployment
-    Object.entries(qlfs.provinces).forEach(([name, info]) => {
+    const tooltipHtml = (name, rate) =>
+      `<strong>${name}</strong><br>Narrow unemployment: ${rate.toFixed(1)}%`;
+
+    let waveIndex = waves.length - 1;
+    const playBtn = $("#map-play-pause");
+    const playLabel = $("#map-play-label");
+    const periodEl = $("#map-period-label");
+    const sliderEl = $("#map-wave-slider");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let playing = !reduceMotion;
+    let autoplayTimer = null;
+    if (playLabel) playLabel.textContent = playing ? "Pause" : "Play";
+    if (playBtn) playBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+
+    const setPlaying = (on) => {
+      playing = on;
+      if (playBtn) playBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+      if (playLabel) playLabel.textContent = playing ? "Pause" : "Play";
+      if (playing) startAutoplay();
+      else stopAutoplay();
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    };
+
+    const startAutoplay = () => {
+      stopAutoplay();
+      if (!playing) return;
+      autoplayTimer = setInterval(() => {
+        waveIndex = (waveIndex + 1) % waves.length;
+        applyWave(waveIndex);
+      }, 3200);
+    };
+
+    const applyWave = (i) => {
+      waveIndex = Math.max(0, Math.min(waves.length - 1, i));
+      const w = waves[waveIndex];
+      const nat = w.national != null ? ` · National ${w.national}%` : "";
+      if (periodEl) periodEl.textContent = `${w.label}${nat}`;
+      if (sliderEl) sliderEl.value = String(waveIndex);
+
+      markerEntries.forEach((entry) => {
+        const r = w.provinces[entry.name];
+        entry.rate = typeof r === "number" ? r : 0;
+        applyMarkerStyle(entry);
+        if (typeof entry.marker.setTooltipContent === "function") {
+          entry.marker.setTooltipContent(tooltipHtml(entry.name, entry.rate));
+        }
+      });
+    };
+
+    Object.keys(PROV_COORDS).forEach((name) => {
       const coord = PROV_COORDS[name];
-      if (!coord) return;
-      const rate = info.unemployment_rate;
+      const w0 = waves[waveIndex];
+      const rate = typeof w0.provinces[name] === "number" ? w0.provinces[name] : 0;
       const marker = L.circleMarker([coord.lat, coord.lon], {
         radius: 10 + Math.min(14, rate / 3),
         color: palette().fg,
@@ -1040,12 +1165,9 @@
         fillColor: provColor(rate),
         fillOpacity: 0.9,
       });
-      const entry = { marker, rate, hover: false };
+      const entry = { marker, name, rate, hover: false };
       markerEntries.push(entry);
-      marker.bindTooltip(
-        `<strong>${name}</strong><br>Narrow unemployment: ${rate.toFixed(1)}%`,
-        { sticky: true, direction: "top", offset: [0, -4] }
-      );
+      marker.bindTooltip(tooltipHtml(name, rate), { sticky: true, direction: "top", offset: [0, -4] });
       marker.on("mouseover", () => {
         entry.hover = true;
         applyMarkerStyle(entry);
@@ -1056,6 +1178,40 @@
       });
       marker.addTo(map);
     });
+
+    if (sliderEl) {
+      sliderEl.max = String(waves.length - 1);
+      sliderEl.addEventListener("input", () => {
+        const v = Number.parseInt(sliderEl.value, 10);
+        if (Number.isFinite(v)) {
+          setPlaying(false);
+          applyWave(v);
+        }
+      });
+    }
+
+    if (playBtn) {
+      playBtn.addEventListener("click", () => setPlaying(!playing));
+    }
+
+    applyWave(waveIndex);
+    if (playing) startAutoplay();
+
+    const mapSection = $("#map");
+    if (mapSection) {
+      const visObs = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            map.invalidateSize();
+            if (playing && !autoplayTimer) startAutoplay();
+          } else {
+            stopAutoplay();
+          }
+        });
+      }, { threshold: 0.12 });
+      visObs.observe(mapSection);
+    }
+
     mapThemeRefreshers.push(applyMapTheme);
     applyMapTheme();
 
@@ -1608,13 +1764,13 @@
     // Disabled outdated hand-drawn intro effect per UX cleanup.
     wireGlobalScrollMotion();
     try {
-      const [ts, ineq, gov, panel, reg, qlfs] = await Promise.all([
+      const [ts, ineq, gov, panel, reg, mapSeries] = await Promise.all([
         fetchJSON("data/timeseries.json"),
         fetchJSON("data/inequality.json"),
         fetchJSON("data/governance.json"),
         fetchJSON("data/panel.json"),
         fetchJSON("data/regressions.json"),
-        fetchJSON("data/qlfs_2025q1.json"),
+        fetchJSON("data/map_unemployment_series.json"),
       ]);
       const safeRun = (name, fn) => {
         try {
@@ -1646,7 +1802,7 @@
       });
       safeRun("regression tables", () => renderRegressionTables(reg));
       window.refreshResultsScrolly?.();
-      safeRun("map", () => buildMap(qlfs));
+      safeRun("map", () => buildMap(mapSeries));
       const seenCharts = new Set();
       const chartObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {

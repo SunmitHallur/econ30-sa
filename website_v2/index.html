@@ -10,7 +10,7 @@
   <meta property="og:image" content="og-image.png" />
   <meta property="og:type" content="article" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="canonical" href="/" />
+  <link rel="canonical" href="https://econ30.vercel.app/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -932,9 +932,11 @@
         <p class="section-step">Section 08</p>
         <h2>One number hides nine very different provinces.</h2>
         <p class="section-lede">
-          Hover a province for its <em>narrow</em> unemployment rate—people actively
-          looking for work who cannot find it. The broader measure that counts
-          discouraged job-seekers too was <strong>43.1%</strong> nationally in Q1 2025.
+          Hover a bubble for <em>narrow</em> unemployment by province (actively looking,
+          no job). The animation cycles through <strong>QLFS quarters (2008–2025)</strong>
+          computed from the same household survey microdata extracts as the rest of this
+          project—rates move when you press play or drag the slider. The broader measure
+          that counts discouraged job-seekers was <strong>43.1%</strong> nationally in Q1 2025.
           Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
         </p>
       </div>
@@ -953,6 +955,16 @@
         </p>
       </div>
 
+      <div class="map-controls" id="map-controls" role="group" aria-label="Map time animation">
+        <button type="button" class="ghost-btn map-controls__play" id="map-play-pause" aria-pressed="true">
+          <span class="ghost-btn__text" id="map-play-label">Pause</span>
+        </button>
+        <span class="map-controls__period mono" id="map-period-label" aria-live="polite">—</span>
+        <label class="map-controls__scrub">
+          <span class="visually-hidden">Quarter</span>
+          <input type="range" id="map-wave-slider" min="0" max="0" value="0" />
+        </label>
+      </div>
       <div id="za-map" class="map-wrap" aria-label="South Africa provinces map"></div>
       <p class="map-legend">
         <span class="sw sw-1"></span> &lt; 25% &nbsp;
@@ -960,6 +972,16 @@
         <span class="sw sw-3"></span> 32–37% &nbsp;
         <span class="sw sw-4"></span> &gt; 37%
       </p>
+      <div class="prose narrow map-methodology">
+        <p>
+          <strong>Method.</strong> Provincial rates are author-calculated from Stats SA QLFS microdata (narrow definition,
+          survey weights). Official headline rates may differ slightly by revision or filtering.
+        </p>
+        <div id="map-data-citation" class="map-data-citation" aria-label="Map data citation and technical note"></div>
+        <p class="map-methodology-sources">
+          <a class="kb-link" href="#sources">Sources</a> lists P0211 and related entries under <em>Datasets</em>.
+        </p>
+      </div>
     </section>
     <div class="section-bridge" aria-label="Transition to conclusions">
       <p class="section-bridge__from">Unemployment is spatially uneven.</p>
@@ -1090,7 +1112,10 @@
             <li><a href="https://wid.world/country/south-africa/" target="_blank" rel="noopener noreferrer">World Inequality Database — South Africa</a> — income and wealth shares.</li>
             <li><a href="https://www.wider.unu.edu/project/wiid-world-income-inequality-database" target="_blank" rel="noopener noreferrer">WIID (UNU-WIDER)</a> — harmonised Gini / Palma.</li>
             <li><a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators" target="_blank" rel="noopener noreferrer">Worldwide Governance Indicators</a> — methodology and data portal.</li>
-            <li><a href="https://www.statssa.gov.za/?page_id=1854&amp;PPN=P0211" target="_blank" rel="noopener noreferrer">Stats SA — Statistical release P0211 (QLFS)</a> — 2025 Q1 and earlier quarters.</li>
+            <li><a href="https://www.statssa.gov.za/?page_id=1854&amp;PPN=P0211" target="_blank" rel="noopener noreferrer">Stats SA — Statistical release P0211 (QLFS)</a> — official publications and methodology.</li>
+            <li><a href="https://www.statssa.gov.za/" target="_blank" rel="noopener noreferrer">Statistics South Africa</a> — producer of QLFS/LFS/OHS microdata used in analysis scripts.</li>
+            <li><strong>Provincial map (§8):</strong> Narrow unemployment by province, quarter, computed from <strong>QLFS household CSV extracts</strong> (2008 Q1–latest in repo); aggregation script <span class="mono">scripts/build_map_unemployment_series.py</span> → <span class="mono">data/map_unemployment_series.json</span>. Aligns with P0211 definitions; not an official Stats SA table.</li>
+            <li><strong>October Household Survey (1994–1999)</strong> microdata via <a href="https://www.datafirst.uct.ac.za/" target="_blank" rel="noopener noreferrer">DataFirst</a> (University of Cape Town) — use follows DataFirst / CC licence terms; cite producer (Statistics South Africa) and distributor.</li>
           </ul>
         </div>
         <div class="card">
@@ -1160,23 +1185,25 @@
       </div>
       <details class="card citation-card">
         <summary><h3 class="card-title inline">How to cite this page</h3></summary>
-        <p><strong>APA:</strong> Hallur, S. (2026). <em>The Price of Integration: South Africa after 1994</em>. Economics 30 final project.</p>
+        <p><strong>APA:</strong> Hallur, S. (2026). <em>The Price of Integration: South Africa after 1994</em>. Economics 30 final project. Retrieved from https://econ30.vercel.app</p>
         <p><strong>BibTeX:</strong></p>
         <pre class="mono">@misc{hallur2026integration,
   author = {Hallur, Sunmit},
   title = {The Price of Integration: South Africa after 1994},
   year = {2026},
   note = {Economics 30 final project},
-  url = {https://example.com}
+  url = {https://econ30.vercel.app}
 }</pre>
       </details>
     </section>
 
     <footer class="footer">
       <p>
-        Built with Python (pandas, statsmodels, matplotlib), Chart.js and
-        Leaflet. All underlying data are in <span class="mono">Knowledge Base/raw/data/</span>.
-        Exploratory analysis pipeline in <span class="mono">analysis_v2/</span>.
+        Built with Python (pandas, statsmodels, matplotlib), Chart.js and Leaflet.
+        Chart data: <span class="mono">website_v2/data/</span>; raw survey extracts:
+        <span class="mono">Knowledge Base/raw/data/</span>; provincial map series generated by
+        <span class="mono">scripts/build_map_unemployment_series.py</span>.
+        Exploratory analysis in <span class="mono">analysis_v2/</span>.
       </p>
       <p>
         Sunmit Hallur · Economics 30 · Spring 2026.

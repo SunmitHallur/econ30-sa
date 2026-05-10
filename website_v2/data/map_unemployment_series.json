@@ -1,0 +1,1309 @@
+{
+  "title": "Provincial narrow unemployment (QLFS microdata extracts)",
+  "definition": "Stats SA narrow unemployment: unemployed \u00f7 (employed + unemployed), survey-weighted. Derived from downloaded QLFS CSV extracts.",
+  "source_note": "Household survey microdata; producer Statistics South Africa.",
+  "citation_apa": "Statistics South Africa. (2008\u20132025). Quarterly Labour Force Survey microdata (P0211 series), provincial aggregates computed by the author from CSV extracts; see Statistical release P0211 and ISIbalo portal.",
+  "citation_urls": [
+    "https://www.statssa.gov.za/?page_id=1854&PPN=P0211",
+    "https://www.statssa.gov.za/"
+  ],
+  "method_note": "Codes: Province 1\u20139 (Stats SA); Lfs_Status or Status with 1=employed, 2=unemployed (narrow); Weight / weight for expansion. Pre-2008 LFS/OHS extracts require separate harmonisation.",
+  "waves": [
+    {
+      "id": "2008-Q1",
+      "year": 2008,
+      "quarter": 1,
+      "label": "2008 Q1",
+      "national": 23.08,
+      "provinces": {
+        "Western Cape": 17.64,
+        "Eastern Cape": 27.73,
+        "Northern Cape": 24.14,
+        "Free State": 24.34,
+        "KwaZulu-Natal": 22.25,
+        "North West": 21.87,
+        "Gauteng": 22.47,
+        "Mpumalanga": 23.41,
+        "Limpopo": 30.82
+      }
+    },
+    {
+      "id": "2008-Q2",
+      "year": 2008,
+      "quarter": 2,
+      "label": "2008 Q2",
+      "national": 22.52,
+      "provinces": {
+        "Western Cape": 18.36,
+        "Eastern Cape": 24.54,
+        "Northern Cape": 23.61,
+        "Free State": 25.31,
+        "KwaZulu-Natal": 21.81,
+        "North West": 22.62,
+        "Gauteng": 21.38,
+        "Mpumalanga": 24.23,
+        "Limpopo": 30.02
+      }
+    },
+    {
+      "id": "2008-Q3",
+      "year": 2008,
+      "quarter": 3,
+      "label": "2008 Q3",
+      "national": 22.68,
+      "provinces": {
+        "Western Cape": 18.85,
+        "Eastern Cape": 26.97,
+        "Northern Cape": 21.87,
+        "Free State": 22.35,
+        "KwaZulu-Natal": 21.53,
+        "North West": 26.67,
+        "Gauteng": 21.49,
+        "Mpumalanga": 22.88,
+        "Limpopo": 28.96
+      }
+    },
+    {
+      "id": "2008-Q4",
+      "year": 2008,
+      "quarter": 4,
+      "label": "2008 Q4",
+      "national": 21.38,
+      "provinces": {
+        "Western Cape": 16.36,
+        "Eastern Cape": 25.06,
+        "Northern Cape": 21.15,
+        "Free State": 21.84,
+        "KwaZulu-Natal": 20.28,
+        "North West": 25.58,
+        "Gauteng": 20.33,
+        "Mpumalanga": 22.45,
+        "Limpopo": 28.19
+      }
+    },
+    {
+      "id": "2009-Q1",
+      "year": 2009,
+      "quarter": 1,
+      "label": "2009 Q1",
+      "national": 22.84,
+      "provinces": {
+        "Western Cape": 17.97,
+        "Eastern Cape": 28.0,
+        "Northern Cape": 26.79,
+        "Free State": 24.58,
+        "KwaZulu-Natal": 21.86,
+        "North West": 26.7,
+        "Gauteng": 21.22,
+        "Mpumalanga": 24.17,
+        "Limpopo": 27.45
+      }
+    },
+    {
+      "id": "2009-Q2",
+      "year": 2009,
+      "quarter": 2,
+      "label": "2009 Q2",
+      "national": 23.08,
+      "provinces": {
+        "Western Cape": 20.03,
+        "Eastern Cape": 27.5,
+        "Northern Cape": 25.67,
+        "Free State": 26.23,
+        "KwaZulu-Natal": 18.79,
+        "North West": 27.35,
+        "Gauteng": 22.63,
+        "Mpumalanga": 26.01,
+        "Limpopo": 24.42
+      }
+    },
+    {
+      "id": "2009-Q3",
+      "year": 2009,
+      "quarter": 3,
+      "label": "2009 Q3",
+      "national": 24.29,
+      "provinces": {
+        "Western Cape": 22.03,
+        "Eastern Cape": 26.53,
+        "Northern Cape": 29.24,
+        "Free State": 27.94,
+        "KwaZulu-Natal": 18.18,
+        "North West": 27.67,
+        "Gauteng": 25.77,
+        "Mpumalanga": 25.15,
+        "Limpopo": 24.98
+      }
+    },
+    {
+      "id": "2009-Q4",
+      "year": 2009,
+      "quarter": 4,
+      "label": "2009 Q4",
+      "national": 23.92,
+      "provinces": {
+        "Western Cape": 20.95,
+        "Eastern Cape": 26.35,
+        "Northern Cape": 24.47,
+        "Free State": 24.75,
+        "KwaZulu-Natal": 18.84,
+        "North West": 26.68,
+        "Gauteng": 25.36,
+        "Mpumalanga": 25.94,
+        "Limpopo": 26.19
+      }
+    },
+    {
+      "id": "2010-Q1",
+      "year": 2010,
+      "quarter": 1,
+      "label": "2010 Q1",
+      "national": 24.87,
+      "provinces": {
+        "Western Cape": 19.92,
+        "Eastern Cape": 29.37,
+        "Northern Cape": 27.12,
+        "Free State": 26.6,
+        "KwaZulu-Natal": 18.93,
+        "North West": 25.94,
+        "Gauteng": 26.94,
+        "Mpumalanga": 28.33,
+        "Limpopo": 25.99
+      }
+    },
+    {
+      "id": "2010-Q2",
+      "year": 2010,
+      "quarter": 2,
+      "label": "2010 Q2",
+      "national": 24.88,
+      "provinces": {
+        "Western Cape": 21.2,
+        "Eastern Cape": 27.13,
+        "Northern Cape": 28.88,
+        "Free State": 27.53,
+        "KwaZulu-Natal": 20.43,
+        "North West": 27.64,
+        "Gauteng": 26.83,
+        "Mpumalanga": 27.28,
+        "Limpopo": 21.93
+      }
+    },
+    {
+      "id": "2010-Q3",
+      "year": 2010,
+      "quarter": 3,
+      "label": "2010 Q3",
+      "national": 25.23,
+      "provinces": {
+        "Western Cape": 22.35,
+        "Eastern Cape": 26.46,
+        "Northern Cape": 25.11,
+        "Free State": 29.5,
+        "KwaZulu-Natal": 19.4,
+        "North West": 27.59,
+        "Gauteng": 27.2,
+        "Mpumalanga": 28.04,
+        "Limpopo": 24.53
+      }
+    },
+    {
+      "id": "2010-Q4",
+      "year": 2010,
+      "quarter": 4,
+      "label": "2010 Q4",
+      "national": 23.76,
+      "provinces": {
+        "Western Cape": 21.49,
+        "Eastern Cape": 24.09,
+        "Northern Cape": 24.12,
+        "Free State": 26.92,
+        "KwaZulu-Natal": 19.28,
+        "North West": 24.19,
+        "Gauteng": 26.57,
+        "Mpumalanga": 28.11,
+        "Limpopo": 16.62
+      }
+    },
+    {
+      "id": "2011-Q1",
+      "year": 2011,
+      "quarter": 1,
+      "label": "2011 Q1",
+      "national": 24.72,
+      "provinces": {
+        "Western Cape": 21.53,
+        "Eastern Cape": 26.54,
+        "Northern Cape": 30.9,
+        "Free State": 27.75,
+        "KwaZulu-Natal": 19.7,
+        "North West": 24.93,
+        "Gauteng": 26.83,
+        "Mpumalanga": 30.47,
+        "Limpopo": 18.83
+      }
+    },
+    {
+      "id": "2011-Q2",
+      "year": 2011,
+      "quarter": 2,
+      "label": "2011 Q2",
+      "national": 25.44,
+      "provinces": {
+        "Western Cape": 21.33,
+        "Eastern Cape": 28.18,
+        "Northern Cape": 28.33,
+        "Free State": 27.82,
+        "KwaZulu-Natal": 19.89,
+        "North West": 27.05,
+        "Gauteng": 28.11,
+        "Mpumalanga": 30.05,
+        "Limpopo": 20.64
+      }
+    },
+    {
+      "id": "2011-Q3",
+      "year": 2011,
+      "quarter": 3,
+      "label": "2011 Q3",
+      "national": 24.82,
+      "provinces": {
+        "Western Cape": 22.87,
+        "Eastern Cape": 26.67,
+        "Northern Cape": 27.91,
+        "Free State": 24.88,
+        "KwaZulu-Natal": 18.57,
+        "North West": 28.36,
+        "Gauteng": 27.77,
+        "Mpumalanga": 28.5,
+        "Limpopo": 18.82
+      }
+    },
+    {
+      "id": "2011-Q4",
+      "year": 2011,
+      "quarter": 4,
+      "label": "2011 Q4",
+      "national": 23.6,
+      "provinces": {
+        "Western Cape": 21.06,
+        "Eastern Cape": 26.73,
+        "Northern Cape": 26.26,
+        "Free State": 28.94,
+        "KwaZulu-Natal": 18.75,
+        "North West": 24.24,
+        "Gauteng": 25.01,
+        "Mpumalanga": 27.19,
+        "Limpopo": 19.63
+      }
+    },
+    {
+      "id": "2012-Q1",
+      "year": 2012,
+      "quarter": 1,
+      "label": "2012 Q1",
+      "national": 24.9,
+      "provinces": {
+        "Western Cape": 22.45,
+        "Eastern Cape": 27.83,
+        "Northern Cape": 25.2,
+        "Free State": 31.72,
+        "KwaZulu-Natal": 19.85,
+        "North West": 26.1,
+        "Gauteng": 25.86,
+        "Mpumalanga": 29.63,
+        "Limpopo": 21.34
+      }
+    },
+    {
+      "id": "2012-Q2",
+      "year": 2012,
+      "quarter": 2,
+      "label": "2012 Q2",
+      "national": 24.63,
+      "provinces": {
+        "Western Cape": 22.78,
+        "Eastern Cape": 28.36,
+        "Northern Cape": 29.74,
+        "Free State": 32.49,
+        "KwaZulu-Natal": 19.15,
+        "North West": 26.1,
+        "Gauteng": 25.29,
+        "Mpumalanga": 28.35,
+        "Limpopo": 19.5
+      }
+    },
+    {
+      "id": "2012-Q3",
+      "year": 2012,
+      "quarter": 3,
+      "label": "2012 Q3",
+      "national": 25.02,
+      "provinces": {
+        "Western Cape": 24.71,
+        "Eastern Cape": 28.66,
+        "Northern Cape": 29.39,
+        "Free State": 31.44,
+        "KwaZulu-Natal": 20.45,
+        "North West": 24.88,
+        "Gauteng": 24.59,
+        "Mpumalanga": 30.27,
+        "Limpopo": 21.41
+      }
+    },
+    {
+      "id": "2012-Q4",
+      "year": 2012,
+      "quarter": 4,
+      "label": "2012 Q4",
+      "national": 24.35,
+      "provinces": {
+        "Western Cape": 23.21,
+        "Eastern Cape": 29.29,
+        "Northern Cape": 28.22,
+        "Free State": 32.57,
+        "KwaZulu-Natal": 21.87,
+        "North West": 23.1,
+        "Gauteng": 23.34,
+        "Mpumalanga": 28.88,
+        "Limpopo": 18.96
+      }
+    },
+    {
+      "id": "2013-Q1",
+      "year": 2013,
+      "quarter": 1,
+      "label": "2013 Q1",
+      "national": 24.87,
+      "provinces": {
+        "Western Cape": 22.93,
+        "Eastern Cape": 29.72,
+        "Northern Cape": 29.12,
+        "Free State": 31.03,
+        "KwaZulu-Natal": 20.37,
+        "North West": 26.16,
+        "Gauteng": 24.98,
+        "Mpumalanga": 29.03,
+        "Limpopo": 19.96
+      }
+    },
+    {
+      "id": "2013-Q2",
+      "year": 2013,
+      "quarter": 2,
+      "label": "2013 Q2",
+      "national": 25.13,
+      "provinces": {
+        "Western Cape": 23.37,
+        "Eastern Cape": 30.07,
+        "Northern Cape": 29.37,
+        "Free State": 32.59,
+        "KwaZulu-Natal": 22.07,
+        "North West": 26.58,
+        "Gauteng": 24.74,
+        "Mpumalanga": 28.89,
+        "Limpopo": 17.69
+      }
+    },
+    {
+      "id": "2013-Q3",
+      "year": 2013,
+      "quarter": 3,
+      "label": "2013 Q3",
+      "national": 24.32,
+      "provinces": {
+        "Western Cape": 22.86,
+        "Eastern Cape": 30.17,
+        "Northern Cape": 27.96,
+        "Free State": 33.52,
+        "KwaZulu-Natal": 20.46,
+        "North West": 26.4,
+        "Gauteng": 24.09,
+        "Mpumalanga": 26.35,
+        "Limpopo": 16.98
+      }
+    },
+    {
+      "id": "2013-Q4",
+      "year": 2013,
+      "quarter": 4,
+      "label": "2013 Q4",
+      "national": 23.95,
+      "provinces": {
+        "Western Cape": 20.83,
+        "Eastern Cape": 27.54,
+        "Northern Cape": 24.86,
+        "Free State": 32.77,
+        "KwaZulu-Natal": 19.72,
+        "North West": 27.21,
+        "Gauteng": 25.03,
+        "Mpumalanga": 27.02,
+        "Limpopo": 16.68
+      }
+    },
+    {
+      "id": "2014-Q1",
+      "year": 2014,
+      "quarter": 1,
+      "label": "2014 Q1",
+      "national": 24.99,
+      "provinces": {
+        "Western Cape": 20.73,
+        "Eastern Cape": 29.27,
+        "Northern Cape": 28.77,
+        "Free State": 34.43,
+        "KwaZulu-Natal": 20.53,
+        "North West": 27.63,
+        "Gauteng": 25.62,
+        "Mpumalanga": 30.22,
+        "Limpopo": 18.19
+      }
+    },
+    {
+      "id": "2014-Q2",
+      "year": 2014,
+      "quarter": 2,
+      "label": "2014 Q2",
+      "national": 25.29,
+      "provinces": {
+        "Western Cape": 23.28,
+        "Eastern Cape": 30.31,
+        "Northern Cape": 32.07,
+        "Free State": 34.85,
+        "KwaZulu-Natal": 23.53,
+        "North West": 26.12,
+        "Gauteng": 24.39,
+        "Mpumalanga": 29.28,
+        "Limpopo": 15.78
+      }
+    },
+    {
+      "id": "2014-Q3",
+      "year": 2014,
+      "quarter": 3,
+      "label": "2014 Q3",
+      "national": 25.22,
+      "provinces": {
+        "Western Cape": 23.38,
+        "Eastern Cape": 29.37,
+        "Northern Cape": 29.44,
+        "Free State": 34.39,
+        "KwaZulu-Natal": 23.88,
+        "North West": 26.79,
+        "Gauteng": 24.34,
+        "Mpumalanga": 29.11,
+        "Limpopo": 15.89
+      }
+    },
+    {
+      "id": "2014-Q4",
+      "year": 2014,
+      "quarter": 4,
+      "label": "2014 Q4",
+      "national": 24.05,
+      "provinces": {
+        "Western Cape": 22.55,
+        "Eastern Cape": 28.98,
+        "Northern Cape": 28.54,
+        "Free State": 32.1,
+        "KwaZulu-Natal": 20.64,
+        "North West": 25.08,
+        "Gauteng": 24.37,
+        "Mpumalanga": 26.35,
+        "Limpopo": 15.76
+      }
+    },
+    {
+      "id": "2015-Q1",
+      "year": 2015,
+      "quarter": 1,
+      "label": "2015 Q1",
+      "national": 26.15,
+      "provinces": {
+        "Western Cape": 20.79,
+        "Eastern Cape": 29.45,
+        "Northern Cape": 33.87,
+        "Free State": 30.16,
+        "KwaZulu-Natal": 23.34,
+        "North West": 28.17,
+        "Gauteng": 28.14,
+        "Mpumalanga": 28.2,
+        "Limpopo": 19.94
+      }
+    },
+    {
+      "id": "2015-Q2",
+      "year": 2015,
+      "quarter": 2,
+      "label": "2015 Q2",
+      "national": 24.85,
+      "provinces": {
+        "Western Cape": 21.56,
+        "Eastern Cape": 28.94,
+        "Northern Cape": 32.53,
+        "Free State": 31.26,
+        "KwaZulu-Natal": 20.17,
+        "North West": 25.05,
+        "Gauteng": 26.57,
+        "Mpumalanga": 27.07,
+        "Limpopo": 18.79
+      }
+    },
+    {
+      "id": "2015-Q3",
+      "year": 2015,
+      "quarter": 3,
+      "label": "2015 Q3",
+      "national": 25.29,
+      "provinces": {
+        "Western Cape": 20.48,
+        "Eastern Cape": 28.96,
+        "Northern Cape": 34.48,
+        "Free State": 31.26,
+        "KwaZulu-Natal": 20.36,
+        "North West": 25.26,
+        "Gauteng": 28.42,
+        "Mpumalanga": 25.96,
+        "Limpopo": 18.54
+      }
+    },
+    {
+      "id": "2015-Q4",
+      "year": 2015,
+      "quarter": 4,
+      "label": "2015 Q4",
+      "national": 24.31,
+      "provinces": {
+        "Western Cape": 19.18,
+        "Eastern Cape": 27.3,
+        "Northern Cape": 25.59,
+        "Free State": 29.71,
+        "KwaZulu-Natal": 20.29,
+        "North West": 23.82,
+        "Gauteng": 27.39,
+        "Mpumalanga": 25.46,
+        "Limpopo": 19.73
+      }
+    },
+    {
+      "id": "2016-Q1",
+      "year": 2016,
+      "quarter": 1,
+      "label": "2016 Q1",
+      "national": 26.53,
+      "provinces": {
+        "Western Cape": 20.6,
+        "Eastern Cape": 28.44,
+        "Northern Cape": 27.53,
+        "Free State": 33.67,
+        "KwaZulu-Natal": 23.08,
+        "North West": 27.95,
+        "Gauteng": 29.94,
+        "Mpumalanga": 29.47,
+        "Limpopo": 18.06
+      }
+    },
+    {
+      "id": "2016-Q2",
+      "year": 2016,
+      "quarter": 2,
+      "label": "2016 Q2",
+      "national": 26.38,
+      "provinces": {
+        "Western Cape": 21.87,
+        "Eastern Cape": 28.44,
+        "Northern Cape": 27.08,
+        "Free State": 32.06,
+        "KwaZulu-Natal": 22.48,
+        "North West": 27.24,
+        "Gauteng": 29.27,
+        "Mpumalanga": 28.65,
+        "Limpopo": 20.31
+      }
+    },
+    {
+      "id": "2016-Q3",
+      "year": 2016,
+      "quarter": 3,
+      "label": "2016 Q3",
+      "national": 26.85,
+      "provinces": {
+        "Western Cape": 21.51,
+        "Eastern Cape": 27.9,
+        "Northern Cape": 29.34,
+        "Free State": 34.06,
+        "KwaZulu-Natal": 23.28,
+        "North West": 30.44,
+        "Gauteng": 28.87,
+        "Mpumalanga": 30.3,
+        "Limpopo": 21.59
+      }
+    },
+    {
+      "id": "2016-Q4",
+      "year": 2016,
+      "quarter": 4,
+      "label": "2016 Q4",
+      "national": 26.23,
+      "provinces": {
+        "Western Cape": 20.27,
+        "Eastern Cape": 28.16,
+        "Northern Cape": 31.84,
+        "Free State": 34.57,
+        "KwaZulu-Natal": 23.66,
+        "North West": 26.37,
+        "Gauteng": 28.37,
+        "Mpumalanga": 30.86,
+        "Limpopo": 19.02
+      }
+    },
+    {
+      "id": "2017-Q1",
+      "year": 2017,
+      "quarter": 1,
+      "label": "2017 Q1",
+      "national": 27.48,
+      "provinces": {
+        "Western Cape": 21.36,
+        "Eastern Cape": 31.94,
+        "Northern Cape": 30.37,
+        "Free State": 35.25,
+        "KwaZulu-Natal": 25.53,
+        "North West": 26.59,
+        "Gauteng": 28.93,
+        "Mpumalanga": 31.25,
+        "Limpopo": 21.35
+      }
+    },
+    {
+      "id": "2017-Q2",
+      "year": 2017,
+      "quarter": 2,
+      "label": "2017 Q2",
+      "national": 27.52,
+      "provinces": {
+        "Western Cape": 20.58,
+        "Eastern Cape": 34.28,
+        "Northern Cape": 30.12,
+        "Free State": 34.22,
+        "KwaZulu-Natal": 23.69,
+        "North West": 27.05,
+        "Gauteng": 29.65,
+        "Mpumalanga": 32.08,
+        "Limpopo": 20.57
+      }
+    },
+    {
+      "id": "2017-Q3",
+      "year": 2017,
+      "quarter": 3,
+      "label": "2017 Q3",
+      "national": 27.52,
+      "provinces": {
+        "Western Cape": 21.67,
+        "Eastern Cape": 35.24,
+        "Northern Cape": 29.57,
+        "Free State": 31.7,
+        "KwaZulu-Natal": 24.35,
+        "North West": 26.05,
+        "Gauteng": 29.99,
+        "Mpumalanga": 30.52,
+        "Limpopo": 19.02
+      }
+    },
+    {
+      "id": "2017-Q4",
+      "year": 2017,
+      "quarter": 4,
+      "label": "2017 Q4",
+      "national": 26.45,
+      "provinces": {
+        "Western Cape": 19.32,
+        "Eastern Cape": 34.88,
+        "Northern Cape": 26.79,
+        "Free State": 32.42,
+        "KwaZulu-Natal": 23.83,
+        "North West": 23.78,
+        "Gauteng": 28.91,
+        "Mpumalanga": 28.77,
+        "Limpopo": 19.4
+      }
+    },
+    {
+      "id": "2018-Q1",
+      "year": 2018,
+      "quarter": 1,
+      "label": "2018 Q1",
+      "national": 26.53,
+      "provinces": {
+        "Western Cape": 19.46,
+        "Eastern Cape": 35.29,
+        "Northern Cape": 29.25,
+        "Free State": 32.53,
+        "KwaZulu-Natal": 22.12,
+        "North West": 25.8,
+        "Gauteng": 28.4,
+        "Mpumalanga": 32.11,
+        "Limpopo": 19.62
+      }
+    },
+    {
+      "id": "2018-Q2",
+      "year": 2018,
+      "quarter": 2,
+      "label": "2018 Q2",
+      "national": 26.95,
+      "provinces": {
+        "Western Cape": 20.46,
+        "Eastern Cape": 33.86,
+        "Northern Cape": 28.63,
+        "Free State": 34.18,
+        "KwaZulu-Natal": 21.56,
+        "North West": 26.03,
+        "Gauteng": 29.56,
+        "Mpumalanga": 32.91,
+        "Limpopo": 19.06
+      }
+    },
+    {
+      "id": "2018-Q3",
+      "year": 2018,
+      "quarter": 3,
+      "label": "2018 Q3",
+      "national": 27.24,
+      "provinces": {
+        "Western Cape": 20.15,
+        "Eastern Cape": 35.25,
+        "Northern Cape": 26.86,
+        "Free State": 36.07,
+        "KwaZulu-Natal": 22.7,
+        "North West": 27.71,
+        "Gauteng": 29.46,
+        "Mpumalanga": 32.19,
+        "Limpopo": 18.63
+      }
+    },
+    {
+      "id": "2018-Q4",
+      "year": 2018,
+      "quarter": 4,
+      "label": "2018 Q4",
+      "national": 26.84,
+      "provinces": {
+        "Western Cape": 19.07,
+        "Eastern Cape": 35.77,
+        "Northern Cape": 24.87,
+        "Free State": 32.69,
+        "KwaZulu-Natal": 25.37,
+        "North West": 26.27,
+        "Gauteng": 28.84,
+        "Mpumalanga": 31.74,
+        "Limpopo": 16.37
+      }
+    },
+    {
+      "id": "2019-Q1",
+      "year": 2019,
+      "quarter": 1,
+      "label": "2019 Q1",
+      "national": 27.32,
+      "provinces": {
+        "Western Cape": 19.32,
+        "Eastern Cape": 36.98,
+        "Northern Cape": 25.79,
+        "Free State": 34.75,
+        "KwaZulu-Natal": 24.92,
+        "North West": 26.19,
+        "Gauteng": 28.65,
+        "Mpumalanga": 33.9,
+        "Limpopo": 18.3
+      }
+    },
+    {
+      "id": "2019-Q2",
+      "year": 2019,
+      "quarter": 2,
+      "label": "2019 Q2",
+      "national": 28.72,
+      "provinces": {
+        "Western Cape": 20.28,
+        "Eastern Cape": 35.01,
+        "Northern Cape": 28.92,
+        "Free State": 34.05,
+        "KwaZulu-Natal": 25.88,
+        "North West": 32.95,
+        "Gauteng": 30.84,
+        "Mpumalanga": 34.6,
+        "Limpopo": 20.02
+      }
+    },
+    {
+      "id": "2019-Q3",
+      "year": 2019,
+      "quarter": 3,
+      "label": "2019 Q3",
+      "national": 28.9,
+      "provinces": {
+        "Western Cape": 21.36,
+        "Eastern Cape": 36.04,
+        "Northern Cape": 29.5,
+        "Free State": 34.23,
+        "KwaZulu-Natal": 25.73,
+        "North West": 30.18,
+        "Gauteng": 30.71,
+        "Mpumalanga": 35.06,
+        "Limpopo": 21.21
+      }
+    },
+    {
+      "id": "2019-Q4",
+      "year": 2019,
+      "quarter": 4,
+      "label": "2019 Q4",
+      "national": 28.82,
+      "provinces": {
+        "Western Cape": 20.72,
+        "Eastern Cape": 39.14,
+        "Northern Cape": 26.57,
+        "Free State": 34.6,
+        "KwaZulu-Natal": 24.82,
+        "North West": 28.68,
+        "Gauteng": 30.58,
+        "Mpumalanga": 33.32,
+        "Limpopo": 22.91
+      }
+    },
+    {
+      "id": "2020-Q1",
+      "year": 2020,
+      "quarter": 1,
+      "label": "2020 Q1",
+      "national": 29.9,
+      "provinces": {
+        "Western Cape": 20.81,
+        "Eastern Cape": 40.25,
+        "Northern Cape": 26.71,
+        "Free State": 38.04,
+        "KwaZulu-Natal": 26.66,
+        "North West": 33.16,
+        "Gauteng": 31.11,
+        "Mpumalanga": 33.17,
+        "Limpopo": 23.43
+      }
+    },
+    {
+      "id": "2020-Q2",
+      "year": 2020,
+      "quarter": 2,
+      "label": "2020 Q2",
+      "national": 23.11,
+      "provinces": {
+        "Western Cape": 16.44,
+        "Eastern Cape": 36.76,
+        "Northern Cape": 25.1,
+        "Free State": 25.2,
+        "KwaZulu-Natal": 18.7,
+        "North West": 21.47,
+        "Gauteng": 26.19,
+        "Mpumalanga": 13.19,
+        "Limpopo": 21.72
+      }
+    },
+    {
+      "id": "2020-Q3",
+      "year": 2020,
+      "quarter": 3,
+      "label": "2020 Q3",
+      "national": 30.53,
+      "provinces": {
+        "Western Cape": 21.42,
+        "Eastern Cape": 45.66,
+        "Northern Cape": 22.59,
+        "Free State": 35.24,
+        "KwaZulu-Natal": 26.09,
+        "North West": 28.24,
+        "Gauteng": 33.4,
+        "Mpumalanga": 27.51,
+        "Limpopo": 26.13
+      }
+    },
+    {
+      "id": "2020-Q4",
+      "year": 2020,
+      "quarter": 4,
+      "label": "2020 Q4",
+      "national": 32.28,
+      "provinces": {
+        "Western Cape": 22.34,
+        "Eastern Cape": 47.68,
+        "Northern Cape": 28.35,
+        "Free State": 33.22,
+        "KwaZulu-Natal": 29.41,
+        "North West": 33.26,
+        "Gauteng": 33.86,
+        "Mpumalanga": 32.85,
+        "Limpopo": 27.09
+      }
+    },
+    {
+      "id": "2021-Q1",
+      "year": 2021,
+      "quarter": 1,
+      "label": "2021 Q1",
+      "national": 32.34,
+      "provinces": {
+        "Western Cape": 23.51,
+        "Eastern Cape": 43.55,
+        "Northern Cape": 23.07,
+        "Free State": 35.36,
+        "KwaZulu-Natal": 30.3,
+        "North West": 32.1,
+        "Gauteng": 34.13,
+        "Mpumalanga": 33.33,
+        "Limpopo": 29.17
+      }
+    },
+    {
+      "id": "2021-Q2",
+      "year": 2021,
+      "quarter": 2,
+      "label": "2021 Q2",
+      "national": 34.11,
+      "provinces": {
+        "Western Cape": 25.5,
+        "Eastern Cape": 46.92,
+        "Northern Cape": 27.77,
+        "Free State": 36.24,
+        "KwaZulu-Natal": 32.18,
+        "North West": 35.07,
+        "Gauteng": 35.09,
+        "Mpumalanga": 34.94,
+        "Limpopo": 30.34
+      }
+    },
+    {
+      "id": "2021-Q3",
+      "year": 2021,
+      "quarter": 3,
+      "label": "2021 Q3",
+      "national": 34.58,
+      "provinces": {
+        "Western Cape": 26.07,
+        "Eastern Cape": 47.39,
+        "Northern Cape": 24.58,
+        "Free State": 37.65,
+        "KwaZulu-Natal": 28.51,
+        "North West": 35.52,
+        "Gauteng": 36.52,
+        "Mpumalanga": 37.2,
+        "Limpopo": 32.4
+      }
+    },
+    {
+      "id": "2021-Q4",
+      "year": 2021,
+      "quarter": 4,
+      "label": "2021 Q4",
+      "national": 34.97,
+      "provinces": {
+        "Western Cape": 27.85,
+        "Eastern Cape": 44.83,
+        "Northern Cape": 24.59,
+        "Free State": 36.19,
+        "KwaZulu-Natal": 32.03,
+        "North West": 33.66,
+        "Gauteng": 36.25,
+        "Mpumalanga": 39.37,
+        "Limpopo": 33.8
+      }
+    },
+    {
+      "id": "2022-Q1",
+      "year": 2022,
+      "quarter": 1,
+      "label": "2022 Q1",
+      "national": 34.29,
+      "provinces": {
+        "Western Cape": 25.02,
+        "Eastern Cape": 43.87,
+        "Northern Cape": 24.76,
+        "Free State": 30.66,
+        "KwaZulu-Natal": 32.92,
+        "North West": 30.12,
+        "Gauteng": 36.46,
+        "Mpumalanga": 38.35,
+        "Limpopo": 35.39
+      }
+    },
+    {
+      "id": "2022-Q2",
+      "year": 2022,
+      "quarter": 2,
+      "label": "2022 Q2",
+      "national": 33.64,
+      "provinces": {
+        "Western Cape": 27.38,
+        "Eastern Cape": 42.64,
+        "Northern Cape": 23.56,
+        "Free State": 31.78,
+        "KwaZulu-Natal": 32.48,
+        "North West": 32.12,
+        "Gauteng": 34.09,
+        "Mpumalanga": 35.73,
+        "Limpopo": 35.87
+      }
+    },
+    {
+      "id": "2022-Q3",
+      "year": 2022,
+      "quarter": 3,
+      "label": "2022 Q3",
+      "national": 32.65,
+      "provinces": {
+        "Western Cape": 24.35,
+        "Eastern Cape": 42.08,
+        "Northern Cape": 26.22,
+        "Free State": 33.39,
+        "KwaZulu-Natal": 30.38,
+        "North West": 38.89,
+        "Gauteng": 33.42,
+        "Mpumalanga": 34.85,
+        "Limpopo": 30.76
+      }
+    },
+    {
+      "id": "2022-Q4",
+      "year": 2022,
+      "quarter": 4,
+      "label": "2022 Q4",
+      "national": 32.5,
+      "provinces": {
+        "Western Cape": 22.25,
+        "Eastern Cape": 41.71,
+        "Northern Cape": 21.93,
+        "Free State": 34.09,
+        "KwaZulu-Natal": 31.29,
+        "North West": 36.83,
+        "Gauteng": 33.76,
+        "Mpumalanga": 35.65,
+        "Limpopo": 31.56
+      }
+    },
+    {
+      "id": "2023-Q1",
+      "year": 2023,
+      "quarter": 1,
+      "label": "2023 Q1",
+      "national": 32.62,
+      "provinces": {
+        "Western Cape": 21.37,
+        "Eastern Cape": 39.62,
+        "Northern Cape": 26.51,
+        "Free State": 33.94,
+        "KwaZulu-Natal": 30.77,
+        "North West": 37.86,
+        "Gauteng": 34.05,
+        "Mpumalanga": 38.02,
+        "Limpopo": 33.28
+      }
+    },
+    {
+      "id": "2023-Q2",
+      "year": 2023,
+      "quarter": 2,
+      "label": "2023 Q2",
+      "national": 32.38,
+      "provinces": {
+        "Western Cape": 20.64,
+        "Eastern Cape": 39.33,
+        "Northern Cape": 26.65,
+        "Free State": 36.25,
+        "KwaZulu-Natal": 30.85,
+        "North West": 36.65,
+        "Gauteng": 34.15,
+        "Mpumalanga": 38.04,
+        "Limpopo": 31.26
+      }
+    },
+    {
+      "id": "2023-Q3",
+      "year": 2023,
+      "quarter": 3,
+      "label": "2023 Q3",
+      "national": 31.62,
+      "provinces": {
+        "Western Cape": 19.94,
+        "Eastern Cape": 38.47,
+        "Northern Cape": 26.1,
+        "Free State": 38.07,
+        "KwaZulu-Natal": 29.2,
+        "North West": 38.42,
+        "Gauteng": 33.5,
+        "Mpumalanga": 35.06,
+        "Limpopo": 30.42
+      }
+    },
+    {
+      "id": "2023-Q4",
+      "year": 2023,
+      "quarter": 4,
+      "label": "2023 Q4",
+      "national": 31.75,
+      "provinces": {
+        "Western Cape": 19.98,
+        "Eastern Cape": 41.58,
+        "Northern Cape": 26.72,
+        "Free State": 36.64,
+        "KwaZulu-Natal": 29.26,
+        "North West": 38.75,
+        "Gauteng": 33.48,
+        "Mpumalanga": 34.35,
+        "Limpopo": 30.04
+      }
+    },
+    {
+      "id": "2024-Q1",
+      "year": 2024,
+      "quarter": 1,
+      "label": "2024 Q1",
+      "national": 32.63,
+      "provinces": {
+        "Western Cape": 21.11,
+        "Eastern Cape": 42.08,
+        "Northern Cape": 27.86,
+        "Free State": 37.46,
+        "KwaZulu-Natal": 29.62,
+        "North West": 40.33,
+        "Gauteng": 33.9,
+        "Mpumalanga": 35.79,
+        "Limpopo": 32.49
+      }
+    },
+    {
+      "id": "2024-Q2",
+      "year": 2024,
+      "quarter": 2,
+      "label": "2024 Q2",
+      "national": 33.19,
+      "provinces": {
+        "Western Cape": 21.97,
+        "Eastern Cape": 40.84,
+        "Northern Cape": 31.16,
+        "Free State": 37.02,
+        "KwaZulu-Natal": 30.79,
+        "North West": 41.1,
+        "Gauteng": 34.77,
+        "Mpumalanga": 37.0,
+        "Limpopo": 31.24
+      }
+    },
+    {
+      "id": "2024-Q3",
+      "year": 2024,
+      "quarter": 3,
+      "label": "2024 Q3",
+      "national": 31.76,
+      "provinces": {
+        "Western Cape": 19.3,
+        "Eastern Cape": 36.97,
+        "Northern Cape": 29.8,
+        "Free State": 35.48,
+        "KwaZulu-Natal": 30.92,
+        "North West": 36.59,
+        "Gauteng": 33.63,
+        "Mpumalanga": 35.84,
+        "Limpopo": 32.34
+      }
+    },
+    {
+      "id": "2024-Q4",
+      "year": 2024,
+      "quarter": 4,
+      "label": "2024 Q4",
+      "national": 31.52,
+      "provinces": {
+        "Western Cape": 19.27,
+        "Eastern Cape": 36.29,
+        "Northern Cape": 26.96,
+        "Free State": 37.3,
+        "KwaZulu-Natal": 28.33,
+        "North West": 41.13,
+        "Gauteng": 34.04,
+        "Mpumalanga": 34.3,
+        "Limpopo": 31.65
+      }
+    },
+    {
+      "id": "2025-Q1",
+      "year": 2025,
+      "quarter": 1,
+      "label": "2025 Q1",
+      "national": 32.59,
+      "provinces": {
+        "Western Cape": 19.27,
+        "Eastern Cape": 39.04,
+        "Northern Cape": 29.3,
+        "Free State": 37.46,
+        "KwaZulu-Natal": 32.05,
+        "North West": 40.27,
+        "Gauteng": 34.42,
+        "Mpumalanga": 35.09,
+        "Limpopo": 32.89
+      }
+    },
+    {
+      "id": "2025-Q2",
+      "year": 2025,
+      "quarter": 2,
+      "label": "2025 Q2",
+      "national": 32.96,
+      "provinces": {
+        "Western Cape": 20.79,
+        "Eastern Cape": 39.27,
+        "Northern Cape": 32.63,
+        "Free State": 38.07,
+        "KwaZulu-Natal": 33.2,
+        "North West": 40.0,
+        "Gauteng": 33.53,
+        "Mpumalanga": 33.71,
+        "Limpopo": 34.68
+      }
+    },
+    {
+      "id": "2025-Q3",
+      "year": 2025,
+      "quarter": 3,
+      "label": "2025 Q3",
+      "national": 31.73,
+      "provinces": {
+        "Western Cape": 19.49,
+        "Eastern Cape": 40.84,
+        "Northern Cape": 30.93,
+        "Free State": 35.73,
+        "KwaZulu-Natal": 31.43,
+        "North West": 38.0,
+        "Gauteng": 32.97,
+        "Mpumalanga": 33.74,
+        "Limpopo": 29.56
+      }
+    },
+    {
+      "id": "2025-Q4",
+      "year": 2025,
+      "quarter": 4,
+      "label": "2025 Q4",
+      "national": 31.19,
+      "provinces": {
+        "Western Cape": 17.81,
+        "Eastern Cape": 42.27,
+        "Northern Cape": 26.89,
+        "Free State": 36.64,
+        "KwaZulu-Natal": 32.18,
+        "North West": 34.97,
+        "Gauteng": 32.81,
+        "Mpumalanga": 31.92,
+        "Limpopo": 27.99
+      }
+    }
+  ]
+}
