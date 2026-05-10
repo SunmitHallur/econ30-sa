@@ -934,11 +934,12 @@
         <p class="section-lede">
           Each province is shaded by <em>narrow</em> unemployment (actively looking, no job)—lighter
           green is lower, darker green is higher. The colour scale is <strong>fixed across every quarter</strong>
-          in the series so you can see change over time instead of each wave “stretching” to fill the palette. The animation cycles through
-          <strong>QLFS quarters (2008–2025)</strong>. Zoom in past level 8 to see
-          <strong>metropolitan municipality</strong> point estimates (eight metros, Stats SA <code>Metro_code</code>).
+          in the series so you can see change over time instead of each wave “stretching” to fill the palette.
+          The animation cycles through <strong>harmonised LFS/OHS quarters before 2008</strong> (where comparable files exist),
+          then <strong>QLFS</strong> through the latest quarter in the repo.
+          Zoom in past level 8 to see <strong>metropolitan municipality</strong> point estimates (eight metros, Stats SA <code>Metro_code</code>) from 2015 Q1 onward.
           The broader measure that counts discouraged job-seekers was <strong>43.1%</strong> nationally in Q1 2025.
-          Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
+          Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a> (see Sources for LFS/OHS).
         </p>
       </div>
 
@@ -977,8 +978,9 @@
       <p class="map-metro-hint" id="map-metro-zoom-hint">Tip: zoom in on the map to see metropolitan unemployment (after the map loads).</p>
       <div class="prose narrow map-methodology">
         <p>
-          <strong>Method.</strong> Provincial rates are author-calculated from Stats SA QLFS microdata (narrow definition,
-          survey weights). Official headline rates may differ slightly by revision or filtering.
+          <strong>Method.</strong> Provincial rates are author-calculated from Stats SA survey microdata (narrow definition,
+          survey weights): harmonised <strong>LFS/OHS</strong> worker extracts for early years, then <strong>QLFS</strong>.
+          Official headline rates may differ slightly by revision or filtering; long-run comparisons across survey redesigns are indicative only.
         </p>
         <div id="map-data-citation" class="map-data-citation" aria-label="Map data citation and technical note"></div>
         <p class="map-methodology-sources">
@@ -1117,7 +1119,7 @@
             <li><a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators" target="_blank" rel="noopener noreferrer">Worldwide Governance Indicators</a> — methodology and data portal.</li>
             <li><a href="https://www.statssa.gov.za/?page_id=1854&amp;PPN=P0211" target="_blank" rel="noopener noreferrer">Stats SA — Statistical release P0211 (QLFS)</a> — official publications and methodology.</li>
             <li><a href="https://www.statssa.gov.za/" target="_blank" rel="noopener noreferrer">Statistics South Africa</a> — producer of QLFS/LFS/OHS microdata used in analysis scripts.</li>
-            <li><strong>Provincial map (§8):</strong> Narrow unemployment by province, quarter, computed from <strong>QLFS household CSV extracts</strong> (2008 Q1–latest in repo); aggregation script <span class="mono">scripts/build_map_unemployment_series.py</span> → <span class="mono">data/map_unemployment_series.json</span>. Aligns with P0211 definitions; not an official Stats SA table.</li>
+            <li><strong>Provincial map (§8):</strong> Narrow unemployment by province and quarter from harmonised <strong>LFS / OHS / QLFS</strong> CSV extracts in <span class="mono">Knowledge Base/raw/data/</span>; script <span class="mono">scripts/build_map_unemployment_series.py</span> → <span class="mono">data/map_unemployment_series.json</span>. Pre-2008 waves omit some survey vintages without comparable labour-status fields; not an official Stats SA table.</li>
             <li><strong>October Household Survey (1994–1999)</strong> microdata via <a href="https://www.datafirst.uct.ac.za/" target="_blank" rel="noopener noreferrer">DataFirst</a> (University of Cape Town) — use follows DataFirst / CC licence terms; cite producer (Statistics South Africa) and distributor.</li>
           </ul>
         </div>
