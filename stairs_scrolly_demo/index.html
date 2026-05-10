@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Income shares — scroll demo (South Africa framing)</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --panel: rgba(255, 255, 255, 0.94);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .intro {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 2rem;
+      line-height: 1.55;
+    }
+    .intro h2 {
+      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+      font-weight: 700;
+      margin: 0 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .intro .lede {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .intro h3 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin: 1.5rem 0 0.5rem;
+    }
+    .intro .claim {
+      margin: 0;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+    .intro .claim-note {
+      margin: 0.75rem 0 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .outro {
+      max-width: 38rem;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      line-height: 1.55;
+    }
+    .outro p { margin: 0 0 1rem; color: var(--muted); font-size: 0.9rem; }
+
+    #scrolly-track {
+      position: relative;
+      height: 450vh;
+    }
+
+    #canvas-wrap {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      background: linear-gradient(180deg, #eef2f6 0%, #fafafa 50%, #fff 100%);
+    }
+
+    #c {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 1.1rem;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .overlay__panel {
+      pointer-events: auto;
+      max-width: min(92vw, 28rem);
+      padding: 0.75rem 1rem;
+      background: var(--panel);
+      border-radius: 10px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      text-align: center;
+    }
+    .overlay__panel strong { color: var(--text); }
+
+    .step-labels {
+      position: absolute;
+      left: 50%;
+      top: 10%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(0.2rem, 1.2vw, 0.85rem);
+      font-size: clamp(0.5rem, 1.25vw, 0.68rem);
+      color: #6b6b6b;
+      letter-spacing: 0.01em;
+      pointer-events: none;
+      z-index: 1;
+      max-width: 96%;
+      opacity: var(--labels-opacity, 1);
+      transition: opacity 0.15s linear;
+    }
+    .step-labels span {
+      white-space: nowrap;
+      cursor: default;
+    }
+
+    .legend {
+      position: absolute;
+      top: 0.85rem;
+      left: 0.85rem;
+      font-size: 0.68rem;
+      line-height: 1.35;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      z-index: 1;
+      max-width: 11.5rem;
+      background: rgba(255,255,255,0.75);
+      padding: 0.5rem 0.55rem;
+      border-radius: 8px;
+    }
+    .legend__row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+    }
+    .legend__swatch {
+      flex-shrink: 0;
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="intro">
+    <h2>The gains went to the top tenth.</h2>
+    <p class="lede">
+      Who gets what unfolds in steps: income shares, wealth, survey inequality (Gini), and then place.
+      This section starts with the whole country, then zooms to geography.
+    </p>
+    <h3>Who holds income and wealth</h3>
+    <p class="claim">
+      The pattern is not subtle: by 2020 the best-off tenth of people held
+      about 65% of pre-tax national income, while the bottom half received under 6%.
+    </p>
+    <p class="claim-note">
+      Below, each dot is half a percentage point of national pre-tax income (200 dots = 100%).
+      Teal ≈ share accruing to the top 10%; orange ≈ share accruing to the bottom 50%; slate ≈ other shares (approx.).
+    </p>
+  </header>
+
+  <div id="scrolly-track">
+    <div id="canvas-wrap">
+      <canvas id="c" aria-label="Scroll-driven income share visualization"></canvas>
+
+      <div class="legend" role="group" aria-label="Legend">
+        <div class="legend__row">
+          <span class="legend__swatch" style="background:#0d9488"></span>
+          <span>Top 10% income share (~65%)</span>
+        </div>
+        <div class="legend__row">
+          <span class="legend__swatch" style="background:#ea580c"></span>
+          <span>Bottom 50% income share (&lt;6%)</span>
+        </div>
+        <div class="legend__row">
+          <span class="legend__swatch" style="background:#64748b"></span>
+          <span>Other shares (~29%, middle 40%)</span>
+        </div>
+      </div>
+
+      <div class="step-labels" id="step-labels" title="Five lenses from national splits to who captures gains">
+        <span title="Pre-tax income shares">Income shares</span>
+        <span title="Wealth is even more concentrated">Wealth</span>
+        <span title="Survey inequality (Gini)">Gini</span>
+        <span title="Inequality in space">Place</span>
+        <span title="Best-off tenth">Top 10%</span>
+      </div>
+
+      <div class="overlay">
+        <div class="overlay__panel" id="caption">
+          <strong id="caption-title">National income</strong><br />
+          <span id="caption-body">Scroll — dots climb from one pile toward where each slice of income sits.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="outro">
+    <p><strong>Technical:</strong> Scroll progress drives Three.js (no timeline clock). WID-style shares are illustrative totals that sum to 100% across the three colours.</p>
+    <p>Serve this folder over HTTP if the canvas stays blank (<code>python3 -m http.server</code>).</p>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.170.0/build/three.module.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from "three";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* 200 dots = 100% of pre-tax national income (2020 SA headline, WID-style) */
+    const N_TOP = 130;      /* ~65% */
+    const N_BOTTOM = 12;    /* ~6% */
+    const N_OTHER = 58;     /* residual ~29% */
+    const TOTAL = N_TOP + N_BOTTOM + N_OTHER;
+
+    const COL_TOP = new THREE.Color(0x0d9488);
+    const COL_BOTTOM = new THREE.Color(0xea580c);
+    const COL_OTHER = new THREE.Color(0x64748b);
+
+    function smoothstep(edge0, edge1, x) {
+      const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+      return t * t * (3 - 2 * t);
+    }
+
+    function rnd(seed) {
+      const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    /** Stair bin 0..4: income slices pile toward top or bottom of distribution */
+    function stairBinForIndex(i) {
+      if (i < N_TOP) {
+        const r = rnd(i + 17);
+        if (r < 0.55) return 4;
+        if (r < 0.88) return 3;
+        if (r < 0.97) return 2;
+        return 1;
+      }
+      if (i < N_TOP + N_BOTTOM) {
+        const r = rnd(i + 31);
+        return r < 0.65 ? 0 : 1;
+      }
+      const r = rnd(i + 47);
+      if (r < 0.4) return 2;
+      if (r < 0.75) return 1;
+      return 3;
+    }
+
+    /** Grid rows: teal top share | gray other | orange bottom share */
+    function gridRowForIndex(i) {
+      if (i < N_TOP) return 0;
+      if (i < N_TOP + N_BOTTOM) return 2;
+      return 1;
+    }
+
+    const canvas = document.querySelector("#c");
+    const wrap = document.querySelector("#canvas-wrap");
+    const stepLabels = document.querySelector("#step-labels");
+    const captionTitle = document.querySelector("#caption-title");
+    const captionBody = document.querySelector("#caption-body");
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 200);
+    const camPosIso = new THREE.Vector3(14, 11, 14);
+    const camPosTop = new THREE.Vector3(0, 22, 0.01);
+    const lookIso = new THREE.Vector3(0, 1.5, -4);
+    const lookTop = new THREE.Vector3(0, 0, 0);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.82));
+    const dir = new THREE.DirectionalLight(0xffffff, 0.95);
+    dir.position.set(8, 18, 10);
+    scene.add(dir);
+    const fill = new THREE.DirectionalLight(0xe8f4fc, 0.35);
+    fill.position.set(-10, 8, -6);
+    scene.add(fill);
+
+    const stairGroup = new THREE.Group();
+    const stairMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      roughness: 0.38,
+      metalness: 0.04,
+      transparent: true,
+      opacity: 1,
+    });
+    const stepW = 10;
+    const stepD = 1.85;
+    const stepH = 0.35;
+    for (let i = 0; i < 5; i++) {
+      const g = new THREE.BoxGeometry(stepW, stepH, stepD);
+      const m = new THREE.Mesh(g, stairMat);
+      m.position.set(0, i * stepH + stepH / 2, -i * stepD * 0.92);
+      stairGroup.add(m);
+    }
+    scene.add(stairGroup);
+
+    /* Lambert + vertexColors shows instance colours reliably (was reading black with Standard in some setups) */
+    const personGeo = new THREE.CapsuleGeometry(0.11, 0.28, 4, 8);
+    const personMat = new THREE.MeshLambertMaterial({
+      color: 0xffffff,
+      vertexColors: true,
+    });
+    const people = new THREE.InstancedMesh(personGeo, personMat, TOTAL);
+    const dummy = new THREE.Object3D();
+    const colTmp = new THREE.Color();
+
+    for (let i = 0; i < TOTAL; i++) {
+      if (i < N_TOP) colTmp.copy(COL_TOP);
+      else if (i < N_TOP + N_BOTTOM) colTmp.copy(COL_BOTTOM);
+      else colTmp.copy(COL_OTHER);
+      people.setColorAt(i, colTmp);
+    }
+    people.instanceColor.needsUpdate = true;
+
+    scene.add(people);
+
+    const pile = [];
+    const stairPos = [];
+    const gridPos = [];
+
+    const marginX = 3.2;
+    const bins = [];
+    for (let i = 0; i < TOTAL; i++) {
+      const bin = stairBinForIndex(i);
+      bins.push(bin);
+
+      const rx = (rnd(i * 3 + 1) - 0.5) * 2 * marginX;
+      const rz = (rnd(i * 3 + 7) - 0.5) * 1.2;
+      pile.push(new THREE.Vector3(rx, stepH + 0.32, rz + 0.5));
+
+      const sx = (rnd(i * 5 + 2) - 0.5) * 2 * marginX;
+      const sz = -bin * stepD * 0.92 + (rnd(i * 5 + 9) - 0.5) * 0.55;
+      stairPos.push(new THREE.Vector3(sx, bin * stepH + stepH + 0.32, sz));
+
+      const col = bins[i];
+      const row = gridRowForIndex(i);
+      const gx = (col - 2) * 2.05 + (rnd(i * 11 + 3) - 0.5) * 0.32;
+      const gz = (row - 1) * 2.45 + (rnd(i * 11 + 5) - 0.5) * 0.22;
+      gridPos.push(new THREE.Vector3(gx, 0.45, gz));
+    }
+
+    const tempPos = new THREE.Vector3();
+    const rotY = [];
+    for (let i = 0; i < TOTAL; i++) rotY.push((rnd(i * 13) - 0.5) * 0.8);
+    let scrollProgress = 0;
+
+    function resize() {
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    const lookCur = new THREE.Vector3();
+
+    function updateScene(p) {
+      const t1 = smoothstep(0, 0.38, p);
+      const tCam = smoothstep(0.32, 0.62, p);
+      const tGrid = smoothstep(0.52, 0.98, p);
+      const stairHide = smoothstep(0.42, 0.78, p);
+
+      stairMat.opacity = 1 - stairHide;
+      stairGroup.visible = stairMat.opacity > 0.03;
+      stepLabels.style.setProperty("--labels-opacity", String(1 - stairHide));
+
+      if (p < 0.28) {
+        captionTitle.textContent = "National income";
+        captionBody.textContent =
+          "Scroll — income piles onto the upper steps; the bottom half’s slice stays tiny.";
+      } else if (p < 0.55) {
+        captionTitle.textContent = "Pull back";
+        captionBody.textContent = "Camera lifts; steps fade — same dots, wider view.";
+      } else {
+        captionTitle.textContent = "Three slices";
+        captionBody.textContent =
+          "Teal dominates (top 10% share); orange is barely visible (bottom 50% share).";
+      }
+
+      camera.position.lerpVectors(camPosIso, camPosTop, tCam);
+      lookCur.copy(lookIso).lerp(lookTop, tCam);
+      camera.lookAt(lookCur);
+
+      for (let i = 0; i < TOTAL; i++) {
+        tempPos.copy(pile[i]).lerp(stairPos[i], t1);
+        tempPos.lerp(gridPos[i], tGrid);
+        dummy.position.copy(tempPos);
+        dummy.rotation.y = rotY[i];
+        dummy.updateMatrix();
+        people.setMatrixAt(i, dummy.matrix);
+      }
+      people.instanceMatrix.needsUpdate = true;
+
+      renderer.render(scene, camera);
+    }
+
+    function loop() {
+      updateScene(scrollProgress);
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    ScrollTrigger.create({
+      trigger: "#scrolly-track",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.6,
+      onUpdate(self) {
+        scrollProgress = self.progress;
+      },
+    });
+
+    scrollProgress = 0;
+    updateScene(0);
+  </script>
+</body>
+</html>

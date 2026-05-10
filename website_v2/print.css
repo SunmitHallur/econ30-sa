@@ -50,4 +50,12 @@
     color: #111 !important;
     text-decoration: underline !important;
   }
+
+  .title,
+  .section-head h2,
+  .argument-summary h2 {
+    background: none !important;
+    color: #111 !important;
+    -webkit-text-fill-color: #111 !important;
+  }
 }

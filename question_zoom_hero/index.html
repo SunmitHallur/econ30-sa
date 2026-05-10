@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Question — scroll zoom (Apple-style clip)</title>
+  <style>
+    :root {
+      --hero-img-a: url("../website_v2/assets/ground/johannesburg-jse-exchange-1893.webp");
+      --hero-img-b: url("../website_v2/assets/ground/durban-harbour-philippn.webp");
+      --muted: #a1a1aa;
+      --line: rgba(255, 255, 255, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #000;
+      color: #fafafa;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /*
+      Same recipe public write-ups describe for Apple pages:
+      — sticky stage + long scroll track
+      — scroll progress → transform (here: scale) scrubbed in JS
+      — texture inside type via background-image + -webkit-background-clip: text
+      See: https://css-tricks.com/lets-make-one-of-those-fancy-scrolling-animations-used-on-apple-product-pages/
+           https://www.tommygeorge.com/blog/css-how-to-apple-iphone-xr-masked-text/
+    */
+
+    #zoom-scrolly {
+      position: relative;
+      height: 480vh;
+    }
+
+    #zoom-pin {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-text-stack {
+      position: relative;
+      z-index: 1;
+      width: min(94vw, 52rem);
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /**
+     * Only this block scales. At very large scale, a single glyph’s fill area is
+     * huge relative to the viewport — background-size: cover on the text means
+     * you effectively see a full-bleed photo “inside” that letter (Apple’s zoom-from-type illusion).
+     */
+    .hero-zoom-target {
+      transform-origin: 50% 38%;
+      will-change: transform;
+    }
+
+    .hero-headline {
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      font-size: clamp(1.35rem, 4.2vw, 2.75rem);
+      color: transparent;
+      background-image: var(--hero-img-a), var(--hero-img-b);
+      background-size: cover, cover;
+      background-position: 38% 42%, 72% 52%;
+      background-repeat: no-repeat, no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    @supports not (background-clip: text) {
+      .hero-headline {
+        color: #e4e4e7;
+        background: none;
+      }
+    }
+
+    .hero-headline .break {
+      display: block;
+    }
+
+    .hero-eyebrow {
+      font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      margin: 0 0 1rem;
+      opacity: 0;
+    }
+
+    .hero-themes {
+      margin: 1.5rem 0 0;
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: #e4e4e7;
+      opacity: 0;
+    }
+
+    .hero-answer {
+      margin: 1.15rem auto 0;
+      max-width: 36rem;
+      font-size: clamp(1rem, 2.4vw, 1.2rem);
+      font-weight: 600;
+      color: #fff;
+      opacity: 0;
+      line-height: 1.35;
+    }
+
+    .hero-lede {
+      margin: 1.35rem auto 0;
+      max-width: 40rem;
+      font-size: clamp(0.95rem, 2.1vw, 1.05rem);
+      color: var(--muted);
+      line-height: 1.55;
+      opacity: 0;
+    }
+
+    .article {
+      max-width: 38rem;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+    .article p {
+      font-size: 1.02rem;
+      line-height: 1.65;
+      color: #d4d4d8;
+      margin: 0 0 1.25rem;
+    }
+    .article strong { color: #fff; font-weight: 600; }
+
+    figure.question-figure {
+      margin: 2rem 0;
+      padding: 0;
+    }
+    figure.question-figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      border: 1px solid var(--line);
+    }
+    figure.question-figure figcaption {
+      margin-top: 0.85rem;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: #71717a;
+    }
+
+    .note-footer {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+      font-size: 0.8rem;
+      color: #71717a;
+      line-height: 1.55;
+    }
+    .note-footer a {
+      color: #93c5fd;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-zoom-target {
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section id="zoom-scrolly" aria-label="Scroll zooms headline from inside one letter to full line">
+    <div id="zoom-pin">
+      <div class="hero-text-stack">
+        <p class="hero-eyebrow">Section 01 · Opening up</p>
+
+        <div class="hero-zoom-target" id="hero-zoom-target">
+          <h1 class="hero-headline">
+            The Question:
+            <span class="break">Did opening up the country</span>
+            <span class="break">open it up for everyone?</span>
+          </h1>
+        </div>
+
+        <p class="hero-themes" id="hero-themes">Goods · Capital · Norms</p>
+
+        <p class="hero-answer" id="hero-answer">
+          Short answer: not enough — and the rest of this essay shows why.
+        </p>
+
+        <p class="hero-lede" id="hero-lede">
+          After 1994, did South Africa integrate into the global economy faster
+          than it created broad domestic opportunity, driving aggregate growth
+          that ultimately left the majority behind?
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <article class="article">
+    <p>
+      In 1994 South Africa took over an economy that had been partly cut off
+      for decades: sanctions and closed policy had left trade at only
+      <strong>37% of GDP</strong> and foreign money largely shut out of the
+      stock market. The 1893 print below is a reminder that South Africa was
+      already tied to global finance and commodity markets long before 1994:
+      the post-1994 opening built on old patterns of who held power and wealth,
+      not a clean start. Two broad economic strategies shaped the transition.
+      The Reconstruction and Development Programme (RDP, 1994) promised
+      redistribution, housing, electrification and a more active state.
+      About twenty months later, policy shifted toward Growth, Employment and
+      Redistribution (GEAR, 1996): tighter budgets, inflation targets, lower
+      trade barriers, easier rules for money to move across borders, and some
+      privatization.
+    </p>
+
+    <figure class="question-figure">
+      <picture>
+        <source srcset="../website_v2/assets/ground/johannesburg-jse-exchange-1893.webp" type="image/webp" />
+        <img
+          src="../website_v2/assets/ground/johannesburg-jse-exchange-1893.jpg"
+          width="1600"
+          height="1240"
+          loading="lazy"
+          decoding="async"
+          alt="1893 print of the first Johannesburg Stock Exchange building, titled The Exchange"
+        />
+      </picture>
+      <figcaption>
+        <i>(Johannesburg) The Exchange</i> — the first Johannesburg Stock Exchange building.
+        Print dated <strong>1893</strong>; illustrators <strong>Gannon &amp; Hawskey</strong>.
+        Via Wikimedia Commons (British Library).
+      </figcaption>
+    </figure>
+  </article>
+
+  <p class="note-footer">
+    <strong>How this maps to the Apple pattern:</strong> product pages tie animation to scroll position (not a timer) inside a tall section with a sticky viewport; masked headlines use a background clipped to text shapes. Here GSAP ScrollTrigger <code>scrub</code> maps scroll progress to <code>scale</code> only — no image layer fades. Starting scale is high enough that the photo reads full-frame through one oversized glyph; scaling down reveals the full question with the same pixels inside each letter. References:
+    <a href="https://css-tricks.com/lets-make-one-of-those-fancy-scrolling-animations-used-on-apple-product-pages/" rel="noopener noreferrer">CSS-Tricks — Apple-style scroll sections</a>,
+    <a href="https://www.tommygeorge.com/blog/css-how-to-apple-iphone-xr-masked-text/" rel="noopener noreferrer">masked text / background-clip</a>.
+    Serve from the project root for asset paths.
+  </p>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const zoomEl = document.querySelector("#hero-zoom-target");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function startScaleForViewport() {
+      return window.innerWidth < 640 ? 22 : window.innerWidth < 1100 ? 28 : 34;
+    }
+
+    let START_SCALE = startScaleForViewport();
+
+    if (!reduceMotion) {
+      gsap.set(zoomEl, { scale: START_SCALE });
+    } else {
+      gsap.set(zoomEl, { scale: 1 });
+    }
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#zoom-scrolly",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1.08,
+      },
+      defaults: { ease: "none" },
+    });
+
+    if (!reduceMotion) {
+      tl.to(zoomEl, { scale: 1, duration: 1 }, 0)
+        .to(".hero-eyebrow", { opacity: 1, duration: 0.12 }, 0.48)
+        .to("#hero-themes", { opacity: 1, duration: 0.1 }, 0.54)
+        .to("#hero-answer", { opacity: 1, duration: 0.1 }, 0.6)
+        .to("#hero-lede", { opacity: 1, duration: 0.11 }, 0.66);
+    } else {
+      tl.to(".hero-eyebrow", { opacity: 1, duration: 0.18 }, 0)
+        .to("#hero-themes", { opacity: 1, duration: 0.14 }, 0.08)
+        .to("#hero-answer", { opacity: 1, duration: 0.14 }, 0.15)
+        .to("#hero-lede", { opacity: 1, duration: 0.14 }, 0.22);
+    }
+
+    window.addEventListener("load", () => ScrollTrigger.refresh());
+
+    window.addEventListener(
+      "resize",
+      () => {
+        ScrollTrigger.refresh();
+      },
+      { passive: true }
+    );
+  </script>
+</body>
+</html>
