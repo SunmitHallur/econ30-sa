@@ -42,8 +42,24 @@
   }
 
   .chart-canvas-wrap,
-  #za-map {
+  #za-map,
+  .map-wrap--compare {
     min-height: 220px !important;
+  }
+
+  .map-scrolly {
+    min-height: 0 !important;
+  }
+  .map-scrolly-sticky {
+    position: static !important;
+    background: transparent !important;
+  }
+  .map-scrolly-hint {
+    display: none !important;
+  }
+  #map-compare:not([hidden]) {
+    display: block !important;
+    break-inside: avoid;
   }
 
   a {

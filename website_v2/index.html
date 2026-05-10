@@ -935,8 +935,8 @@
           Each province is shaded by <em>narrow</em> unemployment (actively looking, no job)—lighter
           green is lower, darker green is higher. The colour scale is <strong>fixed across every quarter</strong>
           in the series so you can see change over time instead of each wave “stretching” to fill the palette.
-          The animation cycles through <strong>harmonised LFS/OHS quarters before 2008</strong> (where comparable files exist),
-          then <strong>QLFS</strong> through the latest quarter in the repo.
+          <strong>Scroll down</strong> through this section to advance quarters— the map stays in view while the timeline moves.
+          The series runs from harmonised <strong>LFS/OHS</strong> (where files exist) through <strong>QLFS</strong> to the latest quarter in the repo.
           Zoom in past level 8 to see <strong>metropolitan municipality</strong> point estimates (eight metros, Stats SA <code>Metro_code</code>) from 2015 Q1 onward.
           The broader measure that counts discouraged job-seekers was <strong>43.1%</strong> nationally in Q1 2025.
           Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a> (see Sources for LFS/OHS).
@@ -958,24 +958,47 @@
         </p>
       </div>
 
-      <div class="map-controls" id="map-controls" role="group" aria-label="Map time animation">
-        <button type="button" class="ghost-btn map-controls__play" id="map-play-pause" aria-pressed="true">
-          <span class="ghost-btn__text" id="map-play-label">Pause</span>
-        </button>
-        <span class="map-controls__period mono" id="map-period-label" aria-live="polite">—</span>
-        <label class="map-controls__scrub">
-          <span class="visually-hidden">Quarter</span>
-          <input type="range" id="map-wave-slider" min="0" max="0" value="0" />
-        </label>
+      <p class="map-scrolly-hint" id="map-scrolly-hint">
+        Scroll slowly downward while this block is on screen—the quarter advances with your scroll. Use <strong>Play</strong> for an automatic run, or drag the slider anytime.
+      </p>
+      <div class="map-scrolly" id="map-scrolly">
+        <div class="map-scrolly-sticky">
+          <div class="map-controls" id="map-controls" role="group" aria-label="Map time animation">
+            <button type="button" class="ghost-btn map-controls__play" id="map-play-pause" aria-pressed="false">
+              <span class="ghost-btn__text" id="map-play-label">Play</span>
+            </button>
+            <span class="map-controls__period mono" id="map-period-label" aria-live="polite">—</span>
+            <label class="map-controls__scrub">
+              <span class="visually-hidden">Quarter</span>
+              <input type="range" id="map-wave-slider" min="0" max="0" value="0" />
+            </label>
+          </div>
+          <div id="za-map" class="map-wrap" aria-label="South Africa unemployment choropleth"></div>
+          <div class="map-legend map-legend--choro" role="group" aria-label="Colour scale">
+            <span class="map-legend__label">Lower %</span>
+            <span class="map-legend__gradient" aria-hidden="true"></span>
+            <span class="map-legend__label">Higher %</span>
+            <span class="map-legend__range mono" id="map-legend-range"></span>
+          </div>
+          <p class="map-metro-hint" id="map-metro-zoom-hint">Tip: zoom in on the map to see metropolitan unemployment (after the map loads).</p>
+        </div>
       </div>
-      <div id="za-map" class="map-wrap" aria-label="South Africa unemployment choropleth"></div>
-      <div class="map-legend map-legend--choro" role="group" aria-label="Colour scale">
-        <span class="map-legend__label">Lower %</span>
-        <span class="map-legend__gradient" aria-hidden="true"></span>
-        <span class="map-legend__label">Higher %</span>
-        <span class="map-legend__range mono" id="map-legend-range"></span>
+      <div id="map-compare" class="map-compare" hidden>
+        <h3 class="map-compare__title">First quarter vs latest quarter</h3>
+        <p class="map-compare__lede">
+          Same colour scale as above: lighter green is lower narrow unemployment, darker is higher.
+        </p>
+        <div class="map-compare-grid" role="group" aria-label="Before and after provincial maps">
+          <figure class="map-compare-cell">
+            <figcaption class="map-compare-label mono" id="map-compare-start-caption">Start</figcaption>
+            <div id="za-map-compare-start" class="map-wrap map-wrap--compare" aria-label="Provincial unemployment, first quarter in series"></div>
+          </figure>
+          <figure class="map-compare-cell">
+            <figcaption class="map-compare-label mono" id="map-compare-end-caption">Latest</figcaption>
+            <div id="za-map-compare-end" class="map-wrap map-wrap--compare" aria-label="Provincial unemployment, last quarter in series"></div>
+          </figure>
+        </div>
       </div>
-      <p class="map-metro-hint" id="map-metro-zoom-hint">Tip: zoom in on the map to see metropolitan unemployment (after the map loads).</p>
       <div class="prose narrow map-methodology">
         <p>
           <strong>Method.</strong> Provincial rates are author-calculated from Stats SA survey microdata (narrow definition,

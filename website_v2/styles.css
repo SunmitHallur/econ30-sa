@@ -1467,6 +1467,31 @@ details summary { cursor: pointer; list-style: revert; }
 details summary h3 { display: inline; }
 
 /* ---------------- Map ---------------- */
+.map-scrolly-hint {
+  margin: 0 auto 14px;
+  max-width: 62ch;
+  text-align: center;
+  font-size: clamp(15px, 1.35vw, 17px);
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.map-scrolly {
+  position: relative;
+  margin-top: 4px;
+}
+.map-scrolly-sticky {
+  position: sticky;
+  top: 76px;
+  z-index: 3;
+  padding-bottom: 12px;
+  margin-bottom: 0;
+  background: linear-gradient(
+    180deg,
+    var(--bg) 0%,
+    var(--bg) 92%,
+    color-mix(in oklab, var(--bg) 88%, transparent) 100%
+  );
+}
 .map-wrap {
   height: clamp(320px, 56vw, 520px);
   width: 100%;
@@ -1474,6 +1499,54 @@ details summary h3 { display: inline; }
   overflow: hidden;
   border: 1px solid var(--rule);
   background: var(--bg-elev);
+}
+.map-wrap--compare {
+  height: clamp(220px, 38vw, 340px);
+}
+.map-compare {
+  margin-top: 28px;
+  padding: clamp(16px, 3vw, 24px);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--rule);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-sm);
+}
+.map-compare__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 2.2vw, 1.45rem);
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+.map-compare__lede {
+  margin: 0 0 16px;
+  color: var(--fg-muted);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 62ch;
+}
+.map-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 2vw, 20px);
+  align-items: start;
+}
+.map-compare-cell {
+  margin: 0;
+}
+.map-compare-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  margin-bottom: 8px;
+}
+@media (max-width: 768px) {
+  .map-compare-grid {
+    grid-template-columns: 1fr;
+  }
+  .map-scrolly-sticky {
+    top: 68px;
+  }
 }
 .map-controls {
   display: flex;

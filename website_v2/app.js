@@ -1085,7 +1085,7 @@
     const map = L.map(el, {
       zoomControl: true,
       attributionControl: true,
-      scrollWheelZoom: true,
+      scrollWheelZoom: false,
       minZoom: 5,
       maxZoom: 11,
       maxBounds: SA_MAP_BOUNDS,
@@ -1098,8 +1098,13 @@
       opacity: 0.62,
     }).addTo(map);
 
-    let waveIndex = waves.length - 1;
+    let waveIndex = 0;
     const currentScale = { wave: waves[waveIndex] };
+    const mapScrolly = $("#map-scrolly");
+    const comparePanel = $("#map-compare");
+    const compareStartCap = $("#map-compare-start-caption");
+    const compareEndCap = $("#map-compare-end-caption");
+    const scrollyHintEl = $("#map-scrolly-hint");
 
     /** Min/max narrow unemployment across every province & metro in every wave — fixed legend so time animation is comparable. */
     const ratesForFixedScale = [];
@@ -1209,10 +1214,23 @@
     const periodEl = $("#map-period-label");
     const sliderEl = $("#map-wave-slider");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let playing = !reduceMotion;
+    let playing = false;
     let autoplayTimer = null;
-    if (playLabel) playLabel.textContent = playing ? "Pause" : "Play";
-    if (playBtn) playBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+    let comparePairBuilt = false;
+    let playbackCompleted = false;
+    let scrollDriveActive = !reduceMotion;
+
+    if (playLabel) playLabel.textContent = "Play";
+    if (playBtn) playBtn.setAttribute("aria-pressed", "false");
+    if (scrollyHintEl && reduceMotion) {
+      scrollyHintEl.innerHTML = "Use the <strong>slider</strong> or <strong>Play</strong> to move through quarters. After you reach the <strong>last</strong> quarter once, a before-and-after comparison appears below.";
+    }
+
+    const markPlaybackComplete = () => {
+      if (playbackCompleted) return;
+      playbackCompleted = true;
+      buildComparePairOnce();
+    };
 
     const setPlaying = (on) => {
       playing = on;
@@ -1236,9 +1254,137 @@
       stopAutoplay();
       if (!playing) return;
       autoplayTimer = setInterval(() => {
-        waveIndex = (waveIndex + 1) % waves.length;
+        const next = (waveIndex + 1) % waves.length;
+        if (waves.length > 1 && waveIndex === waves.length - 1 && next === 0) {
+          markPlaybackComplete();
+        }
+        waveIndex = next;
         applyWave(waveIndex);
       }, mapPlayStepMs);
+    };
+
+    const mountSideBySideMap = (containerEl, waveData) => {
+      if (!containerEl || containerEl._leaflet_id) return null;
+      const mini = L.map(containerEl, {
+        zoomControl: true,
+        attributionControl: false,
+        scrollWheelZoom: false,
+        minZoom: 5,
+        maxZoom: 11,
+        maxBounds: SA_MAP_BOUNDS,
+        maxBoundsViscosity: 1,
+      }).setView([-28.9, 25.2], 5);
+      const tl = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 11,
+        attribution: "",
+        opacity: document.documentElement.dataset.theme === "dark" ? 0.42 : 0.62,
+      }).addTo(mini);
+      const wRef = { wave: waveData };
+      const styleMini = (feature) => {
+        const nm = feature.properties.province;
+        const rate = wRef.wave.provinces[nm];
+        const r = typeof rate === "number" ? rate : 0;
+        return {
+          fillColor: fillColorForRate(r, mapFixedVmin, mapFixedVmax),
+          weight: 1.1,
+          color: strokeForTheme(),
+          fillOpacity: 0.88,
+        };
+      };
+      const lyr = L.geoJSON(gj, {
+        style: styleMini,
+        onEachFeature: (feature, lyr2) => {
+          const pname = feature.properties.province;
+          lyr2.bindTooltip("", { sticky: true, className: "za-map-prov-tip" });
+          lyr2.on({
+            mouseover: (e) => {
+              e.target.setStyle({ weight: 2.4, color: palette().accent });
+              e.target.bringToFront();
+            },
+            mouseout: (e) => {
+              e.target.setStyle(styleMini(e.target.feature));
+            },
+          });
+        },
+      }).addTo(mini);
+      const syncTips = () => {
+        lyr.eachLayer((ly2) => {
+          const pname = ly2.feature.properties.province;
+          const r = wRef.wave.provinces[pname];
+          const pct = typeof r === "number" ? r.toFixed(1) : "–";
+          ly2.setTooltipContent(`<strong>${pname}</strong><br><span class="mono">Narrow unemployment: ${pct}%</span>`);
+        });
+      };
+      syncTips();
+      mini.fitBounds(lyr.getBounds(), { padding: [10, 10] });
+      const refreshMini = () => {
+        tl.setOpacity(document.documentElement.dataset.theme === "dark" ? 0.42 : 0.62);
+        lyr.eachLayer((ly2) => ly2.setStyle(styleMini(ly2.feature)));
+      };
+      return { map: mini, refreshMini };
+    };
+
+    const buildComparePairOnce = () => {
+      if (comparePairBuilt || !comparePanel) return;
+      const startEl = $("#za-map-compare-start");
+      const endEl = $("#za-map-compare-end");
+      if (!startEl || !endEl) return;
+      comparePairBuilt = true;
+      comparePanel.hidden = false;
+      const w0 = waves[0];
+      const w1 = waves[waves.length - 1];
+      if (compareStartCap) compareStartCap.textContent = `${w0.label}${w0.national != null ? ` · National ${w0.national}%` : ""}`;
+      if (compareEndCap) compareEndCap.textContent = `${w1.label}${w1.national != null ? ` · National ${w1.national}%` : ""}`;
+      const a = mountSideBySideMap(startEl, w0);
+      const b = mountSideBySideMap(endEl, w1);
+      [a, b].forEach((x) => {
+        if (x?.refreshMini) mapThemeRefreshers.push(x.refreshMini);
+      });
+      requestAnimationFrame(() => {
+        a?.map?.invalidateSize();
+        b?.map?.invalidateSize();
+      });
+    };
+
+    const PX_PER_WAVE = 52;
+    const setScrollyHeight = () => {
+      if (!mapScrolly || !scrollDriveActive) {
+        if (mapScrolly) mapScrolly.style.minHeight = "";
+        return;
+      }
+      const stickyInner = mapScrolly.querySelector(".map-scrolly-sticky");
+      const base = stickyInner ? stickyInner.offsetHeight : 560;
+      const extra = Math.max(2000, (waves.length - 1) * PX_PER_WAVE);
+      mapScrolly.style.minHeight = `${base + extra}px`;
+    };
+
+    let scrollRaf = null;
+    const onScrollProgress = () => {
+      if (!scrollDriveActive || !mapScrolly || waves.length < 2) return;
+      const rect = mapScrolly.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const start = top;
+      const end = top + mapScrolly.offsetHeight - window.innerHeight;
+      const range = Math.max(1, end - start);
+      let t = (window.scrollY - start) / range;
+      t = Math.max(0, Math.min(1, t));
+      const idx = Math.round(t * (waves.length - 1));
+      if (idx !== waveIndex && !playing) {
+        waveIndex = idx;
+        applyWave(waveIndex);
+      }
+      if (waves.length > 1 && t >= 0.997) {
+        markPlaybackComplete();
+      }
+    };
+
+    const scheduleScrollTick = () => {
+      if (!scrollDriveActive) return;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = requestAnimationFrame(() => {
+        scrollRaf = null;
+        onScrollProgress();
+      });
     };
 
     const applyWave = (i) => {
@@ -1296,6 +1442,9 @@
         if (Number.isFinite(v)) {
           setPlaying(false);
           applyWave(v);
+          if (reduceMotion && v >= waves.length - 1) {
+            markPlaybackComplete();
+          }
         }
       });
     }
@@ -1305,7 +1454,6 @@
     }
 
     applyWave(waveIndex);
-    if (playing) startAutoplay();
 
     const mapSection = $("#map");
     if (mapSection) {
@@ -1313,9 +1461,9 @@
         entries.forEach((en) => {
           if (en.isIntersecting) {
             map.invalidateSize();
-            if (playing && !autoplayTimer) startAutoplay();
           } else {
             stopAutoplay();
+            setPlaying(false);
           }
         });
       }, { threshold: 0.12 });
@@ -1328,11 +1476,24 @@
 
     map.fitBounds(provLayer.getBounds(), { padding: [14, 14] });
     syncMetroLayerZoom();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setScrollyHeight();
+        scheduleScrollTick();
+      });
+    });
+    window.addEventListener("scroll", scheduleScrollTick, { passive: true });
+    window.addEventListener("resize", () => {
+      map.invalidateSize();
+      setScrollyHeight();
+      scheduleScrollTick();
+    });
+
     const obs = new IntersectionObserver(entries => {
       entries.forEach(en => { if (en.isIntersecting) map.invalidateSize(); });
     }, { threshold: 0.15 });
     obs.observe(el);
-    window.addEventListener("resize", () => map.invalidateSize());
   };
 
   // ------------------------------------------------------------
