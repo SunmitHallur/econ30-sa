@@ -1001,20 +1001,34 @@
   };
 
   // ------------------------------------------------------------
-  // Leaflet map - country outline + province centroid bubbles
+  // Leaflet map — SA-only bounds, provincial choropleth, metro markers when zoomed
   // ------------------------------------------------------------
-  const provColor = r => r < 25 ? "#c7e7d7" : r < 32 ? "#83ccae" : r < 37 ? "#3a9a78" : "#134e3a";
-  const PROV_COORDS = {
-    "Western Cape":   { lat: -33.20, lon: 21.90 },
-    "Eastern Cape":   { lat: -32.20, lon: 26.50 },
-    "Northern Cape":  { lat: -29.80, lon: 21.50 },
-    "Free State":     { lat: -28.50, lon: 27.00 },
-    "KwaZulu-Natal":  { lat: -29.00, lon: 30.90 },
-    "North West":     { lat: -26.60, lon: 25.50 },
-    "Gauteng":        { lat: -26.20, lon: 28.10 },
-    "Mpumalanga":     { lat: -25.80, lon: 30.60 },
-    "Limpopo":        { lat: -23.90, lon: 29.40 },
+  const SA_MAP_BOUNDS = L.latLngBounds([-35.35, 15.65], [-21.25, 34.05]);
+  const METRO_ZOOM_MIN = 8;
+  /** Representative centres for the eight metros (QLFS Metro_code); display only. */
+  const METRO_COORDS = {
+    "City of Cape Town": [-33.9249, 18.4241],
+    "Buffalo City": [-32.9963, 27.8964],
+    "Nelson Mandela Bay": [-33.9138, 25.5827],
+    "Mangaung": [-29.1194, 26.218],
+    "eThekwini": [-29.8587, 31.0218],
+    "Ekurhuleni": [-26.1715, 28.3183],
+    "City of Johannesburg": [-26.2041, 28.0473],
+    "City of Tshwane": [-25.7461, 28.1881],
   };
+  const GREEN_CHORO_LOW = [209, 250, 229];
+  const GREEN_CHORO_HIGH = [6, 78, 59];
+
+  const fillColorForRate = (rate, vmin, vmax) => {
+    const span = vmax - vmin;
+    let t = span > 0.001 ? (rate - vmin) / span : 0.5;
+    t = Math.max(0, Math.min(1, t));
+    const r = Math.round(GREEN_CHORO_LOW[0] + (GREEN_CHORO_HIGH[0] - GREEN_CHORO_LOW[0]) * t);
+    const g = Math.round(GREEN_CHORO_LOW[1] + (GREEN_CHORO_HIGH[1] - GREEN_CHORO_LOW[1]) * t);
+    const b = Math.round(GREEN_CHORO_LOW[2] + (GREEN_CHORO_HIGH[2] - GREEN_CHORO_LOW[2]) * t);
+    return `rgb(${r},${g},${b})`;
+  };
+
   const buildMap = async (series) => {
     const el = $("#za-map");
     if (!el || typeof L === "undefined") return;
@@ -1064,45 +1078,115 @@
       }
     }
 
-    const gj = await fetchJSON("zaf-outline.geojson");
-    const map = L.map(el, { zoomControl: true, attributionControl: true, scrollWheelZoom: false })
-      .setView([-28.8, 25.0], 5.2);
-    const tile = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 10,
-      attribution: "© OpenStreetMap",
-      opacity: 0.35,
-    }).addTo(map);
-    const layer = L.geoJSON(gj, {
-      style: { weight: 1.4, color: palette().fg, fillColor: palette().bgSunken, fillOpacity: 0.35 },
-    }).addTo(map);
-    const markerEntries = [];
-    const applyMarkerStyle = entry => {
-      const p = palette();
-      entry.marker.setStyle({
-        radius: 10 + Math.min(14, entry.rate / 3),
-        color: entry.hover ? p.accent : p.fg,
-        weight: entry.hover ? 2.2 : 1.2,
-        fillColor: provColor(entry.rate),
-        fillOpacity: 0.9,
-      });
-    };
-    const applyMapTheme = () => {
-      const p = palette();
-      const dark = document.documentElement.dataset.theme === "dark";
-      tile.setOpacity(dark ? 0.22 : 0.35);
-      layer.setStyle({
-        weight: 1.4,
-        color: p.fg,
-        fillColor: p.bgSunken,
-        fillOpacity: dark ? 0.28 : 0.36,
-      });
-      markerEntries.forEach(applyMarkerStyle);
-    };
+    const gj = await fetchJSON("zaf-provinces.geojson");
+    const legendRangeEl = $("#map-legend-range");
+    const legendHintEl = $("#map-metro-zoom-hint");
 
-    const tooltipHtml = (name, rate) =>
-      `<strong>${name}</strong><br>Narrow unemployment: ${rate.toFixed(1)}%`;
+    const map = L.map(el, {
+      zoomControl: true,
+      attributionControl: true,
+      scrollWheelZoom: true,
+      minZoom: 5,
+      maxZoom: 11,
+      maxBounds: SA_MAP_BOUNDS,
+      maxBoundsViscosity: 1,
+    }).setView([-28.9, 25.2], 5);
+    const tile = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      maxZoom: 11,
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © CARTO · '
+        + 'Province outlines: <a href="https://gadm.org" target="_blank" rel="noopener noreferrer">GADM</a>',
+      opacity: 0.62,
+    }).addTo(map);
 
     let waveIndex = waves.length - 1;
+    const currentScale = { vmin: 0, vmax: 50, wave: waves[waveIndex] };
+
+    const strokeForTheme = () => {
+      const dark = document.documentElement.dataset.theme === "dark";
+      return dark ? "rgba(231,235,241,0.42)" : "rgba(24,28,35,0.5)";
+    };
+
+    const styleProvince = feature => {
+      const name = feature.properties.province;
+      const rate = currentScale.wave.provinces[name];
+      const r = typeof rate === "number" ? rate : 0;
+      return {
+        fillColor: fillColorForRate(r, currentScale.vmin, currentScale.vmax),
+        weight: 1.15,
+        color: strokeForTheme(),
+        fillOpacity: 0.88,
+      };
+    };
+
+    const metroTooltip = (name, rate) =>
+      `<strong>${name}</strong><br><span class="mono">Narrow unemployment: ${typeof rate === "number" ? rate.toFixed(1) : "–"}%</span>`;
+
+    const metroLayer = L.layerGroup();
+    const metroEntries = [];
+    Object.keys(METRO_COORDS).forEach((name) => {
+      const [lat, lng] = METRO_COORDS[name];
+      const marker = L.circleMarker([lat, lng], {
+        radius: 11,
+        stroke: true,
+        weight: 1.5,
+        opacity: 1,
+        fillOpacity: 0.92,
+      });
+      marker.bindTooltip(metroTooltip(name, null), { sticky: true, direction: "top", className: "za-map-metro-tip" });
+      metroEntries.push({ marker, name, hover: false });
+      marker.addTo(metroLayer);
+    });
+
+    const provLayer = L.geoJSON(gj, {
+      style: styleProvince,
+      onEachFeature: (feature, lyr) => {
+        const pname = feature.properties.province;
+        lyr.bindTooltip("", { sticky: true, className: "za-map-prov-tip" });
+        lyr.on({
+          mouseover: (e) => {
+            e.target.setStyle({ weight: 2.6, color: palette().accent });
+            e.target.bringToFront();
+          },
+          mouseout: (e) => {
+            e.target.setStyle(styleProvince(e.target.feature));
+          },
+        });
+      },
+    }).addTo(map);
+
+    const applyMetroStyles = () => {
+      const w = currentScale.wave;
+      const metros = w.metros || {};
+      metroEntries.forEach((entry) => {
+        const rate = metros[entry.name];
+        const r = typeof rate === "number" ? rate : 0;
+        entry.marker.setStyle({
+          radius: 9 + Math.min(12, r / 4),
+          color: entry.hover ? palette().accent : strokeForTheme(),
+          weight: entry.hover ? 2.4 : 1.5,
+          fillColor: fillColorForRate(r, currentScale.vmin, currentScale.vmax),
+        });
+        entry.marker.setTooltipContent(metroTooltip(entry.name, typeof rate === "number" ? rate : null));
+      });
+    };
+
+    const waveHasMetros = () => {
+      const m = waves[waveIndex]?.metros;
+      return m && typeof m === "object" && Object.keys(m).length > 0;
+    };
+
+    const syncMetroLayerZoom = () => {
+      const z = map.getZoom();
+      const ok = waveHasMetros();
+      if (ok && z >= METRO_ZOOM_MIN) {
+        if (!map.hasLayer(metroLayer)) metroLayer.addTo(map);
+        if (legendHintEl) legendHintEl.hidden = true;
+      } else {
+        if (map.hasLayer(metroLayer)) map.removeLayer(metroLayer);
+        if (legendHintEl) legendHintEl.hidden = false;
+      }
+    };
+
     const playBtn = $("#map-play-pause");
     const playLabel = $("#map-play-label");
     const periodEl = $("#map-period-label");
@@ -1140,44 +1224,53 @@
     const applyWave = (i) => {
       waveIndex = Math.max(0, Math.min(waves.length - 1, i));
       const w = waves[waveIndex];
+      currentScale.wave = w;
+      const pv = Object.values(w.provinces || {}).filter(v => typeof v === "number");
+      currentScale.vmin = pv.length ? Math.min(...pv) : 0;
+      currentScale.vmax = pv.length ? Math.max(...pv) : 50;
+
       const nat = w.national != null ? ` · National ${w.national}%` : "";
       if (periodEl) periodEl.textContent = `${w.label}${nat}`;
       if (sliderEl) sliderEl.value = String(waveIndex);
+      if (legendRangeEl) {
+        legendRangeEl.textContent = `${currentScale.vmin.toFixed(1)}% — ${currentScale.vmax.toFixed(1)}% (provinces, this quarter)`;
+      }
+      if (legendHintEl) {
+        const ok = w.metros && Object.keys(w.metros).length > 0;
+        legendHintEl.textContent = ok
+          ? "Tip: zoom in on the map (scroll or +/−) to show unemployment for the eight metropolitan municipalities."
+          : "Metro municipality dots use the Stats SA Metro_code scheme from 2015 Q1 onward; scrub the slider to 2015 or later, then zoom in.";
+      }
 
-      markerEntries.forEach((entry) => {
-        const r = w.provinces[entry.name];
-        entry.rate = typeof r === "number" ? r : 0;
-        applyMarkerStyle(entry);
-        if (typeof entry.marker.setTooltipContent === "function") {
-          entry.marker.setTooltipContent(tooltipHtml(entry.name, entry.rate));
-        }
+      provLayer.eachLayer((ly) => {
+        ly.setStyle(styleProvince(ly.feature));
+        const pname = ly.feature.properties.province;
+        const r = w.provinces[pname];
+        const pct = typeof r === "number" ? r.toFixed(1) : "–";
+        ly.setTooltipContent(`<strong>${pname}</strong><br><span class="mono">Narrow unemployment: ${pct}%</span>`);
       });
+      applyMetroStyles();
+      syncMetroLayerZoom();
     };
 
-    Object.keys(PROV_COORDS).forEach((name) => {
-      const coord = PROV_COORDS[name];
-      const w0 = waves[waveIndex];
-      const rate = typeof w0.provinces[name] === "number" ? w0.provinces[name] : 0;
-      const marker = L.circleMarker([coord.lat, coord.lon], {
-        radius: 10 + Math.min(14, rate / 3),
-        color: palette().fg,
-        weight: 1.2,
-        fillColor: provColor(rate),
-        fillOpacity: 0.9,
-      });
-      const entry = { marker, name, rate, hover: false };
-      markerEntries.push(entry);
-      marker.bindTooltip(tooltipHtml(name, rate), { sticky: true, direction: "top", offset: [0, -4] });
-      marker.on("mouseover", () => {
+    const applyMapTheme = () => {
+      const dark = document.documentElement.dataset.theme === "dark";
+      tile.setOpacity(dark ? 0.42 : 0.62);
+      applyWave(waveIndex);
+    };
+
+    metroEntries.forEach((entry) => {
+      entry.marker.on("mouseover", () => {
         entry.hover = true;
-        applyMarkerStyle(entry);
+        applyMetroStyles();
       });
-      marker.on("mouseout", () => {
+      entry.marker.on("mouseout", () => {
         entry.hover = false;
-        applyMarkerStyle(entry);
+        applyMetroStyles();
       });
-      marker.addTo(map);
     });
+
+    map.on("zoomend", syncMetroLayerZoom);
 
     if (sliderEl) {
       sliderEl.max = String(waves.length - 1);
@@ -1213,9 +1306,11 @@
     }
 
     mapThemeRefreshers.push(applyMapTheme);
-    applyMapTheme();
+    const darkInit = document.documentElement.dataset.theme === "dark";
+    tile.setOpacity(darkInit ? 0.42 : 0.62);
 
-    map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+    map.fitBounds(provLayer.getBounds(), { padding: [14, 14] });
+    syncMetroLayerZoom();
     const obs = new IntersectionObserver(entries => {
       entries.forEach(en => { if (en.isIntersecting) map.invalidateSize(); });
     }, { threshold: 0.15 });

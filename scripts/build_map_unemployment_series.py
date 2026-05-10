@@ -37,6 +37,19 @@ PROV_CODE_TO_NAME = {
     9: "Limpopo",
 }
 
+# Stats SA QLFS Metro_code — eight metropolitan municipalities (narrow LF unemployment).
+# See QLFS metadata: Metro/non-metro (Metro_code), derived from stratum.
+METRO_CODE_TO_LABEL = {
+    2: "City of Cape Town",
+    4: "Buffalo City",
+    5: "Nelson Mandela Bay",
+    8: "Mangaung",
+    10: "eThekwini",
+    13: "Ekurhuleni",
+    14: "City of Johannesburg",
+    15: "City of Tshwane",
+}
+
 
 def clean_float(x: str | None) -> float | None:
     if x is None or x == "":
@@ -80,7 +93,7 @@ def parse_qlfs_folder(name: str) -> tuple[int, int] | None:
     return y, q
 
 
-def aggregate_csv(path: Path) -> tuple[dict[str, float], float | None]:
+def aggregate_csv(path: Path) -> tuple[dict[str, float], float | None, dict[str, float]]:
     with path.open(newline="", encoding="utf-8", errors="replace") as f:
         reader = csv.DictReader(f)
         fieldnames = reader.fieldnames or []
@@ -93,10 +106,14 @@ def aggregate_csv(path: Path) -> tuple[dict[str, float], float | None]:
         )
         if not wcol:
             raise ValueError(f"No Weight column in {path}")
+        mcol = "Metro_code" if "Metro_code" in fieldnames else None
 
         by_prov_lf: dict[int, float] = {}
         by_prov_u: dict[int, float] = {}
+        by_metro_lf: dict[int, float] = {}
+        by_metro_u: dict[int, float] = {}
         nat_lf = nat_u = 0.0
+        metro_code_max = 0
 
         for row in reader:
             w = clean_float(row.get(wcol))
@@ -120,14 +137,35 @@ def aggregate_csv(path: Path) -> tuple[dict[str, float], float | None]:
             if st == 2:
                 nat_u += w
 
+            if mcol:
+                try:
+                    mc = int(float(row.get(mcol) or ""))
+                except (TypeError, ValueError):
+                    mc = None
+                if mc is not None:
+                    metro_code_max = max(metro_code_max, mc)
+                    # Current scheme 1–17 (Stats SA); older extracts used 71–76 etc.
+                    if mc in METRO_CODE_TO_LABEL:
+                        by_metro_lf[mc] = by_metro_lf.get(mc, 0.0) + w
+                        if st == 2:
+                            by_metro_u[mc] = by_metro_u.get(mc, 0.0) + w
+
     provinces: dict[str, float] = {}
     for code, pname in PROV_CODE_TO_NAME.items():
         lf = by_prov_lf.get(code, 0.0)
         u = by_prov_u.get(code, 0.0)
         provinces[pname] = round(100.0 * u / lf, 2) if lf > 0 else 0.0
 
+    metros: dict[str, float] = {}
+    # Legacy Metro_code values (>17) appear until 2014; do not emit misleading zeros.
+    if metro_code_max <= 17 and by_metro_lf:
+        for code, label in METRO_CODE_TO_LABEL.items():
+            lf = by_metro_lf.get(code, 0.0)
+            u = by_metro_u.get(code, 0.0)
+            metros[label] = round(100.0 * u / lf, 2) if lf > 0 else 0.0
+
     national = round(100.0 * nat_u / nat_lf, 2) if nat_lf > 0 else None
-    return provinces, national
+    return provinces, national, metros
 
 
 def main() -> None:
@@ -152,7 +190,7 @@ def main() -> None:
         if not csv_path.is_file():
             continue
         try:
-            provinces, national = aggregate_csv(csv_path)
+            provinces, national, metros = aggregate_csv(csv_path)
         except Exception as e:
             print(f"SKIP {name}: {e}")
             continue
@@ -165,6 +203,7 @@ def main() -> None:
                 "label": f"{year} Q{quarter}",
                 "national": national,
                 "provinces": provinces,
+                "metros": metros,
             }
         )
 
@@ -186,7 +225,11 @@ def main() -> None:
         ],
         "method_note": (
             "Codes: Province 1–9 (Stats SA); Lfs_Status or Status with 1=employed, 2=unemployed (narrow); "
-            "Weight / weight for expansion. Pre-2008 LFS/OHS extracts require separate harmonisation."
+            "Weight / weight for expansion. Eight metropolitan unemployment rates use Stats SA Metro_code "
+            "(metropolitan municipalities only) under the current 1–17 coding from 2015 Q1; earlier QLFS extracts "
+            "used different Metro_code values and metro breakdown is omitted there. "
+            "Metro marker positions are approximate city centres for display. "
+            "Pre-2008 LFS/OHS extracts require separate harmonisation."
         ),
         "waves": waves,
     }

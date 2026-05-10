@@ -932,11 +932,11 @@
         <p class="section-step">Section 08</p>
         <h2>One number hides nine very different provinces.</h2>
         <p class="section-lede">
-          Hover a bubble for <em>narrow</em> unemployment by province (actively looking,
-          no job). The animation cycles through <strong>QLFS quarters (2008–2025)</strong>
-          computed from the same household survey microdata extracts as the rest of this
-          project—rates move when you press play or drag the slider. The broader measure
-          that counts discouraged job-seekers was <strong>43.1%</strong> nationally in Q1 2025.
+          Each province is shaded by <em>narrow</em> unemployment (actively looking, no job)—lighter
+          green is lower, darker green is higher for that quarter. The animation cycles through
+          <strong>QLFS quarters (2008–2025)</strong>. Zoom in past level 8 to see
+          <strong>metropolitan municipality</strong> point estimates (eight metros, Stats SA <code>Metro_code</code>).
+          The broader measure that counts discouraged job-seekers was <strong>43.1%</strong> nationally in Q1 2025.
           Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
         </p>
       </div>
@@ -947,8 +947,9 @@
           Apartheid left a geography where jobs, housing, and former homeland regions
           still line up with worse outcomes today. Gauteng may offer more formal work
           on average, yet pockets of deep joblessness remain everywhere.
-          This color-coded map is crude—each province holds rich and poor communities—but
-          it still shows the main point: joblessness is concentrated, not evenly spread,
+          Province shading summarises the whole region; metro dots add detail where the survey
+          identifies one of the eight metros. Each province still holds rich and poor communities—
+          the map is descriptive, not a street-level portrait—yet it shows joblessness is uneven,
           and high trade on paper does not erase those gaps.
           Pair KwaZulu-Natal with the Durban harbour photos in §2 and the Western Cape
           with Gugulethu: same country, different realities at province scale.
@@ -965,13 +966,14 @@
           <input type="range" id="map-wave-slider" min="0" max="0" value="0" />
         </label>
       </div>
-      <div id="za-map" class="map-wrap" aria-label="South Africa provinces map"></div>
-      <p class="map-legend">
-        <span class="sw sw-1"></span> &lt; 25% &nbsp;
-        <span class="sw sw-2"></span> 25–32% &nbsp;
-        <span class="sw sw-3"></span> 32–37% &nbsp;
-        <span class="sw sw-4"></span> &gt; 37%
-      </p>
+      <div id="za-map" class="map-wrap" aria-label="South Africa unemployment choropleth"></div>
+      <div class="map-legend map-legend--choro" role="group" aria-label="Colour scale">
+        <span class="map-legend__label">Lower %</span>
+        <span class="map-legend__gradient" aria-hidden="true"></span>
+        <span class="map-legend__label">Higher %</span>
+        <span class="map-legend__range mono" id="map-legend-range"></span>
+      </div>
+      <p class="map-metro-hint" id="map-metro-zoom-hint">Tip: zoom in on the map to see metropolitan unemployment (after the map loads).</p>
       <div class="prose narrow map-methodology">
         <p>
           <strong>Method.</strong> Provincial rates are author-calculated from Stats SA QLFS microdata (narrow definition,

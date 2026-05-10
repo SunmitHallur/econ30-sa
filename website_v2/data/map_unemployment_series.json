@@ -7,7 +7,7 @@
     "https://www.statssa.gov.za/?page_id=1854&PPN=P0211",
     "https://www.statssa.gov.za/"
   ],
-  "method_note": "Codes: Province 1\u20139 (Stats SA); Lfs_Status or Status with 1=employed, 2=unemployed (narrow); Weight / weight for expansion. Pre-2008 LFS/OHS extracts require separate harmonisation.",
+  "method_note": "Codes: Province 1\u20139 (Stats SA); Lfs_Status or Status with 1=employed, 2=unemployed (narrow); Weight / weight for expansion. Eight metropolitan unemployment rates use Stats SA Metro_code (metropolitan municipalities only) under the current 1\u201317 coding from 2015 Q1; earlier QLFS extracts used different Metro_code values and metro breakdown is omitted there. Metro marker positions are approximate city centres for display. Pre-2008 LFS/OHS extracts require separate harmonisation.",
   "waves": [
     {
       "id": "2008-Q1",
@@ -25,7 +25,8 @@
         "Gauteng": 22.47,
         "Mpumalanga": 23.41,
         "Limpopo": 30.82
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2008-Q2",
@@ -43,7 +44,8 @@
         "Gauteng": 21.38,
         "Mpumalanga": 24.23,
         "Limpopo": 30.02
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2008-Q3",
@@ -61,7 +63,8 @@
         "Gauteng": 21.49,
         "Mpumalanga": 22.88,
         "Limpopo": 28.96
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2008-Q4",
@@ -79,7 +82,8 @@
         "Gauteng": 20.33,
         "Mpumalanga": 22.45,
         "Limpopo": 28.19
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2009-Q1",
@@ -97,7 +101,8 @@
         "Gauteng": 21.22,
         "Mpumalanga": 24.17,
         "Limpopo": 27.45
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2009-Q2",
@@ -115,7 +120,8 @@
         "Gauteng": 22.63,
         "Mpumalanga": 26.01,
         "Limpopo": 24.42
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2009-Q3",
@@ -133,7 +139,8 @@
         "Gauteng": 25.77,
         "Mpumalanga": 25.15,
         "Limpopo": 24.98
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2009-Q4",
@@ -151,7 +158,8 @@
         "Gauteng": 25.36,
         "Mpumalanga": 25.94,
         "Limpopo": 26.19
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2010-Q1",
@@ -169,7 +177,8 @@
         "Gauteng": 26.94,
         "Mpumalanga": 28.33,
         "Limpopo": 25.99
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2010-Q2",
@@ -187,7 +196,8 @@
         "Gauteng": 26.83,
         "Mpumalanga": 27.28,
         "Limpopo": 21.93
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2010-Q3",
@@ -205,7 +215,8 @@
         "Gauteng": 27.2,
         "Mpumalanga": 28.04,
         "Limpopo": 24.53
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2010-Q4",
@@ -223,7 +234,8 @@
         "Gauteng": 26.57,
         "Mpumalanga": 28.11,
         "Limpopo": 16.62
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2011-Q1",
@@ -241,7 +253,8 @@
         "Gauteng": 26.83,
         "Mpumalanga": 30.47,
         "Limpopo": 18.83
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2011-Q2",
@@ -259,7 +272,8 @@
         "Gauteng": 28.11,
         "Mpumalanga": 30.05,
         "Limpopo": 20.64
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2011-Q3",
@@ -277,7 +291,8 @@
         "Gauteng": 27.77,
         "Mpumalanga": 28.5,
         "Limpopo": 18.82
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2011-Q4",
@@ -295,7 +310,8 @@
         "Gauteng": 25.01,
         "Mpumalanga": 27.19,
         "Limpopo": 19.63
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2012-Q1",
@@ -313,7 +329,8 @@
         "Gauteng": 25.86,
         "Mpumalanga": 29.63,
         "Limpopo": 21.34
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2012-Q2",
@@ -331,7 +348,8 @@
         "Gauteng": 25.29,
         "Mpumalanga": 28.35,
         "Limpopo": 19.5
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2012-Q3",
@@ -349,7 +367,8 @@
         "Gauteng": 24.59,
         "Mpumalanga": 30.27,
         "Limpopo": 21.41
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2012-Q4",
@@ -367,7 +386,8 @@
         "Gauteng": 23.34,
         "Mpumalanga": 28.88,
         "Limpopo": 18.96
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2013-Q1",
@@ -385,7 +405,8 @@
         "Gauteng": 24.98,
         "Mpumalanga": 29.03,
         "Limpopo": 19.96
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2013-Q2",
@@ -403,7 +424,8 @@
         "Gauteng": 24.74,
         "Mpumalanga": 28.89,
         "Limpopo": 17.69
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2013-Q3",
@@ -421,7 +443,8 @@
         "Gauteng": 24.09,
         "Mpumalanga": 26.35,
         "Limpopo": 16.98
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2013-Q4",
@@ -439,7 +462,8 @@
         "Gauteng": 25.03,
         "Mpumalanga": 27.02,
         "Limpopo": 16.68
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2014-Q1",
@@ -457,7 +481,8 @@
         "Gauteng": 25.62,
         "Mpumalanga": 30.22,
         "Limpopo": 18.19
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2014-Q2",
@@ -475,7 +500,8 @@
         "Gauteng": 24.39,
         "Mpumalanga": 29.28,
         "Limpopo": 15.78
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2014-Q3",
@@ -493,7 +519,8 @@
         "Gauteng": 24.34,
         "Mpumalanga": 29.11,
         "Limpopo": 15.89
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2014-Q4",
@@ -511,7 +538,8 @@
         "Gauteng": 24.37,
         "Mpumalanga": 26.35,
         "Limpopo": 15.76
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2015-Q1",
@@ -529,6 +557,16 @@
         "Gauteng": 28.14,
         "Mpumalanga": 28.2,
         "Limpopo": 19.94
+      },
+      "metros": {
+        "City of Cape Town": 23.26,
+        "Buffalo City": 27.36,
+        "Nelson Mandela Bay": 32.77,
+        "Mangaung": 26.66,
+        "eThekwini": 19.37,
+        "Ekurhuleni": 30.39,
+        "City of Johannesburg": 26.35,
+        "City of Tshwane": 27.43
       }
     },
     {
@@ -547,6 +585,16 @@
         "Gauteng": 26.57,
         "Mpumalanga": 27.07,
         "Limpopo": 18.79
+      },
+      "metros": {
+        "City of Cape Town": 22.4,
+        "Buffalo City": 28.86,
+        "Nelson Mandela Bay": 32.76,
+        "Mangaung": 28.91,
+        "eThekwini": 16.25,
+        "Ekurhuleni": 29.07,
+        "City of Johannesburg": 26.01,
+        "City of Tshwane": 24.47
       }
     },
     {
@@ -565,6 +613,16 @@
         "Gauteng": 28.42,
         "Mpumalanga": 25.96,
         "Limpopo": 18.54
+      },
+      "metros": {
+        "City of Cape Town": 21.69,
+        "Buffalo City": 26.29,
+        "Nelson Mandela Bay": 33.74,
+        "Mangaung": 28.38,
+        "eThekwini": 15.68,
+        "Ekurhuleni": 29.94,
+        "City of Johannesburg": 29.55,
+        "City of Tshwane": 24.59
       }
     },
     {
@@ -583,6 +641,16 @@
         "Gauteng": 27.39,
         "Mpumalanga": 25.46,
         "Limpopo": 19.73
+      },
+      "metros": {
+        "City of Cape Town": 20.38,
+        "Buffalo City": 23.74,
+        "Nelson Mandela Bay": 30.36,
+        "Mangaung": 22.7,
+        "eThekwini": 15.72,
+        "Ekurhuleni": 30.53,
+        "City of Johannesburg": 27.72,
+        "City of Tshwane": 23.36
       }
     },
     {
@@ -601,6 +669,16 @@
         "Gauteng": 29.94,
         "Mpumalanga": 29.47,
         "Limpopo": 18.06
+      },
+      "metros": {
+        "City of Cape Town": 20.82,
+        "Buffalo City": 24.01,
+        "Nelson Mandela Bay": 33.04,
+        "Mangaung": 28.2,
+        "eThekwini": 18.67,
+        "Ekurhuleni": 34.21,
+        "City of Johannesburg": 29.62,
+        "City of Tshwane": 25.83
       }
     },
     {
@@ -619,6 +697,16 @@
         "Gauteng": 29.27,
         "Mpumalanga": 28.65,
         "Limpopo": 20.31
+      },
+      "metros": {
+        "City of Cape Town": 22.67,
+        "Buffalo City": 29.64,
+        "Nelson Mandela Bay": 31.78,
+        "Mangaung": 28.7,
+        "eThekwini": 19.49,
+        "Ekurhuleni": 34.2,
+        "City of Johannesburg": 28.16,
+        "City of Tshwane": 25.02
       }
     },
     {
@@ -637,6 +725,16 @@
         "Gauteng": 28.87,
         "Mpumalanga": 30.3,
         "Limpopo": 21.59
+      },
+      "metros": {
+        "City of Cape Town": 22.81,
+        "Buffalo City": 27.83,
+        "Nelson Mandela Bay": 31.34,
+        "Mangaung": 30.95,
+        "eThekwini": 20.04,
+        "Ekurhuleni": 31.29,
+        "City of Johannesburg": 27.97,
+        "City of Tshwane": 26.06
       }
     },
     {
@@ -655,6 +753,16 @@
         "Gauteng": 28.37,
         "Mpumalanga": 30.86,
         "Limpopo": 19.02
+      },
+      "metros": {
+        "City of Cape Town": 23.72,
+        "Buffalo City": 33.06,
+        "Nelson Mandela Bay": 29.2,
+        "Mangaung": 34.61,
+        "eThekwini": 21.78,
+        "Ekurhuleni": 30.33,
+        "City of Johannesburg": 27.56,
+        "City of Tshwane": 25.5
       }
     },
     {
@@ -673,6 +781,16 @@
         "Gauteng": 28.93,
         "Mpumalanga": 31.25,
         "Limpopo": 21.35
+      },
+      "metros": {
+        "City of Cape Town": 22.87,
+        "Buffalo City": 29.31,
+        "Nelson Mandela Bay": 29.84,
+        "Mangaung": 34.33,
+        "eThekwini": 21.53,
+        "Ekurhuleni": 30.5,
+        "City of Johannesburg": 27.92,
+        "City of Tshwane": 28.09
       }
     },
     {
@@ -691,6 +809,16 @@
         "Gauteng": 29.65,
         "Mpumalanga": 32.08,
         "Limpopo": 20.57
+      },
+      "metros": {
+        "City of Cape Town": 22.53,
+        "Buffalo City": 28.96,
+        "Nelson Mandela Bay": 34.29,
+        "Mangaung": 33.25,
+        "eThekwini": 21.5,
+        "Ekurhuleni": 30.94,
+        "City of Johannesburg": 29.76,
+        "City of Tshwane": 27.11
       }
     },
     {
@@ -709,6 +837,16 @@
         "Gauteng": 29.99,
         "Mpumalanga": 30.52,
         "Limpopo": 19.02
+      },
+      "metros": {
+        "City of Cape Town": 23.01,
+        "Buffalo City": 33.84,
+        "Nelson Mandela Bay": 35.73,
+        "Mangaung": 31.85,
+        "eThekwini": 23.07,
+        "Ekurhuleni": 32.05,
+        "City of Johannesburg": 29.25,
+        "City of Tshwane": 27.75
       }
     },
     {
@@ -727,6 +865,16 @@
         "Gauteng": 28.91,
         "Mpumalanga": 28.77,
         "Limpopo": 19.4
+      },
+      "metros": {
+        "City of Cape Town": 21.6,
+        "Buffalo City": 28.79,
+        "Nelson Mandela Bay": 36.6,
+        "Mangaung": 28.97,
+        "eThekwini": 21.71,
+        "Ekurhuleni": 33.27,
+        "City of Johannesburg": 27.9,
+        "City of Tshwane": 26.74
       }
     },
     {
@@ -745,6 +893,16 @@
         "Gauteng": 28.4,
         "Mpumalanga": 32.11,
         "Limpopo": 19.62
+      },
+      "metros": {
+        "City of Cape Town": 22.15,
+        "Buffalo City": 30.34,
+        "Nelson Mandela Bay": 35.89,
+        "Mangaung": 29.86,
+        "eThekwini": 20.14,
+        "Ekurhuleni": 30.66,
+        "City of Johannesburg": 28.54,
+        "City of Tshwane": 25.86
       }
     },
     {
@@ -763,6 +921,16 @@
         "Gauteng": 29.56,
         "Mpumalanga": 32.91,
         "Limpopo": 19.06
+      },
+      "metros": {
+        "City of Cape Town": 21.02,
+        "Buffalo City": 28.55,
+        "Nelson Mandela Bay": 34.43,
+        "Mangaung": 31.34,
+        "eThekwini": 19.06,
+        "Ekurhuleni": 33.18,
+        "City of Johannesburg": 28.2,
+        "City of Tshwane": 28.47
       }
     },
     {
@@ -781,6 +949,16 @@
         "Gauteng": 29.46,
         "Mpumalanga": 32.19,
         "Limpopo": 18.63
+      },
+      "metros": {
+        "City of Cape Town": 20.79,
+        "Buffalo City": 26.69,
+        "Nelson Mandela Bay": 35.83,
+        "Mangaung": 31.75,
+        "eThekwini": 17.92,
+        "Ekurhuleni": 30.78,
+        "City of Johannesburg": 29.0,
+        "City of Tshwane": 29.28
       }
     },
     {
@@ -799,6 +977,16 @@
         "Gauteng": 28.84,
         "Mpumalanga": 31.74,
         "Limpopo": 16.37
+      },
+      "metros": {
+        "City of Cape Town": 20.94,
+        "Buffalo City": 25.82,
+        "Nelson Mandela Bay": 35.25,
+        "Mangaung": 29.71,
+        "eThekwini": 21.45,
+        "Ekurhuleni": 30.78,
+        "City of Johannesburg": 28.84,
+        "City of Tshwane": 27.74
       }
     },
     {
@@ -817,6 +1005,16 @@
         "Gauteng": 28.65,
         "Mpumalanga": 33.9,
         "Limpopo": 18.3
+      },
+      "metros": {
+        "City of Cape Town": 20.99,
+        "Buffalo City": 25.74,
+        "Nelson Mandela Bay": 37.47,
+        "Mangaung": 32.15,
+        "eThekwini": 22.73,
+        "Ekurhuleni": 29.65,
+        "City of Johannesburg": 29.54,
+        "City of Tshwane": 26.23
       }
     },
     {
@@ -835,6 +1033,16 @@
         "Gauteng": 30.84,
         "Mpumalanga": 34.6,
         "Limpopo": 20.02
+      },
+      "metros": {
+        "City of Cape Town": 21.55,
+        "Buffalo City": 27.84,
+        "Nelson Mandela Bay": 36.02,
+        "Mangaung": 29.63,
+        "eThekwini": 21.55,
+        "Ekurhuleni": 31.49,
+        "City of Johannesburg": 30.43,
+        "City of Tshwane": 29.6
       }
     },
     {
@@ -853,6 +1061,16 @@
         "Gauteng": 30.71,
         "Mpumalanga": 35.06,
         "Limpopo": 21.21
+      },
+      "metros": {
+        "City of Cape Town": 21.84,
+        "Buffalo City": 30.54,
+        "Nelson Mandela Bay": 34.37,
+        "Mangaung": 30.0,
+        "eThekwini": 21.21,
+        "Ekurhuleni": 30.86,
+        "City of Johannesburg": 32.07,
+        "City of Tshwane": 28.17
       }
     },
     {
@@ -871,6 +1089,16 @@
         "Gauteng": 30.58,
         "Mpumalanga": 33.32,
         "Limpopo": 22.91
+      },
+      "metros": {
+        "City of Cape Town": 22.49,
+        "Buffalo City": 30.86,
+        "Nelson Mandela Bay": 33.88,
+        "Mangaung": 30.09,
+        "eThekwini": 20.63,
+        "Ekurhuleni": 31.63,
+        "City of Johannesburg": 32.45,
+        "City of Tshwane": 27.29
       }
     },
     {
@@ -889,6 +1117,16 @@
         "Gauteng": 31.11,
         "Mpumalanga": 33.17,
         "Limpopo": 23.43
+      },
+      "metros": {
+        "City of Cape Town": 22.38,
+        "Buffalo City": 29.55,
+        "Nelson Mandela Bay": 35.44,
+        "Mangaung": 32.29,
+        "eThekwini": 21.8,
+        "Ekurhuleni": 32.03,
+        "City of Johannesburg": 32.33,
+        "City of Tshwane": 28.95
       }
     },
     {
@@ -907,6 +1145,16 @@
         "Gauteng": 26.19,
         "Mpumalanga": 13.19,
         "Limpopo": 21.72
+      },
+      "metros": {
+        "City of Cape Town": 18.53,
+        "Buffalo City": 22.69,
+        "Nelson Mandela Bay": 40.33,
+        "Mangaung": 22.22,
+        "eThekwini": 8.15,
+        "Ekurhuleni": 25.11,
+        "City of Johannesburg": 28.92,
+        "City of Tshwane": 24.71
       }
     },
     {
@@ -925,6 +1173,16 @@
         "Gauteng": 33.4,
         "Mpumalanga": 27.51,
         "Limpopo": 26.13
+      },
+      "metros": {
+        "City of Cape Town": 22.81,
+        "Buffalo City": 30.5,
+        "Nelson Mandela Bay": 40.37,
+        "Mangaung": 37.56,
+        "eThekwini": 13.85,
+        "Ekurhuleni": 32.03,
+        "City of Johannesburg": 33.19,
+        "City of Tshwane": 38.38
       }
     },
     {
@@ -943,6 +1201,16 @@
         "Gauteng": 33.86,
         "Mpumalanga": 32.85,
         "Limpopo": 27.09
+      },
+      "metros": {
+        "City of Cape Town": 25.78,
+        "Buffalo City": 35.82,
+        "Nelson Mandela Bay": 42.03,
+        "Mangaung": 26.06,
+        "eThekwini": 20.49,
+        "Ekurhuleni": 32.42,
+        "City of Johannesburg": 34.79,
+        "City of Tshwane": 36.9
       }
     },
     {
@@ -961,6 +1229,16 @@
         "Gauteng": 34.13,
         "Mpumalanga": 33.33,
         "Limpopo": 29.17
+      },
+      "metros": {
+        "City of Cape Town": 26.25,
+        "Buffalo City": 29.99,
+        "Nelson Mandela Bay": 39.07,
+        "Mangaung": 24.43,
+        "eThekwini": 20.44,
+        "Ekurhuleni": 34.19,
+        "City of Johannesburg": 33.81,
+        "City of Tshwane": 36.43
       }
     },
     {
@@ -979,6 +1257,16 @@
         "Gauteng": 35.09,
         "Mpumalanga": 34.94,
         "Limpopo": 30.34
+      },
+      "metros": {
+        "City of Cape Town": 27.23,
+        "Buffalo City": 32.21,
+        "Nelson Mandela Bay": 39.56,
+        "Mangaung": 23.21,
+        "eThekwini": 25.62,
+        "Ekurhuleni": 32.87,
+        "City of Johannesburg": 36.89,
+        "City of Tshwane": 35.53
       }
     },
     {
@@ -997,6 +1285,16 @@
         "Gauteng": 36.52,
         "Mpumalanga": 37.2,
         "Limpopo": 32.4
+      },
+      "metros": {
+        "City of Cape Town": 27.28,
+        "Buffalo City": 40.07,
+        "Nelson Mandela Bay": 40.53,
+        "Mangaung": 29.08,
+        "eThekwini": 21.67,
+        "Ekurhuleni": 33.5,
+        "City of Johannesburg": 39.99,
+        "City of Tshwane": 35.89
       }
     },
     {
@@ -1015,7 +1313,8 @@
         "Gauteng": 36.25,
         "Mpumalanga": 39.37,
         "Limpopo": 33.8
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2022-Q1",
@@ -1033,6 +1332,16 @@
         "Gauteng": 36.46,
         "Mpumalanga": 38.35,
         "Limpopo": 35.39
+      },
+      "metros": {
+        "City of Cape Town": 27.15,
+        "Buffalo City": 33.7,
+        "Nelson Mandela Bay": 36.38,
+        "Mangaung": 21.65,
+        "eThekwini": 28.03,
+        "Ekurhuleni": 30.59,
+        "City of Johannesburg": 38.77,
+        "City of Tshwane": 38.12
       }
     },
     {
@@ -1051,6 +1360,16 @@
         "Gauteng": 34.09,
         "Mpumalanga": 35.73,
         "Limpopo": 35.87
+      },
+      "metros": {
+        "City of Cape Town": 29.83,
+        "Buffalo City": 27.3,
+        "Nelson Mandela Bay": 34.59,
+        "Mangaung": 19.91,
+        "eThekwini": 22.16,
+        "Ekurhuleni": 32.75,
+        "City of Johannesburg": 34.16,
+        "City of Tshwane": 34.51
       }
     },
     {
@@ -1069,6 +1388,16 @@
         "Gauteng": 33.42,
         "Mpumalanga": 34.85,
         "Limpopo": 30.76
+      },
+      "metros": {
+        "City of Cape Town": 26.6,
+        "Buffalo City": 28.04,
+        "Nelson Mandela Bay": 33.36,
+        "Mangaung": 26.44,
+        "eThekwini": 21.61,
+        "Ekurhuleni": 31.18,
+        "City of Johannesburg": 33.17,
+        "City of Tshwane": 34.08
       }
     },
     {
@@ -1087,6 +1416,16 @@
         "Gauteng": 33.76,
         "Mpumalanga": 35.65,
         "Limpopo": 31.56
+      },
+      "metros": {
+        "City of Cape Town": 24.26,
+        "Buffalo City": 34.71,
+        "Nelson Mandela Bay": 33.86,
+        "Mangaung": 31.87,
+        "eThekwini": 17.48,
+        "Ekurhuleni": 30.42,
+        "City of Johannesburg": 32.27,
+        "City of Tshwane": 34.66
       }
     },
     {
@@ -1105,6 +1444,16 @@
         "Gauteng": 34.05,
         "Mpumalanga": 38.02,
         "Limpopo": 33.28
+      },
+      "metros": {
+        "City of Cape Town": 23.21,
+        "Buffalo City": 27.48,
+        "Nelson Mandela Bay": 33.42,
+        "Mangaung": 31.54,
+        "eThekwini": 19.27,
+        "Ekurhuleni": 33.09,
+        "City of Johannesburg": 32.45,
+        "City of Tshwane": 34.7
       }
     },
     {
@@ -1123,6 +1472,16 @@
         "Gauteng": 34.15,
         "Mpumalanga": 38.04,
         "Limpopo": 31.26
+      },
+      "metros": {
+        "City of Cape Town": 22.14,
+        "Buffalo City": 30.33,
+        "Nelson Mandela Bay": 31.48,
+        "Mangaung": 32.4,
+        "eThekwini": 20.49,
+        "Ekurhuleni": 32.13,
+        "City of Johannesburg": 33.21,
+        "City of Tshwane": 34.7
       }
     },
     {
@@ -1141,6 +1500,16 @@
         "Gauteng": 33.5,
         "Mpumalanga": 35.06,
         "Limpopo": 30.42
+      },
+      "metros": {
+        "City of Cape Town": 22.81,
+        "Buffalo City": 31.4,
+        "Nelson Mandela Bay": 31.59,
+        "Mangaung": 33.91,
+        "eThekwini": 22.35,
+        "Ekurhuleni": 29.29,
+        "City of Johannesburg": 32.42,
+        "City of Tshwane": 34.67
       }
     },
     {
@@ -1159,6 +1528,16 @@
         "Gauteng": 33.48,
         "Mpumalanga": 34.35,
         "Limpopo": 30.04
+      },
+      "metros": {
+        "City of Cape Town": 22.54,
+        "Buffalo City": 32.57,
+        "Nelson Mandela Bay": 33.51,
+        "Mangaung": 33.07,
+        "eThekwini": 21.82,
+        "Ekurhuleni": 30.45,
+        "City of Johannesburg": 32.83,
+        "City of Tshwane": 34.66
       }
     },
     {
@@ -1177,6 +1556,16 @@
         "Gauteng": 33.9,
         "Mpumalanga": 35.79,
         "Limpopo": 32.49
+      },
+      "metros": {
+        "City of Cape Town": 23.51,
+        "Buffalo City": 33.36,
+        "Nelson Mandela Bay": 31.98,
+        "Mangaung": 29.74,
+        "eThekwini": 21.56,
+        "Ekurhuleni": 32.38,
+        "City of Johannesburg": 32.25,
+        "City of Tshwane": 34.8
       }
     },
     {
@@ -1195,6 +1584,16 @@
         "Gauteng": 34.77,
         "Mpumalanga": 37.0,
         "Limpopo": 31.24
+      },
+      "metros": {
+        "City of Cape Town": 23.17,
+        "Buffalo City": 33.36,
+        "Nelson Mandela Bay": 30.86,
+        "Mangaung": 30.2,
+        "eThekwini": 22.62,
+        "Ekurhuleni": 33.03,
+        "City of Johannesburg": 33.96,
+        "City of Tshwane": 35.07
       }
     },
     {
@@ -1213,6 +1612,16 @@
         "Gauteng": 33.63,
         "Mpumalanga": 35.84,
         "Limpopo": 32.34
+      },
+      "metros": {
+        "City of Cape Town": 21.99,
+        "Buffalo City": 29.71,
+        "Nelson Mandela Bay": 24.26,
+        "Mangaung": 27.16,
+        "eThekwini": 20.31,
+        "Ekurhuleni": 31.65,
+        "City of Johannesburg": 33.26,
+        "City of Tshwane": 33.77
       }
     },
     {
@@ -1231,6 +1640,16 @@
         "Gauteng": 34.04,
         "Mpumalanga": 34.3,
         "Limpopo": 31.65
+      },
+      "metros": {
+        "City of Cape Town": 22.07,
+        "Buffalo City": 31.53,
+        "Nelson Mandela Bay": 21.54,
+        "Mangaung": 27.85,
+        "eThekwini": 16.82,
+        "Ekurhuleni": 30.63,
+        "City of Johannesburg": 34.28,
+        "City of Tshwane": 32.61
       }
     },
     {
@@ -1249,6 +1668,16 @@
         "Gauteng": 34.42,
         "Mpumalanga": 35.09,
         "Limpopo": 32.89
+      },
+      "metros": {
+        "City of Cape Town": 21.62,
+        "Buffalo City": 37.05,
+        "Nelson Mandela Bay": 22.05,
+        "Mangaung": 30.02,
+        "eThekwini": 21.18,
+        "Ekurhuleni": 32.07,
+        "City of Johannesburg": 33.94,
+        "City of Tshwane": 33.27
       }
     },
     {
@@ -1267,6 +1696,16 @@
         "Gauteng": 33.53,
         "Mpumalanga": 33.71,
         "Limpopo": 34.68
+      },
+      "metros": {
+        "City of Cape Town": 22.99,
+        "Buffalo City": 28.38,
+        "Nelson Mandela Bay": 26.12,
+        "Mangaung": 31.24,
+        "eThekwini": 26.67,
+        "Ekurhuleni": 34.34,
+        "City of Johannesburg": 32.75,
+        "City of Tshwane": 30.51
       }
     },
     {
@@ -1285,7 +1724,8 @@
         "Gauteng": 32.97,
         "Mpumalanga": 33.74,
         "Limpopo": 29.56
-      }
+      },
+      "metros": {}
     },
     {
       "id": "2025-Q4",
@@ -1303,6 +1743,16 @@
         "Gauteng": 32.81,
         "Mpumalanga": 31.92,
         "Limpopo": 27.99
+      },
+      "metros": {
+        "City of Cape Town": 19.55,
+        "Buffalo City": 25.67,
+        "Nelson Mandela Bay": 28.07,
+        "Mangaung": 33.04,
+        "eThekwini": 23.98,
+        "Ekurhuleni": 31.78,
+        "City of Johannesburg": 33.58,
+        "City of Tshwane": 33.16
       }
     }
   ]

@@ -1517,10 +1517,45 @@ details summary h3 { display: inline; }
   gap: 6px;
   flex-wrap: wrap;
 }
-.map-legend .sw {
+.map-legend--choro {
+  align-items: center;
+  gap: 10px 14px;
+}
+.map-legend__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+.map-legend__gradient {
   display: inline-block;
-  width: 14px; height: 14px; border-radius: 3px;
-  margin-right: 2px;
+  width: min(240px, 38vw);
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+  background: linear-gradient(90deg, rgb(209, 250, 229), rgb(6, 78, 59));
+  flex-shrink: 0;
+}
+.map-legend__range {
+  font-size: 13px;
+  color: var(--fg-muted);
+  width: 100%;
+  flex-basis: 100%;
+  margin-top: 2px;
+}
+.map-metro-hint {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--fg-muted);
+  max-width: 62ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  line-height: 1.45;
+}
+.leaflet-tooltip.za-map-prov-tip,
+.leaflet-tooltip.za-map-metro-tip {
+  font-family: var(--font-sans);
+  font-size: 13px;
 }
 .map-methodology {
   margin-top: 1rem !important;
