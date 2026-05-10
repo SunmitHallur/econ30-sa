@@ -1212,13 +1212,16 @@
       }
     };
 
+    /** ~20 seconds for one full loop through all quarters (interval scales with wave count). */
+    const mapPlayStepMs = Math.max(120, Math.round(20000 / Math.max(1, waves.length)));
+
     const startAutoplay = () => {
       stopAutoplay();
       if (!playing) return;
       autoplayTimer = setInterval(() => {
         waveIndex = (waveIndex + 1) % waves.length;
         applyWave(waveIndex);
-      }, 3200);
+      }, mapPlayStepMs);
     };
 
     const applyWave = (i) => {
