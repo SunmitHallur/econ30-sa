@@ -1099,7 +1099,24 @@
     }).addTo(map);
 
     let waveIndex = waves.length - 1;
-    const currentScale = { vmin: 0, vmax: 50, wave: waves[waveIndex] };
+    const currentScale = { wave: waves[waveIndex] };
+
+    /** Min/max narrow unemployment across every province & metro in every wave — fixed legend so time animation is comparable. */
+    const ratesForFixedScale = [];
+    waves.forEach((wv) => {
+      Object.values(wv.provinces || {}).forEach((v) => {
+        if (typeof v === "number") ratesForFixedScale.push(v);
+      });
+      Object.values(wv.metros || {}).forEach((v) => {
+        if (typeof v === "number") ratesForFixedScale.push(v);
+      });
+    });
+    let mapFixedVmin = ratesForFixedScale.length ? Math.min(...ratesForFixedScale) : 0;
+    let mapFixedVmax = ratesForFixedScale.length ? Math.max(...ratesForFixedScale) : 50;
+    if (mapFixedVmax - mapFixedVmin < 1) {
+      mapFixedVmin = Math.max(0, mapFixedVmin - 3);
+      mapFixedVmax = mapFixedVmax + 3;
+    }
 
     const strokeForTheme = () => {
       const dark = document.documentElement.dataset.theme === "dark";
@@ -1111,7 +1128,7 @@
       const rate = currentScale.wave.provinces[name];
       const r = typeof rate === "number" ? rate : 0;
       return {
-        fillColor: fillColorForRate(r, currentScale.vmin, currentScale.vmax),
+        fillColor: fillColorForRate(r, mapFixedVmin, mapFixedVmax),
         weight: 1.15,
         color: strokeForTheme(),
         fillOpacity: 0.88,
@@ -1164,7 +1181,7 @@
           radius: 9 + Math.min(12, r / 4),
           color: entry.hover ? palette().accent : strokeForTheme(),
           weight: entry.hover ? 2.4 : 1.5,
-          fillColor: fillColorForRate(r, currentScale.vmin, currentScale.vmax),
+          fillColor: fillColorForRate(r, mapFixedVmin, mapFixedVmax),
         });
         entry.marker.setTooltipContent(metroTooltip(entry.name, typeof rate === "number" ? rate : null));
       });
@@ -1228,15 +1245,12 @@
       waveIndex = Math.max(0, Math.min(waves.length - 1, i));
       const w = waves[waveIndex];
       currentScale.wave = w;
-      const pv = Object.values(w.provinces || {}).filter(v => typeof v === "number");
-      currentScale.vmin = pv.length ? Math.min(...pv) : 0;
-      currentScale.vmax = pv.length ? Math.max(...pv) : 50;
 
       const nat = w.national != null ? ` · National ${w.national}%` : "";
       if (periodEl) periodEl.textContent = `${w.label}${nat}`;
       if (sliderEl) sliderEl.value = String(waveIndex);
       if (legendRangeEl) {
-        legendRangeEl.textContent = `${currentScale.vmin.toFixed(1)}% — ${currentScale.vmax.toFixed(1)}% (provinces, this quarter)`;
+        legendRangeEl.textContent = `${mapFixedVmin.toFixed(1)}% — ${mapFixedVmax.toFixed(1)}% (fixed scale, all quarters)`;
       }
       if (legendHintEl) {
         const ok = w.metros && Object.keys(w.metros).length > 0;
