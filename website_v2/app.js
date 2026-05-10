@@ -1050,31 +1050,48 @@
         citeRoot.appendChild(p);
       }
       if (Array.isArray(series.citation_urls) && series.citation_urls.length) {
-        const ul = document.createElement("ul");
-        ul.className = "map-citation-urls link-list";
-        series.citation_urls.forEach((url) => {
+        const linkRow = document.createElement("p");
+        linkRow.className = "map-citation-links";
+        const labels = Array.isArray(series.citation_link_labels) ? series.citation_link_labels : [];
+        series.citation_urls.forEach((url, i) => {
           if (!url || typeof url !== "string") return;
-          const li = document.createElement("li");
+          if (linkRow.childElementCount > 0) {
+            linkRow.appendChild(document.createTextNode(" · "));
+          }
           const a = document.createElement("a");
           a.href = url;
           a.rel = "noopener noreferrer";
           a.target = "_blank";
-          try {
-            const u = new URL(url);
-            a.textContent = `${u.hostname}${u.pathname}${u.search}` || url;
-          } catch {
-            a.textContent = url.replace(/^https?:\/\//u, "");
+          let label = labels[i];
+          if (!label) {
+            try {
+              label = new URL(url).hostname.replace(/^www\./u, "");
+            } catch {
+              label = url.replace(/^https?:\/\//u, "");
+            }
           }
-          li.appendChild(a);
-          ul.appendChild(li);
+          a.textContent = label;
+          linkRow.appendChild(a);
         });
-        if (ul.childElementCount) citeRoot.appendChild(ul);
+        if (linkRow.childElementCount) citeRoot.appendChild(linkRow);
       }
       if (series.method_note) {
         const mn = document.createElement("p");
         mn.className = "map-method-note";
         mn.textContent = series.method_note;
         citeRoot.appendChild(mn);
+      }
+      if (series.method_note_detail) {
+        const det = document.createElement("details");
+        det.className = "map-method-details";
+        const sum = document.createElement("summary");
+        sum.textContent = "Technical notes";
+        det.appendChild(sum);
+        const body = document.createElement("p");
+        body.className = "map-method-detail-body";
+        body.textContent = series.method_note_detail;
+        det.appendChild(body);
+        citeRoot.appendChild(det);
       }
     }
 

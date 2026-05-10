@@ -1643,9 +1643,9 @@ details summary h3 { display: inline; }
   color: var(--fg);
 }
 .map-data-citation {
-  margin: 0.75rem 0 0;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
+  margin: 0.65rem 0 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
   border: 1px solid var(--rule);
   background: var(--bg-sunken);
 }
@@ -1654,28 +1654,45 @@ details summary h3 { display: inline; }
   font-style: normal;
 }
 .map-citation-apa cite {
-  font-style: italic;
+  font-style: normal;
   color: var(--fg-muted);
-  font-size: 0.96em;
-  line-height: 1.5;
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
-.map-citation-urls {
-  margin: 0.65rem 0 0 !important;
-  padding: 0 !important;
+.map-citation-links {
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
-.map-citation-urls li {
-  padding: 6px 0 !important;
-  border-bottom: none !important;
-  font-size: 14px !important;
-}
-.map-citation-urls a {
-  word-break: break-all;
+.map-citation-links a {
+  font-weight: 600;
+  color: var(--accent);
 }
 .map-method-note {
-  margin: 0.65rem 0 0;
-  font-size: 0.92em;
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
   color: var(--fg-muted);
-  line-height: 1.5;
+  line-height: 1.45;
+}
+.map-method-details {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+}
+.map-method-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--fg-muted);
+  list-style-position: outside;
+}
+.map-method-details summary:hover {
+  color: var(--accent);
+}
+.map-method-detail-body {
+  margin: 0.4rem 0 0;
+  padding-left: 0.15rem;
+  line-height: 1.45;
+  font-size: 0.82rem;
 }
 .map-methodology-sources {
   margin: 0.85rem 0 0;

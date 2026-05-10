@@ -587,22 +587,23 @@ def main() -> None:
         "source_note": "Household survey microdata; producer Statistics South Africa. Series mixes survey instruments; "
         "interpret long-run comparisons cautiously.",
         "citation_apa": (
-            "Statistics South Africa. (1994–2025). Quarterly Labour Force Survey, Labour Force Survey, and "
-            "October Household Survey microdata extracts; provincial aggregates computed by the author from CSV files; "
-            "see Statistical releases P0211 (QLFS) and DataFirst/ISIbalo portals."
+            "Statistics South Africa (1994–2025). QLFS / LFS / OHS microdata; provincial narrow unemployment "
+            "computed by the author from CSV extracts (not official published tables)."
         ),
         "citation_urls": [
             "https://www.statssa.gov.za/?page_id=1854&PPN=P0211",
             "https://www.statssa.gov.za/",
             "https://datafirst.uct.ac.za/",
         ],
+        "citation_link_labels": ["P0211 (QLFS)", "Stats SA", "DataFirst"],
         "method_note": (
-            "QLFS: Province codes 1–9; Lfs_Status or Status with 1=employed, 2=unemployed (narrow); Weight / weight. "
-            "LFS: Status1 with same 0/1/2 coding; Prov from WORKER or merged from PERSON on household/person keys; "
-            "semi-annual folders mapped to calendar quarters. "
-            "OHS: STATUS1 text or numeric; PROV string or code; annual October surveys assigned to Q4 when only one wave exists. "
-            "Metro rates (eight metros) use Metro_code only under QLFS 1–17 coding from 2015 Q1—empty {} earlier. "
-            "Some OHS vintages lack comparable worker modules and are skipped."
+            "Survey-weighted narrow LF unemployment by province; instruments change over time—treat long spans as indicative."
+        ),
+        "method_note_detail": (
+            "QLFS: provinces 1–9; Lfs_Status or Status (1=employed, 2=unemployed); weights. "
+            "LFS: Status1; province on worker or merged from person file; semi-annual rounds mapped to quarters. "
+            "OHS: STATUS1 + province; single annual wave coded as Q4. "
+            "Eight metro dots use Metro_code under QLFS from 2015 Q1 onward. Waves without comparable labour fields skipped."
         ),
         "waves": waves,
     }
