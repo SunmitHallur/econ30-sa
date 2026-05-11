@@ -1016,16 +1016,23 @@
     "City of Johannesburg": [-26.2041, 28.0473],
     "City of Tshwane": [-25.7461, 28.1881],
   };
-  const GREEN_CHORO_LOW = [209, 250, 229];
-  const GREEN_CHORO_HIGH = [6, 78, 59];
+  /** Choropleth ramp: green in dark theme, blue in light (matches CSS --map-choro-legend-*). */
+  const choroRgbEndpoints = () => {
+    const dark = document.documentElement.dataset.theme === "dark";
+    if (dark) {
+      return { low: [209, 250, 229], high: [6, 78, 59] };
+    }
+    return { low: [239, 246, 255], high: [30, 58, 138] };
+  };
 
   const fillColorForRate = (rate, vmin, vmax) => {
     const span = vmax - vmin;
     let t = span > 0.001 ? (rate - vmin) / span : 0.5;
     t = Math.max(0, Math.min(1, t));
-    const r = Math.round(GREEN_CHORO_LOW[0] + (GREEN_CHORO_HIGH[0] - GREEN_CHORO_LOW[0]) * t);
-    const g = Math.round(GREEN_CHORO_LOW[1] + (GREEN_CHORO_HIGH[1] - GREEN_CHORO_LOW[1]) * t);
-    const b = Math.round(GREEN_CHORO_LOW[2] + (GREEN_CHORO_HIGH[2] - GREEN_CHORO_LOW[2]) * t);
+    const { low, high } = choroRgbEndpoints();
+    const r = Math.round(low[0] + (high[0] - low[0]) * t);
+    const g = Math.round(low[1] + (high[1] - low[1]) * t);
+    const b = Math.round(low[2] + (high[2] - low[2]) * t);
     return `rgb(${r},${g},${b})`;
   };
 
