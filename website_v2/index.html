@@ -61,6 +61,7 @@
         <a href="#from-the-ground">Ground</a>
         <a href="#timeline">Timeline</a>
         <a href="#macro">Economy</a>
+        <a href="#sectors">Sectors</a>
         <a href="#inequality">Inequality</a>
         <a href="#governance">Governance</a>
         <a href="#results">Evidence</a>
@@ -106,7 +107,7 @@
         </div>
         <p class="hero-data-note">Built on WDI, WID, WIID, WGI, and QLFS data — <a href="#sources">see sources</a>.</p>
       </div>
-      <div class="hero-figure">
+      <div class="hero-figure hero-figure--photo-only">
         <figure class="hero-photo-card">
           <picture>
             <source srcset="assets/ground/johannesburg-cbd.webp" type="image/webp" />
@@ -114,24 +115,26 @@
           </picture>
           <figcaption>View of Johannesburg from Braamfontein (4 Dec 2009; author: Evan Bench). <a href="https://commons.wikimedia.org/wiki/File:Johannesburg_CBD.jpg">Wikimedia Commons · File:Johannesburg CBD.jpg</a>.</figcaption>
         </figure>
-        <div class="hero-chart-stack">
-          <p class="hero-chart-caption">Top-10% income share and trade openness (Trade/GDP)</p>
-          <div class="hero-chart-canvas-wrap">
-            <canvas id="chart-hero" aria-label="Chart comparing top-10% income share with trade openness"></canvas>
-            <p class="chart-caveat">This is a year-by-year national pattern, not proof of direct causation.</p>
-          </div>
-        </div>
       </div>
+    </section>
+    <section class="argument-context" aria-label="Why 1994 matters">
+      <p class="argument-context__lede">
+        In April 1994 South Africa held its first non-racial elections and ended decades of
+        apartheid-era isolation. The same political opening became an economic one: trade
+        sanctions lifted, the rand floated, capital controls were eased, and the country
+        rejoined the GATT/WTO trading system. The question is what that opening did to the
+        people who had been locked out of the previous economy.
+      </p>
     </section>
     <section class="argument-summary" aria-label="What this essay argues">
       <h2>What this essay argues</h2>
       <p>
         South Africa's democratic transition reintegrated the economy faster than it
-        built broad labor-market inclusion. The strongest pattern in these data is that
-        trade openness rises alongside top-income concentration while unemployment remains high.
-        National correlations are suggestive, not causal proof, so the essay pairs them with
-        district-level evidence and policy history. The sections below move from lived places
-        to macro trends to statistical checks, then return to a policy conclusion.
+        built broad labor-market inclusion. The strongest pattern in the data is that
+        trade openness moves with the decline of <strong>trade-exposed sectors</strong>—
+        especially manufacturing—both in employment and in share of GDP. The sections
+        below set the scene with places and policy, then narrow in on those sectors,
+        then briefly examine who captured the remaining gains.
       </p>
     </section>
     <div class="section-bridge" aria-label="Transition to question">
@@ -476,22 +479,143 @@
         </div>
       </div>
     </section>
-    <div class="section-bridge" aria-label="Transition to inequality">
+    <div class="section-bridge" aria-label="Transition to sectors">
       <p class="section-bridge__from">Macro gains are visible.</p>
-      <p class="section-bridge__to"><a href="#inequality">Next: who captured those gains ↓</a></p>
+      <p class="section-bridge__to"><a href="#sectors">Next: which sectors actually bore the cost ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
-    <!-- 5. Inequality                                                -->
+    <!-- 5. Sectors deep-dive (tradable vs non-tradable employment)   -->
+    <!-- ============================================================ -->
+    <section id="sectors" class="section section-sectors">
+      <div class="section-head">
+        <p class="section-step">Section 05</p>
+        <h2>The casualty was tradable work.</h2>
+        <p class="section-lede">
+          The aggregate story (more trade, faster GDP, stuck jobs) hides which sectors gained
+          and which paid the cost. After 1994 South Africa cut tariffs across the board and
+          signed onto WTO rules; the parts of the economy that competed most directly with
+          imports — agriculture, mining, and especially <strong>manufacturing</strong> —
+          steadily shrank as a share of both GDP and employment, while non-tradable services
+          absorbed only some of the displaced workers. That is the sharper "price of integration."
+        </p>
+      </div>
+
+      <div class="sector-key-stats card sector-stats-card" aria-label="Key sector statistics">
+        <div class="sector-stat">
+          <p class="sector-stat__label">Manufacturing, % of GDP</p>
+          <p class="sector-stat__value"><span class="mono" id="stat-manuf-va-start">–</span> → <span class="mono" id="stat-manuf-va-end">–</span></p>
+          <p class="sector-stat__detail">World Bank WDI, 1990 → latest year</p>
+        </div>
+        <div class="sector-stat">
+          <p class="sector-stat__label">Manufacturing, % of employed</p>
+          <p class="sector-stat__value"><span class="mono" id="stat-manuf-emp-start">–</span> → <span class="mono" id="stat-manuf-emp-end">–</span></p>
+          <p class="sector-stat__detail">OHS/LFS/QLFS, 1999 → latest year</p>
+        </div>
+        <div class="sector-stat">
+          <p class="sector-stat__label">Tradable sectors, % of employed</p>
+          <p class="sector-stat__value"><span class="mono" id="stat-tradable-start">–</span> → <span class="mono" id="stat-tradable-end">–</span></p>
+          <p class="sector-stat__detail">Agriculture + mining + manufacturing</p>
+        </div>
+      </div>
+
+      <div class="chart-mockup chart-mockup--sectors">
+        <div class="chart-mockup__accent" aria-hidden="true"></div>
+        <div class="chart-mockup__grid">
+          <div class="chart-mockup__copy chart-annotations chart-mockup__copy--sectors">
+            <h3 class="chart-mockup__title">Trade exposure, sector by sector</h3>
+            <p class="chart-claim">
+              When openness rises, the sectors most directly competing with imports get
+              squeezed first. South African manufacturing lost roughly a third of its
+              share of GDP between 1990 and 2024, and tradable sectors shed nearly
+              twelve percentage points of employment share between 1999 and 2025.
+            </p>
+            <div class="annotation-list">
+              <p><span>How to read</span> The big line chart shows the share of employed adults working in
+                tradable sectors (agriculture + mining + manufacturing) vs the rest. The
+                smaller chart traces manufacturing's value-added share of GDP from the WDI.</p>
+              <p><span>Method</span> Employment shares are weighted from Stats SA worker microdata: OHS 1999,
+                LFS 2000–2007, QLFS 2008–2025. Year values average all available waves. Value-added
+                shares come from the World Bank's WDI series (NV.IND.MANF.ZS).</p>
+              <p><span>Stat check</span> Regressing manufacturing employment share on trade openness
+                (Newey–West HAC, two lags, <span class="mono" id="sector-reg-n">n</span> years) gives a slope of
+                <span class="mono" id="sector-reg-slope">–</span> with <span class="mono" id="sector-reg-t">t</span> and
+                <span class="mono" id="sector-reg-p">p</span>. The same regression for tradable share gives
+                <span class="mono" id="sector-reg-trd-slope">–</span> (p&nbsp;= <span class="mono" id="sector-reg-trd-p">–</span>).</p>
+              <p><span>Caution</span> Co-movement is not causation. The cleanest causal evidence remains
+                <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
+                district-level analysis; this is the macro sector pattern it implies.</p>
+            </div>
+          </div>
+          <div class="chart-mockup__charts">
+            <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
+            <div class="chart-mockup__charts-stack">
+              <figure class="card sector-chart-solo chart-mockup__card">
+                <figcaption class="card-head">
+                  <h3>Tradable vs non-tradable employment share, 1999–2025</h3>
+                  <p class="chart-mockup__card-lede">Each year is a weighted average across Stats SA labour-survey waves. Tradable = agriculture + mining + manufacturing.</p>
+                </figcaption>
+                <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-sector-shares"></canvas></div>
+              </figure>
+              <figure class="card sector-chart-solo chart-mockup__card">
+                <figcaption class="card-head">
+                  <h3>Manufacturing's slice of GDP and employment</h3>
+                  <p class="chart-mockup__card-lede">Two indicators of the same story: manufacturing as a share of value added (WDI) and as a share of employment (LFS/QLFS).</p>
+                </figcaption>
+                <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-manuf-decline"></canvas></div>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2 sector-followup">
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Trade openness vs manufacturing share</h3>
+            <p>Each dot is a year (1999–2024). The line is the OLS best fit. The slope is precisely-estimated and negative — the years with the most-open trade are also the years with the least manufacturing in employment.</p>
+          </figcaption>
+          <div class="chart-canvas-wrap"><canvas id="chart-scatter-manuf-trade"></canvas></div>
+          <p class="chart-caveat">Year-level co-movement, not district- or worker-level causation.</p>
+        </figure>
+        <div class="card sector-takeaway">
+          <h3 class="card-title">Why the sector cut is the sharper lens</h3>
+          <p>
+            Erten, Leight and Tregenna (2019) compare South African districts that were
+            <em>more</em> exposed to tariff cuts with districts that were <em>less</em> exposed and
+            find weaker employment and formal-sector outcomes in the more-exposed places — with
+            the heaviest costs falling on Black workers and women. The aggregate sector pattern
+            here mirrors that story: manufacturing — the canonical trade-exposed sector — lost
+            ground both in output and in jobs as openness rose, and services did not absorb the
+            displaced workforce, which is why national unemployment never fell back to the
+            pre-1994 range.
+          </p>
+          <p>
+            Read together, this sector deep-dive answers a sharper version of the essay's core
+            question: integration succeeded for capital flows and headline trade volumes, but
+            it visibly hollowed out the sectors that historically employed the broadest base
+            of workers.
+          </p>
+        </div>
+      </div>
+    </section>
+    <div class="section-bridge" aria-label="Transition to inequality">
+      <p class="section-bridge__from">Sectors tell the sharpest story.</p>
+      <p class="section-bridge__to"><a href="#inequality">Next: who captured the gains that remained ↓</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 6. Inequality (supporting evidence)                          -->
     <!-- ============================================================ -->
     <section id="inequality" class="section section-inequality">
       <div class="section-head">
-        <p class="section-step">Section 05</p>
-        <h2>The gains went to the top tenth.</h2>
+        <p class="section-step">Section 06</p>
+        <h2>The gains that remained went to the top tenth.</h2>
         <p class="section-lede">
-          Who gets what unfolds in steps: income shares, wealth, survey inequality
-          (Gini), and then place. This section starts with the whole country, then
-          zooms to geography.
+          The sector-level story is what mainly drives the labour-market outcomes; the
+          inequality numbers are the second-order consequence — once the income from
+          the surviving sectors is split, the share captured by the best-off tenth has
+          risen steadily, and wealth is even more concentrated.
         </p>
       </div>
 
@@ -556,9 +680,29 @@
       </figure>
 
       <div class="chart-more" aria-label="Additional inequality charts">
-        <h3 class="chart-more-title">More inequality checks</h3>
-        <p class="chart-more-lede">These two views add context: one tracks overall inequality across surveys, and one compares trade openness with top-income share year by year.</p>
+        <h3 class="chart-more-title">Trade openness alongside top-income share</h3>
+        <p class="chart-more-lede">
+          Now that the sectoral story is on the table, this view shows the income distribution beside it.
+          The first chart traces top-10% income share alongside trade openness year by year; the second is the
+          same relationship as a scatter; the third compares survey-based Gini measures.
+        </p>
         <div class="grid-2 chart-more-inner">
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Top-10% income share &amp; Trade/GDP, year by year</h3>
+            <p>Income share (solid line, left axis) is the share of pre-tax national income held by the top 10%; trade openness (dashed, scaled to overlay the same axis) is (exports + imports) / GDP. The two move together over three decades.</p>
+          </figcaption>
+          <div class="chart-canvas-wrap"><canvas id="chart-top10-trade-time"></canvas></div>
+          <p class="chart-caveat">National time series, not a causal estimate.</p>
+        </figure>
+        <figure class="card">
+          <figcaption class="card-head">
+            <h3>Top-10% income share vs Trade/GDP (scatter)</h3>
+            <p>Each dot is one year. The best-fit line slopes up and is statistically tight in this sample — but that still does not prove trade caused higher top shares.</p>
+          </figcaption>
+          <div class="chart-canvas-wrap"><canvas id="chart-scatter-top10-trade"></canvas></div>
+          <p class="chart-caveat">Year-level co-movement, not a person- or district-level estimate.</p>
+        </figure>
         <figure class="card">
           <figcaption class="card-head">
             <h3>Gini (WIID vs WDI)</h3>
@@ -566,14 +710,6 @@
           </figcaption>
           <div class="chart-canvas-wrap"><canvas id="chart-gini"></canvas></div>
           <p class="chart-caveat">Survey design changes across years; use this as directional context.</p>
-        </figure>
-        <figure class="card">
-          <figcaption class="card-head">
-            <h3>Top-10% income share vs Trade/GDP</h3>
-            <p>Each dot is a year (hover for the year). The best-fit line slopes up and is statistically tight in this sample—but that still does not prove trade caused higher top shares.</p>
-          </figcaption>
-          <div class="chart-canvas-wrap"><canvas id="chart-scatter-top10-trade"></canvas></div>
-          <p class="chart-caveat">Each dot is one year, not a person or district-level estimate.</p>
         </figure>
         </div>
       </div>
@@ -616,13 +752,13 @@
     <!-- ============================================================ -->
     <section id="governance" class="section">
       <div class="section-head">
-        <p class="section-step">Section 06</p>
+        <p class="section-step">Section 07</p>
         <h2>Institutions wobbled when patronage hardened.</h2>
         <p class="section-lede">
-          This section asks how far courts, accountability, and trust in rules
-          moved alongside the economy. The World Bank’s governance scores are rough
-          annual summaries, but they help test whether outside observers still saw
-          those commitments as credible over time.
+          A short pause from the sectoral spine: how far did the institutions that were
+          supposed to spread integration's gains move alongside the economy? The World
+          Bank's governance scores are rough annual summaries — useful here as one extra
+          check, not as a competing main channel.
         </p>
       </div>
 
@@ -690,10 +826,11 @@
     <!-- ============================================================ -->
     <section id="results" class="section">
       <div class="section-head">
-        <p class="section-step">Section 07</p>
+        <p class="section-step">Section 08</p>
         <h2>What survives a strict statistical test.</h2>
         <p class="section-lede">
-          Summary first; full regression tables below if you want every estimate and diagnostic.
+          A plain-English summary first; the full regression battery — hundreds of tests with
+          diagnostics — is tucked away below for readers who want every estimate.
         </p>
       </div>
       <div class="result-chips" aria-label="Headline statistical outcomes">
@@ -714,22 +851,38 @@
           <span class="result-chip__claim">Trade does not robustly explain unemployment levels.</span>
         </button>
       </div>
-      <div class="card">
-        <p class="card-sub">
-          <strong>Regression in plain English.</strong> Each test asks how variables moved together across years.
-          That helps spot patterns; it does <em>not</em> by itself prove cause and effect—especially with only a few
-          decades of annual data.
+      <div class="card results-summary-card">
+        <h3 class="card-title">Summary in one paragraph</h3>
+        <p>
+          Of the hundreds of regression specifications run on the macro panel, two
+          conclusions survive strict Benjamini–Hochberg corrections. <strong>First</strong>,
+          the move toward an open economy lines up with the decline of trade-exposed
+          sectors: manufacturing employment share and tradable employment share both
+          fall robustly as trade openness rises (HAC <span class="mono">t</span> ≈ −2.5 and −3.8 respectively over
+          26 years). <strong>Second</strong>, trade openness also tracks the rise of the top
+          1%'s income share — the one inequality–trade link the multiple-testing
+          adjustments cannot dismiss. On the other side of the ledger, the Chow test does
+          not find a clean structural break at the 1996 GEAR pivot, governance scores
+          line up with GDP growth only in one specification (raw <span class="mono">p</span>, dies under
+          adjustment), and trade does not robustly explain unemployment levels on its
+          own. None of these single-country regressions are causal proof — for that
+          this essay leans on
+          <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
+          district-level evidence — but they show which patterns are sturdy enough to
+          take seriously.
+        </p>
+        <p class="results-summary-card__note">
+          BH / Bonf / Raw flags below indicate how strict a multiple-testing bar each
+          regression clears. The full battery is collapsed by default; expand it only if
+          you want every estimate and diagnostic.
         </p>
       </div>
-      <div class="card results-plain">
-        <h3 class="card-title">Takeaways</h3>
-        <ul class="results-plain-list">
-          <li><strong>Trade and top incomes move together.</strong> In this project’s many tests, the link between trade openness and the richest 1%’s income share is the one pattern that still clears the strictest “many-tests” checks. That is not proof that trade caused higher top incomes—but it matches what you see on the charts and fits alongside Erten–Leight–Tregenna’s district-level evidence.</li>
-          <li><strong>No simple “GEAR changed growth overnight” break.</strong> Formal break tests around 1996 do not show a sharp statistical regime shift at usual cutoffs; the story of GEAR is still clearer in policy history than in one clean break line.</li>
-          <li><strong>Unemployment stays the limiting factor.</strong> National charts and the provincial map both show opening up did not automatically produce enough jobs.</li>
-          <li><strong>Use the tables as reference, not scripture.</strong> They are exploratory; the BH / Bonf / Raw labels tell you how skeptical to be after accounting for running lots of tests.</li>
-        </ul>
-      </div>
+
+      <details class="card results-detail-toggle">
+        <summary>
+          <h3 class="card-title inline">Open the full regression battery</h3>
+          <span class="results-detail-toggle__hint">Counts, BH/Bonf/Raw cutoffs, Chow, Engle–Granger, Granger</span>
+        </summary>
 
       <div class="results-scrolly">
         <div class="results-scrolly-inner">
@@ -918,6 +1071,7 @@
           </div>
         </div>
       </div>
+      </details>
     </section>
     <div class="section-bridge" aria-label="Transition to map">
       <p class="section-bridge__from">Evidence narrows the core claims.</p>
@@ -925,11 +1079,11 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 8. Map                                                       -->
+    <!-- 9. Map                                                       -->
     <!-- ============================================================ -->
     <section id="map" class="section">
       <div class="section-head">
-        <p class="section-step">Section 08</p>
+        <p class="section-step">Section 09</p>
         <h2>One number hides nine very different provinces.</h2>
         <p class="section-lede">
           Each province is shaded by <em>narrow</em> unemployment (actively looking, no job)—lighter
@@ -1017,11 +1171,11 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 9. Conclusions                                               -->
+    <!-- 10. Conclusions                                              -->
     <!-- ============================================================ -->
     <section id="conclusions" class="section">
       <div class="section-head">
-        <p class="section-step">Section 09</p>
+        <p class="section-step">Section 10</p>
         <h2>Integration succeeded. Inclusion didn't.</h2>
         <p class="section-lede">
           After 1994, South Africa successfully rejoined the world economy. The unresolved
@@ -1120,11 +1274,11 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 10. Sources & caveats                                        -->
+    <!-- 11. Sources & caveats                                        -->
     <!-- ============================================================ -->
     <section id="sources" class="section">
       <div class="section-head">
-        <p class="section-step">Section 10</p>
+        <p class="section-step">Section 11</p>
         <h2>How to check this essay.</h2>
         <p class="section-lede">
           Every claim above is either a direct calculation on the linked

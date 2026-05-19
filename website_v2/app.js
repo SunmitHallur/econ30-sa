@@ -290,29 +290,21 @@
     };
   };
 
-  const buildHeroChart = (inequality, timeseries) => {
-    const canvas = $("#chart-hero");
-    if (!canvas) return;
-    const years = inequality.years;
-    makeLineChart(canvas, {
-      labels: years,
-      datasets: [
-        datasetFrom(years, inequality.series.top10_inc, "wid", { borderWidth: 2.5 }),
-        datasetFrom(timeseries.years, { label: "Trade / GDP (scaled to match income axis)", values: timeseries.series.trade_gdp.values.map(v => v == null ? null : v / 100) }, "wdi", { borderDash: [4, 4] }),
-      ],
-      yTitle: "Share of income (0–1)",
-      xTitle: "Year",
-    });
-  };
-
   const buildIndexedChart = (ts) => {
     const canvas = $("#chart-indexed");
     if (!canvas) return;
     const years = ts.indexed.years;
     const ds = [];
-    const colors = { gdp_pc_usd: "wdi", trade_gdp: "accent", fdi_gdp: "wgi" };
+    // Use three highly-distinct hues: blue (income), warm orange (trade), purple (FDI).
+    // The previous palette stacked three blue shades that were hard to tell apart.
+    const colors = { gdp_pc_usd: "wdi", trade_gdp: "wid", fdi_gdp: "wiid" };
+    const styles = {
+      gdp_pc_usd: { borderWidth: 2.6 },
+      trade_gdp: { borderWidth: 2.6, borderDash: [6, 4] },
+      fdi_gdp: { borderWidth: 2.2, borderDash: [2, 3] },
+    };
     Object.entries(ts.indexed.series).forEach(([key, s]) => {
-      ds.push(datasetFrom(years, s, colors[key] ?? "fg", { borderWidth: 2.2 }));
+      ds.push(datasetFrom(years, s, colors[key] ?? "fg", styles[key] ?? { borderWidth: 2.2 }));
     });
     makeLineChart(canvas, {
       labels: years,
@@ -322,6 +314,213 @@
       yAxisType: "logarithmic",
       annotations: [{ type: "label", x: 2002, y: 320, label: "Trade rises faster than income" }],
     });
+  };
+
+  /** Top-10 income share with overlaid trade openness (relocated from hero per Spring 2026 feedback). */
+  const buildTop10TradeTimeChart = (inequality, timeseries) => {
+    const canvas = $("#chart-top10-trade-time");
+    if (!canvas) return;
+    const years = inequality.years;
+    makeLineChart(canvas, {
+      labels: years,
+      datasets: [
+        datasetFrom(years, inequality.series.top10_inc, "wid", { borderWidth: 2.6 }),
+        datasetFrom(
+          timeseries.years,
+          {
+            label: "Trade / GDP (scaled to match income axis)",
+            values: timeseries.series.trade_gdp.values.map((v) => (v == null ? null : v / 100)),
+          },
+          "wdi",
+          { borderDash: [4, 4], borderWidth: 2.2 },
+        ),
+      ],
+      yTitle: "Share of income (0–1)",
+      xTitle: "Year",
+    });
+  };
+
+  /** Sector deep-dive (Section 05). Two stacked line charts + a scatter with OLS fit. */
+  const buildSectorCharts = (sector) => {
+    if (!sector || !Array.isArray(sector.rows)) return;
+    const rows = sector.rows.filter((r) => r.year != null);
+    const empRows = rows.filter((r) => r.tradable_share != null);
+    const empYears = empRows.map((r) => r.year);
+
+    const sharesCanvas = $("#chart-sector-shares");
+    if (sharesCanvas) {
+      makeLineChart(sharesCanvas, {
+        labels: empYears,
+        datasets: [
+          datasetFrom(
+            empYears,
+            { label: "Tradable (agriculture + mining + manufacturing)", values: empRows.map((r) => r.tradable_share) },
+            "wid",
+            { borderWidth: 2.6 },
+          ),
+          datasetFrom(
+            empYears,
+            { label: "Non-tradable (services, construction, utilities…)", values: empRows.map((r) => r.nontradable_share) },
+            "wdi",
+            { borderWidth: 2.6 },
+          ),
+          datasetFrom(
+            empYears,
+            { label: "Manufacturing only", values: empRows.map((r) => r.sic3_share) },
+            "wiid",
+            { borderWidth: 2.2, borderDash: [4, 4] },
+          ),
+        ],
+        yTitle: "Share of employed adults (0–1)",
+        xTitle: "Year",
+      });
+    }
+
+    const decline = $("#chart-manuf-decline");
+    if (decline) {
+      const vaRows = rows.filter((r) => r.manuf_va_share_gdp != null);
+      const empMfg = rows.filter((r) => r.sic3_share != null);
+      makeLineChart(decline, {
+        labels: vaRows.map((r) => r.year),
+        datasets: [
+          datasetFrom(
+            vaRows.map((r) => r.year),
+            { label: "Manufacturing value added, % of GDP (WDI)", values: vaRows.map((r) => r.manuf_va_share_gdp) },
+            "wid",
+            { borderWidth: 2.6 },
+          ),
+          datasetFrom(
+            empMfg.map((r) => r.year),
+            { label: "Manufacturing employment share × 100", values: empMfg.map((r) => r.sic3_share * 100) },
+            "wiid",
+            { borderWidth: 2.4, borderDash: [4, 4] },
+          ),
+        ],
+        yTitle: "% of GDP / % of employed",
+        xTitle: "Year",
+      });
+    }
+
+    const scatter = $("#chart-scatter-manuf-trade");
+    if (scatter && typeof Chart !== "undefined") {
+      const p = palette();
+      const points = rows
+        .filter((r) => r.trade_pct_gdp != null && r.sic3_share != null)
+        .map((r) => ({ x: r.trade_pct_gdp, y: r.sic3_share * 100, year: r.year }));
+      if (points.length >= 4) {
+        const n = points.length;
+        const mx = points.reduce((s, q) => s + q.x, 0) / n;
+        const my = points.reduce((s, q) => s + q.y, 0) / n;
+        const num = points.reduce((s, q) => s + (q.x - mx) * (q.y - my), 0);
+        const den = points.reduce((s, q) => s + (q.x - mx) ** 2, 0);
+        const slope = num / den;
+        const intercept = my - slope * mx;
+        const xmin = Math.min(...points.map((q) => q.x));
+        const xmax = Math.max(...points.map((q) => q.x));
+        const line = [
+          { x: xmin, y: intercept + slope * xmin },
+          { x: xmax, y: intercept + slope * xmax },
+        ];
+        new Chart(scatter, {
+          data: {
+            datasets: [
+              {
+                type: "scatter",
+                label: "Years (1999–2024)",
+                data: points,
+                backgroundColor: p.wid,
+                borderColor: p.wid,
+                pointBackgroundColor: p.wid,
+                paletteKey: "wid",
+                pointRadius: 5,
+                pointHoverRadius: 7,
+              },
+              {
+                type: "line",
+                label: `Best-fit line (slope=${slope.toFixed(3)} pp / 1pp trade)`,
+                data: line,
+                borderColor: p.danger,
+                backgroundColor: `${p.danger}33`,
+                pointBackgroundColor: p.danger,
+                paletteKey: "danger",
+                borderDash: [4, 4],
+                pointRadius: 0,
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 380, easing: "easeOutQuart" },
+            scales: {
+              x: {
+                type: "linear",
+                title: { display: true, text: "Trade openness (exports + imports) / GDP, %" },
+                ticks: { callback: formatChartTickPlain },
+              },
+              y: {
+                title: { display: true, text: "Manufacturing employment share, %" },
+                ticks: { callback: formatChartTickPlain },
+              },
+            },
+            plugins: {
+              legend: { display: true },
+              tooltip: {
+                callbacks: {
+                  label: (item) => {
+                    const raw = item.raw || {};
+                    if (raw.year != null) return `${raw.year}: trade ${raw.x.toFixed(1)}%, mfg emp ${raw.y.toFixed(2)}%`;
+                    return `${item.dataset.label}`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+    }
+  };
+
+  /** Backfill the three "first → latest" stat boxes and the inline regression numbers. */
+  const renderSectorStats = (sector) => {
+    if (!sector || !Array.isArray(sector.rows)) return;
+    const rows = sector.rows;
+    const fmtPct = (v, dp = 1) => (v == null || Number.isNaN(v) ? "–" : `${(v * 100).toFixed(dp)}%`);
+    const fmtRaw = (v, dp = 1) => (v == null || Number.isNaN(v) ? "–" : `${v.toFixed(dp)}%`);
+
+    const vaFirst = rows.find((r) => r.manuf_va_share_gdp != null);
+    const vaLast = [...rows].reverse().find((r) => r.manuf_va_share_gdp != null);
+    if (vaFirst) document.getElementById("stat-manuf-va-start") && (document.getElementById("stat-manuf-va-start").textContent = `${fmtRaw(vaFirst.manuf_va_share_gdp)} (${vaFirst.year})`);
+    if (vaLast) document.getElementById("stat-manuf-va-end") && (document.getElementById("stat-manuf-va-end").textContent = `${fmtRaw(vaLast.manuf_va_share_gdp)} (${vaLast.year})`);
+
+    const empFirst = rows.find((r) => r.sic3_share != null);
+    const empLast = [...rows].reverse().find((r) => r.sic3_share != null);
+    if (empFirst) document.getElementById("stat-manuf-emp-start") && (document.getElementById("stat-manuf-emp-start").textContent = `${fmtPct(empFirst.sic3_share)} (${empFirst.year})`);
+    if (empLast) document.getElementById("stat-manuf-emp-end") && (document.getElementById("stat-manuf-emp-end").textContent = `${fmtPct(empLast.sic3_share)} (${empLast.year})`);
+
+    const trFirst = rows.find((r) => r.tradable_share != null);
+    const trLast = [...rows].reverse().find((r) => r.tradable_share != null);
+    if (trFirst) document.getElementById("stat-tradable-start") && (document.getElementById("stat-tradable-start").textContent = `${fmtPct(trFirst.tradable_share)} (${trFirst.year})`);
+    if (trLast) document.getElementById("stat-tradable-end") && (document.getElementById("stat-tradable-end").textContent = `${fmtPct(trLast.tradable_share)} (${trLast.year})`);
+
+    const regs = sector.regressions || {};
+    const manufReg = regs.manuf_emp_vs_trade;
+    const tradReg = regs.tradable_emp_vs_trade;
+    const fmtSlope = (r) => (r ? `${r.slope.toFixed(5)} (per pp of trade openness)` : "–");
+    const fmtP = (r) => (r ? `p ≈ ${r.p_two_sided_normal < 0.001 ? "<0.001" : r.p_two_sided_normal.toFixed(3)}` : "–");
+    const fmtT = (r) => (r ? `t ≈ ${r.t_hac.toFixed(2)}` : "–");
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    if (manufReg) {
+      set("sector-reg-n", manufReg.n);
+      set("sector-reg-slope", fmtSlope(manufReg));
+      set("sector-reg-t", fmtT(manufReg));
+      set("sector-reg-p", fmtP(manufReg));
+    }
+    if (tradReg) {
+      set("sector-reg-trd-slope", fmtSlope(tradReg));
+      set("sector-reg-trd-p", fmtP(tradReg));
+    }
   };
 
   const buildUnemploymentChart = (ts) => {
@@ -1552,6 +1751,7 @@
       "from-the-ground": "ground",
       timeline: "timeline",
       macro: "numbers",
+      sectors: "numbers",
       inequality: "numbers",
       governance: "numbers",
       results: "results",
@@ -1569,7 +1769,7 @@
     const progressFill = document.getElementById("top-progress-fill");
     const indicatorText = document.getElementById("section-indicator-text");
     if (!links.length) return;
-    const sectionOrder = ["question", "from-the-ground", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"];
+    const sectionOrder = ["question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "governance", "results", "map", "conclusions", "sources"];
     const spyIds = ["hero", ...sectionOrder];
     const spySections = spyIds.map(id => document.getElementById(id)).filter(Boolean);
     const sectionLabelById = new Map(sectionOrder.map((id, idx) => {
@@ -1841,9 +2041,12 @@
   const resizeRegisteredCharts = () => {
     if (typeof Chart === "undefined") return;
     [
-      "chart-hero",
       "chart-indexed",
       "chart-unemployment",
+      "chart-sector-shares",
+      "chart-manuf-decline",
+      "chart-scatter-manuf-trade",
+      "chart-top10-trade-time",
       "chart-income-shares",
       "chart-wealth-shares",
       "chart-gini",
@@ -2061,13 +2264,14 @@
     // Disabled outdated hand-drawn intro effect per UX cleanup.
     wireGlobalScrollMotion();
     try {
-      const [ts, ineq, gov, panel, reg, mapSeries] = await Promise.all([
+      const [ts, ineq, gov, panel, reg, mapSeries, sectorData] = await Promise.all([
         fetchJSON("data/timeseries.json"),
         fetchJSON("data/inequality.json"),
         fetchJSON("data/governance.json"),
         fetchJSON("data/panel.json"),
         fetchJSON("data/regressions.json"),
         fetchJSON("data/map_unemployment_series.json"),
+        fetchJSON("data/sector_employment.json").catch(() => null),
       ]);
       const safeRun = (name, fn) => {
         try {
@@ -2076,10 +2280,10 @@
           console.error(`website_v2 block failed: ${name}`, e);
         }
       };
-      safeRun("hero chart", () => buildHeroChart(ineq, ts));
       const lazySections = new Map([
         ["macro", () => safeRun("macro charts", () => { buildIndexedChart(ts); buildUnemploymentChart(ts); })],
-        ["inequality", () => safeRun("inequality charts", () => { buildIncomeChart(ineq); buildWealthChart(ineq); wireLazyInequalityCharts(ineq, panel); })],
+        ["sectors", () => safeRun("sector charts", () => { if (sectorData) { buildSectorCharts(sectorData); renderSectorStats(sectorData); } })],
+        ["inequality", () => safeRun("inequality charts", () => { buildIncomeChart(ineq); buildWealthChart(ineq); buildTop10TradeTimeChart(ineq, ts); wireLazyInequalityCharts(ineq, panel); })],
         ["governance", () => safeRun("governance chart", () => buildWGIChart(gov))],
       ]);
       const lazyObserver = new IntersectionObserver((entries) => {
@@ -2093,7 +2297,7 @@
           entry.target.dataset.chartBuilt = "1";
         });
       }, { rootMargin: "120px 0px" });
-      ["macro", "inequality", "governance"].forEach((id) => {
+      ["macro", "sectors", "inequality", "governance"].forEach((id) => {
         const section = document.getElementById(id);
         if (section) lazyObserver.observe(section);
       });
@@ -2110,7 +2314,7 @@
       const telemetryEndpoint = document.documentElement.dataset.telemetryEndpoint || "";
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState !== "hidden") return;
-        const sectionIds = ["hero", "question", "from-the-ground", "timeline", "macro", "inequality", "governance", "results", "map", "conclusions", "sources"];
+        const sectionIds = ["hero", "question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "governance", "results", "map", "conclusions", "sources"];
         let reached = "hero";
         sectionIds.forEach((id) => {
           const section = document.getElementById(id);

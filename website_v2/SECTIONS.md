@@ -15,18 +15,20 @@ Use this map for targeted edits after the visual-essay redesign.
 
 | Order | Section `id` | Main hooks |
 |---|---|---|
-| 0 | `hero` | `#chart-hero`, `.hero-thesis-pull`, `.hero-data-note` |
-| 0.5 | n/a | `.argument-summary` (new thesis anchor card) |
-| 1 | `question` | `#hand-scroll-ink`, `.question-big` |
+| 0 | `hero` | `.hero-photo-card`, `.hero-thesis-pull`, `.hero-data-note` (photo-only after Spring 2026 feedback) |
+| 0.4 | n/a | `.argument-context` (1994 background block) |
+| 0.5 | n/a | `.argument-summary` (thesis anchor card, sector-focused) |
+| 1 | `question` | `.question-big`, JSE 1893 figure |
 | 2 | `from-the-ground` | `.ground-sequence`, `.inline-voice` |
 | 3 | `timeline` | `#timeline-shell`, `#timeline-scroll`, `#timeline-list` |
-| 4 | `macro` | `#chart-indexed`, `#chart-unemployment` |
-| 5 | `inequality` | `#chart-income-shares`, `#chart-wealth-shares`, `#chart-gini`, `#chart-scatter-top10-trade` |
-| 6 | `governance` | `#chart-wgi`, `#wgi-show-context` |
-| 7 | `results` | `.result-chips`, `#headline-table`, `#all-table`, `#dw-filter` |
-| 8 | `map` | `#za-map` |
-| 9 | `conclusions` | `.conclusion-grid`, `#quote-orbit` |
-| 10 | `sources` | dataset/policy/causal cards, `.citation-card` |
+| 4 | `macro` | `#chart-indexed` (now 3 distinct hues), `#chart-unemployment` |
+| 5 | `sectors` | `.sector-stats-card`, `#chart-sector-shares`, `#chart-manuf-decline`, `#chart-scatter-manuf-trade` |
+| 6 | `inequality` | `#chart-income-shares`, `#chart-wealth-shares`, `#chart-top10-trade-time`, `#chart-scatter-top10-trade`, `#chart-gini` |
+| 7 | `governance` | `#chart-wgi`, `#wgi-show-context` |
+| 8 | `results` | `.results-summary-card`, `.results-detail-toggle`, `.result-chips`, `#headline-table` |
+| 9 | `map` | `#za-map` |
+| 10 | `conclusions` | `.conclusion-grid`, `#quote-orbit` |
+| 11 | `sources` | dataset/policy/causal cards, `.citation-card` |
 
 ## Transition cards
 

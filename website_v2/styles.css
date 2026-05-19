@@ -537,14 +537,16 @@ a:hover { border-bottom-color: currentColor; }
 }
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(38px, 6.2vw, 76px);
+  /* Sized so "The Price of Integration" sits on a single line from ~720px width upward. */
+  font-size: clamp(34px, 5.4vw, 64px);
   /* Room for descenders (g, y, p) with background-clip: text */
-  line-height: 1.14;
-  letter-spacing: -0.01em;
+  line-height: 1.08;
+  letter-spacing: -0.012em;
   margin: 0 0 18px;
   padding-bottom: 0.08em;
   font-weight: 600;
   overflow: visible;
+  white-space: nowrap;
   background-image: var(--heading-gradient);
   background-size: 240% 100%;
   background-repeat: no-repeat;
@@ -553,6 +555,10 @@ a:hover { border-bottom-color: currentColor; }
   color: transparent;
   -webkit-text-fill-color: transparent;
   animation: heading-gradient-flow 14s ease-in-out infinite alternate;
+}
+@media (max-width: 640px) {
+  /* Allow wrapping below 640px so the title stays readable on phones. */
+  .title { white-space: normal; font-size: clamp(32px, 8.2vw, 44px); }
 }
 .subtitle {
   font-family: var(--font-serif);
@@ -1895,6 +1901,11 @@ details summary h3 { display: inline; }
   background: var(--bg-sunken);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
+.hero-figure--photo-only .hero-photo {
+  /* Hero now carries only an image; let it breathe a bit taller. */
+  max-height: min(440px, 50vh);
+  border-radius: var(--radius-lg);
+}
 .hero-figure .hero-photo-card figcaption {
   font-size: 14px;
   color: var(--fg-muted);
@@ -2278,6 +2289,137 @@ details summary h3 { display: inline; }
     top: 84px;
     align-self: start;
   }
+}
+
+/* ---------------- Section 05: Sector deep-dive ---------------- */
+.section-sectors {
+  /* Inherit .section spacing; subtle background tint to set it apart from inequality. */
+  background:
+    radial-gradient(
+      60% 80% at 100% 0%,
+      color-mix(in oklab, var(--c-wid) 8%, transparent) 0%,
+      transparent 70%
+    ),
+    transparent;
+}
+.sector-stats-card {
+  margin: clamp(24px, 3vw, 36px) 0 clamp(16px, 2vw, 28px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.5vw, 28px);
+  align-items: stretch;
+}
+@media (max-width: 800px) {
+  .sector-stats-card { grid-template-columns: 1fr; }
+}
+.sector-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 6px;
+  border-left: 2px solid color-mix(in oklab, var(--c-wid) 60%, var(--rule));
+}
+.sector-stat__label {
+  margin: 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.sector-stat__value {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.2;
+}
+.sector-stat__detail {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  line-height: 1.45;
+}
+.sector-followup {
+  margin-top: clamp(28px, 4vw, 40px);
+  align-items: stretch;
+}
+.sector-takeaway {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--c-wid) 6%, var(--bg-elev)) 0%,
+      var(--bg-elev) 90%
+    );
+  border: 1px solid color-mix(in oklab, var(--c-wid) 24%, var(--rule));
+}
+.sector-takeaway p {
+  margin: 0 0 12px;
+}
+.sector-takeaway p:last-child { margin-bottom: 0; }
+
+/* Make the inequality "More inequality checks" grid handle three figures cleanly */
+.chart-more-inner {
+  align-items: stretch;
+}
+@media (min-width: 1080px) {
+  .chart-more-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chart-more-inner > figure:nth-child(3) { grid-column: span 2; }
+}
+
+/* Results section: paragraph summary + collapsed regression battery */
+.results-summary-card {
+  margin: clamp(16px, 2vw, 24px) 0 clamp(20px, 2.5vw, 28px);
+}
+.results-summary-card p {
+  margin: 0 0 12px;
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.25vw, 19px);
+  line-height: 1.65;
+  color: var(--fg);
+}
+.results-summary-card p:last-child { margin-bottom: 0; }
+.results-summary-card__note {
+  font-family: var(--font-sans) !important;
+  font-size: 14.5px !important;
+  color: var(--fg-muted) !important;
+}
+.results-detail-toggle {
+  margin-top: clamp(12px, 2vw, 20px);
+  padding: 0;
+  background: var(--bg-elev);
+}
+.results-detail-toggle > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: clamp(14px, 2vw, 20px) clamp(16px, 2.5vw, 24px);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  border-bottom: 1px solid transparent;
+}
+.results-detail-toggle[open] > summary {
+  border-bottom: 1px solid var(--rule);
+}
+.results-detail-toggle > summary::-webkit-details-marker { display: none; }
+.results-detail-toggle > summary::after {
+  content: "▾";
+  margin-left: auto;
+  color: var(--fg-muted);
+  font-size: 14px;
+  transition: transform 0.18s ease;
+}
+.results-detail-toggle[open] > summary::after { transform: rotate(180deg); }
+.results-detail-toggle__hint {
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+.results-detail-toggle .results-scrolly {
+  padding: clamp(16px, 2vw, 24px);
 }
 
 .inequality-map-preface {
@@ -2691,10 +2833,25 @@ details summary h3 { display: inline; }
   color: var(--fg-muted);
   font-size: 14px;
 }
+.argument-context {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 36px) var(--gutter) 0;
+}
+.argument-context__lede {
+  margin: 0;
+  max-width: 64ch;
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.35vw, 21px);
+  line-height: 1.6;
+  color: var(--fg-muted);
+  border-left: 2px solid color-mix(in oklab, var(--accent) 65%, var(--rule));
+  padding-left: clamp(14px, 2vw, 20px);
+}
 .argument-summary {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--gutter) 26px;
+  padding: clamp(18px, 2.4vw, 28px) var(--gutter) 26px;
 }
 .argument-summary h2 {
   font-family: var(--font-serif);
