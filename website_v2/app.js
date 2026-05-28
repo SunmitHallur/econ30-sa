@@ -1146,7 +1146,10 @@
   // ------------------------------------------------------------
   // Leaflet map — SA-only bounds, provincial choropleth, metro markers when zoomed
   // ------------------------------------------------------------
-  const SA_MAP_BOUNDS = L.latLngBounds([-35.35, 15.65], [-21.25, 34.05]);
+  // Plain corner array (not L.latLngBounds) so this module-level constant does not
+  // reference Leaflet's global `L`, which is now lazy-loaded. Leaflet accepts this
+  // form directly for the `maxBounds` option.
+  const SA_MAP_BOUNDS = [[-35.35, 15.65], [-21.25, 34.05]];
   const METRO_ZOOM_MIN = 8;
   /** Representative centres for the eight metros (QLFS Metro_code); display only. */
   const METRO_COORDS = {

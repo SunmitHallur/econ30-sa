@@ -546,7 +546,8 @@ a:hover { border-bottom-color: currentColor; }
   padding-bottom: 0.08em;
   font-weight: 600;
   overflow: visible;
-  white-space: nowrap;
+  white-space: normal;
+  text-wrap: balance;
   background-image: var(--heading-gradient);
   background-size: 240% 100%;
   background-repeat: no-repeat;
@@ -1989,6 +1990,60 @@ details summary h3 { display: inline; }
   margin-left: auto;
   margin-right: auto;
 }
+/* Condensed visual band: uniform photo grid, captions only (no prose). */
+.ground-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(16px, 2.2vw, 26px);
+  margin-top: clamp(20px, 3vw, 32px);
+}
+.ground-gallery .ground-photo,
+.ground-compare .ground-photo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ground-gallery .ground-photo img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.ground-gallery .ground-photo figcaption,
+.ground-compare .ground-photo figcaption {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+@media (max-width: 560px) {
+  .ground-gallery { grid-template-columns: 1fr; }
+}
+
+/* Inner-city vs outer-city: deliberate side-by-side comparison. */
+.ground-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 2.5vw, 30px);
+  margin-top: clamp(28px, 4vw, 44px);
+}
+.ground-compare__item img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.ground-compare__label {
+  margin: 0 0 9px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding-left: 10px;
+  border-left: 3px solid currentColor;
+  line-height: 1.1;
+}
+.ground-compare__label--in { color: var(--accent-strong); }
+.ground-compare__label--out { color: var(--danger); }
+@media (max-width: 560px) {
+  .ground-compare { grid-template-columns: 1fr; }
+}
 /* Ground: quiet texture, not duplicated photography behind the foreground sequence. */
 .section-visual-panel {
   position: relative;
@@ -2059,26 +2114,6 @@ details summary h3 { display: inline; }
   );
 }
 
-.ground-sequence {
-  display: grid;
-  gap: clamp(34px, 6vw, 72px);
-}
-.ground-step {
-  display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  gap: clamp(24px, 4vw, 54px);
-  align-items: center;
-}
-.ground-step--reverse {
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
-}
-.ground-step--stack {
-  grid-template-columns: 1fr;
-  gap: clamp(18px, 3vw, 34px);
-}
-.ground-step__text {
-  max-width: 44rem;
-}
 .ground-step__label,
 .annotation-list span {
   display: inline-flex;
@@ -2090,49 +2125,6 @@ details summary h3 { display: inline; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent-strong);
-}
-.ground-step__text h3 {
-  margin: 0 0 10px;
-  font-family: var(--font-serif);
-  font-size: clamp(1.55rem, 2.6vw, 2.25rem);
-  line-height: 1.15;
-  color: var(--fg);
-}
-.ground-step__text p {
-  margin: 0 0 13px;
-  color: var(--fg);
-  font-family: var(--font-serif);
-  font-size: clamp(18px, 1.45vw, 22px);
-  line-height: 1.62;
-}
-.ground-step__text p:last-child {
-  margin-bottom: 0;
-}
-.ground-port-hero {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.ground-photo-bleed img {
-  max-height: min(480px, 56vh);
-  object-fit: cover;
-}
-.ground-ports-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(22px, 3.5vw, 44px);
-  margin-top: 0;
-}
-@media (max-width: 900px) {
-  .ground-step,
-  .ground-step--reverse {
-    grid-template-columns: 1fr;
-  }
-  .ground-step--reverse .ground-step__text {
-    order: -1;
-  }
-  .ground-ports-pair {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* Section-with-mockup style: explanation left, charts right (vanilla; theme tokens). */
@@ -2286,8 +2278,15 @@ details summary h3 { display: inline; }
   .chart-mockup__copy--macro,
   .chart-mockup__copy--inequality {
     position: sticky;
-    top: 84px;
+    top: 0;
     align-self: start;
+    /* Fill the viewport and vertically center the copy so it floats in the
+       middle of the screen while the charts scroll, instead of hugging the top.
+       min-height (not height) lets taller copy grow without clipping. */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 
@@ -2875,14 +2874,24 @@ details summary h3 { display: inline; }
   color: var(--fg-muted);
   font-size: 14px;
 }
+/* Quiet, consistent photo-credit link in figcaptions */
+.fig-src {
+  font-size: 0.92em;
+  font-weight: 600;
+  color: var(--fg-faint);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px dotted currentColor;
+}
+.fig-src:hover { color: var(--accent-strong); }
 .argument-context {
-  max-width: var(--max-width);
+  max-width: 46rem;
   margin: 0 auto;
   padding: clamp(20px, 3vw, 36px) var(--gutter) 0;
 }
 .argument-context__lede {
   margin: 0;
-  max-width: 64ch;
+  max-width: none;
   font-family: var(--font-serif);
   font-size: clamp(17px, 1.35vw, 21px);
   line-height: 1.6;
@@ -2891,7 +2900,7 @@ details summary h3 { display: inline; }
   padding-left: clamp(14px, 2vw, 20px);
 }
 .argument-summary {
-  max-width: var(--max-width);
+  max-width: 46rem;
   margin: 0 auto;
   padding: clamp(18px, 2.4vw, 28px) var(--gutter) 26px;
 }
@@ -2912,7 +2921,7 @@ details summary h3 { display: inline; }
   animation: heading-gradient-flow 14s ease-in-out infinite alternate;
 }
 .argument-summary p {
-  max-width: 64ch;
+  max-width: none;
   margin: 0;
   color: var(--fg);
 }
