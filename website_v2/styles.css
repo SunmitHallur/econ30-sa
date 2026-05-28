@@ -3163,7 +3163,7 @@ details summary h3 { display: inline; }
   background: var(--bg);
   border: 1.5px solid color-mix(in oklab, var(--fg) 14%, transparent);
   border-radius: var(--radius-md);
-  padding: 16px 18px;
+  padding: 14px 16px;
   cursor: pointer;
   font: inherit;
   color: var(--fg);

@@ -31,63 +31,79 @@
     {
       "year": "1994",
       "title": "The vote, and the open door",
-      "scene": "The capital account is opening; foreign money is allowed back onto the Johannesburg Stock Exchange. Tariffs are still high, so the factories are busy, for now.",
-      "prompt": "The economy is reopening. Where do you put your energy first?",
+      "scene": "The country reopens to global trade and investment. Foreign money flows back in. Local factories are still busy, for now.",
+      "prompt": "You still have your job, but the economy is changing fast. What do you do first?",
       "options": [
         {
-          "label": "Put money into the newly open markets",
+          "label": "Invest whatever savings you have",
           "effects": { "pieter": 3, "sipho": 0 },
           "react": {
-            "pieter": "Pieter has savings and a broker on speed-dial. As global money floods the JSE, his portfolio starts to climb.",
-            "sipho": "Sipho has no savings to invest. The open capital account is news that happens to other people."
+            "pieter": "Pieter has savings and a broker on speed-dial. As global money floods the stock exchange, his portfolio starts to climb.",
+            "sipho": "Sipho has no savings to invest. The reopening is news that happens to other people."
           }
         },
         {
-          "label": "Trust the job you already have",
+          "label": "Keep your head down at your current job",
           "effects": { "pieter": -2, "sipho": -1 },
           "react": {
-            "pieter": "Pieter stays cautious and salaried. That's fine, but he watches colleagues who invested pull ahead.",
-            "sipho": "Sipho keeps his head down at the machine. The order book is still full; the trouble is two years away."
+            "pieter": "Pieter stays cautious and salaried. That is fine, but he watches colleagues who invested pull ahead.",
+            "sipho": "Sipho keeps working the machine. The order book is still full; the trouble is two years away."
           }
         },
         {
-          "label": "Go back to school and retrain",
+          "label": "Go back to school to learn new skills",
           "effects": { "pieter": 1, "sipho": 2 },
           "react": {
             "pieter": "Pieter takes night classes; with a cushion to fall back on, the risk is small.",
-            "sipho": "Sipho scrapes together fees for a part-time course. It costs him sleep and rent, but it is the one bet that's his to make."
+            "sipho": "Sipho scrapes together fees for a part-time course. It costs him sleep and rent, but it is the one bet that is his to make."
+          }
+        },
+        {
+          "label": "Start a small side business after work",
+          "effects": { "pieter": 1, "sipho": 2 },
+          "react": {
+            "pieter": "Pieter tries a side venture for fun and a little extra. He can afford to fail.",
+            "sipho": "Sipho sells goods after his shift. Cash-in-hand, no contract, no safety net, but it is income he controls."
           }
         }
       ]
     },
     {
       "year": "1996",
-      "title": "GEAR, and the tariffs come down",
-      "scene": "Policy shifts to GEAR: tighter budgets and lower import taxes. Cheaper clothing and goods pour in. The factory's customers start buying from abroad.",
-      "prompt": "Imports are undercutting the factory. What now?",
+      "title": "Cheaper imports arrive",
+      "scene": "The government tightens budgets and lowers import taxes. Cheaper clothing and goods pour in. Customers start buying from abroad instead of local factories.",
+      "prompt": "Your factory is losing orders. What do you do next?",
       "options": [
         {
-          "label": "Move money into finance and abroad",
+          "label": "Move your savings into finance or overseas",
           "effects": { "pieter": 3, "sipho": 0 },
           "react": {
             "pieter": "With capital controls loosened, Pieter shifts savings into global assets. The open economy is built for him.",
-            "sipho": "Sipho has nothing to move offshore. He reads about the rand in the paper, not in his bank balance."
+            "sipho": "Sipho has nothing to move offshore. He reads about the exchange rate in the paper, not in his bank balance."
           }
         },
         {
-          "label": "Stay on the factory floor and hope",
+          "label": "Stay at the factory and hope orders return",
           "effects": { "pieter": -1, "sipho": -3 },
           "react": {
-            "pieter": "Not really Pieter's fight, but a slowing factory town isn't good for anyone's clients.",
-            "sipho": "The orders dry up. Sipho's shift is cut, then cut again. The thing he can do best is the thing the world now buys cheaper elsewhere."
+            "pieter": "Not really Pieter's fight, but a slowing factory town is not good for anyone's clients.",
+            "sipho": "The orders dry up. Sipho's shift is cut, then cut again. The work he knows best is what the world now buys cheaper elsewhere."
           }
         },
         {
-          "label": "Organize: join the union and push back",
+          "label": "Organize with coworkers to slow the layoffs",
           "effects": { "pieter": -2, "sipho": 2 },
           "react": {
-            "pieter": "Pieter sides with the workers and is quietly marked as 'not a team player' by the firm.",
-            "sipho": "Sipho helps organize for a phase-in of the tariff cuts. It buys the plant, and his wage, a few more years."
+            "pieter": "Pieter sides with the workers and is quietly marked as not a team player by the firm.",
+            "sipho": "Sipho helps push for a slower phase-in of the tariff cuts. It buys the plant, and his wage, a few more years."
+          }
+        },
+        {
+          "label": "Apply for a steadier government or office job",
+          "effects": { "pieter": 0, "sipho": 1 },
+          "react": {
+            "pieter": "Pieter could land something stable, but leaving finance feels like a step down. He stays put.",
+            "sipho": "Sipho queues for municipal work. The pay is modest, but a contract beats a dying factory floor."
           }
         }
       ]
@@ -95,19 +111,19 @@
     {
       "year": "2000s",
       "title": "The commodity boom",
-      "scene": "Resource prices and foreign investment surge. Mining and finance are minting money. Factory work outside the mines keeps struggling.",
-      "prompt": "The boom is lifting some boats. How do you ride it?",
+      "scene": "Resource prices and foreign investment surge. Mining and finance are minting money. Factory wages outside those sectors keep struggling.",
+      "prompt": "A few industries are booming while yours is not. How do you try to get ahead?",
       "options": [
         {
-          "label": "Follow the money into mining and finance",
+          "label": "Switch to a higher-paying industry while you can",
           "effects": { "pieter": 3, "sipho": 1 },
           "react": {
             "pieter": "Pieter's sector is exactly where the boom lands. His income compounds.",
-            "sipho": "Sipho lands a contract job near the mines: better pay, but no security and far from home."
+            "sipho": "Sipho lands contract work near the mines: better pay, but no security and far from home."
           }
         },
         {
-          "label": "Stay put and wait it out",
+          "label": "Stay where you are and wait it out",
           "effects": { "pieter": 0, "sipho": -1 },
           "react": {
             "pieter": "Pieter coasts; the rising tide carries him regardless.",
@@ -115,11 +131,19 @@
           }
         },
         {
-          "label": "Start an informal side business",
+          "label": "Pick up informal work on the side for extra cash",
           "effects": { "pieter": 1, "sipho": 2 },
           "react": {
             "pieter": "Pieter dabbles in a side venture for fun and a little extra.",
-            "sipho": "Sipho sells goods after his shift. It's cash-in-hand, no contract, no safety net, but it's his."
+            "sipho": "Sipho sells goods after his shift. It is cash-in-hand, no contract, no safety net, but it is his."
+          }
+        },
+        {
+          "label": "Pool money with family or friends in a savings group",
+          "effects": { "pieter": 0, "sipho": 2 },
+          "react": {
+            "pieter": "Pieter already has a bank. A stokvel feels unnecessary when credit is one call away.",
+            "sipho": "Sipho joins a rotating savings group. Small, steady pools of cash beat no cushion at all."
           }
         }
       ]
@@ -127,11 +151,11 @@
     {
       "year": "2008–09",
       "title": "The global crisis hits",
-      "scene": "The financial crisis lands. Manufacturing shrinks sharply and unemployment steps up. Whoever you are, the ground moves.",
-      "prompt": "The crisis is here. How do you absorb the shock?",
+      "scene": "A worldwide financial crisis lands. Manufacturing shrinks sharply and unemployment steps up. Whoever you are, the ground moves.",
+      "prompt": "Jobs and pay are at risk. How do you handle the shock?",
       "options": [
         {
-          "label": "Sit tight on diversified assets",
+          "label": "Hold on to what you own and wait it out",
           "effects": { "pieter": 2, "sipho": -1 },
           "react": {
             "pieter": "Pieter's holdings dip, then recover. Having assets to hold is its own kind of shelter.",
@@ -139,19 +163,27 @@
           }
         },
         {
-          "label": "Take any job you can get",
+          "label": "Take any job you can find, however temporary",
           "effects": { "pieter": -2, "sipho": 1 },
           "react": {
             "pieter": "Pieter takes a step down to stay employed, a bruise to the ego, not the bank balance.",
-            "sipho": "Sipho grabs whatever work appears: security, cleaning, day labour. It's a wage, and a wage is everything."
+            "sipho": "Sipho grabs whatever work appears: security, cleaning, day labour. A wage is everything."
           }
         },
         {
-          "label": "Migrate to Gauteng to chase work",
+          "label": "Move to a bigger city where more jobs are listed",
           "effects": { "pieter": 1, "sipho": 2 },
           "react": {
             "pieter": "Pieter relocates easily: a moving van, a new suburb, a transferred mortgage.",
-            "sipho": "Sipho leaves Gugulethu for a shack on Johannesburg's edge, closer to the jobs but far from everyone he knows."
+            "sipho": "Sipho leaves Cape Town for a shack on Johannesburg's edge, closer to jobs but far from everyone he knows."
+          }
+        },
+        {
+          "label": "Move in with family to cut rent and expenses",
+          "effects": { "pieter": -1, "sipho": 1 },
+          "react": {
+            "pieter": "Pieter downsizes slightly. It is an adjustment, not a crisis.",
+            "sipho": "Sipho gives up his rented room and sleeps three to a house. Pride hurts, but the rent bill disappears."
           }
         }
       ]
@@ -159,11 +191,11 @@
     {
       "year": "2015–25",
       "title": "The long aftermath",
-      "scene": "Recovery is thin and uneven. Broad unemployment runs above 40%; the top tenth keeps pulling away. The last move sets where each man lands.",
-      "prompt": "A decade of slow growth. What's your final play?",
+      "scene": "Recovery is thin and uneven. Unemployment stays very high; the wealthiest keep pulling ahead. This last choice shapes where each man lands.",
+      "prompt": "Growth is slow and jobs are scarce. This is your last big move. What do you choose?",
       "options": [
         {
-          "label": "Double down on what already worked",
+          "label": "Double down on what has worked for you so far",
           "effects": { "pieter": 3, "sipho": 0 },
           "react": {
             "pieter": "Pieter leans harder into assets and connections. His income is now mostly money making money.",
@@ -171,7 +203,7 @@
           }
         },
         {
-          "label": "Fall back on grants and informal work",
+          "label": "Live on government help, odd jobs, and family support",
           "effects": { "pieter": -3, "sipho": 1 },
           "react": {
             "pieter": "For Pieter this would mean a hard fall: selling up, leaning on the state he never expected to need.",
@@ -179,11 +211,19 @@
           }
         },
         {
-          "label": "Try to leave the country entirely",
+          "label": "Try to move to another country for work",
           "effects": { "pieter": 2, "sipho": -1 },
           "react": {
-            "pieter": "Pieter has the passport options, the savings, and the in-demand skills to emigrate cleanly.",
+            "pieter": "Pieter has passport options, savings, and in-demand skills to emigrate cleanly.",
             "sipho": "Sipho explores leaving, but without papers, capital, or contacts abroad, the door barely opens."
+          }
+        },
+        {
+          "label": "Spend what you have on your children's schooling",
+          "effects": { "pieter": 0, "sipho": 2 },
+          "react": {
+            "pieter": "Pieter's kids were already in good schools. The choice changes little for him.",
+            "sipho": "Sipho drains what he saved to keep a child in class. It is a bet on the next generation, not on his own paycheck."
           }
         }
       ]
@@ -271,7 +311,7 @@
     }
   },
   "epilogue": {
-    "lede": "Same five choices. Same thirty years. Different country.",
+    "lede": "Same five rounds of choices. Same thirty years. Different starting points.",
     "body": "Pieter and Sipho answered the same questions. Where they landed was decided less by the choices on this screen than by where 1994 found each of them standing: who already held capital, which jobs were exposed to imports, and which neighbourhoods the old law had built. That gap is what the charts above measure: trade and growth rose, and the gains piled up at the top.",
     "restart": "↺ Live it again, differently",
     "cta": { "label": "See the evidence behind their split ↓", "href": "#results" }
