@@ -12,6 +12,9 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const CHARS = ["pieter", "sipho"];
+  // Score range used only to render the divergence bars (no numbers shown).
+  const MIN_SCORE = -8;
+  const MAX_SCORE = 20;
 
   // -- tiny DOM helper ------------------------------------------------------
   function el(tag, attrs, children) {
@@ -41,6 +44,13 @@
     }
   }
 
+  function nameWithToken(key) {
+    return el("span", { class: "tl-name-wrap" }, [
+      el("span", { class: `tl-token tl-token--${key}`, "aria-hidden": "true" }),
+      el("span", { class: "tl-name-text", text: data.characters[key].name }),
+    ]);
+  }
+
   // -- engine state ---------------------------------------------------------
   let data = null;
   let state = null;
@@ -52,74 +62,95 @@
       scores: { pieter: data.characters.pieter.start, sipho: data.characters.sipho.start },
       reacted: false,
       lastReact: null,
+      history: [],
     };
   }
 
-  function bandFor(score) {
-    for (const b of data.bands) if (score <= b.max) return b.key;
-    return data.bands[data.bands.length - 1].key;
+  function bandObjFor(score) {
+    for (const b of data.bands) if (score <= b.max) return b;
+    return data.bands[data.bands.length - 1];
+  }
+  function bandFor(score) { return bandObjFor(score).key; }
+  function fillPct(score) {
+    const pct = ((score - MIN_SCORE) / (MAX_SCORE - MIN_SCORE)) * 100;
+    return Math.max(5, Math.min(100, Math.round(pct)));
   }
 
-  // -- render: progress -----------------------------------------------------
+  // -- render: progress (year ticks) ---------------------------------------
   function renderProgress() {
     const total = data.beats.length;
-    const dots = el("div", { class: "tl-progress", "aria-hidden": "true" });
+    const ticks = el("div", { class: "tl-progress", "aria-hidden": "true" });
     for (let i = 0; i < total; i++) {
-      let cls = "tl-progress__dot";
-      if (state.phase === "ending") cls += " is-done";
-      else if (i < state.beat) cls += " is-done";
-      else if (i === state.beat && state.phase === "beat") cls += " is-active";
-      dots.appendChild(el("span", { class: cls }));
+      let dotCls = "tl-progress__dot";
+      if (state.phase === "ending" || i < state.beat) dotCls += " is-done";
+      else if (i === state.beat && state.phase === "beat") dotCls += " is-active";
+      ticks.appendChild(el("div", { class: "tl-progress__tick" }, [
+        el("span", { class: dotCls }),
+        el("span", { class: "tl-progress__year", text: data.beats[i].year }),
+      ]));
     }
     const label =
       state.phase === "ending"
-        ? "Outcome"
+        ? "Outcome · 2025"
         : state.phase === "beat"
         ? `Decision ${state.beat + 1} of ${total}`
         : "Start";
     return el("div", { class: "tl-progress-row" }, [
       el("p", { class: "tl-progress-label", text: label }),
-      dots,
+      ticks,
     ]);
   }
 
-  // -- render: character chip ----------------------------------------------
-  function charChip(key) {
-    const c = data.characters[key];
-    return el("div", { class: `tl-chip tl-chip--${key}` }, [
-      el("span", { class: "tl-chip__name", text: c.name }),
-      el("span", { class: "tl-chip__tag", text: c.tagline }),
-    ]);
+  // -- render: divergence status track -------------------------------------
+  function renderStatus() {
+    return el("div", { class: "tl-status", "aria-label": "How each man is doing so far" },
+      CHARS.map((k) => {
+        const b = bandObjFor(state.scores[k]);
+        return el("div", { class: `tl-status__row tl-status__row--${k}` }, [
+          el("div", { class: "tl-status__head" }, [
+            nameWithToken(k),
+            el("span", { class: "tl-status__word", text: b.status }),
+          ]),
+          el("div", { class: "tl-status__track" }, [
+            el("span", {
+              class: "tl-status__fill",
+              style: `width:${fillPct(state.scores[k])}%`,
+            }),
+          ]),
+        ]);
+      })
+    );
   }
 
   // -- render: intro --------------------------------------------------------
   function renderIntro() {
     const i = data.intro;
-    const card = el("div", { class: "tl-card tl-card--intro" }, [
+    return el("div", { class: "tl-card tl-card--intro" }, [
       el("p", { class: "tl-kicker", text: i.kicker }),
       el("h3", { class: "tl-card__title", "data-autofocus": "", tabindex: "-1", text: "Meet two South Africans" }),
       el("p", { class: "tl-lede", text: i.lede }),
       el("div", { class: "tl-cast" }, CHARS.map((k) => {
         const c = data.characters[k];
         return el("div", { class: `tl-cast__member tl-cast__member--${k}` }, [
-          el("p", { class: "tl-cast__name", text: c.name }),
+          el("p", { class: "tl-cast__name" }, [nameWithToken(k)]),
           el("p", { class: "tl-cast__tagline", text: c.tagline }),
           el("p", { class: "tl-cast__blurb", text: c.blurb }),
         ]);
       })),
+      el("p", { class: "tl-hint", text: "Tip: you can press 1–4 to choose, and → to continue." }),
       el("button", {
         class: "tl-btn tl-btn--primary",
         type: "button",
         onclick: () => { state.phase = "beat"; render(); },
       }, i.start_button),
     ]);
-    return card;
   }
 
   // -- render: a beat -------------------------------------------------------
   function renderBeat() {
     const beat = data.beats[state.beat];
     const wrap = el("div", { class: "tl-card tl-card--beat" });
+    wrap.appendChild(renderStatus());
     wrap.appendChild(el("p", { class: "tl-kicker", text: `${beat.year} · ${beat.title}` }));
     wrap.appendChild(el("h3", { class: "tl-card__title", "data-autofocus": "", tabindex: "-1", text: beat.prompt }));
     wrap.appendChild(el("p", { class: "tl-scene", text: beat.scene }));
@@ -142,7 +173,7 @@
       wrap.appendChild(el("p", { class: "tl-chose", html: `You chose: <strong>${escapeHtml(r.label)}</strong>` }));
       wrap.appendChild(el("div", { class: "tl-react" }, CHARS.map((k) =>
         el("div", { class: `tl-react__col tl-react__col--${k}` }, [
-          el("p", { class: "tl-react__name", text: data.characters[k].name }),
+          el("p", { class: "tl-react__name" }, [nameWithToken(k)]),
           el("p", { class: "tl-react__text", text: r.react[k] }),
         ])
       )));
@@ -159,20 +190,21 @@
 
   // -- render: endings + epilogue ------------------------------------------
   function renderEnding() {
+    const ep = data.epilogue;
     const wrap = el("div", { class: "tl-card tl-card--ending" });
     wrap.appendChild(el("p", { class: "tl-kicker", text: "2025 · where they landed" }));
-    wrap.appendChild(el("h3", { class: "tl-card__title", "data-autofocus": "", tabindex: "-1", text: data.epilogue.lede }));
+    wrap.appendChild(el("h3", { class: "tl-card__title", "data-autofocus": "", tabindex: "-1", text: ep.lede }));
+    wrap.appendChild(renderStatus());
 
     wrap.appendChild(el("div", { class: "tl-endings" }, CHARS.map((k) => {
-      const band = bandFor(state.scores[k]);
-      const e = data.endings[k][band];
+      const e = data.endings[k][bandFor(state.scores[k])];
       const stat = e.stat
         ? (e.statHref
             ? el("p", { class: "tl-ending__stat" }, [el("a", { href: e.statHref, text: e.stat })])
             : el("p", { class: "tl-ending__stat", text: e.stat }))
         : null;
       return el("div", { class: `tl-ending tl-ending--${k}` }, [
-        el("p", { class: "tl-ending__name", text: data.characters[k].name }),
+        el("p", { class: "tl-ending__name" }, [nameWithToken(k)]),
         el("p", { class: "tl-ending__tag", text: e.tag }),
         el("h4", { class: "tl-ending__title", text: e.title }),
         el("p", { class: "tl-ending__body", text: e.body }),
@@ -180,17 +212,33 @@
       ].filter(Boolean));
     })));
 
-    wrap.appendChild(el("p", { class: "tl-epilogue", text: data.epilogue.body }));
+    wrap.appendChild(el("p", { class: "tl-epilogue", text: ep.body }));
 
-    const actions = el("div", { class: "tl-actions" }, [
+    if (ep.punchline) {
+      wrap.appendChild(el("p", { class: "tl-punchline", text: ep.punchline }));
+    }
+
+    if (state.history.length) {
+      const details = el("details", { class: "tl-recap" }, [
+        el("summary", { class: "tl-recap__summary", text: ep.recap_label || "The choices you made" }),
+        el("ol", { class: "tl-recap__list" }, state.history.map((h) =>
+          el("li", { class: "tl-recap__item" }, [
+            el("span", { class: "tl-recap__year", text: h.year }),
+            el("span", { class: "tl-recap__label", text: h.label }),
+          ])
+        )),
+      ]);
+      wrap.appendChild(details);
+    }
+
+    wrap.appendChild(el("div", { class: "tl-actions" }, [
       el("button", {
         class: "tl-btn tl-btn--ghost",
         type: "button",
         onclick: () => { state = freshState(); render(); },
-      }, data.epilogue.restart),
-      el("a", { class: "tl-btn tl-btn--link", href: data.epilogue.cta.href }, data.epilogue.cta.label),
-    ]);
-    wrap.appendChild(actions);
+      }, ep.restart),
+      el("a", { class: "tl-btn tl-btn--link", href: ep.cta.href }, ep.cta.label),
+    ]));
     return wrap;
   }
 
@@ -198,21 +246,37 @@
   function choose(optIdx) {
     const beat = data.beats[state.beat];
     const opt = beat.options[optIdx];
+    if (!opt) return;
     CHARS.forEach((k) => { state.scores[k] += opt.effects[k] || 0; });
     state.reacted = true;
     state.lastReact = opt;
+    state.history.push({ year: beat.year, label: opt.label });
     render();
   }
 
   function advance() {
     state.reacted = false;
     state.lastReact = null;
-    if (state.beat >= data.beats.length - 1) {
-      state.phase = "ending";
-    } else {
-      state.beat += 1;
-    }
+    if (state.beat >= data.beats.length - 1) state.phase = "ending";
+    else state.beat += 1;
     render();
+  }
+
+  // -- keyboard shortcuts ---------------------------------------------------
+  function onKey(e) {
+    if (!state || state.phase !== "beat") return;
+    const tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+    if (!state.reacted) {
+      const n = parseInt(e.key, 10);
+      if (n >= 1 && n <= data.beats[state.beat].options.length) {
+        e.preventDefault();
+        choose(n - 1);
+      }
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      advance();
+    }
   }
 
   // -- main render ----------------------------------------------------------
@@ -242,6 +306,7 @@
       data = json;
       state = freshState();
       render();
+      root.addEventListener("keydown", onKey);
     })
     .catch((err) => { console.error("two-lives: failed to load", err); showError(); });
 })();

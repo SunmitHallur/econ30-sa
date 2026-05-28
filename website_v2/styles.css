@@ -2822,6 +2822,48 @@ details summary h3 { display: inline; }
   max-width: 22ch;
 }
 .hero-thesis-pull em { color: var(--accent-strong); }
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 auto 22px;
+  padding: 0;
+  max-width: 40rem;
+}
+.hero-stat {
+  flex: 1 1 9rem;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  border-left: 3px solid var(--accent);
+}
+.hero-stat--warn { border-left-color: var(--danger); }
+.hero-stat dt {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--fg-faint);
+}
+.hero-stat dd {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.hero-stat__num {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--fg);
+}
+.hero-stat__unit {
+  font-size: 0.74rem;
+  color: var(--fg-muted);
+  margin-top: 2px;
+}
 .hero-text-link {
   display: inline-flex;
   align-items: center;
@@ -3083,9 +3125,19 @@ details summary h3 { display: inline; }
 .tl-progress {
   display: flex;
   gap: 7px;
+  flex: 1;
+}
+.tl-progress__tick {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
 }
 .tl-progress__dot {
-  width: 22px;
+  width: 100%;
+  max-width: 34px;
   height: 5px;
   border-radius: 999px;
   background: color-mix(in oklab, var(--fg-faint) 35%, transparent);
@@ -3093,6 +3145,73 @@ details summary h3 { display: inline; }
 }
 .tl-progress__dot.is-active { background: var(--accent); }
 .tl-progress__dot.is-done { background: color-mix(in oklab, var(--accent) 60%, var(--fg-faint)); }
+.tl-progress__year {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--fg-faint);
+  white-space: nowrap;
+}
+.tl-progress-row { align-items: flex-start; }
+.tl-progress-label { flex: 0 0 auto; padding-top: 0; }
+
+/* Divergence status track */
+.tl-status {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 0 0 22px;
+  padding: 14px 16px;
+  background: var(--bg-sunken);
+  border-radius: var(--radius-md);
+}
+.tl-status__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.tl-status__word {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.tl-status__row--pieter .tl-status__word { color: var(--tl-pieter); }
+.tl-status__row--sipho .tl-status__word { color: var(--tl-sipho); }
+.tl-status__track {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--fg-faint) 28%, transparent);
+  overflow: hidden;
+}
+.tl-status__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tl-status__row--pieter .tl-status__fill { background: var(--tl-pieter); }
+.tl-status__row--sipho .tl-status__fill { background: var(--tl-sipho); }
+.tl-reduce .tl-status__fill { transition: none; }
+
+/* Colorblind-safe shape tokens (circle = Pieter, diamond = Sipho) */
+.tl-name-wrap { display: inline-flex; align-items: center; gap: 7px; }
+.tl-token {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+}
+.tl-token--pieter { background: var(--tl-pieter); border-radius: 50%; }
+.tl-token--sipho { background: var(--tl-sipho); border-radius: 2px; transform: rotate(45deg); }
+
+/* Keyboard hint */
+.tl-hint {
+  margin: 0 0 16px;
+  font-size: 0.8rem;
+  color: var(--fg-faint);
+}
 
 .tl-kicker {
   margin: 0 0 8px;
@@ -3312,6 +3431,65 @@ details summary h3 { display: inline; }
   max-width: 64ch;
   color: var(--fg-muted);
 }
+.tl-punchline {
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--accent) 8%, var(--bg-elev));
+  border-left: 4px solid var(--accent);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--fg);
+}
+.tl-recap {
+  margin: 0 0 22px;
+  border: 1px solid color-mix(in oklab, var(--fg) 12%, transparent);
+  border-radius: var(--radius-md);
+  padding: 4px 16px;
+}
+.tl-recap__summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 10px 0;
+  color: var(--accent-strong);
+}
+.tl-recap__list {
+  margin: 4px 0 14px;
+  padding: 0;
+  list-style: none;
+  counter-reset: tl-recap;
+}
+.tl-recap__item {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 7px 0;
+  border-top: 1px dashed color-mix(in oklab, var(--fg) 12%, transparent);
+}
+.tl-recap__item::before {
+  counter-increment: tl-recap;
+  content: counter(tl-recap);
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+.tl-recap__year {
+  flex: 0 0 auto;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  min-width: 56px;
+}
+.tl-recap__label { font-size: 0.9rem; line-height: 1.4; }
 .tl-actions {
   display: flex;
   flex-wrap: wrap;
@@ -3323,6 +3501,12 @@ details summary h3 { display: inline; }
 @media (max-width: 680px) {
   .tl-cast,
   .tl-react,
+  .tl-status,
   .tl-endings { grid-template-columns: 1fr; }
-  .tl-progress__dot { width: 16px; }
+  /* Lead with Sipho on small screens — the harder-hitting path first. */
+  .tl-react__col--sipho,
+  .tl-ending--sipho,
+  .tl-status__row--sipho { order: -1; }
+  .tl-progress__year { font-size: 0.55rem; }
+  .tl-progress-row { flex-wrap: wrap; }
 }

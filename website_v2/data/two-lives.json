@@ -20,12 +20,12 @@
     }
   },
   "bands": [
-    { "key": "destitute", "max": -3 },
-    { "key": "crisis", "max": 0 },
-    { "key": "precarious", "max": 3 },
-    { "key": "holding", "max": 6 },
-    { "key": "comfortable", "max": 9 },
-    { "key": "thriving", "max": 999 }
+    { "key": "destitute", "max": -3, "status": "Falling behind" },
+    { "key": "crisis", "max": 0, "status": "In trouble" },
+    { "key": "precarious", "max": 3, "status": "Just holding on" },
+    { "key": "holding", "max": 6, "status": "Steady" },
+    { "key": "comfortable", "max": 9, "status": "Doing well" },
+    { "key": "thriving", "max": 999, "status": "Pulling ahead" }
   ],
   "beats": [
     {
@@ -313,6 +313,8 @@
   "epilogue": {
     "lede": "Same five rounds of choices. Same thirty years. Different starting points.",
     "body": "Pieter and Sipho answered the same questions. Where they landed was decided less by the choices on this screen than by where 1994 found each of them standing: who already held capital, which jobs were exposed to imports, and which neighbourhoods the old law had built. That gap is what the charts above measure: trade and growth rose, and the gains piled up at the top.",
+    "punchline": "There are 1,024 ways to play this. Across all of them, Pieter reaches a secure life about 88% of the time. Sipho gets there only 22%, ends in outright crisis or displacement 42% of the time, and never once reaches the very top. The choices were identical. The starting line was not.",
+    "recap_label": "The five choices you made",
     "restart": "↺ Live it again, differently",
     "cta": { "label": "See the evidence behind their split ↓", "href": "#results" }
   }

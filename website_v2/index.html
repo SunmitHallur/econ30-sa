@@ -14,7 +14,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="print.css" media="print" />
   <script type="application/ld+json">
@@ -101,6 +100,20 @@
           South Africa's post-1994 opening <em>reconnected the economy</em>, but did not
           broaden opportunity: growth rose while jobs and income stayed concentrated.
         </p>
+        <dl class="hero-stats" aria-label="The opening in three numbers">
+          <div class="hero-stat">
+            <dt>Trade openness</dt>
+            <dd><span class="hero-stat__num">37% → 66%</span><span class="hero-stat__unit">of GDP</span></dd>
+          </div>
+          <div class="hero-stat">
+            <dt>Income per person</dt>
+            <dd><span class="hero-stat__num">+~⅓</span><span class="hero-stat__unit">since 1994</span></dd>
+          </div>
+          <div class="hero-stat hero-stat--warn">
+            <dt>Top-10% income share</dt>
+            <dd><span class="hero-stat__num">47% → 65%</span><span class="hero-stat__unit">1990–2020</span></dd>
+          </div>
+        </dl>
         <div class="meta-row">
           <a class="ghost-btn hero-cta-primary" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
           <a class="hero-text-link" href="#macro">Jump to national charts →</a>
@@ -205,9 +218,9 @@
           <a class="kb-link" href="#sources" data-kb="political-economy-of-transition">deeply political</a>, not only technical.
         </p>
         <blockquote class="callout">
-          <strong>How to read this page.</strong> You are looking at 
+          <strong>How to read this page.</strong> You are looking at
           <span class="mono">35</span> years of national data. Numbers from
-           regressions show asso ciations, not proof that one thing caused
+          regressions show associations, not proof that one thing caused
           another. Where this essay makes a cause-and-effect argument, it points to
           outside studies in the <a href="#sources">sources section</a>.
         </blockquote>
@@ -1357,7 +1370,6 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="scrolly-results.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>
   <script src="two-lives.js" defer></script>
 </body>

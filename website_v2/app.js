@@ -2244,7 +2244,42 @@
       });
       safeRun("regression tables", () => renderRegressionTables(reg));
       window.refreshResultsScrolly?.();
-      safeRun("map", () => buildMap(mapSeries));
+      // Lazy-load Leaflet (CSS + JS) only when the map section approaches the viewport.
+      let leafletPromise = null;
+      const loadLeaflet = () => {
+        if (window.L) return Promise.resolve();
+        if (leafletPromise) return leafletPromise;
+        leafletPromise = new Promise((resolve, reject) => {
+          const css = document.createElement("link");
+          css.rel = "stylesheet";
+          css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+          document.head.appendChild(css);
+          const js = document.createElement("script");
+          js.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+          js.onload = () => resolve();
+          js.onerror = () => reject(new Error("Leaflet failed to load"));
+          document.head.appendChild(js);
+        });
+        return leafletPromise;
+      };
+      const buildMapLazy = () => loadLeaflet()
+        .then(() => safeRun("map", () => buildMap(mapSeries)))
+        .catch((e) => console.error("website_v2 block failed: map (Leaflet load)", e));
+      const mapSection = document.getElementById("map");
+      if (mapSection && "IntersectionObserver" in window) {
+        let mapStarted = false;
+        const mapObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting || mapStarted) return;
+            mapStarted = true;
+            mapObserver.disconnect();
+            buildMapLazy();
+          });
+        }, { rootMargin: "300px 0px" });
+        mapObserver.observe(mapSection);
+      } else {
+        buildMapLazy();
+      }
       const seenCharts = new Set();
       const chartObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
