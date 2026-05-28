@@ -271,7 +271,7 @@
   };
 
   // ------------------------------------------------------------
-  // Macro / inequality / governance / hero charts
+  // Macro / inequality / hero charts
   // ------------------------------------------------------------
   const colorFrom = keyOrColor => palette()[keyOrColor] ?? keyOrColor;
   const datasetFrom = (years, series, colorKey, style = {}) => {
@@ -671,60 +671,6 @@
     });
   };
 
-  const buildWGIChart = (gov) => {
-    const canvas = $("#chart-wgi");
-    if (!canvas) return;
-    const years = gov.years;
-    const colors = { va: "wdi", pv: "wid", ge: "wgi", rq: "wiid", rl: "accent", cc: "danger" };
-    const labels = {
-      va: "Voice & accountability (context)",
-      pv: "Political stability (context)",
-      ge: "Government effectiveness (context)",
-      rq: "Regulatory quality (context)",
-      rl: "Courts/rules reliability",
-      cc: "Corruption control",
-    };
-    const contextLabels = new Set([labels.va, labels.pv, labels.ge, labels.rq]);
-    let showContext = false;
-    const ds = [];
-    ["va", "pv", "ge", "rq"].forEach(k => {
-      ds.push(datasetFrom(years, { ...gov.series[k], label: labels[k] }, colors[k], {
-        borderWidth: 1,
-        colorAlpha: "44",
-        backgroundAlpha: "18",
-        pointRadius: 0,
-        borderDash: [3, 4],
-        hidden: true,
-      }));
-    });
-    ds.push(datasetFrom(years, { ...gov.series.rl, label: labels.rl }, "accent", { borderWidth: 2.4 }));
-    ds.push(datasetFrom(years, { ...gov.series.cc, label: labels.cc }, "danger", { borderWidth: 2.4 }));
-    ds.push(datasetFrom(years, { ...gov.series.avg, label: "Average governance" }, "fg", { borderWidth: 3.2 }));
-    const chart = makeLineChart(canvas, {
-      labels: years,
-      datasets: ds,
-      yTitle: "Score (0 = weak, 1 = strong)",
-      xTitle: "Year",
-      xMin: 1995,
-      annotations: [{ type: "marker", x: 2009, label: "Zuma-era decline", color: "rgba(255,255,255,0.42)", dash: [4, 4] }],
-    });
-    chart.options.plugins.legend.labels.filter = (item) => showContext || !contextLabels.has(item.text);
-    chart.update();
-    const contextToggle = $("#wgi-show-context");
-    if (contextToggle) {
-      contextToggle.checked = false;
-      contextToggle.addEventListener("change", () => {
-        showContext = contextToggle.checked;
-        chart.data.datasets.forEach((set) => {
-          if (contextLabels.has(set.label)) {
-            set.hidden = !showContext;
-          }
-        });
-        chart.update();
-      });
-    }
-  };
-
   // ------------------------------------------------------------
   // Timeline
   // ------------------------------------------------------------
@@ -741,8 +687,8 @@
       body: "Resource prices and foreign investment jumped; factory jobs outside mining often struggled." },
     { year: "2008–09", title: "Global financial crisis", kb: "trade-liberalization-sa-manufacturing", chartHref: "#chart-unemployment",
       body: "Manufacturing shrank sharply; unemployment stepped up." },
-    { year: "2009–18", title: "Zuma era: state capture", kb: "political-economy-of-transition",
-      body: "Outside ratings of rule of law and corruption control weakened." },
+    { year: "2009–18", title: "The gap widens", kb: "political-economy-of-transition",
+      body: "A decade of slow, uneven growth: asset-holders kept pulling ahead while jobless and informal workers fell further behind — the divergence accelerated rather than closed." },
     { year: "2017", title: "Sovereign rating downgrades", kb: "trade-liberalisation-south-africa",
       body: "Credit-rating agencies moved South Africa below top investment grades; borrowing became costlier." },
     { year: "2020–22", title: "COVID-19 shock", kb: "building-back-better-covid-jobs",
@@ -770,7 +716,6 @@
     "wealth-inequality-lab-south-africa": "https://doi.org/10.1093/wber/lhab012",
     "dataset-wiid-2025": "https://www.wider.unu.edu/project/wiid-world-income-inequality-database",
     "inequality-in-south-africa": "https://www.worldbank.org/en/country/southafrica/overview",
-    "dataset-wgi-underlying-sources": "https://www.worldbank.org/en/publication/worldwide-governance-indicators",
     "sanctions-synthetic-control-south-africa": "https://open.uct.ac.za/items/57c851e3-bd2e-4b04-9626-7778d529137e",
     "sanctions-impact-south-african-exports": "https://doi.org/10.1111/1467-9485.00248",
     "mayekiso-trade-liberalisation-privatisation": "https://doi.org/10.70132/j4269338243",
@@ -1016,7 +961,6 @@
     tr.setAttribute("aria-label", `Expand estimates for ${r.y_label}`);
     const joined = `${r.y_label} ${r.x_labels.join(" ")}`.toLowerCase();
     if (joined.includes("top 1") && joined.includes("trade")) tr.id = "row-trade-top1";
-    if (joined.includes("wgi") && joined.includes("gdp")) tr.id = "row-wgi-gdp";
     if (joined.includes("unemployment") && joined.includes("trade")) tr.id = "row-trade-unemp";
     if (joined.includes("gear") || joined.includes("1996")) tr.id = "row-gear-break";
     tr.innerHTML = `
@@ -1753,7 +1697,7 @@
       macro: "numbers",
       sectors: "numbers",
       inequality: "numbers",
-      governance: "numbers",
+      "two-lives": "numbers",
       results: "results",
       map: "results",
       conclusions: "conclusions",
@@ -1769,7 +1713,7 @@
     const progressFill = document.getElementById("top-progress-fill");
     const indicatorText = document.getElementById("section-indicator-text");
     if (!links.length) return;
-    const sectionOrder = ["question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "governance", "results", "map", "conclusions", "sources"];
+    const sectionOrder = ["question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "two-lives", "results", "map", "conclusions", "sources"];
     const spyIds = ["hero", ...sectionOrder];
     const spySections = spyIds.map(id => document.getElementById(id)).filter(Boolean);
     const sectionLabelById = new Map(sectionOrder.map((id, idx) => {
@@ -2051,7 +1995,6 @@
       "chart-wealth-shares",
       "chart-gini",
       "chart-scatter-top10-trade",
-      "chart-wgi",
     ].forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -2264,10 +2207,9 @@
     // Disabled outdated hand-drawn intro effect per UX cleanup.
     wireGlobalScrollMotion();
     try {
-      const [ts, ineq, gov, panel, reg, mapSeries, sectorData] = await Promise.all([
+      const [ts, ineq, panel, reg, mapSeries, sectorData] = await Promise.all([
         fetchJSON("data/timeseries.json"),
         fetchJSON("data/inequality.json"),
-        fetchJSON("data/governance.json"),
         fetchJSON("data/panel.json"),
         fetchJSON("data/regressions.json"),
         fetchJSON("data/map_unemployment_series.json"),
@@ -2284,7 +2226,6 @@
         ["macro", () => safeRun("macro charts", () => { buildIndexedChart(ts); buildUnemploymentChart(ts); })],
         ["sectors", () => safeRun("sector charts", () => { if (sectorData) { buildSectorCharts(sectorData); renderSectorStats(sectorData); } })],
         ["inequality", () => safeRun("inequality charts", () => { buildIncomeChart(ineq); buildWealthChart(ineq); buildTop10TradeTimeChart(ineq, ts); wireLazyInequalityCharts(ineq, panel); })],
-        ["governance", () => safeRun("governance chart", () => buildWGIChart(gov))],
       ]);
       const lazyObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -2297,7 +2238,7 @@
           entry.target.dataset.chartBuilt = "1";
         });
       }, { rootMargin: "120px 0px" });
-      ["macro", "sectors", "inequality", "governance"].forEach((id) => {
+      ["macro", "sectors", "inequality"].forEach((id) => {
         const section = document.getElementById(id);
         if (section) lazyObserver.observe(section);
       });
@@ -2314,7 +2255,7 @@
       const telemetryEndpoint = document.documentElement.dataset.telemetryEndpoint || "";
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState !== "hidden") return;
-        const sectionIds = ["hero", "question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "governance", "results", "map", "conclusions", "sources"];
+        const sectionIds = ["hero", "question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "two-lives", "results", "map", "conclusions", "sources"];
         let reached = "hero";
         sectionIds.forEach((id) => {
           const section = document.getElementById(id);

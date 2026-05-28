@@ -63,7 +63,7 @@
         <a href="#macro">Economy</a>
         <a href="#sectors">Sectors</a>
         <a href="#inequality">Inequality</a>
-        <a href="#governance">Governance</a>
+        <a href="#two-lives">Two Lives</a>
         <a href="#results">Evidence</a>
         <a href="#map">Map</a>
         <a href="#conclusions">Conclusions</a>
@@ -73,7 +73,7 @@
         <summary>More</summary>
         <div class="topnav-more-menu">
           <a href="#timeline">Timeline</a>
-          <a href="#governance">Governance</a>
+          <a href="#two-lives">Two Lives</a>
           <a href="#map">Map</a>
         </div>
       </details>
@@ -105,7 +105,7 @@
           <a class="ghost-btn hero-cta-primary" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
           <a class="hero-text-link" href="#macro">Jump to national charts →</a>
         </div>
-        <p class="hero-data-note">Built on WDI, WID, WIID, WGI, and QLFS data — <a href="#sources">see sources</a>.</p>
+        <p class="hero-data-note">Built on WDI, WID, WIID, and QLFS data — <a href="#sources">see sources</a>.</p>
       </div>
       <div class="hero-figure hero-figure--photo-only">
         <figure class="hero-photo-card">
@@ -129,12 +129,14 @@
     <section class="argument-summary" aria-label="What this essay argues">
       <h2>What this essay argues</h2>
       <p>
-        South Africa's democratic transition reintegrated the economy faster than it
-        built broad labor-market inclusion. The strongest pattern in the data is that
-        trade openness moves with the decline of <strong>trade-exposed sectors</strong>—
-        especially manufacturing—both in employment and in share of GDP. The sections
-        below set the scene with places and policy, then narrow in on those sectors,
-        then briefly examine who captured the remaining gains.
+        Opening up <strong>worked, and it didn't</strong>. After 1994 trade nearly doubled
+        as a share of the economy (≈37% → ≈66% of GDP) and income per person rose by roughly
+        a third from its 1994 level — the gains were real. But those gains did not spread:
+        unemployment stayed above 30%, the decline of <strong>trade-exposed sectors</strong>
+        (especially manufacturing) accelerated, and the share of income held by the top tenth
+        climbed from about 47% to 65%. The same opening that grew the pie also concentrated it.
+        The sections below set the scene with places and policy, narrow in on the sectors,
+        and show who captured the gains.
       </p>
     </section>
     <div class="section-bridge" aria-label="Transition to question">
@@ -375,7 +377,7 @@
         <p class="section-step">Section 03</p>
         <h2>Twelve moments that opened the economy.</h2>
         <p class="section-lede">
-          Tracing the path: sanctions end, RDP becomes GEAR, global trade locks in, commodities surge, and governance stalls. The cards below map these turning points.
+          Tracing the path: sanctions end, RDP becomes GEAR, global trade locks in, and commodities surge. The cards below map these turning points.
         </p>
       </div>
 
@@ -742,82 +744,45 @@
         </p>
       </div>
     </section>
-    <div class="section-bridge" aria-label="Transition to governance">
+    <div class="section-bridge" aria-label="Transition to Two Lives">
       <p class="section-bridge__from">Distribution remains concentrated.</p>
-      <p class="section-bridge__to"><a href="#governance">Next: what happened to institutions and trust ↓</a></p>
+      <p class="section-bridge__to"><a href="#two-lives">Next: live the same transition through two people ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
-    <!-- 6. Governance                                                -->
+    <!-- 7. Two Lives — interactive perspective                       -->
     <!-- ============================================================ -->
-    <section id="governance" class="section">
+    <section id="two-lives" class="section section-two-lives">
       <div class="section-head">
         <p class="section-step">Section 07</p>
-        <h2>Institutions wobbled when patronage hardened.</h2>
+        <h2>Two lives, one transition.</h2>
         <p class="section-lede">
-          A short pause from the sectoral spine: how far did the institutions that were
-          supposed to spread integration's gains move alongside the economy? The World
-          Bank's governance scores are rough annual summaries — useful here as one extra
-          check, not as a competing main channel.
+          The charts above are national averages. They hide what an average always hides:
+          two people can live through the exact same decade and come out in opposite places.
+          Below, walk 1994 to 2025 through two South Africans. Make the choices any worker faced,
+          and watch the same decisions land differently depending on where apartheid left each man standing.
         </p>
       </div>
 
-      <figure class="card constitutional-court-figure">
-        <figcaption class="card-head">
-          <h3>Constitution Hill in brick and glass</h3>
-          <p>
-            The Constitutional Court in the photo stands for the post-1994 legal
-            order—public-interest cases, socioeconomic rights, and a break with
-            unchecked parliamentary power under apartheid. The “rule of law” and
-            “voice and accountability” scores in the chart below are only rough
-            yearly ratings; they cannot describe every court case, but they track
-            whether outside observers still saw those promises as credible when
-            patronage politics hardened in the 2010s.
+      <div class="two-lives" id="two-lives-app" data-src="data/two-lives.json">
+        <p class="two-lives__disclaimer" role="note">
+          <strong>Pieter</strong> and <strong>Sipho</strong> are <em>composite</em> characters:
+          illustrative figures built from the cited data and history, not real individuals.
+          Their paths reflect documented patterns, not any one person's life.
+        </p>
+        <div class="two-lives__stage" id="tl-stage" aria-live="polite"></div>
+        <noscript>
+          <p class="two-lives__noscript">
+            This interactive needs JavaScript. The short version: starting from 1994, the same
+            economic choices tended to lift Pieter (white, Johannesburg, with access to capital)
+            into the top income decile, while pushing Sipho (Black, from Gugulethu, in a
+            trade-exposed factory job) toward retrenchment, displacement, and the informal economy.
           </p>
-        </figcaption>
-        <picture>
-
-          <source srcset="assets/ground/constitutional-court-johannesburg.webp" type="image/webp" />
-
-          <img class="constitutional-court-img" src="assets/ground/constitutional-court-johannesburg.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Constitutional Court of South Africa, Johannesburg"  />
-
-        </picture>
-        <p class="card-sub court-photo-credit">Photo: Alex Southgate (image dated 26 Aug 2009; uploaded 1 Nov 2009). Licence not stated in supplied metadata—confirm on the original host before reuse. See <a href="assets/CREDITS.md">CREDITS.md</a>.</p>
-      </figure>
-
-      <figure class="card">
-        <figcaption class="card-head">
-          <h3>WGI (World Governance Indicators), South Africa (1996–2024)</h3>
-          <p>Start with three lines: <strong>Average governance</strong>, <strong>courts/rules reliability</strong>, and <strong>corruption control</strong>. The other pillars are optional context. See <a class="kb-link" href="#sources" data-kb="dataset-wgi-underlying-sources">how WGI is built</a>.</p>
-        </figcaption>
-        <div class="wgi-controls">
-          <label class="wgi-toggle">
-            <input type="checkbox" id="wgi-show-context" />
-            <span>Show all governance pillars</span>
-          </label>
-        </div>
-        <div class="chart-canvas-wrap"><canvas id="chart-wgi"></canvas></div>
-        <p class="chart-caveat">WGI reflects external governance assessments, not direct legal outcomes.</p>
-        <p class="card-sub wgi-callouts">
-          Quick read: peaks around 2008, weakens through much of 2009–2018, then partially recovers after 2019.
-        </p>
-      </figure>
-
-      <div class="prose narrow">
-        <p>
-          The overall WGI score peaks around 2008 and weakens during the Zuma
-          years (2009–2018), with a partial bounce later. That timing lines up with
-          the “rules and trust” story, but it does not prove governance caused growth.
-          In the statistical battery, a higher WGI score lines up with faster GDP
-          growth in one specification (<strong>slope ≈ 40.5</strong>,
-          <span class="mono">p = 0.036</span> with adjusted errors, 26 years)—yet
-          that remains an association in a short, shock-filled sample, not proof that
-          better governance caused faster growth.
-        </p>
+        </noscript>
       </div>
     </section>
     <div class="section-bridge" aria-label="Transition to evidence">
-      <p class="section-bridge__from">Patterns are visible in the charts.</p>
+      <p class="section-bridge__from">Two people, one widening gap.</p>
       <p class="section-bridge__to"><a href="#results">Next: which patterns survive stricter tests ↓</a></p>
     </div>
 
@@ -842,10 +807,6 @@
           <span class="result-chip__tier">Not significant</span>
           <span class="result-chip__claim">No clean structural break at the 1996 GEAR pivot.</span>
         </button>
-        <button class="result-chip result-chip--raw" type="button" data-target="row-wgi-gdp">
-          <span class="result-chip__tier">Raw-only</span>
-          <span class="result-chip__claim">Governance aligns with GDP growth in one specification.</span>
-        </button>
         <button class="result-chip result-chip--ns" type="button" data-target="row-trade-unemp">
           <span class="result-chip__tier">Not significant</span>
           <span class="result-chip__claim">Trade does not robustly explain unemployment levels.</span>
@@ -862,9 +823,8 @@
           26 years). <strong>Second</strong>, trade openness also tracks the rise of the top
           1%'s income share — the one inequality–trade link the multiple-testing
           adjustments cannot dismiss. On the other side of the ledger, the Chow test does
-          not find a clean structural break at the 1996 GEAR pivot, governance scores
-          line up with GDP growth only in one specification (raw <span class="mono">p</span>, dies under
-          adjustment), and trade does not robustly explain unemployment levels on its
+          not find a clean structural break at the 1996 GEAR pivot, and trade does not
+          robustly explain unemployment levels on its
           own. None of these single-country regressions are causal proof — for that
           this essay leans on
           <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
@@ -1293,7 +1253,6 @@
             <li><a href="https://databank.worldbank.org/source/world-development-indicators" target="_blank" rel="noopener noreferrer">World Development Indicators (Databank)</a> — exports, GDP, population, etc.</li>
             <li><a href="https://wid.world/country/south-africa/" target="_blank" rel="noopener noreferrer">World Inequality Database — South Africa</a> — income and wealth shares.</li>
             <li><a href="https://www.wider.unu.edu/project/wiid-world-income-inequality-database" target="_blank" rel="noopener noreferrer">WIID (UNU-WIDER)</a> — harmonised Gini / Palma.</li>
-            <li><a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators" target="_blank" rel="noopener noreferrer">Worldwide Governance Indicators</a> — methodology and data portal.</li>
             <li><a href="https://www.statssa.gov.za/?page_id=1854&amp;PPN=P0211" target="_blank" rel="noopener noreferrer">Stats SA — Statistical release P0211 (QLFS)</a> — official publications and methodology.</li>
             <li><a href="https://www.statssa.gov.za/" target="_blank" rel="noopener noreferrer">Statistics South Africa</a> — producer of QLFS/LFS/OHS microdata used in analysis scripts.</li>
             <li>
@@ -1334,7 +1293,7 @@
         <ul class="link-list sources-scope-list">
           <li><strong>Fair to say:</strong> After 1994, South Africa opened more while income and wealth stayed highly concentrated and unemployment stayed high.</li>
           <li><strong>Fair to say:</strong> Among this project’s many regressions, the trade/top-income pattern is the hardest to dismiss after strict corrections.</li>
-          <li><strong>Not fair to claim:</strong> That these national charts alone prove trade caused inequality, or GEAR caused growth paths, or governance caused GDP.</li>
+          <li><strong>Not fair to claim:</strong> That these national charts alone prove trade caused inequality, or that GEAR alone caused these growth paths.</li>
           <li><strong>Not fair to claim:</strong> Perfect comparability across inequality surveys that were built in different ways or stop in different years.</li>
         </ul>
       </div>
@@ -1400,5 +1359,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>
+  <script src="two-lives.js" defer></script>
 </body>
 </html>

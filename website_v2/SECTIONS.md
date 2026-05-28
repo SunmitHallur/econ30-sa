@@ -24,7 +24,7 @@ Use this map for targeted edits after the visual-essay redesign.
 | 4 | `macro` | `#chart-indexed` (now 3 distinct hues), `#chart-unemployment` |
 | 5 | `sectors` | `.sector-stats-card`, `#chart-sector-shares`, `#chart-manuf-decline`, `#chart-scatter-manuf-trade` |
 | 6 | `inequality` | `#chart-income-shares`, `#chart-wealth-shares`, `#chart-top10-trade-time`, `#chart-scatter-top10-trade`, `#chart-gini` |
-| 7 | `governance` | `#chart-wgi`, `#wgi-show-context` |
+| 7 | `two-lives` | `#two-lives-app`, `#tl-stage` — interactive perspective engine (`two-lives.js` + `data/two-lives.json`) |
 | 8 | `results` | `.results-summary-card`, `.results-detail-toggle`, `.result-chips`, `#headline-table` |
 | 9 | `map` | `#za-map` |
 | 10 | `conclusions` | `.conclusion-grid`, `#quote-orbit` |
@@ -40,6 +40,7 @@ Between every major section: `.section-bridge` (`.section-bridge__from`, `.secti
 |---|---|
 | Chart rendering + annotation bands/labels | `app.js` (`annotationPlugin`, chart builders) |
 | Timeline and autoplay | `app.js` (`TIMELINE`, `renderTimeline`, `wireTimelineAutoscroll`) |
+| Two Lives interactive | `two-lives.js` (engine), `data/two-lives.json` (content) |
 | Results scrolly behavior | `scrolly-results.js` |
 | TOC + breadcrumb active step | `app.js` (`wireTOC`, `updateArgumentBreadcrumb`) |
 | Page-level design and responsive behavior | `styles.css` |
