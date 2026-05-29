@@ -568,6 +568,8 @@
     refreshSuggestedChips();
   };
 
+  const getTourSteps = () => (Array.isArray(tour?.steps) ? tour.steps : []);
+
   const tourScrollOffset = () => ($(".topbar")?.offsetHeight || 64) + 20;
 
   const scrollToAnchor = (anchor) => {
@@ -586,6 +588,21 @@
     window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
   };
 
+  /** ScrollTrigger.refresh() can reset window scroll; re-apply after layout settles. */
+  const scrollTourSectionToStartAfterLayout = (el) => {
+    scrollTourSectionToStart(el);
+    const reapply = () => scrollTourSectionToStart(el);
+    requestAnimationFrame(() => {
+      if (typeof ScrollTrigger !== "undefined") {
+        try {
+          ScrollTrigger.refresh();
+        } catch { /* ignore */ }
+      }
+      reapply();
+      requestAnimationFrame(reapply);
+    });
+  };
+
   const setTourHighlight = (selector) => {
     document.body.classList.toggle("essay-guide-tour-active", tourActive);
     $$("main section, main .hero").forEach((sec) => {
@@ -600,22 +617,18 @@
   };
 
   const focusTourStep = (step) => {
-    const selector = step.highlight || step.anchor;
-    const el = document.querySelector(step.anchor);
-    setTourHighlight(selector);
-    scrollTourSectionToStart(el);
-    if (typeof ScrollTrigger !== "undefined") {
-      window.requestAnimationFrame(() => {
-        try {
-          ScrollTrigger.refresh();
-        } catch { /* ignore */ }
-      });
-    }
+    const anchor = step?.anchor || step?.highlight;
+    if (!anchor) return;
+    const el = document.querySelector(anchor);
+    if (!el) return;
+    setTourHighlight(step.highlight || anchor);
+    scrollTourSectionToStartAfterLayout(el);
   };
 
   const renderTourStep = () => {
     if (mode !== "tour" || !panelOpen) return;
-    const step = tour.steps[tourIndex];
+    const steps = getTourSteps();
+    const step = steps[tourIndex];
     if (!step) return;
 
     const titleEl = $("#essay-guide-tour-title");
@@ -626,10 +639,10 @@
 
     if (titleEl) titleEl.textContent = step.title;
     if (narrEl) narrEl.textContent = step.narration;
-    if (progEl) progEl.textContent = `Step ${tourIndex + 1} of ${tour.steps.length}`;
+    if (progEl) progEl.textContent = `Step ${tourIndex + 1} of ${steps.length}`;
     if (prevBtn) prevBtn.disabled = tourIndex === 0;
     if (nextBtn) {
-      const isLast = tourIndex >= tour.steps.length - 1;
+      const isLast = tourIndex >= steps.length - 1;
       nextBtn.textContent = isLast ? "Finish tour" : "Next section →";
       nextBtn.setAttribute("aria-label", isLast ? "Finish walkthrough" : "Go to next section");
     }
@@ -638,7 +651,7 @@
 
     const indicator = $("#section-indicator-text");
     if (indicator) {
-      indicator.textContent = `Tour ${tourIndex + 1}/${tour.steps.length} · ${step.title}`;
+      indicator.textContent = `Tour ${tourIndex + 1}/${steps.length} · ${step.title}`;
     }
 
     refreshSuggestedChips(step.suggestedQuestions);
@@ -657,17 +670,22 @@
   };
 
   const tourNext = () => {
-    if (tourIndex >= tour.steps.length - 1) {
+    const steps = getTourSteps();
+    if (!steps.length || mode !== "tour" || !panelOpen) return;
+    if (tourIndex >= steps.length - 1) {
       resetTour();
       setModeTab("ask");
       return;
     }
+    tourActive = true;
     tourIndex += 1;
     renderTourStep();
   };
 
   const tourPrev = () => {
-    if (tourIndex <= 0) return;
+    const steps = getTourSteps();
+    if (!steps.length || tourIndex <= 0 || mode !== "tour" || !panelOpen) return;
+    tourActive = true;
     tourIndex -= 1;
     renderTourStep();
   };
@@ -678,7 +696,7 @@
     wrap.innerHTML = "";
     let questions = overrideQuestions;
     if (!questions?.length) {
-      const step = tour.steps.find((s) => s.id === getActiveSectionId());
+      const step = getTourSteps().find((s) => s.id === getActiveSectionId());
       questions = step?.suggestedQuestions || [
         "What is this project about?",
         "What data do you use?",
@@ -957,6 +975,11 @@
       if (tourRes.ok) tour = await tourRes.json();
     } catch (e) {
       console.warn("Essay Guide: could not load data", e);
+    }
+
+    if (mode === "tour" && panelOpen && getTourSteps().length) {
+      tourActive = true;
+      renderTourStep();
     }
 
     appendMessage(
