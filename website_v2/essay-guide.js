@@ -60,6 +60,33 @@
       .replace(/\s+/g, " ")
       .trim();
 
+  const parseWordLimit = (query) => {
+    const q = String(query || "");
+    const patterns = [
+      /\b(\d{1,3})\s*[-]?\s*words?\b/i,
+      /\bwithin\s+(\d{1,3})\s+words?\b/i,
+      /\bmax(?:imum)?\s+(\d{1,3})\s+words?\b/i,
+      /\bin\s+(\d{1,3})\s+words?\b/i,
+    ];
+    for (const re of patterns) {
+      const m = q.match(re);
+      if (m) {
+        const n = parseInt(m[1], 10);
+        if (n >= 5 && n <= 120) return n;
+      }
+    }
+    return null;
+  };
+
+  const truncateToWordLimit = (text, limit) => {
+    const words = String(text || "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    if (words.length <= limit) return words.join(" ");
+    return words.slice(0, limit).join(" ");
+  };
+
   const isEssayAdjacentQuery = (query) => {
     const n = normalizeQuery(query);
     if (!n || n.length < 4) return false;
@@ -174,6 +201,10 @@
       { test: () => /\b(main finding|takeaway|headline|summar)/.test(q), id: "faq-what-are-the-main-findings" },
       { test: () => /\b(section|structure|navigate|organized)\b/.test(q), id: "meta-sections" },
       { test: () => /\b(capstone|econ\s*30|who wrote|author)\b/.test(q), id: "meta-scope" },
+      {
+        test: () => /\bsummar/i.test(q) && /\b25\s*[-]?\s*words?\b/i.test(q),
+        id: "faq-25-word-summary",
+      },
     ];
     for (const rule of rules) {
       if (!rule.test()) continue;
@@ -276,7 +307,22 @@
   };
 
   const buildLocalAnswer = (query, hits) => {
+    const wordLimit = parseWordLimit(query);
     const adjacent = isEssayAdjacentQuery(query);
+
+    if (wordLimit && hits.length) {
+      const best = hits[0].chunk;
+      let text = best.id?.startsWith("faq-")
+        ? best.text
+        : excerptFromChunk(best);
+      text = truncateToWordLimit(text, wordLimit);
+      return {
+        html: `<p>${text}</p>`,
+        anchors: [best.anchor || "#hero"],
+        grounded: true,
+      };
+    }
+
     if (!hits.length) {
       if (adjacent) {
         const scope = getChunkById("meta-scope");
@@ -370,9 +416,17 @@
       if (!res.ok) return null;
       if (!data?.answer) return null;
       apiAvailable = true;
+      const wordLimit = data.wordLimit ?? parseWordLimit(query);
+      let answerText = data.answer;
+      if (wordLimit) {
+        answerText = truncateToWordLimit(answerText, wordLimit);
+      }
       const anchors = data.anchors || hits.map((h) => h.chunk.anchor).filter(Boolean);
-      let html = `<p>${data.answer.replace(/\n/g, "</p><p>")}</p>`;
-      if (anchors.length) {
+      let html = `<p>${answerText.replace(/\n/g, " ").replace(/</g, "&lt;")}</p>`;
+      if (wordLimit) {
+        const wc = answerText.split(/\s+/).filter(Boolean).length;
+        html += `<p class="essay-guide__cite mono">${wc} words (limit ${wordLimit}) · <a href="#hero">Intro</a></p>`;
+      } else if (anchors.length) {
         html += `<p class="essay-guide__cite">See: ${anchors
           .map((a) => `<a href="${a}">${a.replace("#", "")}</a>`)
           .join(", ")}</p>`;

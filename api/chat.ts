@@ -39,8 +39,47 @@ Grounding:
 - Prioritize the provided context. Do not invent statistics, regression coefficients, p-values, or years not supported by the chunks.
 - If chunks are partial, give a short orienting answer from what is present and name which section to read; do not pretend the essay covers something it does not.
 - Prefer "association" or "lines up with" over causal claims unless the context cites district-level evidence (e.g. Erten–Leight–Tregenna).
-- Use plain language for a general reader. Up to ~150 words when the question needs synthesis.
-- End with one short sentence suggesting which section to read next.`;
+- Use plain language for a general reader. Up to ~150 words when the question needs synthesis, unless the reader specifies a word count.
+- When no word count is specified, end with one short sentence suggesting which section to read next.
+- When the reader specifies a word count (e.g. "25 words", "in 30 words"), that limit is mandatory: stay at or under it, use one short paragraph only, and do not add section pointers or sign-offs.`;
+
+function countWords(text: string): number {
+  const t = text.trim();
+  if (!t) return 0;
+  return t.split(/\s+/).length;
+}
+
+/** Detect requests like "25 word summary" or "summarize in 40 words". */
+export function parseWordLimit(question: string): number | null {
+  const q = question.trim();
+  const patterns = [
+    /\b(\d{1,3})\s*[-]?\s*words?\b/i,
+    /\bwithin\s+(\d{1,3})\s+words?\b/i,
+    /\bmax(?:imum)?\s+(\d{1,3})\s+words?\b/i,
+    /\bin\s+(\d{1,3})\s+words?\b/i,
+  ];
+  for (const re of patterns) {
+    const m = q.match(re);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (n >= 5 && n <= 120) return n;
+    }
+  }
+  return null;
+}
+
+function truncateToWordLimit(text: string, limit: number): string {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= limit) return words.join(" ");
+  return words.slice(0, limit).join(" ");
+}
+
+function answerInstructions(wordLimit: number | null): string {
+  if (wordLimit) {
+    return `Answer in at most ${wordLimit} words (hard limit). One paragraph only. No "read the X section" footer, no bullet lists, no markdown headers. Every word must count toward the summary.`;
+  }
+  return `Answer in 2-4 short paragraphs. For essay-adjacent questions, connect the dots across chunks. End with one short sentence suggesting which section to read next. Do not use markdown headers.`;
+}
 
 function serviceUnavailable(message: string) {
   return Response.json({ error: message }, { status: 503 });
@@ -116,6 +155,8 @@ export async function POST(request: Request) {
     )
     .join("\n\n");
 
+  const wordLimit = parseWordLimit(question);
+
   try {
     const { text } = await generateText({
       model,
@@ -127,22 +168,31 @@ ${contextBlock || "(no chunks retrieved — give a brief orienting answer about 
 
 Question: ${question}
 
-Answer in 2-4 short paragraphs. For essay-adjacent questions, connect the dots across chunks. Do not use markdown headers.`,
-      maxOutputTokens: 400,
-      temperature: 0.2,
+${answerInstructions(wordLimit)}`,
+      maxOutputTokens: wordLimit ? Math.min(200, Math.max(48, wordLimit * 6)) : 400,
+      temperature: wordLimit ? 0.15 : 0.2,
     });
 
-    const anchors = [
-      ...new Set(
-        context
-          .map((c) => c.anchor || (c.section ? `#${c.section}` : null))
-          .filter(Boolean) as string[]
-      ),
-    ];
+    let answer = text.trim();
+    if (wordLimit) {
+      answer = truncateToWordLimit(answer, wordLimit);
+    }
+
+    const anchors = wordLimit
+      ? ["#hero"]
+      : [
+          ...new Set(
+            context
+              .map((c) => c.anchor || (c.section ? `#${c.section}` : null))
+              .filter(Boolean) as string[]
+          ),
+        ];
 
     return Response.json({
-      answer: text.trim(),
+      answer,
       anchors: anchors.length ? anchors : ["#sources"],
+      wordLimit: wordLimit ?? undefined,
+      wordCount: countWords(answer),
     });
   } catch (err) {
     console.error("api/chat error", err);
