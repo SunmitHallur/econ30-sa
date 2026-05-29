@@ -638,11 +638,18 @@
     }
   };
 
+  const syncTourUiClasses = () => {
+    const walkthroughUi =
+      mode === "tour" && panelOpen && tourActive && tour.steps.length > 0;
+    document.body.classList.toggle("essay-guide-mode-tour", walkthroughUi);
+  };
+
   const setTourDockVisible = (visible) => {
     const dock = $("#essay-guide-tour-dock");
     if (!dock) return;
+    syncTourUiClasses();
     const eligible =
-      tourActive && panelOpen && mode === "tour" && tour.steps.length > 0;
+      mode === "tour" && panelOpen && tourActive && tour.steps.length > 0;
     if (!eligible) {
       stopTourDockRevealWatch();
       dock.classList.remove("is-visible");
@@ -698,6 +705,7 @@
   };
 
   const renderTourStep = () => {
+    if (mode !== "tour" || !panelOpen) return;
     const step = tour.steps[tourIndex];
     if (!step) return;
 
@@ -741,6 +749,7 @@
     stopTourDockRevealWatch();
     setTourHighlight(null);
     document.body.classList.remove("essay-guide-tour-active");
+    document.body.classList.remove("essay-guide-mode-tour");
     setTourDockVisible(false);
   };
 
@@ -845,6 +854,8 @@
 
   const showInvite = () => {
     if (panelOpen || inviteDismissed()) return;
+    setTourDockVisible(false);
+    if (tourActive) pauseTour();
     const invite = $("#essay-guide-invite");
     if (!invite) return;
     inviteVisible = true;
@@ -869,9 +880,14 @@
     root?.classList.add("is-open");
     root?.setAttribute("aria-hidden", "false");
     $("#essay-guide-launcher")?.setAttribute("aria-expanded", "true");
-    if (initialMode) setModeTab(initialMode);
-    if (initialMode !== "tour") $("#essay-guide-input")?.focus();
-    setTourDockVisible(initialMode === "tour");
+    if (initialMode === "tour") {
+      setModeTab("tour");
+    } else {
+      if (tourActive) pauseTour();
+      setModeTab("ask");
+      $("#essay-guide-input")?.focus();
+    }
+    setTourDockVisible(initialMode === "tour" && mode === "tour");
   };
 
   const closePanel = () => {
@@ -1058,6 +1074,8 @@
 
   const boot = async () => {
     buildUI();
+    pauseTour();
+    setTourDockVisible(false);
     clearLegacyInviteDismiss();
     scheduleInvite();
 
@@ -1108,6 +1126,10 @@
 
   window.addEventListener("load", onPageReady);
   window.addEventListener("pageshow", (e) => {
+    if (!panelOpen || mode !== "tour") {
+      setTourDockVisible(false);
+      if (!panelOpen && tourActive) pauseTour();
+    }
     if (e.persisted && !inviteDismissed() && !panelOpen) {
       scheduleInvite(INVITE_RESHOW_MS);
     }

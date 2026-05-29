@@ -3953,14 +3953,14 @@ details summary h3 { display: inline; }
     0 16px 48px color-mix(in oklab, var(--bg) 55%, transparent);
 }
 
-/* Floating next-step control in the essay column (visible while sections are dimmed) */
+/* Floating next-step control — walkthrough tab only (see body.essay-guide-mode-tour) */
 .essay-guide-tour-dock {
   position: fixed;
   z-index: 880;
   left: max(var(--gutter), 16px);
   right: max(16px, var(--gutter));
   bottom: max(18px, env(safe-area-inset-bottom));
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
@@ -3979,13 +3979,19 @@ details summary h3 { display: inline; }
     opacity 0.28s var(--ease-out),
     transform 0.32s var(--ease-spring);
 }
+body.essay-guide-mode-tour.essay-guide-panel-open .essay-guide-tour-dock {
+  display: flex;
+}
 .essay-guide-tour-dock.is-visible {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
+.essay-guide-tour-dock[hidden] {
+  display: none !important;
+}
 @media (min-width: 900px) {
-  body.essay-guide-panel-open .essay-guide-tour-dock {
+  body.essay-guide-panel-open.essay-guide-mode-tour .essay-guide-tour-dock {
     right: min(400px, calc(34vw + 20px));
   }
 }
