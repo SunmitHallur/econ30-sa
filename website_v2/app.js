@@ -45,7 +45,7 @@
   const initialTheme = () => {
     const saved = localStorage.getItem(themeKey);
     if (saved) return saved;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "dark";
   };
   applyTheme(initialTheme());
   $("#theme-toggle")?.addEventListener("click", () => {
