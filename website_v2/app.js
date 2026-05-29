@@ -488,21 +488,80 @@
     const rows = sector.rows;
     const fmtPct = (v, dp = 1) => (v == null || Number.isNaN(v) ? "–" : `${(v * 100).toFixed(dp)}%`);
     const fmtRaw = (v, dp = 1) => (v == null || Number.isNaN(v) ? "–" : `${v.toFixed(dp)}%`);
+    const fmtDeltaPp = (d, dp = 1) => {
+      if (d == null || Number.isNaN(d)) return "–";
+      const sign = d > 0 ? "+" : d < 0 ? "−" : "";
+      return `${sign}${Math.abs(d).toFixed(dp)} pp`;
+    };
+
+    const paintSectorStat = ({
+      cardKey,
+      startVal,
+      endVal,
+      startYear,
+      endYear,
+      fmtValue,
+      deltaPp,
+    }) => {
+      const root = document.querySelector(`[data-stat="${cardKey}"]`);
+      if (!root || startVal == null || endVal == null) return;
+      const trend = endVal < startVal ? "down" : endVal > startVal ? "up" : "flat";
+      root.classList.remove("sector-stat--down", "sector-stat--up", "sector-stat--flat");
+      root.classList.add(`sector-stat--${trend}`);
+      const set = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      set(`stat-${cardKey}-start`, fmtValue(startVal));
+      set(`stat-${cardKey}-end`, fmtValue(endVal));
+      set(`stat-${cardKey}-start-yr`, String(startYear));
+      set(`stat-${cardKey}-end-yr`, String(endYear));
+      set(`stat-${cardKey}-delta`, fmtDeltaPp(deltaPp));
+      const arrow = document.getElementById(`stat-${cardKey}-arrow`);
+      if (arrow) arrow.textContent = trend === "down" ? "↓" : trend === "up" ? "↑" : "→";
+    };
 
     const vaFirst = rows.find((r) => r.manuf_va_share_gdp != null);
     const vaLast = [...rows].reverse().find((r) => r.manuf_va_share_gdp != null);
-    if (vaFirst) document.getElementById("stat-manuf-va-start") && (document.getElementById("stat-manuf-va-start").textContent = `${fmtRaw(vaFirst.manuf_va_share_gdp)} (${vaFirst.year})`);
-    if (vaLast) document.getElementById("stat-manuf-va-end") && (document.getElementById("stat-manuf-va-end").textContent = `${fmtRaw(vaLast.manuf_va_share_gdp)} (${vaLast.year})`);
+    if (vaFirst && vaLast) {
+      paintSectorStat({
+        cardKey: "manuf-va",
+        startVal: vaFirst.manuf_va_share_gdp,
+        endVal: vaLast.manuf_va_share_gdp,
+        startYear: vaFirst.year,
+        endYear: vaLast.year,
+        fmtValue: fmtRaw,
+        deltaPp: vaLast.manuf_va_share_gdp - vaFirst.manuf_va_share_gdp,
+      });
+    }
 
     const empFirst = rows.find((r) => r.sic3_share != null);
     const empLast = [...rows].reverse().find((r) => r.sic3_share != null);
-    if (empFirst) document.getElementById("stat-manuf-emp-start") && (document.getElementById("stat-manuf-emp-start").textContent = `${fmtPct(empFirst.sic3_share)} (${empFirst.year})`);
-    if (empLast) document.getElementById("stat-manuf-emp-end") && (document.getElementById("stat-manuf-emp-end").textContent = `${fmtPct(empLast.sic3_share)} (${empLast.year})`);
+    if (empFirst && empLast) {
+      paintSectorStat({
+        cardKey: "manuf-emp",
+        startVal: empFirst.sic3_share,
+        endVal: empLast.sic3_share,
+        startYear: empFirst.year,
+        endYear: empLast.year,
+        fmtValue: fmtPct,
+        deltaPp: (empLast.sic3_share - empFirst.sic3_share) * 100,
+      });
+    }
 
     const trFirst = rows.find((r) => r.tradable_share != null);
     const trLast = [...rows].reverse().find((r) => r.tradable_share != null);
-    if (trFirst) document.getElementById("stat-tradable-start") && (document.getElementById("stat-tradable-start").textContent = `${fmtPct(trFirst.tradable_share)} (${trFirst.year})`);
-    if (trLast) document.getElementById("stat-tradable-end") && (document.getElementById("stat-tradable-end").textContent = `${fmtPct(trLast.tradable_share)} (${trLast.year})`);
+    if (trFirst && trLast) {
+      paintSectorStat({
+        cardKey: "tradable",
+        startVal: trFirst.tradable_share,
+        endVal: trLast.tradable_share,
+        startYear: trFirst.year,
+        endYear: trLast.year,
+        fmtValue: fmtPct,
+        deltaPp: (trLast.tradable_share - trFirst.tradable_share) * 100,
+      });
+    }
 
     const regs = sector.regressions || {};
     const manufReg = regs.manuf_emp_vs_trade;
