@@ -24,8 +24,7 @@
   ];
   const ESSAY_ADJACENT_RE =
     /\b(essay|site|project|capstone|econ(?:omics)?\s*30|thesis|argument|claim|finding|conclusion|method|methodolog|data|dataset|source|chart|map|regression|evidence|caus|associat|apartheid|south africa|post.?1994|integration|inclusion|openness|trade|gear|rdp|unemployment|inequality|manufactur|sector|pieter|sipho|two lives|wdi|qlfs|benjamini|bonferroni|chow|present|professor|reader|section|walkthrough|gdp|provinc|geograph|policy|democrat|sanction|township|hallur|takeaway|summar|explain|compare|who|what|why|how)\b/i;
-  /** Session-only: "Not now" / Escape — invite can return on a later visit. */
-  const INVITE_SESSION_KEY = "econ30-guide-invite-dismissed-session";
+  /** In-memory only: "Not now" / Escape hides invite until the next full page load. */
   const INVITE_DELAY_MS = 900;
   const INVITE_RESHOW_MS = 600;
 
@@ -39,6 +38,7 @@
   let messages = [];
   let apiAvailable = null;
   let inviteVisible = false;
+  let inviteDismissedForLoad = false;
   let inviteTimer = null;
 
   const sectionOrder = [
@@ -794,20 +794,10 @@
     }
   };
 
-  const inviteDismissed = () => {
-    try {
-      return Boolean(sessionStorage.getItem(INVITE_SESSION_KEY));
-    } catch {
-      return false;
-    }
-  };
+  const inviteDismissed = () => inviteDismissedForLoad;
 
-  const hideInvite = (forSession = false) => {
-    if (forSession) {
-      try {
-        sessionStorage.setItem(INVITE_SESSION_KEY, "1");
-      } catch { /* ignore */ }
-    }
+  const hideInvite = (forThisLoad = false) => {
+    if (forThisLoad) inviteDismissedForLoad = true;
     inviteVisible = false;
     const invite = $("#essay-guide-invite");
     invite?.classList.remove("is-visible");
@@ -1011,7 +1001,11 @@
         "econ30-guide-invite-dismissed",
         "econ30-guide-invite-dismissed-v2",
         "econ30-guide-invite-dismissed-v3",
-      ].forEach((k) => localStorage.removeItem(k));
+        "econ30-guide-invite-dismissed-session",
+      ].forEach((k) => {
+        localStorage.removeItem(k);
+        sessionStorage.removeItem(k);
+      });
     } catch { /* ignore */ }
   };
 
