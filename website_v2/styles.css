@@ -643,9 +643,9 @@ a:hover { border-bottom-color: currentColor; }
       transparent 70%
     );
 }
-/* Ground uses .section-bg-film for the same corners; skip duplicate ::before */
+/* Corner wash must sit above the vertical scrim (::after), not on .section-bg-film */
 .section-visual-panel::before {
-  display: none;
+  z-index: 2;
 }
 .section > * {
   position: relative;
@@ -2106,17 +2106,6 @@ details summary h3 { display: inline; }
   z-index: 0;
   pointer-events: none;
   opacity: 0.62;
-  background:
-    radial-gradient(
-      ellipse 46% 42% at 0% 0%,
-      color-mix(in oklab, var(--accent-soft) 36%, transparent) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 46% 42% at 100% 0%,
-      color-mix(in oklab, var(--accent-soft) 36%, transparent) 0%,
-      transparent 70%
-    );
 }
 .section-bg-film__slide {
   position: absolute;
