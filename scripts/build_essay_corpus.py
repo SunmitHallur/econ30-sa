@@ -215,6 +215,166 @@ def load_two_lives_chunk() -> dict | None:
     }
 
 
+def load_meta_chunks() -> list[dict]:
+    """Broad orientation chunks so the guide can answer essay-adjacent questions."""
+    return [
+        {
+            "id": "meta-scope",
+            "section": "hero",
+            "title": "About this project",
+            "anchor": "#hero",
+            "text": (
+                "The Price of Integration is an Economics 30 capstone by Sunmit Hallur (Spring 2026). "
+                "It examines South Africa after 1994: whether reconnecting to global trade and finance "
+                "spread jobs and income to most people. The central tension is integration without inclusion, "
+                "trade and GDP per capita rose while unemployment stayed high, tradable sectors shrank, "
+                "and income concentrated at the top. The site combines narrative sections, national charts, "
+                "a provincial unemployment map, regression results with multiple-testing corrections, "
+                "and the Two Lives interactive story."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "essay",
+                "capstone",
+                "economics",
+                "project",
+                "site",
+                "about",
+                "thesis",
+                "argument",
+                "integration",
+                "inclusion",
+                "sunmit",
+                "hallur",
+                "professor",
+                "presentation",
+            ],
+        },
+        {
+            "id": "meta-methods",
+            "section": "results",
+            "title": "Methods and data",
+            "anchor": "#results",
+            "text": (
+                "The project uses World Bank WDI national panels (trade openness, GDP per capita, unemployment), "
+                "labour force surveys (OHS, LFS, QLFS) for sector employment shares, wealth and top-income series "
+                "from WID and related sources, and a provincial unemployment map built from consistent survey codes. "
+                "A battery of time-series regressions uses HAC standard errors; Benjamini–Hochberg (BH) and Bonferroni "
+                "correct for multiple testing. Results are described as associations, not proof of causation. "
+                "District-level trade exposure work (Erten, Leight, Tregenna) is cited for sharper labour-market "
+                "mechanisms. The Chow test does not find a clean break exactly at the 1996 GEAR pivot."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "method",
+                "methodology",
+                "data",
+                "dataset",
+                "regression",
+                "hac",
+                "benjamini",
+                "bonferroni",
+                "wdi",
+                "qlfs",
+                "evidence",
+                "causation",
+                "association",
+                "chow",
+                "sources",
+            ],
+        },
+        {
+            "id": "meta-sections",
+            "section": "hero",
+            "title": "How the site is organized",
+            "anchor": "#hero",
+            "text": (
+                "Sections walk from the research question through ground-level context (From the Ground, Timeline), "
+                "national economy (Macro, Sectors, Inequality), the Two Lives choices narrative, regression Evidence, "
+                "the provincial Map, Conclusions, and Sources with papers and knowledge-base notes. "
+                "Macro charts show trade openness vs GDP per capita and unemployment. Sectors highlight manufacturing "
+                "and tradable employment loss. Inequality covers top shares and wealth concentration. "
+                "Results summarize which specifications survive BH correction. The map compares provinces on unemployment "
+                "with a fixed colour scale across years."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "section",
+                "structure",
+                "navigate",
+                "walkthrough",
+                "chart",
+                "map",
+                "read",
+                "where",
+                "find",
+            ],
+        },
+        {
+            "id": "meta-sa-context",
+            "section": "question",
+            "title": "South Africa background (essay frame)",
+            "anchor": "#question",
+            "text": (
+                "After apartheid ended in 1994, sanctions lifted and South Africa rejoined global trade and capital markets. "
+                "The RDP (1994) emphasised housing, services, and redistribution; by 1996 policy shifted toward GEAR "
+                "(fiscal tightening, lower tariffs, inflation targets, capital-account openness). "
+                "This essay situates those policy turns alongside stylised facts: rising trade openness, modest GDP per capita "
+                "growth, very high unemployment, declining manufacturing and tradable employment shares, "
+                "and rising top-income concentration. It does not provide a full political history; see Sources for "
+                "academic papers and World Bank updates."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "apartheid",
+                "1994",
+                "1996",
+                "rdp",
+                "gear",
+                "policy",
+                "history",
+                "background",
+                "context",
+                "sanctions",
+                "democracy",
+                "township",
+            ],
+        },
+        {
+            "id": "meta-findings",
+            "section": "conclusions",
+            "title": "Headline findings",
+            "anchor": "#conclusions",
+            "text": (
+                "Main takeaways: South Africa reconnected to the world faster than it shared the benefits. "
+                "Trade openness and GDP per capita rose together; unemployment remained very high. "
+                "Under strict BH correction, trade openness associates with lower manufacturing and tradable employment "
+                "shares and with a higher top 1% income share; it does not robustly explain unemployment levels alone. "
+                "Geography matters: eastern and former homeland provinces tend toward higher unemployment on the map. "
+                "Two Lives illustrates how the same macro shocks can land differently for a white finance worker in "
+                "Johannesburg vs a black factory worker in a Cape Town township."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "finding",
+                "takeaway",
+                "conclusion",
+                "summary",
+                "main",
+                "result",
+                "remember",
+                "learned",
+                "so what",
+            ],
+        },
+    ]
+
+
 def load_timeseries_chunk() -> dict | None:
     path = DATA / "timeseries.json"
     if not path.is_file():
@@ -265,6 +425,7 @@ def main() -> None:
 
     chunks.extend(load_kb_chunks())
     chunks.extend(load_regression_stats())
+    chunks.extend(load_meta_chunks())
     for extra in (load_two_lives_chunk(), load_timeseries_chunk()):
         if extra:
             chunks.append(extra)
@@ -355,6 +516,43 @@ def main() -> None:
             "conclusions",
             "#conclusions",
             ["takeaway", "conclusion", "one sentence"],
+        ),
+        (
+            "what data do you use",
+            "National charts use World Bank WDI (trade, GDP per capita, unemployment). Sector shares draw on "
+            "OHS, LFS, and QLFS. Inequality uses WID-style top shares. The map uses provincial unemployment from "
+            "labour surveys with harmonised codes. Regressions are on a national panel with HAC errors and "
+            "Benjamini–Hochberg multiple-testing correction.",
+            "sources",
+            "#sources",
+            ["data", "dataset", "wdi", "qlfs", "source", "use"],
+        ),
+        (
+            "causation or correlation",
+            "The essay treats national regressions as associations, not proof that trade alone caused unemployment "
+            "or inequality. Language prefers lines up with or correlates unless citing district-level trade exposure "
+            "evidence. The Chow test does not show a clean structural break at 1996 GEAR.",
+            "results",
+            "#results",
+            ["causation", "causal", "correlation", "association", "prove"],
+        ),
+        (
+            "who are pieter and sipho",
+            "Two Lives follows Pieter (white, Johannesburg finance, apartheid-era advantages in jobs and credit) "
+            "and Sipho (black, Gugulethu township, factory wage, rented room) from 1994 through policy and trade shocks. "
+            "It is illustrative, not a representative sample, but shows how the same macro trends can diverge by place and race.",
+            "two-lives",
+            "#two-lives",
+            ["pieter", "sipho", "characters", "interactive", "story"],
+        ),
+        (
+            "what are the main findings",
+            "Integration without inclusion: trade openness and GDP per capita rose; unemployment stayed high; "
+            "manufacturing and tradable jobs lost share; top incomes concentrated. BH-robust links include trade "
+            "with tradable employment decline and top 1% share, not unemployment levels alone.",
+            "conclusions",
+            "#conclusions",
+            ["findings", "main", "takeaway", "summary", "results"],
         ),
     ]
     for fid, text, section, anchor, kws in faqs:

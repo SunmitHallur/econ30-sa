@@ -1867,6 +1867,80 @@
         },
       });
     }
+
+    wireChartCopyScrollDrift();
+  };
+
+  /**
+   * Macro / sectors / inequality: left copy starts level with charts, then drifts toward
+   * viewport center while the reader scrolls through the chart stack.
+   */
+  const wireChartCopyScrollDrift = () => {
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const desktop = () => window.matchMedia("(min-width: 900px)").matches;
+
+    const topbarPx = () => {
+      const tb = document.querySelector(".topbar");
+      return Math.round((tb?.offsetHeight || 64) + 12);
+    };
+
+    const centerTopPx = (copyEl) => {
+      const start = topbarPx();
+      const h = copyEl.offsetHeight;
+      return Math.max(start, Math.round((window.innerHeight - h) * 0.5));
+    };
+
+    const teardown = () => {
+      ScrollTrigger.getAll()
+        .filter((st) => st.vars?.id === "chart-copy-drift")
+        .forEach((st) => st.kill());
+      document.querySelectorAll(".chart-mockup__copy").forEach((el) => {
+        gsap.killTweensOf(el);
+        el.style.removeProperty("top");
+      });
+    };
+
+    const setup = () => {
+      teardown();
+      if (reduce || !desktop()) return;
+
+      document.querySelectorAll(".chart-mockup").forEach((mockup) => {
+        const pin = mockup.querySelector(".chart-mockup__copy-pin");
+        const copy = mockup.querySelector(".chart-mockup__copy");
+        if (!pin || !copy) return;
+
+        const start = topbarPx();
+        copy.style.top = `${start}px`;
+
+        gsap.fromTo(
+          copy,
+          { top: start },
+          {
+            top: () => centerTopPx(copy),
+            ease: "none",
+            immediateRender: false,
+            scrollTrigger: {
+              id: "chart-copy-drift",
+              trigger: pin,
+              start: () => `top top+=${topbarPx()}`,
+              end: "bottom bottom",
+              scrub: 0.55,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      });
+    };
+
+    setup();
+    window.setupChartCopyScrollDrift = setup;
+    window.matchMedia("(min-width: 900px)").addEventListener("change", () => {
+      setup();
+      ScrollTrigger.refresh();
+    });
   };
 
   /** Chart.js bitmap must match CSS box size; call after layout settles (esp. after wrapper CSS fix). */
@@ -2192,6 +2266,7 @@
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           resizeRegisteredCharts();
+          window.setupChartCopyScrollDrift?.();
           if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
           window.refreshTimelineAutoplay?.();
         });

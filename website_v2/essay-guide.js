@@ -12,8 +12,18 @@
     "a an the and or but in on at to for of is are was were be been being it its that with from as by not no so if than then into who which their there they them we you your our".split(" ")
   );
 
-  const SCORE_THRESHOLD = 1.25;
+  const SCORE_THRESHOLD = 0.55;
+  const RETRIEVE_TOP_K = 5;
   const API_TIMEOUT_MS = 12000;
+  const META_CHUNK_IDS = [
+    "meta-scope",
+    "meta-methods",
+    "meta-sections",
+    "meta-sa-context",
+    "meta-findings",
+  ];
+  const ESSAY_ADJACENT_RE =
+    /\b(essay|site|project|capstone|econ(?:omics)?\s*30|thesis|argument|claim|finding|conclusion|method|methodolog|data|dataset|source|chart|map|regression|evidence|caus|associat|apartheid|south africa|post.?1994|integration|inclusion|openness|trade|gear|rdp|unemployment|inequality|manufactur|sector|pieter|sipho|two lives|wdi|qlfs|benjamini|bonferroni|chow|present|professor|reader|section|walkthrough|gdp|provinc|geograph|policy|democrat|sanction|township|hallur|takeaway|summar|explain|compare|who|what|why|how)\b/i;
   const INVITE_STORAGE_KEY = "econ30-guide-invite-dismissed-v3";
   const INVITE_DELAY_MS = 900;
   const INVITE_RESHOW_MS = 600;
@@ -48,6 +58,76 @@
       .replace(/[^a-z0-9\s]/g, " ")
       .replace(/\s+/g, " ")
       .trim();
+
+  const isEssayAdjacentQuery = (query) => {
+    const n = normalizeQuery(query);
+    if (!n || n.length < 4) return false;
+    if (ESSAY_ADJACENT_RE.test(n)) return true;
+    return tokenize(query).length >= 2;
+  };
+
+  const getChunkById = (id) => corpus.chunks.find((c) => c.id === id);
+
+  const getMetaHits = () =>
+    META_CHUNK_IDS.map((id) => getChunkById(id))
+      .filter(Boolean)
+      .map((chunk) => ({ chunk, score: 1.2 }));
+
+  const getSectionOverviewHit = (sectionId) => {
+    const chunk = corpus.chunks.find(
+      (c) =>
+        c.section === sectionId &&
+        !c.id.startsWith("kb-") &&
+        !c.id.startsWith("meta-")
+    );
+    return chunk ? { chunk, score: 0.85 } : null;
+  };
+
+  const enrichHits = (query, hits, sectionId) => {
+    const seen = new Set(hits.map((h) => h.chunk.id));
+    const out = [...hits];
+    const add = (item) => {
+      if (item && !seen.has(item.chunk.id)) {
+        seen.add(item.chunk.id);
+        out.push(item);
+      }
+    };
+
+    const weak =
+      !hits.length || hits[0].score < SCORE_THRESHOLD;
+    if (!isEssayAdjacentQuery(query) && !weak) {
+      return out.sort((a, b) => b.score - a.score).slice(0, RETRIEVE_TOP_K);
+    }
+
+    getMetaHits().forEach(add);
+    add(getSectionOverviewHit(sectionId));
+    const hero =
+      getChunkById("hero") ||
+      corpus.chunks.find((c) => c.section === "hero");
+    if (hero) add({ chunk: hero, score: 0.7 });
+
+    if (/\b(method|data|regression|evidence|caus|benjamini|bonferroni|hac)\b/i.test(query)) {
+      add(
+        getChunkById("stats-meta")
+          ? { chunk: getChunkById("stats-meta"), score: 1.5 }
+          : null
+      );
+      add(
+        getChunkById("meta-methods")
+          ? { chunk: getChunkById("meta-methods"), score: 1.4 }
+          : null
+      );
+    }
+    if (/\b(finding|takeaway|conclusion|remember|summary|so what)\b/i.test(query)) {
+      add(
+        getChunkById("meta-findings")
+          ? { chunk: getChunkById("meta-findings"), score: 1.4 }
+          : null
+      );
+    }
+
+    return out.sort((a, b) => b.score - a.score).slice(0, RETRIEVE_TOP_K);
+  };
 
   const JUNK_SENTENCE =
     /(% of GDP|% of employed|World Bank WDI|OHS \/ LFS|QLFS|BH-significant|Not significant|→|Stat check|How to read|View source|Section \d|Built on WDI|Pick a term)/i;
@@ -86,6 +166,13 @@
       { test: () => /\bwhy\b.*\bunemployment\b/.test(q) || /\bunemployment\b.*\b(stay|high|fall)\b/.test(q), id: "faq-why-unemployment" },
       { test: () => q.includes("map") && (q.includes("show") || q.includes("what")), id: "faq-what-does-the-map-show" },
       { test: () => q.includes("one sentence") || q.includes("remember"), id: "faq-remember-one-sentence" },
+      { test: () => /\b(thesis|main argument|central claim|what is this (about|project))\b/.test(q), id: "faq-what-is-this-essay-about" },
+      { test: () => /\b(method|methodolog|how did you (study|analyze)|what data)\b/.test(q), id: "faq-what-data-do-you-use" },
+      { test: () => /\b(causation|causal|correlation|prove caus)\b/.test(q), id: "faq-causation-or-correlation" },
+      { test: () => /\b(pieter|sipho|two lives|characters)\b/.test(q), id: "faq-who-are-pieter-and-sipho" },
+      { test: () => /\b(main finding|takeaway|headline|summar)/.test(q), id: "faq-what-are-the-main-findings" },
+      { test: () => /\b(section|structure|navigate|organized)\b/.test(q), id: "meta-sections" },
+      { test: () => /\b(capstone|econ\s*30|who wrote|author)\b/.test(q), id: "meta-scope" },
     ];
     for (const rule of rules) {
       if (!rule.test()) continue;
@@ -98,10 +185,11 @@
   const chunkNoisePenalty = (chunk) => {
     const t = chunk.text || "";
     let penalty = 0;
+    if (chunk.id?.startsWith("meta-") || chunk.id?.startsWith("faq-")) return 0;
     if ((t.match(/→/g) || []).length >= 2) penalty += 4;
     if (/% of (GDP|employed)/i.test(t)) penalty += 3;
-    if (chunk.id?.startsWith("kb-") && !chunk.id.includes("gear") && !chunk.id.includes("rdp")) penalty += 2;
-    if (/^##\s/m.test(t)) penalty += 5;
+    if (chunk.id?.startsWith("kb-") && !chunk.id.includes("gear") && !chunk.id.includes("rdp")) penalty += 1.5;
+    if (/^##\s/m.test(t)) penalty += 4;
     return penalty;
   };
 
@@ -155,7 +243,25 @@
       if (/\b(happened|when|timeline|year)\b/.test(qNorm) && chunk.section === "timeline") {
         score += 2;
       }
-      if (sectionBoostId && chunk.section === sectionBoostId) score += 0.5;
+      if (sectionBoostId && chunk.section === sectionBoostId) score += 1;
+
+      if (/\b(method|data|regression|evidence|study|analyze)\b/.test(qNorm)) {
+        if (["results", "sources"].includes(chunk.section) || chunk.id?.startsWith("stats-")) score += 2;
+        if (chunk.id?.startsWith("meta-methods")) score += 4;
+      }
+      if (/\b(about|essay|project|capstone|thesis|argument)\b/.test(qNorm)) {
+        if (chunk.section === "hero" || chunk.id?.startsWith("meta-scope")) score += 3;
+      }
+      if (/\b(finding|takeaway|conclusion|remember|summary)\b/.test(qNorm)) {
+        if (["conclusions", "results"].includes(chunk.section)) score += 2;
+        if (chunk.id === "meta-findings") score += 3;
+      }
+      if (/\b(section|navigate|where|find|structure)\b/.test(qNorm) && chunk.id === "meta-sections") {
+        score += 4;
+      }
+      if (/\b(pieter|sipho|story|interactive|lives)\b/.test(qNorm) && chunk.section === "two-lives") {
+        score += 3;
+      }
 
       score -= chunkNoisePenalty(chunk);
 
@@ -165,13 +271,33 @@
     return scored
       .filter((s) => s.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
+      .slice(0, RETRIEVE_TOP_K);
   };
 
   const buildLocalAnswer = (query, hits) => {
-    if (!hits.length || hits[0].score < SCORE_THRESHOLD) {
+    const adjacent = isEssayAdjacentQuery(query);
+    if (!hits.length) {
+      if (adjacent) {
+        const scope = getChunkById("meta-scope");
+        if (scope) {
+          return {
+            html: `<p><strong>About this project.</strong> ${excerptFromChunk(scope)}</p>
+              <p class="essay-guide__cite">Start at <a href="#hero">Intro</a> or browse <a href="#sources">Sources</a>.</p>`,
+            anchors: ["#hero", "#sources"],
+            grounded: true,
+          };
+        }
+      }
       return {
-        html: `<p>I could not find a clear match in this essay. Try asking about trade openness, manufacturing jobs, inequality, GEAR, the map, or the regression results. See <a href="#sources">Sources</a> for papers and data.</p>`,
+        html: `<p>I do not have a specific passage for that. This guide focuses on <em>The Price of Integration</em> and related South African evidence on trade, jobs, inequality, and policy after 1994. Try asking about the thesis, methods, GEAR, the map, or main findings, or see <a href="#sources">Sources</a>.</p>`,
+        anchors: ["#sources"],
+        grounded: false,
+      };
+    }
+
+    if (hits[0].score < SCORE_THRESHOLD && !adjacent) {
+      return {
+        html: `<p>That looks outside this essay's scope. Ask about South Africa after 1994, trade openness, unemployment, inequality, GEAR, the map, regressions, or what the project argues. See <a href="#sources">Sources</a> for papers.</p>`,
         anchors: ["#sources"],
         grounded: false,
       };
@@ -181,8 +307,19 @@
     const excerpt = excerptFromChunk(best);
     const anchor = best.anchor || `#${best.section}`;
     const sectionLabel = best.title || best.section.replace(/-/g, " ");
+    const soft =
+      hits[0].score < SCORE_THRESHOLD
+        ? `<p class="essay-guide__cite">Here is the closest material in the project:</p>`
+        : "";
 
-    let body = `<p><strong>${sectionLabel}.</strong> ${excerpt}</p>`;
+    let body = `${soft}<p><strong>${sectionLabel}.</strong> ${excerpt}</p>`;
+    if (hits.length > 1 && hits[0].score < 2) {
+      const also = hits[1].chunk;
+      const extra = excerptFromChunk(also);
+      if (extra && extra !== excerpt) {
+        body += `<p><strong>${also.title || also.section}.</strong> ${extra}</p>`;
+      }
+    }
     if (best.stats?.length) {
       const statLine = best.stats
         .map((s) => `<strong>${s.label}:</strong> ${s.value}`)
@@ -260,17 +397,22 @@
     log.scrollTop = log.scrollHeight;
   };
 
+  const resolveHits = (query, sectionId) => {
+    const curated = findCuratedChunk(query);
+    let hits = curated ? [curated] : retrieve(query, sectionId);
+    if (!curated && hits.length && hits[0].score < SCORE_THRESHOLD) {
+      const retry = retrieve(query, null);
+      if (retry[0]?.score > hits[0].score) hits = retry;
+    }
+    return enrichHits(query, hits, sectionId);
+  };
+
   const handleAsk = async (query) => {
     const q = String(query || "").trim();
     if (!q) return;
     appendMessage("user", q);
     const sectionId = getActiveSectionId();
-    const curated = findCuratedChunk(q);
-    let hits = curated ? [curated] : retrieve(q, sectionId);
-    if (!curated && hits.length && hits[0].score < SCORE_THRESHOLD) {
-      const retry = retrieve(q, null);
-      if (retry[0]?.score > hits[0].score) hits = retry;
-    }
+    const hits = resolveHits(q, sectionId);
 
     const thinking = document.createElement("div");
     thinking.className = "essay-guide__msg essay-guide__msg--assistant essay-guide__thinking";
@@ -278,7 +420,10 @@
     $("#essay-guide-log")?.appendChild(thinking);
 
     let answer = null;
-    if (apiAvailable !== false) {
+    const tryApi =
+      apiAvailable !== false &&
+      (hits.length > 0 || isEssayAdjacentQuery(q));
+    if (tryApi) {
       answer = await tryApiAnswer(q, hits);
     }
     thinking.remove();
@@ -373,9 +518,10 @@
     if (!questions?.length) {
       const step = tour.steps.find((s) => s.id === getActiveSectionId());
       questions = step?.suggestedQuestions || [
-        "What is GEAR?",
+        "What is this project about?",
+        "What data do you use?",
+        "What are the main findings?",
         "Why didn't unemployment fall?",
-        "What survived the regressions?",
       ];
     }
     questions.slice(0, 4).forEach((q) => {
@@ -635,8 +781,8 @@
 
     appendMessage(
       "assistant",
-      `<p>Hi. I can walk you through <strong>The Price of Integration</strong> or answer questions grounded in this essay's text, charts, and sources.</p>
-       <p>Try <strong>Walkthrough</strong> for an 11-step tour, or ask anything below.</p>`
+      `<p>Hi. I can walk you through <strong>The Price of Integration</strong> or answer questions about the argument, methods, data, and South African context around this essay.</p>
+       <p>Try <strong>Walkthrough</strong> for an 11-step tour, or ask below (e.g. main findings, what data you use, or why unemployment stayed high).</p>`
     );
     refreshSuggestedChips();
 

@@ -30,12 +30,17 @@ type ChatBody = {
 
 const SYSTEM = `You are the Essay Guide for "The Price of Integration", an Economics 30 capstone about South Africa after 1994.
 
-Rules:
-- Answer ONLY using the provided context chunks. If the context does not contain the answer, say so briefly and point the reader to #sources.
-- Never invent statistics, regression coefficients, p-values, or years.
-- Use plain language suitable for a general reader. Keep answers under 120 words unless the question requires more detail.
+Scope:
+- Answer questions about this essay, its argument, methods, data, charts, map, regressions, Two Lives narrative, and closely related background (post-1994 South Africa, RDP/GEAR, trade openness, unemployment, inequality, sectors).
+- Synthesize across the provided context chunks when the question is essay-adjacent (e.g. "what is this project about?", "how did you study this?", "what should I remember?").
+- Only decline when the question is clearly unrelated (other countries, unrelated homework, personal advice). Then say briefly that you focus on this project and point to #sources.
+
+Grounding:
+- Prioritize the provided context. Do not invent statistics, regression coefficients, p-values, or years not supported by the chunks.
+- If chunks are partial, give a short orienting answer from what is present and name which section to read; do not pretend the essay covers something it does not.
 - Prefer "association" or "lines up with" over causal claims unless the context cites district-level evidence (e.g. Erten–Leight–Tregenna).
-- End with one short sentence suggesting which section of the essay to read next.`;
+- Use plain language for a general reader. Up to ~150 words when the question needs synthesis.
+- End with one short sentence suggesting which section to read next.`;
 
 function serviceUnavailable(message: string) {
   return Response.json({ error: message }, { status: 503 });
@@ -117,12 +122,12 @@ export async function POST(request: Request) {
       system: SYSTEM,
       prompt: `Reader is viewing section: ${body.section || "unknown"}.
 
-Context from the essay:
-${contextBlock || "(no chunks retrieved)"}
+Context from the essay (may include overview/meta chunks):
+${contextBlock || "(no chunks retrieved — give a brief orienting answer about what this capstone covers and point to #hero and #sources)"}
 
 Question: ${question}
 
-Answer in 2-4 short paragraphs. Do not use markdown headers.`,
+Answer in 2-4 short paragraphs. For essay-adjacent questions, connect the dots across chunks. Do not use markdown headers.`,
       maxOutputTokens: 400,
       temperature: 0.2,
     });

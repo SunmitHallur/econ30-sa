@@ -1943,20 +1943,30 @@ details summary h3 { display: inline; }
   border: none;
   border-radius: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* Fixed-height media box so object-fit: cover actually fills the frame */
+.hero-figure .hero-photo-card picture {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 42vh, 400px);
+  overflow: hidden;
+  line-height: 0;
+  background: var(--bg-sunken);
 }
 .hero-figure .hero-photo {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: min(320px, 36vh);
+  height: 100%;
+  max-height: none;
   object-fit: cover;
+  object-position: center 38%;
   background: var(--bg-sunken);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: 0;
 }
-.hero-figure--photo-only .hero-photo {
-  /* Hero now carries only an image; let it breathe a bit taller. */
-  max-height: min(440px, 50vh);
-  border-radius: var(--radius-lg);
+.hero-figure--photo-only .hero-photo-card picture {
+  height: clamp(240px, 46vh, 420px);
 }
 .hero-figure .hero-photo-card figcaption {
   font-size: 14px;
@@ -2324,30 +2334,22 @@ details summary h3 { display: inline; }
 }
 
 @media (min-width: 900px) {
-  /* Pin column matches chart stack height; copy centered, then sticks under the top bar. */
+  /* Pin column matches chart stack height; copy sticks and drifts top → center (see app.js). */
   .chart-mockup__copy-pin {
     align-self: stretch;
-    display: flex;
-    flex-direction: column;
     min-height: 100%;
-  }
-  .chart-mockup__copy-pin::before,
-  .chart-mockup__copy-pin::after {
-    content: "";
-    flex: 1 1 0;
-    min-height: 0;
-    pointer-events: none;
   }
   .chart-mockup__copy-pin > .chart-mockup__copy {
     position: sticky;
     top: var(--chart-copy-sticky-top, 4.5rem);
-    flex: 0 0 auto;
-    align-self: start;
     width: 100%;
     max-height: calc(100vh - var(--chart-copy-sticky-top, 4.5rem) - 1.25rem);
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
+  }
+  .motion-ready .chart-mockup__copy-pin > .chart-mockup__copy {
+    will-change: top;
   }
 }
 
