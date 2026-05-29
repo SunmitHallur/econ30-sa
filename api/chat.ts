@@ -1,5 +1,14 @@
-import { generateText } from "ai";
 import { createGateway } from "@ai-sdk/gateway";
+import { createOpenAI } from "@ai-sdk/openai";
+import { generateText, type LanguageModel } from "ai";
+import {
+  checkOrigin,
+  checkRateLimit,
+  clampContext,
+  guardStatus,
+  isGuideEnabled,
+  validateQuestion,
+} from "../lib/essay-guide-guard";
 
 export const config = {
   runtime: "nodejs",
@@ -28,16 +37,58 @@ Rules:
 - Prefer "association" or "lines up with" over causal claims unless the context cites district-level evidence (e.g. Erten–Leight–Tregenna).
 - End with one short sentence suggesting which section of the essay to read next.`;
 
+function serviceUnavailable(message: string) {
+  return Response.json({ error: message }, { status: 503 });
+}
+
+/** OpenAI keys must use @ai-sdk/openai; gateway keys use AI Gateway model ids. */
+function resolveModel(): LanguageModel | null {
+  const modelEnv = process.env.ESSAY_GUIDE_MODEL ?? "gpt-4o-mini";
+  const gatewayKey = process.env.AI_GATEWAY_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+
+  if (gatewayKey) {
+    const gateway = createGateway({ apiKey: gatewayKey });
+    const modelId = modelEnv.includes("/") ? modelEnv : `openai/${modelEnv}`;
+    return gateway(modelId);
+  }
+
+  if (openaiKey) {
+    const openai = createOpenAI({ apiKey: openaiKey });
+    const modelId = modelEnv.replace(/^openai\//, "");
+    return openai(modelId);
+  }
+
+  return null;
+}
+
 export async function HEAD() {
-  const key = process.env.AI_GATEWAY_API_KEY ?? process.env.OPENAI_API_KEY;
-  return new Response(null, { status: key ? 200 : 503 });
+  const status = guardStatus();
+  if (!status.enabled) return new Response(null, { status: 503 });
+  if (!status.hasKey) return new Response(null, { status: 503 });
+  return new Response(null, {
+    status: 200,
+    headers: {
+      "X-Essay-Guide-RateLimit": status.rateLimit ? "upstash" : "off",
+    },
+  });
 }
 
 export async function POST(request: Request) {
-  const key = process.env.AI_GATEWAY_API_KEY ?? process.env.OPENAI_API_KEY;
-  if (!key) {
-    return Response.json({ error: "AI not configured" }, { status: 503 });
+  if (!isGuideEnabled()) {
+    return serviceUnavailable("Essay guide is temporarily disabled.");
   }
+
+  const model = resolveModel();
+  if (!model) {
+    return serviceUnavailable("AI not configured");
+  }
+
+  const originBlock = checkOrigin(request);
+  if (originBlock) return originBlock;
+
+  const rateBlock = await checkRateLimit(request);
+  if (rateBlock) return rateBlock;
 
   let body: ChatBody;
   try {
@@ -47,11 +98,12 @@ export async function POST(request: Request) {
   }
 
   const question = String(body.question || "").trim();
-  if (!question) {
-    return Response.json({ error: "Missing question" }, { status: 400 });
-  }
+  const questionError = validateQuestion(question);
+  if (questionError) return questionError;
 
-  const context = Array.isArray(body.context) ? body.context : [];
+  const context = clampContext(
+    Array.isArray(body.context) ? body.context : []
+  );
   const contextBlock = context
     .map(
       (c, i) =>
@@ -59,13 +111,9 @@ export async function POST(request: Request) {
     )
     .join("\n\n");
 
-  const gateway = createGateway({ apiKey: key });
-  const modelId =
-    process.env.ESSAY_GUIDE_MODEL ?? "openai/gpt-4o-mini";
-
   try {
     const { text } = await generateText({
-      model: gateway(modelId),
+      model,
       system: SYSTEM,
       prompt: `Reader is viewing section: ${body.section || "unknown"}.
 

@@ -216,8 +216,20 @@
         signal: controller.signal,
       });
       clearTimeout(timer);
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 429) {
+        apiAvailable = true;
+        const msg =
+          data.error ||
+          "Too many questions. Please wait a few minutes and try again.";
+        return {
+          html: `<p>${msg.replace(/</g, "&lt;")}</p>`,
+          anchors: ["#sources"],
+          grounded: false,
+          viaApi: true,
+        };
+      }
       if (!res.ok) return null;
-      const data = await res.json();
       if (!data?.answer) return null;
       apiAvailable = true;
       const anchors = data.anchors || hits.map((h) => h.chunk.anchor).filter(Boolean);
