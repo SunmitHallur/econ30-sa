@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "npm install --omit=dev 2>/dev/null || echo 'No API deps'",
+  "installCommand": "npm install --omit=dev",
   "buildCommand": "echo 'Static site + optional API'",
   "outputDirectory": "website_v2",
   "headers": [

@@ -8,7 +8,7 @@ import {
   guardStatus,
   isGuideEnabled,
   validateQuestion,
-} from "../lib/essay-guide-guard";
+} from "./essay-guide-guard.js";
 
 export const config = {
   runtime: "nodejs",
