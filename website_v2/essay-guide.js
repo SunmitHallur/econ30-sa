@@ -43,7 +43,23 @@
 
   const sectionOrder = [
     "hero", "question", "from-the-ground", "timeline", "macro", "sectors",
-    "inequality", "two-lives", "results", "map", "conclusions", "sources",
+    "inequality", "two-lives", "results", "map", "conclusions", "ask-anything", "sources",
+  ];
+
+  const ASK_LOGS = ["#essay-guide-log", "#ask-anything-log"];
+
+  const DEFAULT_SUGGESTIONS = [
+    "What is this project about?",
+    "What data do you use?",
+    "What are the main findings?",
+    "Why didn't unemployment fall?",
+  ];
+
+  const ASK_ANYTHING_SUGGESTIONS = [
+    "Summarize the essay in three sentences.",
+    "What survived the regression tests?",
+    "How should I explain this to my professor?",
+    "What is GEAR and why does it matter here?",
   ];
 
   const tokenize = (text) =>
@@ -517,17 +533,48 @@
     }
   };
 
-  const appendMessage = (role, html) => {
+  const getAskLogs = () =>
+    ASK_LOGS.map((sel) => $(sel)).filter(Boolean);
+
+  const appendMessage = (role, html, logs = getAskLogs()) => {
     messages.push({ role, html });
-    const log = $("#essay-guide-log");
-    if (!log) return;
-    const item = document.createElement("div");
-    item.className = `essay-guide__msg essay-guide__msg--${role}`;
-    item.innerHTML = role === "user"
-      ? `<p>${html.replace(/</g, "&lt;")}</p>`
-      : html;
-    log.appendChild(item);
-    log.scrollTop = log.scrollHeight;
+    logs.forEach((log) => {
+      const item = document.createElement("div");
+      item.className = `essay-guide__msg essay-guide__msg--${role}`;
+      item.innerHTML = role === "user"
+        ? `<p>${html.replace(/</g, "&lt;")}</p>`
+        : html;
+      log.appendChild(item);
+      log.scrollTop = log.scrollHeight;
+    });
+  };
+
+  const appendThinking = (logs = getAskLogs()) => {
+    const nodes = [];
+    logs.forEach((log) => {
+      const thinking = document.createElement("div");
+      thinking.className =
+        "essay-guide__msg essay-guide__msg--assistant essay-guide__thinking";
+      thinking.textContent = "Searching the essay…";
+      log.appendChild(thinking);
+      log.scrollTop = log.scrollHeight;
+      nodes.push(thinking);
+    });
+    return () => nodes.forEach((n) => n.remove());
+  };
+
+  const resolveAnswer = async (query, sectionId) => {
+    const q = String(query || "").trim();
+    if (!q) return null;
+    const hits = resolveHits(q, sectionId);
+    const tryApi =
+      apiAvailable !== false &&
+      (hits.length > 0 || isEssayAdjacentQuery(q));
+    if (tryApi) {
+      const apiAnswer = await tryApiAnswer(q, hits);
+      if (apiAnswer) return apiAnswer;
+    }
+    return buildLocalAnswer(q, hits);
   };
 
   const resolveHits = (query, sectionId) => {
@@ -540,30 +587,17 @@
     return enrichHits(query, hits, sectionId);
   };
 
-  const handleAsk = async (query) => {
+  const handleAsk = async (query, { sectionId } = {}) => {
     const q = String(query || "").trim();
     if (!q) return;
     appendMessage("user", q);
-    const sectionId = getActiveSectionId();
-    const hits = resolveHits(q, sectionId);
-
-    const thinking = document.createElement("div");
-    thinking.className = "essay-guide__msg essay-guide__msg--assistant essay-guide__thinking";
-    thinking.textContent = "Searching the essay…";
-    $("#essay-guide-log")?.appendChild(thinking);
-
-    let answer = null;
-    const tryApi =
-      apiAvailable !== false &&
-      (hits.length > 0 || isEssayAdjacentQuery(q));
-    if (tryApi) {
-      answer = await tryApiAnswer(q, hits);
-    }
-    thinking.remove();
-
-    if (!answer) {
-      answer = buildLocalAnswer(q, hits);
-    }
+    const removeThinking = appendThinking();
+    const answer = await resolveAnswer(
+      q,
+      sectionId ?? getActiveSectionId()
+    );
+    removeThinking();
+    if (!answer) return;
     appendMessage("assistant", answer.html);
     refreshSuggestedChips();
   };
@@ -690,32 +724,62 @@
     renderTourStep();
   };
 
-  const refreshSuggestedChips = (overrideQuestions) => {
-    const wrap = $("#essay-guide-suggestions");
+  const fillSuggestionChips = (wrap, questions, onPick) => {
     if (!wrap) return;
     wrap.innerHTML = "";
-    let questions = overrideQuestions;
-    if (!questions?.length) {
-      const step = getTourSteps().find((s) => s.id === getActiveSectionId());
-      questions = step?.suggestedQuestions || [
-        "What is this project about?",
-        "What data do you use?",
-        "What are the main findings?",
-        "Why didn't unemployment fall?",
-      ];
-    }
     questions.slice(0, 4).forEach((q) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "essay-guide__chip";
       btn.textContent = q;
-      btn.addEventListener("click", () => {
-        setModeTab("ask");
-        $("#essay-guide-input")?.focus();
-        handleAsk(q);
-      });
+      btn.addEventListener("click", () => onPick(q));
       wrap.appendChild(btn);
     });
+  };
+
+  const refreshSuggestedChips = (overrideQuestions) => {
+    let questions = overrideQuestions;
+    if (!questions?.length) {
+      const step = getTourSteps().find((s) => s.id === getActiveSectionId());
+      questions = step?.suggestedQuestions || DEFAULT_SUGGESTIONS;
+    }
+    fillSuggestionChips($("#essay-guide-suggestions"), questions, (q) => {
+      setModeTab("ask");
+      $("#essay-guide-input")?.focus();
+      handleAsk(q);
+    });
+    if (!overrideQuestions) {
+      fillSuggestionChips($("#ask-anything-suggestions"), ASK_ANYTHING_SUGGESTIONS, (q) => {
+        $("#ask-anything-input")?.focus();
+        handleAsk(q, { sectionId: "ask-anything" });
+      });
+    }
+  };
+
+  const wireAskAnything = () => {
+    const form = $("#ask-anything-form");
+    const input = $("#ask-anything-input");
+    if (!form || !input) return;
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const val = input.value;
+      input.value = "";
+      handleAsk(val, { sectionId: "ask-anything" });
+    });
+
+    $("#ask-anything-open-guide")?.addEventListener("click", () => {
+      openPanel("ask");
+    });
+  };
+
+  const seedAskAnythingWelcome = () => {
+    const log = $("#ask-anything-log");
+    if (!log || log.childElementCount > 0) return;
+    const item = document.createElement("div");
+    item.className = "essay-guide__msg essay-guide__msg--assistant";
+    item.innerHTML = `<p><strong>Site AI agent.</strong> Ask about <em>The Price of Integration</em>—the argument, charts, regressions, GEAR, the map, or how to present the project. I ground answers in this website’s text and data; on the live site I can also use a language model when configured.</p>`;
+    log.appendChild(item);
   };
 
   const setModeTab = (next) => {
@@ -962,6 +1026,8 @@
 
   const boot = async () => {
     buildUI();
+    wireAskAnything();
+    seedAskAnythingWelcome();
     pauseTour();
     clearLegacyInviteDismiss();
     scheduleInvite();
@@ -982,11 +1048,15 @@
       renderTourStep();
     }
 
-    appendMessage(
-      "assistant",
-      `<p>Hi. I can walk you through <strong>The Price of Integration</strong> or answer questions about the argument, methods, data, and South African context around this essay.</p>
-       <p>Try <strong>Walkthrough</strong> for an 11-step tour, or ask below (e.g. main findings, what data you use, or why unemployment stayed high).</p>`
-    );
+    const guideLog = $("#essay-guide-log");
+    if (guideLog) {
+      appendMessage(
+        "assistant",
+        `<p>Hi. I can walk you through <strong>The Price of Integration</strong> or answer questions about the argument, methods, data, and South African context around this essay.</p>
+         <p>Try <strong>Walkthrough</strong> for an 11-step tour, or ask below (e.g. main findings, what data you use, or why unemployment stayed high).</p>`,
+        [guideLog]
+      );
+    }
     refreshSuggestedChips();
 
     if (!inviteVisible && !inviteDismissed() && !panelOpen) {

@@ -3630,6 +3630,95 @@ details summary h3 { display: inline; }
   .tl-progress-row { flex-wrap: wrap; }
 }
 
+/* ---------------- Ask me anything (inline Essay Guide agent) ---------------- */
+.section-ask-anything {
+  padding-top: clamp(32px, 5vw, 56px);
+  padding-bottom: clamp(40px, 6vw, 72px);
+}
+.ask-anything__shell {
+  max-width: min(72rem, 100%);
+  margin: 0 auto;
+}
+.ask-anything__intro {
+  margin-bottom: 20px;
+}
+.ask-anything__kicker {
+  margin: 0 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+.section-ask-anything h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+.ask-anything__lede {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(16px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+.ask-anything__panel {
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--rule-strong));
+  background: color-mix(in oklab, var(--bg-elev) 92%, var(--accent-soft));
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 12%, transparent),
+    var(--shadow-md);
+}
+:root[data-theme="dark"] .ask-anything__panel {
+  background: color-mix(in oklab, var(--bg-elev) 88%, var(--bg));
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 22%, transparent),
+    0 12px 40px color-mix(in oklab, #000 35%, transparent);
+}
+.ask-anything__log {
+  min-height: 120px;
+  max-height: min(42vh, 360px);
+  overflow-y: auto;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule);
+  background: var(--bg);
+}
+.ask-anything__suggestions {
+  margin-bottom: 12px;
+}
+.ask-anything__form .essay-guide__input {
+  font-size: 16px;
+  padding: 12px 14px;
+}
+.ask-anything__form .essay-guide__send {
+  padding: 12px 20px;
+  font-size: 15px;
+}
+.ask-anything__disclaimer {
+  margin-top: 12px;
+}
+.ask-anything__guide-link {
+  font: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--accent-strong);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ask-anything__guide-link:hover,
+.ask-anything__guide-link:focus-visible {
+  color: var(--accent);
+  outline: none;
+}
+
 /* ---------------- Essay Guide (walkthrough + Q&A) ---------------- */
 .essay-guide {
   position: fixed;

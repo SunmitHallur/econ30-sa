@@ -1597,7 +1597,7 @@
     const progressFill = document.getElementById("top-progress-fill");
     const indicatorText = document.getElementById("section-indicator-text");
     if (!links.length) return;
-    const sectionOrder = ["question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "two-lives", "results", "map", "conclusions", "sources"];
+    const sectionOrder = ["question", "from-the-ground", "timeline", "macro", "sectors", "inequality", "two-lives", "results", "map", "conclusions", "ask-anything", "sources"];
     const spyIds = ["hero", ...sectionOrder];
     const spySections = spyIds.map(id => document.getElementById(id)).filter(Boolean);
     const sectionLabelById = new Map(sectionOrder.map((id, idx) => {

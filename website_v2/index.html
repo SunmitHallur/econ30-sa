@@ -60,7 +60,7 @@
         <a href="#from-the-ground" data-nav-sections="from-the-ground,timeline">Story</a>
         <a href="#macro" data-nav-sections="macro,sectors,inequality">Economy</a>
         <a href="#two-lives" data-nav-sections="two-lives,results,map">Evidence</a>
-        <a href="#conclusions" data-nav-sections="conclusions,sources">Takeaways</a>
+        <a href="#conclusions" data-nav-sections="conclusions,ask-anything,sources">Takeaways</a>
       </nav>
       <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Toggle theme">
         <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◐</span></span>
@@ -1007,8 +1007,48 @@
         </div>
       </div>
     </section>
-    <div class="section-bridge" aria-label="Transition to sources">
+    <div class="section-bridge" aria-label="Transition to ask the site agent">
       <p class="section-bridge__from">Argument complete.</p>
+      <p class="section-bridge__to"><a href="#ask-anything">Next: ask the site’s AI agent ↓</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Ask me anything (inline Essay Guide agent)                   -->
+    <!-- ============================================================ -->
+    <section id="ask-anything" class="section section-ask-anything" aria-labelledby="ask-anything-heading">
+      <div class="ask-anything__shell">
+        <div class="ask-anything__intro">
+          <p class="ask-anything__kicker mono">AI agent for this website</p>
+          <h2 id="ask-anything-heading">Ask me anything</h2>
+          <p class="ask-anything__lede">
+            This is the same grounded assistant as the <strong>Essay Guide</strong> in the top bar:
+            it searches this essay, its charts, and linked sources, and uses an optional cloud model when available.
+            Answers are for learning about the project—not financial or policy advice.
+          </p>
+        </div>
+        <div class="ask-anything__panel" role="region" aria-label="Conversation with the site AI agent">
+          <div id="ask-anything-log" class="ask-anything__log essay-guide__log" aria-live="polite" aria-relevant="additions"></div>
+          <div id="ask-anything-suggestions" class="ask-anything__suggestions essay-guide__suggestions" aria-label="Suggested questions"></div>
+          <form id="ask-anything-form" class="ask-anything__form essay-guide__form">
+            <label class="visually-hidden" for="ask-anything-input">Ask the site AI agent</label>
+            <input
+              id="ask-anything-input"
+              class="essay-guide__input"
+              type="text"
+              placeholder="Ask about the argument, data, methods, or South Africa after 1994…"
+              autocomplete="off"
+            />
+            <button type="submit" class="essay-guide__send">Ask</button>
+          </form>
+          <p class="ask-anything__disclaimer essay-guide__disclaimer">
+            Powered by the Essay Guide: retrieval from this site’s corpus, plus <span class="mono">/api/chat</span> when deployed.
+            You can also open <button type="button" class="ask-anything__guide-link" id="ask-anything-open-guide">Guide</button> in the sidebar.
+          </p>
+        </div>
+      </div>
+    </section>
+    <div class="section-bridge" aria-label="Transition to sources">
+      <p class="section-bridge__from">Questions welcome.</p>
       <p class="section-bridge__to"><a href="#sources">Next: evidence, caveats, and citations ↓</a></p>
     </div>
 
