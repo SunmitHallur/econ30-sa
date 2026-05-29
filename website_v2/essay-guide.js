@@ -23,7 +23,19 @@
     "meta-findings",
   ];
   const ESSAY_ADJACENT_RE =
-    /\b(essay|site|project|capstone|econ(?:omics)?\s*30|thesis|argument|claim|finding|conclusion|method|methodolog|data|dataset|source|chart|map|regression|evidence|caus|associat|apartheid|south africa|post.?1994|integration|inclusion|openness|trade|gear|rdp|unemployment|inequality|manufactur|sector|pieter|sipho|two lives|wdi|qlfs|benjamini|bonferroni|chow|present|professor|reader|section|walkthrough|gdp|provinc|geograph|policy|democrat|sanction|township|hallur|takeaway|summar|explain|compare|who|what|why|how)\b/i;
+    /\b(essay|site|project|capstone|econ(?:omics)?\s*30|thesis|argument|claim|finding|conclusion|method|methodolog|data|dataset|source|chart|map|regression|evidence|caus|associat|apartheid|south africa|post.?1994|integration|inclusion|openness|trade|gear|rdp|unemployment|inequality|manufactur|sector|pieter|sipho|two lives|wdi|qlfs|benjamini|bonferroni|chow|present|professor|reader|section|walkthrough|gdp|provinc|geograph|policy|democrat|sanction|township|hallur|takeaway|summar|explain|compare)\b/i;
+
+  /** Words that appear in many queries but are not essay-specific — ignore for corpus overlap. */
+  const GENERIC_QUERY_TOKENS = new Set(
+    "about tell show mean help like good best much many some also just really very here there when where does did was were been being have has had can could would should make made year years time people work world country south africa who what why how compare explain summarize better won".split(
+      " "
+    )
+  );
+
+  const substantiveTokens = (query) =>
+    tokenize(query).filter(
+      (t) => !GENERIC_QUERY_TOKENS.has(t) && !/^\d+$/.test(t)
+    );
   /** In-memory only: "Not now" / Escape hides invite until the next full page load. */
   const INVITE_DELAY_MS = 900;
   const INVITE_RESHOW_MS = 600;
@@ -166,12 +178,80 @@
     format.kind === "oneSentence" ||
     format.kind === "brief";
 
-  const isEssayAdjacentQuery = (query) => {
+  const isStrongEssayAdjacent = (query) => {
     const n = normalizeQuery(query);
-    if (!n || n.length < 4) return false;
+    if (!n || n.length < 3) return false;
     if (ESSAY_ADJACENT_RE.test(n)) return true;
-    return tokenize(query).length >= 2;
+    if (/\b(who|what|why|how)\b/.test(n) && queryTouchesCorpus(query)) return true;
+    return false;
   };
+
+  /** Good-faith follow-ups with no named topic — still answer from context. */
+  const isVagueOpenQuestion = (query) =>
+    /\b(tell me more|more about (?:this|it|that)|explain this|what about this|go on|continue|say more|elaborate)\b/i.test(
+      String(query || "")
+    );
+
+  /** Lost / confused reader — still answer from project context. */
+  const isLaypersonHelpQuery = (query) =>
+    /\b(i am confused|i'?m confused|im confused|help i'?m confused|help im confused|i am lost|i'?m lost|im lost|don'?t understand any|do not understand any|no idea what this|make sense of this|what am i looking at|where do i even start|help me understand)\b/i.test(
+      String(query || "")
+    );
+
+  /** Clearly unrelated topics — decline even if a generic word overlaps the corpus. */
+  const OFF_TOPIC_TOPIC_RE =
+    /\b(ishowspeed|taylor swift|minecraft|marvel|mcu|netflix|iphone|climate change|global warming|write my homework|homework for me|homework essay|translate(?: this)?(?: page)? to spanish|us election|presidential election|super bowl|best pizza|recipe for|fortnite|tiktok|nba\b|nfl\b|messi|ronaldo|disney\+|spotify)\b/i;
+
+  let corpusVocab = null;
+  const getCorpusVocab = () => {
+    if (corpusVocab) return corpusVocab;
+    const vocab = new Set(sectionOrder);
+    for (const chunk of corpus.chunks) {
+      tokenize(chunk.title).forEach((t) => vocab.add(t));
+      tokenize(chunk.text).forEach((t) => {
+        if (t.length >= 4) vocab.add(t);
+      });
+      (chunk.keywords || []).forEach((k) => vocab.add(String(k).toLowerCase()));
+    }
+    corpusVocab = vocab;
+    return vocab;
+  };
+
+  const queryTouchesCorpus = (query) => {
+    const vocab = getCorpusVocab();
+    return substantiveTokens(query).some((t) => vocab.has(t));
+  };
+
+  /**
+   * Obvious nonsense / unrelated: no substantive corpus link and not a curated FAQ hit.
+   * Biased toward answering borderline questions.
+   */
+  const isObviousOffTopic = (query, rawHits) => {
+    const n = normalizeQuery(query);
+    if (OFF_TOPIC_TOPIC_RE.test(n)) return true;
+    if (isStrongEssayAdjacent(query)) return false;
+    if (isVagueOpenQuestion(query)) return false;
+    if (isLaypersonHelpQuery(query)) return false;
+    if (queryTouchesCorpus(query)) return false;
+    if (rawHits[0]?.score >= 20) return false;
+    const subs = substantiveTokens(query);
+    if (!subs.length) return true;
+    const top = rawHits[0]?.score ?? 0;
+    return top < 20;
+  };
+
+  const obviousOffTopicAnswer = () => ({
+    html: `<p>I can't help with that here. This agent answers questions about <em>The Price of Integration</em> and South Africa after 1994—try the thesis, data, charts, or <a href="#sources">Sources</a>.</p>`,
+    anchors: ["#sources"],
+    grounded: false,
+  });
+
+  /** @deprecated alias — prefer isStrongEssayAdjacent for guardrails */
+  const isEssayAdjacentQuery = (query) =>
+    isStrongEssayAdjacent(query) ||
+    isVagueOpenQuestion(query) ||
+    isLaypersonHelpQuery(query) ||
+    queryTouchesCorpus(query);
 
   const getChunkById = (id) => corpus.chunks.find((c) => c.id === id);
 
@@ -421,7 +501,7 @@
       };
     }
 
-    if (hits[0].score < SCORE_THRESHOLD && !adjacent) {
+    if (hits[0].score < SCORE_THRESHOLD && !isStrongEssayAdjacent(query) && !isVagueOpenQuestion(query) && !isLaypersonHelpQuery(query) && !queryTouchesCorpus(query)) {
       return {
         html: `<p>That looks outside this essay's scope. Ask about South Africa after 1994, trade openness, unemployment, inequality, GEAR, the map, regressions, or what the project argues. See <a href="#sources">Sources</a> for papers.</p>`,
         anchors: ["#sources"],
@@ -566,7 +646,8 @@
   const resolveAnswer = async (query, sectionId) => {
     const q = String(query || "").trim();
     if (!q) return null;
-    const hits = resolveHits(q, sectionId);
+    const { hits, offTopic } = resolveHits(q, sectionId);
+    if (offTopic) return obviousOffTopicAnswer();
     const tryApi =
       apiAvailable !== false &&
       (hits.length > 0 || isEssayAdjacentQuery(q));
@@ -584,7 +665,9 @@
       const retry = retrieve(query, null);
       if (retry[0]?.score > hits[0].score) hits = retry;
     }
-    return enrichHits(query, hits, sectionId);
+    const offTopic = !curated && isObviousOffTopic(query, hits);
+    if (offTopic) return { hits, offTopic: true };
+    return { hits: enrichHits(query, hits, sectionId), offTopic: false };
   };
 
   const handleAsk = async (query, { sectionId } = {}) => {
@@ -1023,6 +1106,7 @@
       ]);
       if (corpusRes.ok) corpus = await corpusRes.json();
       if (tourRes.ok) tour = await tourRes.json();
+      corpusVocab = null;
     } catch (e) {
       console.warn("Essay Guide: could not load data", e);
     }
