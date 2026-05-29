@@ -40,9 +40,6 @@
   let apiAvailable = null;
   let inviteVisible = false;
   let inviteTimer = null;
-  let tourDockPendingReveal = false;
-  let tourDockRevealCancel = null;
-  let tourDockRevealTimer = null;
 
   const sectionOrder = [
     "hero", "question", "from-the-ground", "timeline", "macro", "sectors",
@@ -589,52 +586,6 @@
     window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
   };
 
-  const isTourSectionAligned = (el) => {
-    if (!el) return false;
-    const offset = tourScrollOffset();
-    const top = el.getBoundingClientRect().top;
-    const doc = document.documentElement;
-    const atBottom = window.scrollY + window.innerHeight >= doc.scrollHeight - 8;
-    if (atBottom) {
-      return el.getBoundingClientRect().top < window.innerHeight * 0.35;
-    }
-    return top >= offset - 56 && top <= offset + 96;
-  };
-
-  const waitForScrollSettle = (callback, maxMs = 1100) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      callback();
-      return () => {};
-    }
-    let lastY = Math.round(window.scrollY);
-    let stable = 0;
-    let intervalId = 0;
-    let timeoutId = 0;
-    let done = false;
-    const finish = () => {
-      if (done) return;
-      done = true;
-      clearInterval(intervalId);
-      clearTimeout(timeoutId);
-      window.removeEventListener("scroll", onScroll, scrollOpts);
-      callback();
-    };
-    const scrollOpts = { passive: true };
-    const onScroll = () => {
-      const y = Math.round(window.scrollY);
-      if (y === lastY) stable += 1;
-      else {
-        stable = 0;
-        lastY = y;
-      }
-      if (stable >= 4) finish();
-    };
-    intervalId = window.setInterval(onScroll, 60);
-    timeoutId = window.setTimeout(finish, maxMs);
-    window.addEventListener("scroll", onScroll, scrollOpts);
-    return finish;
-  };
-
   const setTourHighlight = (selector) => {
     document.body.classList.toggle("essay-guide-tour-active", tourActive);
     $$("main section, main .hero").forEach((sec) => {
@@ -662,104 +613,6 @@
     }
   };
 
-  const updateTourDockContent = () => {
-    const step = tour.steps[tourIndex];
-    if (!step) return;
-    const isLast = tourIndex >= tour.steps.length - 1;
-    const prog = $("#essay-guide-tour-dock-progress");
-    const title = $("#essay-guide-tour-dock-title");
-    const prev = $("#essay-guide-tour-dock-prev");
-    const next = $("#essay-guide-tour-dock-next");
-    if (prog) prog.textContent = `Step ${tourIndex + 1} of ${tour.steps.length}`;
-    if (title) title.textContent = step.title;
-    if (prev) prev.disabled = tourIndex === 0;
-    if (next) {
-      next.textContent = isLast ? "Finish tour" : "Next section →";
-      next.setAttribute("aria-label", isLast ? "Finish walkthrough" : "Go to next section");
-    }
-  };
-
-  const stopTourDockRevealWatch = () => {
-    if (tourDockRevealCancel) {
-      tourDockRevealCancel();
-      tourDockRevealCancel = null;
-    }
-    if (tourDockRevealTimer) {
-      clearTimeout(tourDockRevealTimer);
-      tourDockRevealTimer = null;
-    }
-  };
-
-  const syncTourUiClasses = () => {
-    const walkthroughUi =
-      mode === "tour" && panelOpen && tourActive && tour.steps.length > 0;
-    document.body.classList.toggle("essay-guide-mode-tour", walkthroughUi);
-  };
-
-  const setTourDockVisible = (visible) => {
-    const dock = $("#essay-guide-tour-dock");
-    if (!dock) return;
-    syncTourUiClasses();
-    const eligible =
-      mode === "tour" && panelOpen && tourActive && tour.steps.length > 0;
-    if (!eligible) {
-      stopTourDockRevealWatch();
-      dock.classList.remove("is-visible");
-      dock.hidden = true;
-      document.body.classList.remove("essay-guide-tour-dock-visible");
-      return;
-    }
-    dock.hidden = false;
-    updateTourDockContent();
-    if (visible) {
-      requestAnimationFrame(() => {
-        dock.classList.add("is-visible");
-        document.body.classList.add("essay-guide-tour-dock-visible");
-      });
-    } else {
-      dock.classList.remove("is-visible");
-      document.body.classList.remove("essay-guide-tour-dock-visible");
-    }
-  };
-
-  /** Hide dock after Next/Prev; show again once scroll settles with section top aligned. */
-  const beginTourDockRevealWatch = (step) => {
-    stopTourDockRevealWatch();
-    setTourDockVisible(false);
-
-    const el = document.querySelector(step.highlight || step.anchor);
-    if (!el) {
-      setTourDockVisible(true);
-      return;
-    }
-
-    const revealIfReady = () => {
-      if (!tourActive || tour.steps[tourIndex] !== step) return true;
-      if (isTourSectionAligned(el)) {
-        setTourDockVisible(true);
-        stopTourDockRevealWatch();
-        return true;
-      }
-      return false;
-    };
-
-    let nudgeCount = 0;
-    const tryReveal = () => {
-      if (revealIfReady()) return;
-      if (nudgeCount < 2) {
-        nudgeCount += 1;
-        scrollTourSectionToStart(el);
-        if (tourDockRevealCancel) tourDockRevealCancel();
-        tourDockRevealCancel = waitForScrollSettle(tryReveal, 900);
-        return;
-      }
-      setTourDockVisible(true);
-      stopTourDockRevealWatch();
-    };
-
-    tourDockRevealCancel = waitForScrollSettle(tryReveal, 1200);
-  };
-
   const renderTourStep = () => {
     if (mode !== "tour" || !panelOpen) return;
     const step = tour.steps[tourIndex];
@@ -775,21 +628,13 @@
     if (narrEl) narrEl.textContent = step.narration;
     if (progEl) progEl.textContent = `Step ${tourIndex + 1} of ${tour.steps.length}`;
     if (prevBtn) prevBtn.disabled = tourIndex === 0;
-    if (nextBtn) nextBtn.textContent = tourIndex >= tour.steps.length - 1 ? "Finish" : "Next";
-
-    const pendingReveal = tourDockPendingReveal;
-    tourDockPendingReveal = false;
-    if (pendingReveal) {
-      setTourDockVisible(false);
+    if (nextBtn) {
+      const isLast = tourIndex >= tour.steps.length - 1;
+      nextBtn.textContent = isLast ? "Finish tour" : "Next section →";
+      nextBtn.setAttribute("aria-label", isLast ? "Finish walkthrough" : "Go to next section");
     }
 
     focusTourStep(step);
-
-    if (pendingReveal) {
-      beginTourDockRevealWatch(step);
-    } else {
-      setTourDockVisible(true);
-    }
 
     const indicator = $("#section-indicator-text");
     if (indicator) {
@@ -801,12 +646,8 @@
 
   const pauseTour = () => {
     tourActive = false;
-    tourDockPendingReveal = false;
-    stopTourDockRevealWatch();
     setTourHighlight(null);
     document.body.classList.remove("essay-guide-tour-active");
-    document.body.classList.remove("essay-guide-mode-tour");
-    setTourDockVisible(false);
   };
 
   const resetTour = () => {
@@ -821,16 +662,12 @@
       setModeTab("ask");
       return;
     }
-    tourDockPendingReveal = true;
-    setTourDockVisible(false);
     tourIndex += 1;
     renderTourStep();
   };
 
   const tourPrev = () => {
     if (tourIndex <= 0) return;
-    tourDockPendingReveal = true;
-    setTourDockVisible(false);
     tourIndex -= 1;
     renderTourStep();
   };
@@ -910,7 +747,6 @@
 
   const showInvite = () => {
     if (panelOpen || inviteDismissed()) return;
-    setTourDockVisible(false);
     if (tourActive) pauseTour();
     const invite = $("#essay-guide-invite");
     if (!invite) return;
@@ -943,7 +779,6 @@
       setModeTab("ask");
       $("#essay-guide-input")?.focus();
     }
-    setTourDockVisible(initialMode === "tour" && mode === "tour");
   };
 
   const closePanel = () => {
@@ -954,7 +789,6 @@
     root?.classList.remove("is-open");
     root?.setAttribute("aria-hidden", "true");
     $("#essay-guide-launcher")?.setAttribute("aria-expanded", "false");
-    setTourDockVisible(false);
     scheduleInvite(INVITE_RESHOW_MS);
   };
 
@@ -1000,7 +834,7 @@
           <div class="essay-guide__tour-nav">
             <button type="button" id="essay-guide-tour-prev" class="essay-guide__tour-btn ghost-btn"><span class="ghost-btn__text">Previous</span></button>
             <button type="button" id="essay-guide-tour-exit" class="essay-guide__tour-btn ghost-btn"><span class="ghost-btn__text">Exit tour</span></button>
-            <button type="button" id="essay-guide-tour-next" class="essay-guide__next-btn"><span class="ghost-btn__text">Next</span></button>
+            <button type="button" id="essay-guide-tour-next" class="essay-guide__next-btn">Next section →</button>
           </div>
         </div>
       </div>
@@ -1026,26 +860,6 @@
       </div>
     `;
     document.body.appendChild(invite);
-
-    const tourDock = document.createElement("div");
-    tourDock.id = "essay-guide-tour-dock";
-    tourDock.className = "essay-guide-tour-dock";
-    tourDock.hidden = true;
-    tourDock.setAttribute("role", "navigation");
-    tourDock.setAttribute("aria-label", "Walkthrough controls");
-    tourDock.innerHTML = `
-      <div class="essay-guide-tour-dock__copy">
-        <p class="essay-guide-tour-dock__kicker mono" id="essay-guide-tour-dock-progress">Step 1 of 11</p>
-        <p class="essay-guide-tour-dock__title" id="essay-guide-tour-dock-title">Section</p>
-      </div>
-      <div class="essay-guide-tour-dock__actions">
-        <button type="button" class="essay-guide-tour-dock__prev ghost-btn" id="essay-guide-tour-dock-prev"><span class="ghost-btn__text">Previous</span></button>
-        <button type="button" class="essay-guide-tour-dock__next" id="essay-guide-tour-dock-next">Next section →</button>
-      </div>
-    `;
-    document.body.appendChild(tourDock);
-    $("#essay-guide-tour-dock-prev")?.addEventListener("click", tourPrev);
-    $("#essay-guide-tour-dock-next")?.addEventListener("click", tourNext);
 
     invite.querySelector(".essay-guide-invite__close")?.addEventListener("click", () => hideInvite(true));
     $("#essay-guide-invite-dismiss")?.addEventListener("click", () => hideInvite(true));
@@ -1131,7 +945,6 @@
   const boot = async () => {
     buildUI();
     pauseTour();
-    setTourDockVisible(false);
     clearLegacyInviteDismiss();
     scheduleInvite();
 
@@ -1182,10 +995,7 @@
 
   window.addEventListener("load", onPageReady);
   window.addEventListener("pageshow", (e) => {
-    if (!panelOpen || mode !== "tour") {
-      setTourDockVisible(false);
-      if (!panelOpen && tourActive) pauseTour();
-    }
+    if (!panelOpen && tourActive) pauseTour();
     if (e.persisted && !inviteDismissed() && !panelOpen) {
       scheduleInvite(INVITE_RESHOW_MS);
     }
