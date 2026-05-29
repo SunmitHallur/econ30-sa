@@ -588,6 +588,31 @@
     if (el) el.classList.add("essay-guide-tour-focus");
   };
 
+  const syncTourDock = () => {
+    const dock = $("#essay-guide-tour-dock");
+    if (!dock) return;
+    const show =
+      tourActive && panelOpen && mode === "tour" && tour.steps.length > 0;
+    dock.hidden = !show;
+    document.body.classList.toggle("essay-guide-tour-dock-visible", show);
+    if (!show) return;
+
+    const step = tour.steps[tourIndex];
+    if (!step) return;
+    const isLast = tourIndex >= tour.steps.length - 1;
+    const prog = $("#essay-guide-tour-dock-progress");
+    const title = $("#essay-guide-tour-dock-title");
+    const prev = $("#essay-guide-tour-dock-prev");
+    const next = $("#essay-guide-tour-dock-next");
+    if (prog) prog.textContent = `Step ${tourIndex + 1} of ${tour.steps.length}`;
+    if (title) title.textContent = step.title;
+    if (prev) prev.disabled = tourIndex === 0;
+    if (next) {
+      next.textContent = isLast ? "Finish tour" : "Next section →";
+      next.setAttribute("aria-label", isLast ? "Finish walkthrough" : "Go to next section");
+    }
+  };
+
   const renderTourStep = () => {
     const step = tour.steps[tourIndex];
     if (!step) return;
@@ -606,6 +631,7 @@
 
     scrollToAnchor(step.anchor);
     setTourHighlight(step.highlight || step.anchor);
+    syncTourDock();
 
     const indicator = $("#section-indicator-text");
     if (indicator) {
@@ -619,6 +645,7 @@
     tourActive = false;
     setTourHighlight(null);
     document.body.classList.remove("essay-guide-tour-active");
+    syncTourDock();
   };
 
   const resetTour = () => {
@@ -690,6 +717,7 @@
       pauseTour();
       refreshSuggestedChips();
     }
+    syncTourDock();
   };
 
   const inviteDismissed = () => {
@@ -744,6 +772,7 @@
     $("#essay-guide-launcher")?.setAttribute("aria-expanded", "true");
     if (initialMode) setModeTab(initialMode);
     if (initialMode !== "tour") $("#essay-guide-input")?.focus();
+    syncTourDock();
   };
 
   const closePanel = () => {
@@ -754,6 +783,7 @@
     root?.classList.remove("is-open");
     root?.setAttribute("aria-hidden", "true");
     $("#essay-guide-launcher")?.setAttribute("aria-expanded", "false");
+    syncTourDock();
     scheduleInvite(INVITE_RESHOW_MS);
   };
 
@@ -825,6 +855,26 @@
       </div>
     `;
     document.body.appendChild(invite);
+
+    const tourDock = document.createElement("div");
+    tourDock.id = "essay-guide-tour-dock";
+    tourDock.className = "essay-guide-tour-dock";
+    tourDock.hidden = true;
+    tourDock.setAttribute("role", "navigation");
+    tourDock.setAttribute("aria-label", "Walkthrough controls");
+    tourDock.innerHTML = `
+      <div class="essay-guide-tour-dock__copy">
+        <p class="essay-guide-tour-dock__kicker mono" id="essay-guide-tour-dock-progress">Step 1 of 11</p>
+        <p class="essay-guide-tour-dock__title" id="essay-guide-tour-dock-title">Section</p>
+      </div>
+      <div class="essay-guide-tour-dock__actions">
+        <button type="button" class="essay-guide-tour-dock__prev ghost-btn" id="essay-guide-tour-dock-prev"><span class="ghost-btn__text">Previous</span></button>
+        <button type="button" class="essay-guide-tour-dock__next" id="essay-guide-tour-dock-next">Next section →</button>
+      </div>
+    `;
+    document.body.appendChild(tourDock);
+    $("#essay-guide-tour-dock-prev")?.addEventListener("click", tourPrev);
+    $("#essay-guide-tour-dock-next")?.addEventListener("click", tourNext);
 
     invite.querySelector(".essay-guide-invite__close")?.addEventListener("click", () => hideInvite(true));
     $("#essay-guide-invite-dismiss")?.addEventListener("click", () => hideInvite(true));
