@@ -87,6 +87,40 @@
     return words.slice(0, limit).join(" ");
   };
 
+  const escapeHtml = (text) =>
+    String(text || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  /** Plain text → safe <p> blocks (never inject tags then escape). */
+  const formatAnswerHtml = (text, { compact = false } = {}) => {
+    if (compact) {
+      const one = String(text || "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      return one ? `<p>${escapeHtml(one)}</p>` : "<p></p>";
+    }
+    const raw = String(text || "").trim();
+    if (!raw) return "<p></p>";
+    const blocks = String(text || "")
+      .replace(/<[^>]+>/g, "")
+      .split(/\n\s*\n/)
+      .map((p) => p.trim())
+      .filter(Boolean);
+    const paras =
+      blocks.length > 1
+        ? blocks
+        : String(text || "")
+            .replace(/<[^>]+>/g, "")
+            .split(/\n/)
+            .map((p) => p.trim())
+            .filter(Boolean);
+    if (!paras.length) return `<p>${escapeHtml(raw)}</p>`;
+    return paras.map((p) => `<p>${escapeHtml(p)}</p>`).join("");
+  };
+
   const parseAnswerFormat = (query) => {
     const limit = parseWordLimit(query);
     if (limit) return { kind: "wordLimit", limit };
@@ -346,7 +380,7 @@
         text = truncateToWordLimit(text, 90);
       }
       return {
-        html: `<p>${text}</p>`,
+        html: formatAnswerHtml(text, { compact: true }),
         anchors: [best.anchor || `#${best.section}`],
         grounded: true,
       };
@@ -462,10 +496,7 @@
         answerText = truncateToWordLimit(answerText, 90);
       }
       const anchors = data.anchors || hits.map((h) => h.chunk.anchor).filter(Boolean);
-      const body = compact
-        ? answerText.replace(/\n+/g, " ")
-        : answerText.replace(/\n/g, "</p><p>");
-      let html = `<p>${body.replace(/</g, "&lt;")}</p>`;
+      let html = formatAnswerHtml(answerText, { compact });
       if (compact && format.kind === "wordLimit") {
         const wc = answerText.split(/\s+/).filter(Boolean).length;
         const limit = data.wordLimit ?? format.limit;
