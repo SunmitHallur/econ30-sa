@@ -41,7 +41,7 @@
   let inviteVisible = false;
   let inviteTimer = null;
   let tourDockPendingReveal = false;
-  let tourDockRevealObserver = null;
+  let tourDockRevealCancel = null;
   let tourDockRevealTimer = null;
 
   const sectionOrder = [
@@ -571,19 +571,68 @@
     refreshSuggestedChips();
   };
 
-  const scrollToAnchor = (anchor, { center = false } = {}) => {
+  const tourScrollOffset = () => ($(".topbar")?.offsetHeight || 64) + 20;
+
+  const scrollToAnchor = (anchor) => {
     const el = document.querySelector(anchor);
     if (!el) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const behavior = reduce ? "auto" : "smooth";
-    if (center) {
-      el.scrollIntoView({ behavior, block: "center", inline: "nearest" });
-      return;
+    const y = Math.max(0, el.getBoundingClientRect().top + window.scrollY - tourScrollOffset());
+    window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
+  };
+
+  /** Align section start below the top bar (not vertical center — tall sections read wrong). */
+  const scrollTourSectionToStart = (el) => {
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const y = Math.max(0, el.getBoundingClientRect().top + window.scrollY - tourScrollOffset());
+    window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
+  };
+
+  const isTourSectionAligned = (el) => {
+    if (!el) return false;
+    const offset = tourScrollOffset();
+    const top = el.getBoundingClientRect().top;
+    const doc = document.documentElement;
+    const atBottom = window.scrollY + window.innerHeight >= doc.scrollHeight - 8;
+    if (atBottom) {
+      return el.getBoundingClientRect().top < window.innerHeight * 0.35;
     }
-    const topbar = $(".topbar");
-    const offset = (topbar?.offsetHeight || 64) + 12;
-    const y = el.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: y, behavior });
+    return top >= offset - 56 && top <= offset + 96;
+  };
+
+  const waitForScrollSettle = (callback, maxMs = 1100) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      callback();
+      return () => {};
+    }
+    let lastY = Math.round(window.scrollY);
+    let stable = 0;
+    let intervalId = 0;
+    let timeoutId = 0;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+      window.removeEventListener("scroll", onScroll, scrollOpts);
+      callback();
+    };
+    const scrollOpts = { passive: true };
+    const onScroll = () => {
+      const y = Math.round(window.scrollY);
+      if (y === lastY) stable += 1;
+      else {
+        stable = 0;
+        lastY = y;
+      }
+      if (stable >= 4) finish();
+    };
+    intervalId = window.setInterval(onScroll, 60);
+    timeoutId = window.setTimeout(finish, maxMs);
+    window.addEventListener("scroll", onScroll, scrollOpts);
+    return finish;
   };
 
   const setTourHighlight = (selector) => {
@@ -601,15 +650,16 @@
 
   const focusTourStep = (step) => {
     const selector = step.highlight || step.anchor;
+    const el = document.querySelector(step.anchor);
     setTourHighlight(selector);
-    scrollToAnchor(step.anchor, { center: true });
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const settleMs = reduce ? 0 : 520;
-    window.setTimeout(() => {
-      if (!tourActive || tour.steps[tourIndex] !== step) return;
-      scrollToAnchor(step.anchor, { center: true });
-      setTourHighlight(selector);
-    }, settleMs);
+    scrollTourSectionToStart(el);
+    if (typeof ScrollTrigger !== "undefined") {
+      window.requestAnimationFrame(() => {
+        try {
+          ScrollTrigger.refresh();
+        } catch { /* ignore */ }
+      });
+    }
   };
 
   const updateTourDockContent = () => {
@@ -630,8 +680,10 @@
   };
 
   const stopTourDockRevealWatch = () => {
-    tourDockRevealObserver?.disconnect();
-    tourDockRevealObserver = null;
+    if (tourDockRevealCancel) {
+      tourDockRevealCancel();
+      tourDockRevealCancel = null;
+    }
     if (tourDockRevealTimer) {
       clearTimeout(tourDockRevealTimer);
       tourDockRevealTimer = null;
@@ -670,7 +722,7 @@
     }
   };
 
-  /** Hide dock after Next/Prev; show again when the focused section scrolls into view. */
+  /** Hide dock after Next/Prev; show again once scroll settles with section top aligned. */
   const beginTourDockRevealWatch = (step) => {
     stopTourDockRevealWatch();
     setTourDockVisible(false);
@@ -681,27 +733,31 @@
       return;
     }
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const reveal = () => {
-      if (!tourActive || tour.steps[tourIndex] !== step) return;
+    const revealIfReady = () => {
+      if (!tourActive || tour.steps[tourIndex] !== step) return true;
+      if (isTourSectionAligned(el)) {
+        setTourDockVisible(true);
+        stopTourDockRevealWatch();
+        return true;
+      }
+      return false;
+    };
+
+    let nudgeCount = 0;
+    const tryReveal = () => {
+      if (revealIfReady()) return;
+      if (nudgeCount < 2) {
+        nudgeCount += 1;
+        scrollTourSectionToStart(el);
+        if (tourDockRevealCancel) tourDockRevealCancel();
+        tourDockRevealCancel = waitForScrollSettle(tryReveal, 900);
+        return;
+      }
       setTourDockVisible(true);
       stopTourDockRevealWatch();
     };
 
-    tourDockRevealObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.target !== el || !entry.isIntersecting) continue;
-          if (entry.intersectionRatio >= 0.2) {
-            reveal();
-            return;
-          }
-        }
-      },
-      { threshold: [0.12, 0.2, 0.35, 0.5], rootMargin: "-8% 0px -14% 0px" }
-    );
-    tourDockRevealObserver.observe(el);
-    tourDockRevealTimer = window.setTimeout(reveal, reduce ? 60 : 1500);
+    tourDockRevealCancel = waitForScrollSettle(tryReveal, 1200);
   };
 
   const renderTourStep = () => {
