@@ -3936,13 +3936,21 @@ details summary h3 { display: inline; }
 }
 .essay-guide-tour-active main section:not(.essay-guide-tour-focus),
 .essay-guide-tour-active .hero:not(.essay-guide-tour-focus) {
-  opacity: 0.42;
-  transition: opacity 0.35s var(--ease-out);
+  opacity: 0.38;
+  filter: saturate(0.88);
+  transition:
+    opacity 0.35s var(--ease-out),
+    filter 0.35s var(--ease-out);
 }
 .essay-guide-tour-focus {
   opacity: 1 !important;
+  filter: none !important;
   position: relative;
-  z-index: 2;
+  z-index: 10;
+  isolation: isolate;
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--accent) 55%, transparent),
+    0 16px 48px color-mix(in oklab, var(--bg) 55%, transparent);
 }
 
 /* Floating next-step control in the essay column (visible while sections are dimmed) */

@@ -568,13 +568,18 @@
     refreshSuggestedChips();
   };
 
-  const scrollToAnchor = (anchor) => {
+  const scrollToAnchor = (anchor, { center = false } = {}) => {
     const el = document.querySelector(anchor);
     if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const behavior = reduce ? "auto" : "smooth";
+    if (center) {
+      el.scrollIntoView({ behavior, block: "center", inline: "nearest" });
+      return;
+    }
     const topbar = $(".topbar");
     const offset = (topbar?.offsetHeight || 64) + 12;
     const y = el.getBoundingClientRect().top + window.scrollY - offset;
-    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     window.scrollTo({ top: y, behavior });
   };
 
@@ -582,10 +587,26 @@
     document.body.classList.toggle("essay-guide-tour-active", tourActive);
     $$("main section, main .hero").forEach((sec) => {
       sec.classList.remove("essay-guide-tour-focus");
+      sec.style.removeProperty("opacity");
     });
     if (!tourActive || !selector) return;
     const el = document.querySelector(selector);
-    if (el) el.classList.add("essay-guide-tour-focus");
+    if (!el) return;
+    el.classList.add("essay-guide-tour-focus");
+    el.style.opacity = "1";
+  };
+
+  const focusTourStep = (step) => {
+    const selector = step.highlight || step.anchor;
+    setTourHighlight(selector);
+    scrollToAnchor(step.anchor, { center: true });
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const settleMs = reduce ? 0 : 520;
+    window.setTimeout(() => {
+      if (!tourActive || tour.steps[tourIndex] !== step) return;
+      scrollToAnchor(step.anchor, { center: true });
+      setTourHighlight(selector);
+    }, settleMs);
   };
 
   const syncTourDock = () => {
@@ -629,8 +650,7 @@
     if (prevBtn) prevBtn.disabled = tourIndex === 0;
     if (nextBtn) nextBtn.textContent = tourIndex >= tour.steps.length - 1 ? "Finish" : "Next";
 
-    scrollToAnchor(step.anchor);
-    setTourHighlight(step.highlight || step.anchor);
+    focusTourStep(step);
     syncTourDock();
 
     const indicator = $("#section-indicator-text");

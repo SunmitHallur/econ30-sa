@@ -1656,7 +1656,9 @@
 
     const onScroll = () => {
       syncProgress();
-      syncActiveNav();
+      if (!document.body.classList.contains("essay-guide-tour-active")) {
+        syncActiveNav();
+      }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
