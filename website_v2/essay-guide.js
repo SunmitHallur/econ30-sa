@@ -773,15 +773,6 @@
     });
   };
 
-  const seedAskAnythingWelcome = () => {
-    const log = $("#ask-anything-log");
-    if (!log || log.childElementCount > 0) return;
-    const item = document.createElement("div");
-    item.className = "essay-guide__msg essay-guide__msg--assistant";
-    item.innerHTML = `<p><strong>Site AI agent.</strong> Ask about <em>The Price of Integration</em>—the argument, charts, regressions, GEAR, the map, or how to present the project. I ground answers in this website’s text and data; on the live site I can also use a language model when configured.</p>`;
-    log.appendChild(item);
-  };
-
   const setModeTab = (next) => {
     mode = next;
     $$(".essay-guide__tab").forEach((tab) => {
@@ -1027,7 +1018,6 @@
   const boot = async () => {
     buildUI();
     wireAskAnything();
-    seedAskAnythingWelcome();
     pauseTour();
     clearLegacyInviteDismiss();
     scheduleInvite();

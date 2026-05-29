@@ -1018,12 +1018,12 @@
     <section id="ask-anything" class="section section-ask-anything" aria-labelledby="ask-anything-heading">
       <div class="ask-anything__shell">
         <div class="ask-anything__intro">
-          <p class="ask-anything__kicker mono">AI agent for this website</p>
           <h2 id="ask-anything-heading">Ask me anything</h2>
           <p class="ask-anything__lede">
-            This is the same grounded assistant as the <strong>Essay Guide</strong> in the top bar:
-            it searches this essay, its charts, and linked sources, and uses an optional cloud model when available.
-            Answers are for learning about the project—not financial or policy advice.
+            Retrieval-augmented generation (RAG) agent for this site: it pulls passages from this essay and its data, then answers from that context.
+          </p>
+          <p class="ask-anything__lede ask-anything__lede--second">
+            Same backend as the <strong>Guide</strong> in the top bar—not open-ended chat. For learning only; not financial or policy advice.
           </p>
         </div>
         <div class="ask-anything__panel" role="region" aria-label="Conversation with the site AI agent">
@@ -1031,18 +1031,17 @@
           <div id="ask-anything-suggestions" class="ask-anything__suggestions essay-guide__suggestions" aria-label="Suggested questions"></div>
           <form id="ask-anything-form" class="ask-anything__form essay-guide__form">
             <label class="visually-hidden" for="ask-anything-input">Ask the site AI agent</label>
-            <input
+            <textarea
               id="ask-anything-input"
-              class="essay-guide__input"
-              type="text"
+              class="essay-guide__input ask-anything__input"
+              rows="4"
               placeholder="Ask about the argument, data, methods, or South Africa after 1994…"
               autocomplete="off"
-            />
-            <button type="submit" class="essay-guide__send">Ask</button>
+            ></textarea>
+            <button type="submit" class="essay-guide__send ask-anything__send">Ask</button>
           </form>
           <p class="ask-anything__disclaimer essay-guide__disclaimer">
-            Powered by the Essay Guide: retrieval from this site’s corpus, plus <span class="mono">/api/chat</span> when deployed.
-            You can also open <button type="button" class="ask-anything__guide-link" id="ask-anything-open-guide">Guide</button> in the sidebar.
+            <button type="button" class="ask-anything__guide-link" id="ask-anything-open-guide">Open Guide</button> in the sidebar for the same chat while you read.
           </p>
         </div>
       </div>
