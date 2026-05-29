@@ -2957,9 +2957,21 @@ details summary h3 { display: inline; }
   padding: 12px 16px;
   border-radius: var(--radius-md);
   background: var(--bg-sunken);
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--rule-strong);
 }
-.hero-stat--warn { border-left-color: var(--danger); }
+/* Match macro / inequality chart hues: trade = WID, income = WDI, top shares = WIID */
+.hero-stat--trade {
+  border-left-color: var(--c-wid);
+  background: color-mix(in oklab, var(--c-wid) 10%, var(--bg-sunken));
+}
+.hero-stat--income {
+  border-left-color: var(--c-wdi);
+  background: color-mix(in oklab, var(--c-wdi) 10%, var(--bg-sunken));
+}
+.hero-stat--inequality {
+  border-left-color: var(--c-wiid);
+  background: color-mix(in oklab, var(--c-wiid) 10%, var(--bg-sunken));
+}
 .hero-stat dt {
   margin: 0 0 4px;
   font-size: 0.72rem;
