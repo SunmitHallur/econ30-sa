@@ -28,20 +28,28 @@ type ChatBody = {
   context?: CorpusChunk[];
 };
 
+type AnswerFormat =
+  | { kind: "wordLimit"; limit: number }
+  | { kind: "oneSentence" }
+  | { kind: "brief" }
+  | { kind: "detailed" }
+  | { kind: "default" };
+
 const SYSTEM = `You are the Essay Guide for "The Price of Integration", an Economics 30 capstone about South Africa after 1994.
 
 Scope:
 - Answer questions about this essay, its argument, methods, data, charts, map, regressions, Two Lives narrative, and closely related background (post-1994 South Africa, RDP/GEAR, trade openness, unemployment, inequality, sectors).
-- Synthesize across the provided context chunks when the question is essay-adjacent (e.g. "what is this project about?", "how did you study this?", "what should I remember?").
+- Synthesize across the provided context chunks when the question is essay-adjacent.
 - Only decline when the question is clearly unrelated (other countries, unrelated homework, personal advice). Then say briefly that you focus on this project and point to #sources.
 
 Grounding:
 - Prioritize the provided context. Do not invent statistics, regression coefficients, p-values, or years not supported by the chunks.
-- If chunks are partial, give a short orienting answer from what is present and name which section to read; do not pretend the essay covers something it does not.
+- If chunks are partial, give a short orienting answer from what is present; do not pretend the essay covers something it does not.
 - Prefer "association" or "lines up with" over causal claims unless the context cites district-level evidence (e.g. Erten–Leight–Tregenna).
-- Use plain language for a general reader. Up to ~150 words when the question needs synthesis, unless the reader specifies a word count.
-- When no word count is specified, end with one short sentence suggesting which section to read next.
-- When the reader specifies a word count (e.g. "25 words", "in 30 words"), that limit is mandatory: stay at or under it, use one short paragraph only, and do not add section pointers or sign-offs.`;
+
+Length and format (follow the instruction block for each request):
+- Match what the reader asks for: explicit word counts, "briefly", "one sentence", "in depth", lists, comparisons, summaries, etc.
+- Never ignore a stated word limit or brevity request. Never pad a short answer with extra paragraphs or "read section X" sign-offs when they asked for tight length.`;
 
 function countWords(text: string): number {
   const t = text.trim();
@@ -49,8 +57,7 @@ function countWords(text: string): number {
   return t.split(/\s+/).length;
 }
 
-/** Detect requests like "25 word summary" or "summarize in 40 words". */
-export function parseWordLimit(question: string): number | null {
+function parseWordLimit(question: string): number | null {
   const q = question.trim();
   const patterns = [
     /\b(\d{1,3})\s*[-]?\s*words?\b/i,
@@ -68,17 +75,73 @@ export function parseWordLimit(question: string): number | null {
   return null;
 }
 
+function parseAnswerFormat(question: string): AnswerFormat {
+  const limit = parseWordLimit(question);
+  if (limit) return { kind: "wordLimit", limit };
+
+  const q = question.toLowerCase();
+  if (/\b(one sentence|single sentence|in a sentence|one-line)\b/.test(q)) {
+    return { kind: "oneSentence" };
+  }
+  if (
+    /\b(very brief|briefly|short answer|keep it short|quick(ly)?|tl;dr|tl dr|concise)\b/.test(
+      q
+    )
+  ) {
+    return { kind: "brief" };
+  }
+  if (
+    /\b(in depth|detailed|comprehensive|explain fully|walk me through|long answer|elaborate)\b/.test(
+      q
+    )
+  ) {
+    return { kind: "detailed" };
+  }
+  return { kind: "default" };
+}
+
 function truncateToWordLimit(text: string, limit: number): string {
   const words = text.trim().split(/\s+/).filter(Boolean);
   if (words.length <= limit) return words.join(" ");
   return words.slice(0, limit).join(" ");
 }
 
-function answerInstructions(wordLimit: number | null): string {
-  if (wordLimit) {
-    return `Answer in at most ${wordLimit} words (hard limit). One paragraph only. No "read the X section" footer, no bullet lists, no markdown headers. Every word must count toward the summary.`;
+function answerInstructions(format: AnswerFormat): string {
+  switch (format.kind) {
+    case "wordLimit":
+      return `The reader asked for at most ${format.limit} words. Stay at or under that count. One paragraph only—no section pointers, no bullet lists, no markdown headers.`;
+    case "oneSentence":
+      return `Answer in exactly one sentence (about 15–35 words). No section footer, no lists.`;
+    case "brief":
+      return `Answer in 2–4 sentences (under ~80 words). Stay direct; skip a section footer unless essential.`;
+    case "detailed":
+      return `Give a fuller grounded answer in up to 4–6 short paragraphs (about 200–280 words). Connect evidence across chunks. End with one sentence on where to read next. No markdown headers.`;
+    default:
+      return `Answer in 2–4 short paragraphs (~80–150 words). Connect ideas across chunks when helpful. End with one short sentence suggesting which section to read next. No markdown headers.`;
   }
-  return `Answer in 2-4 short paragraphs. For essay-adjacent questions, connect the dots across chunks. End with one short sentence suggesting which section to read next. Do not use markdown headers.`;
+}
+
+function maxTokensForFormat(format: AnswerFormat): number {
+  switch (format.kind) {
+    case "wordLimit":
+      return Math.min(220, Math.max(48, format.limit * 6));
+    case "oneSentence":
+      return 72;
+    case "brief":
+      return 140;
+    case "detailed":
+      return 560;
+    default:
+      return 400;
+  }
+}
+
+function isCompactFormat(format: AnswerFormat): boolean {
+  return (
+    format.kind === "wordLimit" ||
+    format.kind === "oneSentence" ||
+    format.kind === "brief"
+  );
 }
 
 function serviceUnavailable(message: string) {
@@ -155,7 +218,8 @@ export async function POST(request: Request) {
     )
     .join("\n\n");
 
-  const wordLimit = parseWordLimit(question);
+  const format = parseAnswerFormat(question);
+  const compact = isCompactFormat(format);
 
   try {
     const { text } = await generateText({
@@ -168,30 +232,35 @@ ${contextBlock || "(no chunks retrieved — give a brief orienting answer about 
 
 Question: ${question}
 
-${answerInstructions(wordLimit)}`,
-      maxOutputTokens: wordLimit ? Math.min(200, Math.max(48, wordLimit * 6)) : 400,
-      temperature: wordLimit ? 0.15 : 0.2,
+${answerInstructions(format)}`,
+      maxOutputTokens: maxTokensForFormat(format),
+      temperature: compact ? 0.15 : 0.2,
     });
 
     let answer = text.trim();
-    if (wordLimit) {
-      answer = truncateToWordLimit(answer, wordLimit);
+    if (format.kind === "wordLimit") {
+      answer = truncateToWordLimit(answer, format.limit);
+    } else if (format.kind === "oneSentence") {
+      const first = answer.split(/(?<=[.!?])\s+/)[0]?.trim();
+      if (first) answer = first;
+      answer = truncateToWordLimit(answer, 40);
+    } else if (format.kind === "brief") {
+      answer = truncateToWordLimit(answer, 90);
     }
 
-    const anchors = wordLimit
-      ? ["#hero"]
-      : [
-          ...new Set(
-            context
-              .map((c) => c.anchor || (c.section ? `#${c.section}` : null))
-              .filter(Boolean) as string[]
-          ),
-        ];
+    const anchors = [
+      ...new Set(
+        context
+          .map((c) => c.anchor || (c.section ? `#${c.section}` : null))
+          .filter(Boolean) as string[]
+      ),
+    ];
 
     return Response.json({
       answer,
-      anchors: anchors.length ? anchors : ["#sources"],
-      wordLimit: wordLimit ?? undefined,
+      anchors: anchors.length ? anchors.slice(0, 3) : ["#sources"],
+      compact,
+      wordLimit: format.kind === "wordLimit" ? format.limit : undefined,
       wordCount: countWords(answer),
     });
   } catch (err) {

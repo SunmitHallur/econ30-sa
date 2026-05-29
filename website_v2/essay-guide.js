@@ -87,6 +87,35 @@
     return words.slice(0, limit).join(" ");
   };
 
+  const parseAnswerFormat = (query) => {
+    const limit = parseWordLimit(query);
+    if (limit) return { kind: "wordLimit", limit };
+    const q = String(query || "").toLowerCase();
+    if (/\b(one sentence|single sentence|in a sentence|one-line)\b/.test(q)) {
+      return { kind: "oneSentence" };
+    }
+    if (
+      /\b(very brief|briefly|short answer|keep it short|quick(ly)?|tl;dr|tl dr|concise)\b/.test(
+        q
+      )
+    ) {
+      return { kind: "brief" };
+    }
+    if (
+      /\b(in depth|detailed|comprehensive|explain fully|walk me through|long answer|elaborate)\b/.test(
+        q
+      )
+    ) {
+      return { kind: "detailed" };
+    }
+    return { kind: "default" };
+  };
+
+  const isCompactFormat = (format) =>
+    format.kind === "wordLimit" ||
+    format.kind === "oneSentence" ||
+    format.kind === "brief";
+
   const isEssayAdjacentQuery = (query) => {
     const n = normalizeQuery(query);
     if (!n || n.length < 4) return false;
@@ -201,10 +230,6 @@
       { test: () => /\b(main finding|takeaway|headline|summar)/.test(q), id: "faq-what-are-the-main-findings" },
       { test: () => /\b(section|structure|navigate|organized)\b/.test(q), id: "meta-sections" },
       { test: () => /\b(capstone|econ\s*30|who wrote|author)\b/.test(q), id: "meta-scope" },
-      {
-        test: () => /\bsummar/i.test(q) && /\b25\s*[-]?\s*words?\b/i.test(q),
-        id: "faq-25-word-summary",
-      },
     ];
     for (const rule of rules) {
       if (!rule.test()) continue;
@@ -307,18 +332,22 @@
   };
 
   const buildLocalAnswer = (query, hits) => {
-    const wordLimit = parseWordLimit(query);
+    const format = parseAnswerFormat(query);
     const adjacent = isEssayAdjacentQuery(query);
 
-    if (wordLimit && hits.length) {
+    if (isCompactFormat(format) && hits.length) {
       const best = hits[0].chunk;
-      let text = best.id?.startsWith("faq-")
-        ? best.text
-        : excerptFromChunk(best);
-      text = truncateToWordLimit(text, wordLimit);
+      let text = excerptFromChunk(best);
+      if (format.kind === "wordLimit") {
+        text = truncateToWordLimit(text, format.limit);
+      } else if (format.kind === "oneSentence") {
+        text = truncateToWordLimit(text.split(/(?<=[.!?])\s+/)[0] || text, 40);
+      } else {
+        text = truncateToWordLimit(text, 90);
+      }
       return {
         html: `<p>${text}</p>`,
-        anchors: [best.anchor || "#hero"],
+        anchors: [best.anchor || `#${best.section}`],
         grounded: true,
       };
     }
@@ -416,17 +445,35 @@
       if (!res.ok) return null;
       if (!data?.answer) return null;
       apiAvailable = true;
-      const wordLimit = data.wordLimit ?? parseWordLimit(query);
+      const format = parseAnswerFormat(query);
+      const compact = data.compact ?? isCompactFormat(format);
       let answerText = data.answer;
-      if (wordLimit) {
-        answerText = truncateToWordLimit(answerText, wordLimit);
+      if (format.kind === "wordLimit") {
+        answerText = truncateToWordLimit(
+          answerText,
+          data.wordLimit ?? format.limit
+        );
+      } else if (format.kind === "oneSentence") {
+        answerText = truncateToWordLimit(
+          (answerText.split(/(?<=[.!?])\s+/)[0] || answerText).trim(),
+          40
+        );
+      } else if (format.kind === "brief") {
+        answerText = truncateToWordLimit(answerText, 90);
       }
       const anchors = data.anchors || hits.map((h) => h.chunk.anchor).filter(Boolean);
-      let html = `<p>${answerText.replace(/\n/g, " ").replace(/</g, "&lt;")}</p>`;
-      if (wordLimit) {
+      const body = compact
+        ? answerText.replace(/\n+/g, " ")
+        : answerText.replace(/\n/g, "</p><p>");
+      let html = `<p>${body.replace(/</g, "&lt;")}</p>`;
+      if (compact && format.kind === "wordLimit") {
         const wc = answerText.split(/\s+/).filter(Boolean).length;
-        html += `<p class="essay-guide__cite mono">${wc} words (limit ${wordLimit}) · <a href="#hero">Intro</a></p>`;
-      } else if (anchors.length) {
+        const limit = data.wordLimit ?? format.limit;
+        const link = anchors[0]
+          ? `<a href="${anchors[0]}">${anchors[0].replace("#", "")}</a>`
+          : '<a href="#hero">Intro</a>';
+        html += `<p class="essay-guide__cite mono">${wc} / ${limit} words · ${link}</p>`;
+      } else if (!compact && anchors.length) {
         html += `<p class="essay-guide__cite">See: ${anchors
           .map((a) => `<a href="${a}">${a.replace("#", "")}</a>`)
           .join(", ")}</p>`;

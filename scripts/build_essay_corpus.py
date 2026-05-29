@@ -554,14 +554,6 @@ def main() -> None:
             "#conclusions",
             ["findings", "main", "takeaway", "summary", "results"],
         ),
-        (
-            "25 word summary",
-            "Post-1994 South Africa: trade openness and GDP per capita rose; unemployment stayed high; "
-            "manufacturing and jobs in tradables fell; top incomes gained—not inclusion for most.",
-            "hero",
-            "#hero",
-            ["25", "word", "words", "summary", "summarize", "brief", "short"],
-        ),
     ]
     for fid, text, section, anchor, kws in faqs:
         chunks.append(
