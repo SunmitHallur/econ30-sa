@@ -40,6 +40,9 @@
   let apiAvailable = null;
   let inviteVisible = false;
   let inviteTimer = null;
+  let tourDockPendingReveal = false;
+  let tourDockRevealObserver = null;
+  let tourDockRevealTimer = null;
 
   const sectionOrder = [
     "hero", "question", "from-the-ground", "timeline", "macro", "sectors",
@@ -609,15 +612,7 @@
     }, settleMs);
   };
 
-  const syncTourDock = () => {
-    const dock = $("#essay-guide-tour-dock");
-    if (!dock) return;
-    const show =
-      tourActive && panelOpen && mode === "tour" && tour.steps.length > 0;
-    dock.hidden = !show;
-    document.body.classList.toggle("essay-guide-tour-dock-visible", show);
-    if (!show) return;
-
+  const updateTourDockContent = () => {
     const step = tour.steps[tourIndex];
     if (!step) return;
     const isLast = tourIndex >= tour.steps.length - 1;
@@ -632,6 +627,74 @@
       next.textContent = isLast ? "Finish tour" : "Next section →";
       next.setAttribute("aria-label", isLast ? "Finish walkthrough" : "Go to next section");
     }
+  };
+
+  const stopTourDockRevealWatch = () => {
+    tourDockRevealObserver?.disconnect();
+    tourDockRevealObserver = null;
+    if (tourDockRevealTimer) {
+      clearTimeout(tourDockRevealTimer);
+      tourDockRevealTimer = null;
+    }
+  };
+
+  const setTourDockVisible = (visible) => {
+    const dock = $("#essay-guide-tour-dock");
+    if (!dock) return;
+    const eligible =
+      tourActive && panelOpen && mode === "tour" && tour.steps.length > 0;
+    if (!eligible) {
+      stopTourDockRevealWatch();
+      dock.classList.remove("is-visible");
+      dock.hidden = true;
+      document.body.classList.remove("essay-guide-tour-dock-visible");
+      return;
+    }
+    dock.hidden = false;
+    updateTourDockContent();
+    if (visible) {
+      requestAnimationFrame(() => {
+        dock.classList.add("is-visible");
+        document.body.classList.add("essay-guide-tour-dock-visible");
+      });
+    } else {
+      dock.classList.remove("is-visible");
+      document.body.classList.remove("essay-guide-tour-dock-visible");
+    }
+  };
+
+  /** Hide dock after Next/Prev; show again when the focused section scrolls into view. */
+  const beginTourDockRevealWatch = (step) => {
+    stopTourDockRevealWatch();
+    setTourDockVisible(false);
+
+    const el = document.querySelector(step.highlight || step.anchor);
+    if (!el) {
+      setTourDockVisible(true);
+      return;
+    }
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reveal = () => {
+      if (!tourActive || tour.steps[tourIndex] !== step) return;
+      setTourDockVisible(true);
+      stopTourDockRevealWatch();
+    };
+
+    tourDockRevealObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.target !== el || !entry.isIntersecting) continue;
+          if (entry.intersectionRatio >= 0.2) {
+            reveal();
+            return;
+          }
+        }
+      },
+      { threshold: [0.12, 0.2, 0.35, 0.5], rootMargin: "-8% 0px -14% 0px" }
+    );
+    tourDockRevealObserver.observe(el);
+    tourDockRevealTimer = window.setTimeout(reveal, reduce ? 60 : 1500);
   };
 
   const renderTourStep = () => {
@@ -650,8 +713,19 @@
     if (prevBtn) prevBtn.disabled = tourIndex === 0;
     if (nextBtn) nextBtn.textContent = tourIndex >= tour.steps.length - 1 ? "Finish" : "Next";
 
+    const pendingReveal = tourDockPendingReveal;
+    tourDockPendingReveal = false;
+    if (pendingReveal) {
+      setTourDockVisible(false);
+    }
+
     focusTourStep(step);
-    syncTourDock();
+
+    if (pendingReveal) {
+      beginTourDockRevealWatch(step);
+    } else {
+      setTourDockVisible(true);
+    }
 
     const indicator = $("#section-indicator-text");
     if (indicator) {
@@ -663,9 +737,11 @@
 
   const pauseTour = () => {
     tourActive = false;
+    tourDockPendingReveal = false;
+    stopTourDockRevealWatch();
     setTourHighlight(null);
     document.body.classList.remove("essay-guide-tour-active");
-    syncTourDock();
+    setTourDockVisible(false);
   };
 
   const resetTour = () => {
@@ -680,12 +756,16 @@
       setModeTab("ask");
       return;
     }
+    tourDockPendingReveal = true;
+    setTourDockVisible(false);
     tourIndex += 1;
     renderTourStep();
   };
 
   const tourPrev = () => {
     if (tourIndex <= 0) return;
+    tourDockPendingReveal = true;
+    setTourDockVisible(false);
     tourIndex -= 1;
     renderTourStep();
   };
@@ -737,7 +817,6 @@
       pauseTour();
       refreshSuggestedChips();
     }
-    syncTourDock();
   };
 
   const inviteDismissed = () => {
@@ -792,7 +871,7 @@
     $("#essay-guide-launcher")?.setAttribute("aria-expanded", "true");
     if (initialMode) setModeTab(initialMode);
     if (initialMode !== "tour") $("#essay-guide-input")?.focus();
-    syncTourDock();
+    setTourDockVisible(initialMode === "tour");
   };
 
   const closePanel = () => {
@@ -803,7 +882,7 @@
     root?.classList.remove("is-open");
     root?.setAttribute("aria-hidden", "true");
     $("#essay-guide-launcher")?.setAttribute("aria-expanded", "false");
-    syncTourDock();
+    setTourDockVisible(false);
     scheduleInvite(INVITE_RESHOW_MS);
   };
 

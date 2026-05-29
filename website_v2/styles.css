@@ -3972,6 +3972,16 @@ details summary h3 { display: inline; }
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px) saturate(1.15);
   -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition:
+    opacity 0.28s var(--ease-out),
+    transform 0.32s var(--ease-spring);
+}
+.essay-guide-tour-dock.is-visible {
+  opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
 @media (min-width: 900px) {
@@ -4032,6 +4042,11 @@ body.essay-guide-tour-dock-visible .section-indicator {
   50% { box-shadow: 0 0 0 6px color-mix(in oklab, var(--accent) 0%, transparent); }
 }
 @media (prefers-reduced-motion: reduce) {
+  .essay-guide-tour-dock {
+    transition: opacity 0.15s ease;
+    transform: none;
+  }
+  .essay-guide-tour-dock.is-visible { transform: none; }
   .essay-guide-tour-dock__next { animation: none; }
 }
 @media (max-width: 560px) {
