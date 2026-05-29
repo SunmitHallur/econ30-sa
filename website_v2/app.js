@@ -316,31 +316,7 @@
     });
   };
 
-  /** Top-10 income share with overlaid trade openness (relocated from hero per Spring 2026 feedback). */
-  const buildTop10TradeTimeChart = (inequality, timeseries) => {
-    const canvas = $("#chart-top10-trade-time");
-    if (!canvas) return;
-    const years = inequality.years;
-    makeLineChart(canvas, {
-      labels: years,
-      datasets: [
-        datasetFrom(years, inequality.series.top10_inc, "wid", { borderWidth: 2.6 }),
-        datasetFrom(
-          timeseries.years,
-          {
-            label: "Trade / GDP (scaled to match income axis)",
-            values: timeseries.series.trade_gdp.values.map((v) => (v == null ? null : v / 100)),
-          },
-          "wdi",
-          { borderDash: [4, 4], borderWidth: 2.2 },
-        ),
-      ],
-      yTitle: "Share of income (0–1)",
-      xTitle: "Year",
-    });
-  };
-
-  /** Sector deep-dive (Section 05). Two stacked line charts + a scatter with OLS fit. */
+  /** Sector deep-dive (Section 05). Two stacked line charts. */
   const buildSectorCharts = (sector) => {
     if (!sector || !Array.isArray(sector.rows)) return;
     const rows = sector.rows.filter((r) => r.year != null);
@@ -399,86 +375,6 @@
         yTitle: "% of GDP / % of employed",
         xTitle: "Year",
       });
-    }
-
-    const scatter = $("#chart-scatter-manuf-trade");
-    if (scatter && typeof Chart !== "undefined") {
-      const p = palette();
-      const points = rows
-        .filter((r) => r.trade_pct_gdp != null && r.sic3_share != null)
-        .map((r) => ({ x: r.trade_pct_gdp, y: r.sic3_share * 100, year: r.year }));
-      if (points.length >= 4) {
-        const n = points.length;
-        const mx = points.reduce((s, q) => s + q.x, 0) / n;
-        const my = points.reduce((s, q) => s + q.y, 0) / n;
-        const num = points.reduce((s, q) => s + (q.x - mx) * (q.y - my), 0);
-        const den = points.reduce((s, q) => s + (q.x - mx) ** 2, 0);
-        const slope = num / den;
-        const intercept = my - slope * mx;
-        const xmin = Math.min(...points.map((q) => q.x));
-        const xmax = Math.max(...points.map((q) => q.x));
-        const line = [
-          { x: xmin, y: intercept + slope * xmin },
-          { x: xmax, y: intercept + slope * xmax },
-        ];
-        new Chart(scatter, {
-          data: {
-            datasets: [
-              {
-                type: "scatter",
-                label: "Years (1999–2024)",
-                data: points,
-                backgroundColor: p.wid,
-                borderColor: p.wid,
-                pointBackgroundColor: p.wid,
-                paletteKey: "wid",
-                pointRadius: 5,
-                pointHoverRadius: 7,
-              },
-              {
-                type: "line",
-                label: `Best-fit line (slope=${slope.toFixed(3)} pp / 1pp trade)`,
-                data: line,
-                borderColor: p.danger,
-                backgroundColor: `${p.danger}33`,
-                pointBackgroundColor: p.danger,
-                paletteKey: "danger",
-                borderDash: [4, 4],
-                pointRadius: 0,
-                borderWidth: 2,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: { duration: 380, easing: "easeOutQuart" },
-            scales: {
-              x: {
-                type: "linear",
-                title: { display: true, text: "Trade openness (exports + imports) / GDP, %" },
-                ticks: { callback: formatChartTickPlain },
-              },
-              y: {
-                title: { display: true, text: "Manufacturing employment share, %" },
-                ticks: { callback: formatChartTickPlain },
-              },
-            },
-            plugins: {
-              legend: { display: true },
-              tooltip: {
-                callbacks: {
-                  label: (item) => {
-                    const raw = item.raw || {};
-                    if (raw.year != null) return `${raw.year}: trade ${raw.x.toFixed(1)}%, mfg emp ${raw.y.toFixed(2)}%`;
-                    return `${item.dataset.label}`;
-                  },
-                },
-              },
-            },
-          },
-        });
-      }
     }
   };
 
@@ -625,108 +521,6 @@
       yTitle: "Share of household wealth",
       xTitle: "Year",
       annotations: [{ type: "label", x: 2020, y: 0.85, label: "≈85%" }],
-    });
-  };
-
-  const buildGiniChart = (ineq) => {
-    const canvas = $("#chart-gini");
-    if (!canvas) return;
-    const years = ineq.years;
-    makeLineChart(canvas, {
-      labels: years,
-      datasets: [
-        datasetFrom(years, ineq.series.wiid_gini, "wiid", { pointRadius: 4 }),
-        datasetFrom(years, ineq.series.wdi_gini, "wdi", { pointRadius: 4, borderDash: [4, 4] }),
-      ],
-      yTitle: "Gini index (higher = more unequal)",
-      xTitle: "Year",
-      annotations: [{ type: "label", x: 2017, y: 0.63, label: "Coverage thins here" }],
-    });
-  };
-
-  const buildScatterTop10Trade = (panel) => {
-    const canvas = $("#chart-scatter-top10-trade");
-    if (!canvas) return;
-    const p = palette();
-    const points = panel
-      .filter(r => r.wdi_trade_gdp != null && r.wid_top10_inc != null)
-      .map(r => ({ x: r.wdi_trade_gdp, y: r.wid_top10_inc, year: r.year }));
-    if (points.length < 2) return;
-    // OLS fit
-    const n = points.length;
-    const mx = points.reduce((s, p) => s + p.x, 0) / n;
-    const my = points.reduce((s, p) => s + p.y, 0) / n;
-    const num = points.reduce((s, p) => s + (p.x - mx) * (p.y - my), 0);
-    const den = points.reduce((s, p) => s + (p.x - mx) ** 2, 0);
-    const slope = num / den;
-    const intercept = my - slope * mx;
-    const xmin = Math.min(...points.map(p => p.x));
-    const xmax = Math.max(...points.map(p => p.x));
-    const line = [{ x: xmin, y: intercept + slope * xmin }, { x: xmax, y: intercept + slope * xmax }];
-    new Chart(canvas, {
-      data: {
-        datasets: [
-          {
-            type: "scatter",
-            label: "Years (each dot)",
-            data: points,
-            backgroundColor: p.wid,
-            borderColor: p.wid,
-            pointBackgroundColor: p.wid,
-            paletteKey: "wid",
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          },
-          {
-            type: "line",
-            label: `Best-fit line (slope=${slope.toFixed(4)})`,
-            data: line,
-            borderColor: p.danger,
-            backgroundColor: `${p.danger}33`,
-            pointBackgroundColor: p.danger,
-            paletteKey: "danger",
-            borderDash: [4, 4],
-            pointRadius: 0,
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 380, easing: "easeOutQuart" },
-        plugins: {
-          legend: { position: "bottom", labels: { color: p.fg } },
-          tooltip: {
-            ...tooltipThemeColors(),
-            callbacks: {
-              label: ctx => {
-                const pt = ctx.raw;
-                if (pt.year != null) {
-                  const yr = pt.year != null && Number.isFinite(Number(pt.year))
-                    ? formatChartTickPlain(pt.year)
-                    : String(pt.year);
-                  const x = formatChartTickPlain(pt.x);
-                  return `${yr}: trade=${x}, top10=${(pt.y * 100).toFixed(1)}%`;
-                }
-                return `${ctx.dataset.label}`;
-              },
-            },
-          },
-        },
-        scales: {
-          x: {
-            title: { display: true, text: "Trade / GDP (%)", color: p.muted },
-            grid: { color: p.rule },
-            ticks: { color: p.muted, callback: formatChartTickPlain },
-          },
-          y: {
-            title: { display: true, text: "Top-10% share", color: p.muted },
-            grid: { color: p.rule },
-            ticks: { color: p.muted, callback: formatChartTickPlain },
-          },
-        },
-      },
     });
   };
 
@@ -1730,15 +1524,6 @@
   // ------------------------------------------------------------
 
 
-  /** Build Gini + scatter charts for the always-visible inequality subsection. */
-  const wireLazyInequalityCharts = (ineq, panel) => {
-    buildGiniChart(ineq);
-    buildScatterTop10Trade(panel);
-    requestAnimationFrame(() => {
-      Chart.getChart(document.getElementById("chart-gini"))?.resize();
-      Chart.getChart(document.getElementById("chart-scatter-top10-trade"))?.resize();
-    });
-  };
   const wireResultChips = () => {
     $$(".result-chip").forEach((chip) => {
       chip.addEventListener("click", () => {
@@ -2051,12 +1836,8 @@
       "chart-unemployment",
       "chart-sector-shares",
       "chart-manuf-decline",
-      "chart-scatter-manuf-trade",
-      "chart-top10-trade-time",
       "chart-income-shares",
       "chart-wealth-shares",
-      "chart-gini",
-      "chart-scatter-top10-trade",
     ].forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -2287,7 +2068,7 @@
       const lazySections = new Map([
         ["macro", () => safeRun("macro charts", () => { buildIndexedChart(ts); buildUnemploymentChart(ts); })],
         ["sectors", () => safeRun("sector charts", () => { if (sectorData) { buildSectorCharts(sectorData); renderSectorStats(sectorData); } })],
-        ["inequality", () => safeRun("inequality charts", () => { buildIncomeChart(ineq); buildWealthChart(ineq); buildTop10TradeTimeChart(ineq, ts); wireLazyInequalityCharts(ineq, panel); })],
+        ["inequality", () => safeRun("inequality charts", () => { buildIncomeChart(ineq); buildWealthChart(ineq); })],
       ]);
       const lazyObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
