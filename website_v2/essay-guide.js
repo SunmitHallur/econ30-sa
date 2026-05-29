@@ -24,7 +24,8 @@
   ];
   const ESSAY_ADJACENT_RE =
     /\b(essay|site|project|capstone|econ(?:omics)?\s*30|thesis|argument|claim|finding|conclusion|method|methodolog|data|dataset|source|chart|map|regression|evidence|caus|associat|apartheid|south africa|post.?1994|integration|inclusion|openness|trade|gear|rdp|unemployment|inequality|manufactur|sector|pieter|sipho|two lives|wdi|qlfs|benjamini|bonferroni|chow|present|professor|reader|section|walkthrough|gdp|provinc|geograph|policy|democrat|sanction|township|hallur|takeaway|summar|explain|compare|who|what|why|how)\b/i;
-  const INVITE_STORAGE_KEY = "econ30-guide-invite-dismissed-v3";
+  /** Session-only: "Not now" / Escape — invite can return on a later visit. */
+  const INVITE_SESSION_KEY = "econ30-guide-invite-dismissed-session";
   const INVITE_DELAY_MS = 900;
   const INVITE_RESHOW_MS = 600;
 
@@ -561,16 +562,16 @@
 
   const inviteDismissed = () => {
     try {
-      return Boolean(localStorage.getItem(INVITE_STORAGE_KEY));
+      return Boolean(sessionStorage.getItem(INVITE_SESSION_KEY));
     } catch {
       return false;
     }
   };
 
-  const hideInvite = (remember = false) => {
-    if (remember) {
+  const hideInvite = (forSession = false) => {
+    if (forSession) {
       try {
-        localStorage.setItem(INVITE_STORAGE_KEY, "1");
+        sessionStorage.setItem(INVITE_SESSION_KEY, "1");
       } catch { /* ignore */ }
     }
     inviteVisible = false;
@@ -764,8 +765,19 @@
     );
   };
 
+  const clearLegacyInviteDismiss = () => {
+    try {
+      [
+        "econ30-guide-invite-dismissed",
+        "econ30-guide-invite-dismissed-v2",
+        "econ30-guide-invite-dismissed-v3",
+      ].forEach((k) => localStorage.removeItem(k));
+    } catch { /* ignore */ }
+  };
+
   const boot = async () => {
     buildUI();
+    clearLegacyInviteDismiss();
     scheduleInvite();
 
     try {
@@ -785,6 +797,10 @@
        <p>Try <strong>Walkthrough</strong> for an 11-step tour, or ask below (e.g. main findings, what data you use, or why unemployment stayed high).</p>`
     );
     refreshSuggestedChips();
+
+    if (!inviteVisible && !inviteDismissed() && !panelOpen) {
+      scheduleInvite(0);
+    }
 
     // Probe API only on deployed hosts (/api/chat is a Vercel function, not static files)
     const isLocal =
@@ -811,8 +827,13 @@
 
   window.addEventListener("load", onPageReady);
   window.addEventListener("pageshow", (e) => {
-    if (e.persisted) scheduleInvite(INVITE_RESHOW_MS);
+    if (e.persisted && !inviteDismissed() && !panelOpen) {
+      scheduleInvite(INVITE_RESHOW_MS);
+    }
   });
+  if (document.readyState === "complete") {
+    onPageReady();
+  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);
