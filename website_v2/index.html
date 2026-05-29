@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Price of Integration: South Africa after 1994</title>
-  <meta name="description" content="South Africa after 1994: opening to trade and global rules, jobs, inequality, and what the data show—with clear charts and cautious statistics, linked to sources." />
+  <meta name="description" content="South Africa after 1994: opening to trade and global rules, jobs, inequality, and what the data show, with clear charts and cautious statistics, linked to sources." />
   <meta property="og:title" content="The Price of Integration" />
   <meta property="og:description" content="South Africa after 1994: integration succeeded, inclusion did not." />
   <meta property="og:image" content="og-image.png" />
@@ -56,26 +56,12 @@
         <span class="brand-text">Econ 30 · Sunmit Hallur</span>
       </a>
       <nav class="topnav" aria-label="Primary">
-        <a href="#question">Question</a>
-        <a href="#from-the-ground">Ground</a>
-        <a href="#timeline">Timeline</a>
-        <a href="#macro">Economy</a>
-        <a href="#sectors">Sectors</a>
-        <a href="#inequality">Inequality</a>
-        <a href="#two-lives">Two Lives</a>
-        <a href="#results">Evidence</a>
-        <a href="#map">Map</a>
-        <a href="#conclusions">Conclusions</a>
-        <a href="#sources">Sources</a>
+        <a href="#question" data-nav-sections="hero,question">Question</a>
+        <a href="#from-the-ground" data-nav-sections="from-the-ground,timeline">Story</a>
+        <a href="#macro" data-nav-sections="macro,sectors,inequality">Economy</a>
+        <a href="#two-lives" data-nav-sections="two-lives,results,map">Evidence</a>
+        <a href="#conclusions" data-nav-sections="conclusions,sources">Takeaways</a>
       </nav>
-      <details class="topnav-more">
-        <summary>More</summary>
-        <div class="topnav-more-menu">
-          <a href="#timeline">Timeline</a>
-          <a href="#two-lives">Two Lives</a>
-          <a href="#map">Map</a>
-        </div>
-      </details>
       <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Toggle theme">
         <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◐</span></span>
       </button>
@@ -104,7 +90,7 @@
           <a class="ghost-btn hero-cta-primary" href="#from-the-ground"><span class="ghost-btn__text">Start with places ↓</span></a>
           <a class="hero-text-link" href="#macro">Jump to national charts →</a>
         </div>
-        <p class="hero-data-note">Built on WDI, WID, WIID, and QLFS data — <a href="#sources">see sources</a>.</p>
+        <p class="hero-data-note">Built on WDI, WID, WIID, and QLFS data. <a href="#sources">see sources</a>.</p>
       </div>
       <div class="hero-right">
         <div class="hero-figure hero-figure--photo-only">
@@ -123,7 +109,7 @@
           </div>
           <div class="hero-stat">
             <dt>Income per person</dt>
-            <dd><span class="hero-stat__num">+~⅓</span><span class="hero-stat__unit">since 1994</span></dd>
+            <dd><span class="hero-stat__num">+~33%</span><span class="hero-stat__unit">since 1994</span></dd>
           </div>
           <div class="hero-stat hero-stat--warn">
             <dt>Top-10% income share</dt>
@@ -142,7 +128,7 @@
           <p class="section-step">Section 01</p>
           <h2>The Question: Did opening up the country open it up for everyone?</h2>
           <p class="section-question__themes">Goods · Capital · Norms</p>
-          <p class="question-big">Short answer: not enough — and the rest of this essay shows why.</p>
+          <p class="question-big">Short answer: not enough, and the rest of this essay shows why.</p>
           <p class="section-lede">
             After 1994, did South Africa integrate into the global economy faster
             than it created broad domestic opportunity, driving aggregate growth
@@ -301,6 +287,7 @@
       <div class="chart-mockup chart-mockup--macro">
         <div class="chart-mockup__accent" aria-hidden="true"></div>
         <div class="chart-mockup__grid">
+          <div class="chart-mockup__copy-pin">
           <div class="chart-mockup__copy chart-annotations chart-mockup__copy--macro">
             <h3 class="chart-mockup__title">From docks to national lines</h3>
             <p class="chart-claim">
@@ -313,6 +300,7 @@
               <p><span>Technical note</span> A formal “long-run link” test between log income per person and trade/GDP does not find a stable long-run pairing here (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span> for Engle–Granger).</p>
               <p><span>Source</span> World Development Indicators; trade-policy context in <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Sources</a>.</p>
             </div>
+          </div>
           </div>
           <div class="chart-mockup__charts">
             <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
@@ -407,6 +395,7 @@
       <div class="chart-mockup chart-mockup--sectors">
         <div class="chart-mockup__accent" aria-hidden="true"></div>
         <div class="chart-mockup__grid">
+          <div class="chart-mockup__copy-pin">
           <div class="chart-mockup__copy chart-annotations chart-mockup__copy--sectors">
             <h3 class="chart-mockup__title">Trade exposure, sector by sector</h3>
             <p class="chart-claim">
@@ -431,6 +420,7 @@
                 <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
                 district-level analysis; this is the macro sector pattern it implies.</p>
             </div>
+          </div>
           </div>
           <div class="chart-mockup__charts">
             <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
@@ -460,9 +450,9 @@
           <p>
             Erten, Leight and Tregenna (2019) compare South African districts that were
             <em>more</em> exposed to tariff cuts with districts that were <em>less</em> exposed and
-            find weaker employment and formal-sector outcomes in the more-exposed places — with
+            find weaker employment and formal-sector outcomes in the more-exposed places, with
             the heaviest costs falling on Black workers and women. The aggregate sector pattern
-            here mirrors that story: manufacturing — the canonical trade-exposed sector — lost
+            here mirrors that story: manufacturing, the canonical trade-exposed sector, lost
             ground both in output and in jobs as openness rose, and services did not absorb the
             displaced workforce, which is why national unemployment never fell back to the
             pre-1994 range.
@@ -496,6 +486,7 @@
       <div class="chart-mockup chart-mockup--inequality">
         <div class="chart-mockup__accent" aria-hidden="true"></div>
         <div class="chart-mockup__grid">
+          <div class="chart-mockup__copy-pin">
           <div class="chart-mockup__copy chart-annotations chart-mockup__copy--inequality">
             <h3 class="chart-mockup__title">Who holds income and wealth</h3>
             <p class="chart-claim">
@@ -508,6 +499,7 @@
               <p><span>Wealth</span> Wealth is more concentrated than yearly income: the top 10% held roughly 85% of household wealth.</p>
               <p><span>Source</span> WID and <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee–Czajka–Gethin</a>.</p>
             </div>
+          </div>
           </div>
           <div class="chart-mockup__charts">
             <div class="chart-mockup__charts-deco" aria-hidden="true"></div>
@@ -561,7 +553,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 7. Two Lives — interactive perspective                       -->
+    <!-- 7. Two Lives: interactive perspective                       -->
     <!-- ============================================================ -->
     <section id="two-lives" class="section section-two-lives">
       <div class="section-head">
@@ -599,8 +591,7 @@
         <p class="section-step">Section 08</p>
         <h2>What survives a strict statistical test.</h2>
         <p class="section-lede">
-          A plain-English summary first; the full regression battery — hundreds of tests with
-          diagnostics — is tucked away below for readers who want every estimate.
+          A plain-English summary first; the full regression battery (hundreds of tests with diagnostics) is tucked away below for readers who want every estimate.
         </p>
       </div>
       <div class="result-chips" aria-label="Headline statistical outcomes">
@@ -626,14 +617,14 @@
           sectors: manufacturing employment share and tradable employment share both
           fall robustly as trade openness rises (HAC <span class="mono">t</span> ≈ −2.5 and −3.8 respectively over
           26 years). <strong>Second</strong>, trade openness also tracks the rise of the top
-          1%'s income share — the one inequality–trade link the multiple-testing
+          1%'s income share, the one inequality and trade link the multiple-testing
           adjustments cannot dismiss. On the other side of the ledger, the Chow test does
           not find a clean structural break at the 1996 GEAR pivot, and trade does not
           robustly explain unemployment levels on its
-          own. None of these single-country regressions are causal proof — for that
+          own. None of these single-country regressions are causal proof. For that
           this essay leans on
           <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
-          district-level evidence — but they show which patterns are sturdy enough to
+          district-level evidence, but they show which patterns are sturdy enough to
           take seriously.
         </p>
         <p class="results-summary-card__note">
@@ -720,9 +711,9 @@
                     <select id="glossary-select" aria-label="Glossary of statistical terms">
                       <option value="" selected>Pick a term…</option>
                       <option data-def="Smallest standard p-value in that row before any correction. Because hundreds of tests were run, some raw “hits” can appear by chance.">Raw p</option>
-                      <option data-def="Multiply the raw p-value by the number of tests run—very harsh. If a row still clears 5%, treat it seriously.">Bonf (Bonferroni)</option>
+                      <option data-def="Multiply the raw p-value by the number of tests run; very harsh. If a row still clears 5%, treat it seriously.">Bonf (Bonferroni)</option>
                       <option data-def="A middle-ground correction when many tests are run. Surviving BH is the strongest bar used on this page; it means the pattern looks less like luck from testing everything at once.">BH (Benjamini–Hochberg)</option>
-                      <option data-def="Not statistically distinguishable from zero at the usual 5% bar—even before extra corrections.">n/s</option>
+                      <option data-def="Not statistically distinguishable from zero at the usual 5% bar, even before extra corrections.">n/s</option>
                       <option data-def="Durbin–Watson checks whether errors line up year after year in a suspicious way. Near 2 is fine; below about 1.5 raises doubt about the printed p-values for that row.">DW (Durbin-Watson)</option>
                       <option data-def="Breusch–Pagan checks whether the scatter of errors looks uneven across observations. A value above 0.05 is usually read as “no strong warning flag.”">BP (Breusch–Pagan)</option>
                       <option data-def="Ljung–Box checks leftover patterns in errors across short lags. Above 0.05 is usually read as “no strong leftover year-to-year pattern.”">LB (Ljung–Box)</option>
@@ -857,7 +848,7 @@
       </div>
 
       <p class="map-scrolly-hint" id="map-scrolly-hint">
-        Scroll slowly downward while this block is on screen—the quarter advances with your scroll. Use <strong>Play</strong> for an automatic run, or drag the slider anytime.
+        Scroll slowly to advance quarters, use <strong>Play</strong> for an automatic run to the latest quarter, or drag the slider anytime. A before-and-after comparison appears when you finish once.
       </p>
       <div class="map-scrolly" id="map-scrolly">
         <div class="map-scrolly-sticky">
@@ -865,7 +856,7 @@
             <button type="button" class="ghost-btn map-controls__play" id="map-play-pause" aria-pressed="false">
               <span class="ghost-btn__text" id="map-play-label">Play</span>
             </button>
-            <span class="map-controls__period mono" id="map-period-label" aria-live="polite">—</span>
+            <span class="map-controls__period mono" id="map-period-label" aria-live="polite">…</span>
             <label class="map-controls__scrub">
               <span class="visually-hidden">Quarter</span>
               <input type="range" id="map-wave-slider" min="0" max="0" value="0" />
@@ -897,16 +888,20 @@
           </figure>
         </div>
       </div>
-      <div class="prose narrow map-methodology">
-        <p>
-          <strong>Method.</strong> Provincial rates are author-calculated from Stats SA survey microdata (narrow definition,
-          survey weights): harmonised <strong>LFS/OHS</strong> worker extracts for early years, then <strong>QLFS</strong>.
-          Official headline rates may differ slightly by revision or filtering; long-run comparisons across survey redesigns are indicative only.
-        </p>
-        <div id="map-data-citation" class="map-data-citation" aria-label="Map data citation and technical note"></div>
-        <p class="map-methodology-sources">
-          <a class="kb-link" href="#sources">Sources</a> lists P0211 and related entries under <em>Datasets</em>.
-        </p>
+      <div class="map-methodology" aria-label="Map methodology and sources">
+        <div class="map-methodology__grid">
+          <div class="map-methodology__method">
+            <p>
+              <strong>Method.</strong> Provincial rates are author-calculated from Stats SA microdata (narrow unemployment, survey weights),
+              harmonising <strong>LFS</strong> and <strong>OHS</strong> for early years and <strong>QLFS</strong> thereafter.
+              Official tables can differ by revision; treat long-run movement across survey redesigns as indicative.
+            </p>
+            <p class="map-methodology-sources">
+              <a class="kb-link" href="#sources">Sources</a> lists P0211 and related entries under <em>Datasets</em>.
+            </p>
+          </div>
+          <div id="map-data-citation" class="map-data-citation" aria-label="Map data citation and technical note"></div>
+        </div>
       </div>
     </section>
     <div class="section-bridge" aria-label="Transition to conclusions">
@@ -920,7 +915,7 @@
     <section id="conclusions" class="section">
       <div class="section-head">
         <p class="section-step">Section 10</p>
-        <h2>Integration succeeded. Inclusion didn't.</h2>
+        <h2>Integration succeeded. Inclusion did not.</h2>
         <p class="section-lede">
           After 1994, South Africa successfully rejoined the world economy. The unresolved
           question is distribution: why those gains did not become broad employment and
@@ -981,7 +976,7 @@
           class="quote-orbit"
           role="region"
           aria-roledescription="carousel"
-          aria-label="Voices from the record — selected quotations"
+          aria-label="Voices from the record, selected quotations"
           tabindex="0"
           data-autoplay="false"
         >
@@ -1034,11 +1029,11 @@
         <div class="card">
           <h3 class="card-title">Datasets</h3>
           <ul class="link-list">
-            <li><a href="https://databank.worldbank.org/source/world-development-indicators" target="_blank" rel="noopener noreferrer">World Development Indicators (Databank)</a> — exports, GDP, population, etc.</li>
-            <li><a href="https://wid.world/country/south-africa/" target="_blank" rel="noopener noreferrer">World Inequality Database — South Africa</a> — income and wealth shares.</li>
-            <li><a href="https://www.wider.unu.edu/project/wiid-world-income-inequality-database" target="_blank" rel="noopener noreferrer">WIID (UNU-WIDER)</a> — harmonised Gini / Palma.</li>
-            <li><a href="https://www.statssa.gov.za/?page_id=1854&amp;PPN=P0211" target="_blank" rel="noopener noreferrer">Stats SA — Statistical release P0211 (QLFS)</a> — official publications and methodology.</li>
-            <li><a href="https://www.statssa.gov.za/" target="_blank" rel="noopener noreferrer">Statistics South Africa</a> — producer of QLFS/LFS/OHS microdata used in analysis scripts.</li>
+            <li><a href="https://databank.worldbank.org/source/world-development-indicators" target="_blank" rel="noopener noreferrer">World Development Indicators (Databank)</a>: exports, GDP, population, etc.</li>
+            <li><a href="https://wid.world/country/south-africa/" target="_blank" rel="noopener noreferrer">World Inequality Database, South Africa</a>: income and wealth shares.</li>
+            <li><a href="https://www.wider.unu.edu/project/wiid-world-income-inequality-database" target="_blank" rel="noopener noreferrer">WIID (UNU-WIDER)</a>: harmonised Gini / Palma.</li>
+            <li><a href="https://www.statssa.gov.za/?page_id=1854&amp;PPN=P0211" target="_blank" rel="noopener noreferrer">Stats SA, Statistical release P0211 (QLFS)</a>: official publications and methodology.</li>
+            <li><a href="https://www.statssa.gov.za/" target="_blank" rel="noopener noreferrer">Statistics South Africa</a>: producer of QLFS/LFS/OHS microdata used in analysis scripts.</li>
             <li>
               <strong>Provincial map (§8):</strong> Narrow unemployment by province/quarter from harmonised Stats SA <strong>LFS / OHS / QLFS</strong> microdata (author aggregates; not official published tables).
               <details class="sources-more">
@@ -1052,33 +1047,36 @@
         <div class="card">
           <h3 class="card-title">Policy history</h3>
           <ul class="link-list">
-            <li><a href="https://www.gov.za/sites/default/files/16085.pdf" target="_blank" rel="noopener noreferrer">RDP white paper (1994)</a> — Government Gazette No. 16085 (PDF).</li>
-            <li><a href="https://www.treasury.gov.za/publications/other/gear/chapters.pdf" target="_blank" rel="noopener noreferrer">GEAR (1996)</a> — National Treasury consolidated chapters (PDF).</li>
-            <li><a href="https://www.saha.org.za/collections/AL3284/i2215.htm" target="_blank" rel="noopener noreferrer">Adelzadeh (1996), <cite>Transformation</cite> 31</a> — archived record for the RDP → GEAR commentary.</li>
-            <li><a href="https://www.wto.org/english/tratop_e/tpr_e/tp547_e.htm" target="_blank" rel="noopener noreferrer">WTO trade policy review — SACU (2023)</a> — tariff and trade regime.</li>
-            <li><a href="https://doi.org/10.70132/j4269338243" target="_blank" rel="noopener noreferrer">Mayekiso &amp; Lamla (2025)</a> — liberalisation, privatisation, labour.</li>
-            <li><a href="https://ilrigsa.org.za/the-political-economy-of-the-south-african-transition/" target="_blank" rel="noopener noreferrer">ILRIG — political economy of the transition</a> — popular-education course hub.</li>
-            <li><a href="https://documents.worldbank.org/en/publication/documents-reports/documentdetail/368961522944196494/south-africa-economic-update-jobs-and-inequality" target="_blank" rel="noopener noreferrer">World Bank (2021) — <cite>South Africa Economic Update</cite> (jobs &amp; inequality / post-COVID)</a>.</li>
+            <li><a href="https://www.gov.za/sites/default/files/16085.pdf" target="_blank" rel="noopener noreferrer">RDP white paper (1994)</a>: Government Gazette No. 16085 (PDF).</li>
+            <li><a href="https://www.treasury.gov.za/publications/other/gear/chapters.pdf" target="_blank" rel="noopener noreferrer">GEAR (1996)</a>: National Treasury consolidated chapters (PDF).</li>
+            <li><a href="https://www.saha.org.za/collections/AL3284/i2215.htm" target="_blank" rel="noopener noreferrer">Adelzadeh (1996), <cite>Transformation</cite> 31</a>: archived record for the RDP → GEAR commentary.</li>
+            <li><a href="https://www.wto.org/english/tratop_e/tpr_e/tp547_e.htm" target="_blank" rel="noopener noreferrer">WTO trade policy review, SACU (2023)</a>: tariff and trade regime.</li>
+            <li><a href="https://doi.org/10.70132/j4269338243" target="_blank" rel="noopener noreferrer">Mayekiso &amp; Lamla (2025)</a>: liberalisation, privatisation, labour.</li>
+            <li><a href="https://ilrigsa.org.za/the-political-economy-of-the-south-african-transition/" target="_blank" rel="noopener noreferrer">ILRIG, political economy of the transition</a>: popular-education course hub.</li>
+            <li><a href="https://documents.worldbank.org/en/publication/documents-reports/documentdetail/368961522944196494/south-africa-economic-update-jobs-and-inequality" target="_blank" rel="noopener noreferrer">World Bank (2021), <cite>South Africa Economic Update</cite> (jobs &amp; inequality / post-COVID)</a>.</li>
           </ul>
         </div>
         <div class="card">
           <h3 class="card-title">Causal evidence cited</h3>
           <ul class="link-list">
-            <li><a href="https://doi.org/10.1016/j.jinteco.2019.02.006" target="_blank" rel="noopener noreferrer">Erten, Leight &amp; Tregenna (2019), <cite>Journal of International Economics</cite></a> — local labour markets after tariff cuts.</li>
-            <li><a href="https://hdl.handle.net/10419/211260" target="_blank" rel="noopener noreferrer">Driver (2019), UNU-WIDER working paper</a> — manufacturing and trade liberalisation.</li>
-            <li><a href="https://open.uct.ac.za/items/57c851e3-bd2e-4b04-9626-7778d529137e" target="_blank" rel="noopener noreferrer">Uhuru (2020), UCT (OpenUCT)</a> — synthetic control and sanctions.</li>
-            <li><a href="https://doi.org/10.1111/1467-9485.00248" target="_blank" rel="noopener noreferrer">Evenett (2002), <cite>Scottish Journal of Political Economy</cite></a> — sanctions and exports.</li>
-            <li><a href="https://doi.org/10.1093/wber/lhab012" target="_blank" rel="noopener noreferrer">Chatterjee, Czajka &amp; Gethin (2022), <cite>World Bank Economic Review</cite></a> — wealth inequality.</li>
+            <li><a href="https://doi.org/10.1016/j.jinteco.2019.02.006" target="_blank" rel="noopener noreferrer">Erten, Leight &amp; Tregenna (2019), <cite>Journal of International Economics</cite></a>: local labour markets after tariff cuts.</li>
+            <li><a href="https://hdl.handle.net/10419/211260" target="_blank" rel="noopener noreferrer">Driver (2019), UNU-WIDER working paper</a>: manufacturing and trade liberalisation.</li>
+            <li><a href="https://open.uct.ac.za/items/57c851e3-bd2e-4b04-9626-7778d529137e" target="_blank" rel="noopener noreferrer">Uhuru (2020), UCT (OpenUCT)</a>: synthetic control and sanctions.</li>
+            <li><a href="https://doi.org/10.1111/1467-9485.00248" target="_blank" rel="noopener noreferrer">Evenett (2002), <cite>Scottish Journal of Political Economy</cite></a>: sanctions and exports.</li>
+            <li><a href="https://doi.org/10.1093/wber/lhab012" target="_blank" rel="noopener noreferrer">Chatterjee, Czajka &amp; Gethin (2022), <cite>World Bank Economic Review</cite></a>: wealth inequality.</li>
           </ul>
         </div>
       </div>
       <div class="card sources-scope-card">
         <h3 class="card-title">Scope of claims (short version)</h3>
         <ul class="link-list sources-scope-list">
-          <li><strong>Fair to say:</strong> After 1994, South Africa opened more while income and wealth stayed highly concentrated and unemployment stayed high.</li>
-          <li><strong>Fair to say:</strong> Among this project’s many regressions, the trade/top-income pattern is the hardest to dismiss after strict corrections.</li>
-          <li><strong>Not fair to claim:</strong> That these national charts alone prove trade caused inequality, or that GEAR alone caused these growth paths.</li>
-          <li><strong>Not fair to claim:</strong> Perfect comparability across inequality surveys that were built in different ways or stop in different years.</li>
+          <li><strong>Fair to say:</strong> After 1994, South Africa opened more while unemployment stayed high and income and wealth remained concentrated. That is a descriptive read of the national charts and cited surveys.</li>
+          <li><strong>Fair to say:</strong> On this site’s macro panel, <strong>two</strong> associations survive Benjamini–Hochberg correction: trade openness with <strong>declining tradable-sector employment shares</strong> and with <strong>rising top-1% income share</strong> (see §8).</li>
+          <li><strong>Fair to say:</strong> Provincial unemployment is <strong>spatially uneven</strong>. The map (§9) uses author-built aggregates from harmonised Stats SA microdata; treat long runs across survey redesigns as indicative.</li>
+          <li><strong>Not fair to claim:</strong> That national regressions or these charts alone prove trade <em>caused</em> inequality, sector decline, or unemployment. Stronger causal claims rely on outside studies cited in <a href="#sources">Sources</a> (e.g. district tariff exposure).</li>
+          <li><strong>Not fair to claim:</strong> That <strong>GEAR (1996)</strong> marks a clean structural break in these national series (the Chow test here does not support that), or that trade openness by itself explains unemployment levels in the macro panel.</li>
+          <li><strong>Not fair to claim:</strong> Perfect comparability across inequality databases (different methods and end years) or across every map quarter (some waves lack comparable labour fields).</li>
+          <li><strong>Not fair to claim:</strong> That <strong>Two Lives</strong> (Pieter and Sipho) are real individuals or direct microdata extracts. They are composite illustrations built from the essay’s evidence and history.</li>
         </ul>
       </div>
 
@@ -1102,7 +1100,7 @@
           </li>
           <li>
             <strong>Correlation is not policy proof.</strong> For stronger causal claims,
-            this essay leans on outside work—sanctions synthetic controls, district labour
+            this essay leans on outside work: sanctions synthetic controls, district labour
             markets after tariff cuts, and wealth distribution accounting (Chatterjee et al., 2022).
           </li>
           <li>
@@ -1143,5 +1141,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="app.js"></script>
   <script src="two-lives.js" defer></script>
+  <script src="essay-guide.js" defer></script>
 </body>
 </html>

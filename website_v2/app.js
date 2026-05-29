@@ -541,7 +541,7 @@
     { year: "2008–09", title: "Global financial crisis", kb: "trade-liberalization-sa-manufacturing", chartHref: "#chart-unemployment",
       body: "Manufacturing shrank sharply; unemployment stepped up." },
     { year: "2009–18", title: "The gap widens", kb: "political-economy-of-transition",
-      body: "A decade of slow, uneven growth: asset-holders kept pulling ahead while jobless and informal workers fell further behind — the divergence accelerated rather than closed." },
+      body: "A decade of slow, uneven growth: asset-holders kept pulling ahead while jobless and informal workers fell further behind; the divergence accelerated rather than closed." },
     { year: "2017", title: "Sovereign rating downgrades", kb: "trade-liberalisation-south-africa",
       body: "Credit-rating agencies moved South Africa below top investment grades; borrowing became costlier." },
     { year: "2020–22", title: "COVID-19 shock", kb: "building-back-better-covid-jobs",
@@ -549,7 +549,7 @@
     { year: "2024–25", title: "QLFS Q1 2025: narrow u = 32.9%", kb: "stats-sa-qlfs-p0211-2025q1",
       body: "Broader unemployment (including discouraged seekers) at 43.1%; youth unemployment at 46.1%." },
   ];
-  /* Primary sources (publishers, datasets, DOIs) — not course wiki mirrors. */
+  /* Primary sources (publishers, datasets, DOIs), not course wiki mirrors. */
   const KB_SOURCE_URL = {
     "apartheid-era-sanctions": "https://doi.org/10.1111/1467-9485.00248",
     "reconstruction-and-development-programme": "https://www.gov.za/sites/default/files/16085.pdf",
@@ -997,7 +997,7 @@
   };
 
   // ------------------------------------------------------------
-  // Leaflet map — SA-only bounds, provincial choropleth, metro markers when zoomed
+  // Leaflet map: SA-only bounds, provincial choropleth, metro markers when zoomed
   // ------------------------------------------------------------
   // Plain corner array (not L.latLngBounds) so this module-level constant does not
   // reference Leaflet's global `L`, which is now lazy-loaded. Leaflet accepts this
@@ -1091,12 +1091,29 @@
         const det = document.createElement("details");
         det.className = "map-method-details";
         const sum = document.createElement("summary");
-        sum.textContent = "Technical notes";
+        sum.textContent = "Technical notes (harmonisation)";
         det.appendChild(sum);
-        const body = document.createElement("p");
-        body.className = "map-method-detail-body";
-        body.textContent = series.method_note_detail;
-        det.appendChild(body);
+        const detailItems = Array.isArray(series.method_note_detail)
+          ? series.method_note_detail
+          : String(series.method_note_detail)
+              .split(/(?<=[.])\s+(?=[A-Z])/)
+              .map((s) => s.trim())
+              .filter(Boolean);
+        if (detailItems.length > 1) {
+          const list = document.createElement("ul");
+          list.className = "map-method-detail-list";
+          detailItems.forEach((line) => {
+            const li = document.createElement("li");
+            li.textContent = line;
+            list.appendChild(li);
+          });
+          det.appendChild(list);
+        } else {
+          const body = document.createElement("p");
+          body.className = "map-method-detail-body";
+          body.textContent = detailItems[0] || series.method_note_detail;
+          det.appendChild(body);
+        }
         citeRoot.appendChild(det);
       }
     }
@@ -1129,7 +1146,7 @@
     const compareEndCap = $("#map-compare-end-caption");
     const scrollyHintEl = $("#map-scrolly-hint");
 
-    /** Min/max narrow unemployment across every province & metro in every wave — fixed legend so time animation is comparable. */
+    /** Min/max narrow unemployment across every province & metro in every wave; fixed legend so time animation is comparable. */
     const ratesForFixedScale = [];
     waves.forEach((wv) => {
       Object.values(wv.provinces || {}).forEach((v) => {
@@ -1252,7 +1269,14 @@
     const markPlaybackComplete = () => {
       if (playbackCompleted) return;
       playbackCompleted = true;
+      scrollDriveActive = false;
+      setScrollyHeight();
       buildComparePairOnce();
+      if (scrollyHintEl) {
+        scrollyHintEl.innerHTML =
+          "Animation complete. Compare the <strong>first and latest</strong> quarters below, or drag the slider to revisit any quarter.";
+      }
+      comparePanel?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     };
 
     const setPlaying = (on) => {
@@ -1276,13 +1300,20 @@
     const startAutoplay = () => {
       stopAutoplay();
       if (!playing) return;
+      if (waveIndex >= waves.length - 1) {
+        markPlaybackComplete();
+        setPlaying(false);
+        return;
+      }
       autoplayTimer = setInterval(() => {
-        const next = (waveIndex + 1) % waves.length;
-        if (waves.length > 1 && waveIndex === waves.length - 1 && next === 0) {
-          markPlaybackComplete();
+        if (waveIndex < waves.length - 1) {
+          waveIndex += 1;
+          applyWave(waveIndex);
         }
-        waveIndex = next;
-        applyWave(waveIndex);
+        if (waveIndex >= waves.length - 1) {
+          markPlaybackComplete();
+          setPlaying(false);
+        }
       }, mapPlayStepMs);
     };
 
@@ -1419,7 +1450,7 @@
       if (periodEl) periodEl.textContent = `${w.label}${nat}`;
       if (sliderEl) sliderEl.value = String(waveIndex);
       if (legendRangeEl) {
-        legendRangeEl.textContent = `${mapFixedVmin.toFixed(1)}% — ${mapFixedVmax.toFixed(1)}% (fixed scale, all quarters)`;
+        legendRangeEl.textContent = `${mapFixedVmin.toFixed(1)}% to ${mapFixedVmax.toFixed(1)}% (fixed scale, all quarters)`;
       }
       if (legendHintEl) {
         const ok = w.metros && Object.keys(w.metros).length > 0;
@@ -1473,7 +1504,13 @@
     }
 
     if (playBtn) {
-      playBtn.addEventListener("click", () => setPlaying(!playing));
+      playBtn.addEventListener("click", () => {
+        if (!playing && waveIndex >= waves.length - 1) {
+          waveIndex = 0;
+          applyWave(0);
+        }
+        setPlaying(!playing);
+      });
     }
 
     applyWave(waveIndex);
@@ -1600,8 +1637,12 @@
       }
 
       links.forEach((l) => {
-        const href = l.getAttribute("href");
-        l.classList.toggle("active", href === `#${activeId}` && activeId !== "hero");
+        const group = (l.dataset.navSections || l.getAttribute("href")?.slice(1) || "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        const inGroup = group.includes(activeId);
+        l.classList.toggle("active", inGroup && activeId !== "hero");
       });
 
       if (indicatorText) {

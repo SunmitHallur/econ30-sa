@@ -7,7 +7,7 @@ Use this map for targeted edits after the visual-essay redesign.
 | Block | Notes |
 |---|---|
 | `<head>` | SEO/social tags (`og:*`, `twitter:card`), JSON-LD, `print.css` |
-| Top bar | `.topbar`, `.topnav`, `.topnav-more`, `#theme-toggle` |
+| Top bar | `.topbar`, `.topnav` (5 grouped links), `#theme-toggle`, `#essay-guide-launcher` |
 | Argument trail | `.arg-breadcrumb` (sticky step chips) |
 | Floating indicator | `.section-indicator` fallback |
 
@@ -41,5 +41,7 @@ Between every major section: `.section-bridge` (`.section-bridge__from`, `.secti
 | Two Lives interactive | `two-lives.js` (engine), `data/two-lives.json` (content) |
 | Results scrolly behavior | `scrolly-results.js` |
 | TOC + breadcrumb active step | `app.js` (`wireTOC`, `updateArgumentBreadcrumb`) |
+| Essay Guide (walkthrough + Q&A) | `essay-guide.js`, `data/tour.json`, `data/essay_corpus.json` (built by `scripts/build_essay_corpus.py`) |
+| Optional LLM answers | `api/chat.ts` at repo root (falls back to client retrieval if no API key) |
 | Page-level design and responsive behavior | `styles.css` |
 | Print output | `print.css` |

@@ -1,4 +1,4 @@
-/* Two Lives — interactive perspective engine.
+/* Two Lives: interactive perspective engine.
  * Self-contained: reads data/two-lives.json, runs intro → 5 beats → dual endings.
  * No dependency on app.js or Chart.js. */
 (function () {
