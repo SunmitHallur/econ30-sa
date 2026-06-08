@@ -31,6 +31,9 @@
   // Theme toggle (light ↔ dark, persisted) + first-visit picker
   // ------------------------------------------------------------
   const themeKey = "econ30-theme";
+  /** Bump when the picker copy or behavior changes; shows once per visitor per version. */
+  const themePromptKey = "econ30-theme-prompt";
+  const themePromptVersion = "1";
   const mapThemeRefreshers = [];
   const themeRefreshFns = [];
   const setThemeOnPage = (t, { persist = true, refreshMedia = false } = {}) => {
@@ -58,20 +61,37 @@
     if (!prompt) return;
     prompt.hidden = false;
     document.body.classList.add("theme-prompt-open");
-    const lightBtn = prompt.querySelector('[data-theme-choice="light"]');
-    lightBtn?.focus();
+  };
+  const markThemePromptSeen = () => {
+    try {
+      localStorage.setItem(themePromptKey, themePromptVersion);
+    } catch { /* ignore */ }
+  };
+  const shouldShowThemePrompt = () => {
+    try {
+      return localStorage.getItem(themePromptKey) !== themePromptVersion;
+    } catch {
+      return true;
+    }
   };
   const chooseTheme = (t) => {
     setThemeOnPage(t, { refreshMedia: true });
+    markThemePromptSeen();
     hideThemePrompt();
     window.dispatchEvent(new CustomEvent("econ30-theme-chosen", { detail: { theme: t } }));
   };
   const savedTheme = localStorage.getItem(themeKey);
-  if (savedTheme) {
-    setThemeOnPage(savedTheme, { persist: false });
-  } else {
-    setThemeOnPage("light", { persist: false });
+  setThemeOnPage(savedTheme === "dark" ? "dark" : "light", { persist: false });
+  if (shouldShowThemePrompt()) {
+    const prompt = $("#theme-prompt");
+    const current = document.documentElement.dataset.theme;
+    prompt?.querySelectorAll("[data-theme-choice]").forEach((btn) => {
+      btn.classList.toggle("is-current", btn.dataset.themeChoice === current);
+    });
     showThemePrompt();
+    const focusBtn = prompt?.querySelector(`[data-theme-choice="${current}"]`)
+      || prompt?.querySelector('[data-theme-choice="light"]');
+    focusBtn?.focus();
   }
   $("#theme-prompt")?.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-theme-choice]");
