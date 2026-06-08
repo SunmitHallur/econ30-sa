@@ -28,12 +28,9 @@
   });
 
   // ------------------------------------------------------------
-  // Theme toggle (light ↔ dark, persisted) + first-visit picker
+  // Theme toggle (light ↔ dark, persisted) + picker on each load
   // ------------------------------------------------------------
   const themeKey = "econ30-theme";
-  /** Bump when the picker copy or behavior changes; shows once per visitor per version. */
-  const themePromptKey = "econ30-theme-prompt";
-  const themePromptVersion = "1";
   const mapThemeRefreshers = [];
   const themeRefreshFns = [];
   const setThemeOnPage = (t, { persist = true, refreshMedia = false } = {}) => {
@@ -62,27 +59,14 @@
     prompt.hidden = false;
     document.body.classList.add("theme-prompt-open");
   };
-  const markThemePromptSeen = () => {
-    try {
-      localStorage.setItem(themePromptKey, themePromptVersion);
-    } catch { /* ignore */ }
-  };
-  const shouldShowThemePrompt = () => {
-    try {
-      return localStorage.getItem(themePromptKey) !== themePromptVersion;
-    } catch {
-      return true;
-    }
-  };
   const chooseTheme = (t) => {
     setThemeOnPage(t, { refreshMedia: true });
-    markThemePromptSeen();
     hideThemePrompt();
     window.dispatchEvent(new CustomEvent("econ30-theme-chosen", { detail: { theme: t } }));
   };
   const savedTheme = localStorage.getItem(themeKey);
   setThemeOnPage(savedTheme === "dark" ? "dark" : "light", { persist: false });
-  if (shouldShowThemePrompt()) {
+  {
     const prompt = $("#theme-prompt");
     const current = document.documentElement.dataset.theme;
     prompt?.querySelectorAll("[data-theme-choice]").forEach((btn) => {
