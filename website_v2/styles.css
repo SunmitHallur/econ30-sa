@@ -1876,12 +1876,59 @@ details summary h3 { display: inline; }
 .map-methodology strong {
   color: var(--fg);
 }
-.map-data-citation {
+.map-methodology__toggle {
   margin: 0;
-  padding: 0.6rem 0.75rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--rule);
   background: var(--bg-sunken);
+}
+.map-methodology__toggle > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.map-methodology__toggle > summary::-webkit-details-marker { display: none; }
+.map-methodology__toggle > summary::after {
+  content: "▾";
+  color: var(--fg-muted);
+  font-size: 13px;
+  transition: transform 0.18s ease;
+  flex-shrink: 0;
+}
+.map-methodology__toggle[open] > summary {
+  border-bottom: 1px solid var(--rule);
+}
+.map-methodology__toggle[open] > summary::after { transform: rotate(180deg); }
+.map-methodology__toggle > summary:hover { color: var(--accent); }
+.map-methodology__toggle-body {
+  padding: 0.6rem 0.75rem 0.75rem;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.map-methodology__toggle-body p {
+  margin: 0;
+}
+.map-methodology__toggle-body .map-methodology-sources {
+  margin-top: 0.65rem;
+}
+.map-methodology__toggle-body > p + p,
+.map-methodology__toggle-body > p + .map-methodology__toggle-subhead {
+  margin-top: 0.65rem;
+}
+.map-methodology__toggle-subhead {
+  margin: 0.75rem 0 0.35rem;
+  font-weight: 600;
+  color: var(--fg);
+  font-size: 0.92em;
+}
+.map-methodology__toggle-body .map-method-detail-list {
+  margin-top: 0.35rem;
 }
 @media (max-width: 720px) {
   .map-methodology__grid {
@@ -2348,8 +2395,7 @@ details summary h3 { display: inline; }
   );
 }
 
-.ground-step__label,
-.annotation-list span {
+.ground-step__label {
   display: inline-flex;
   margin: 0 0 8px;
   font-family: var(--font-sans);
@@ -2424,22 +2470,57 @@ details summary h3 { display: inline; }
 }
 .annotation-list {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
-.annotation-list p {
+.annotation-toggle {
   margin: 0;
-  padding: 12px 14px;
-  border: 1px solid var(--rule);
   border-radius: var(--radius-sm);
+  border: 1px solid var(--rule);
   background: color-mix(in oklab, var(--bg-elev) 78%, transparent);
+}
+.annotation-toggle > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+.annotation-toggle > summary::-webkit-details-marker { display: none; }
+.annotation-toggle > summary::after {
+  content: "▾";
+  color: var(--fg-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+.annotation-toggle > summary:hover::after {
+  color: var(--accent);
+}
+.annotation-toggle[open] > summary {
+  border-bottom: 1px solid var(--rule);
+}
+.annotation-toggle[open] > summary::after {
+  transform: rotate(180deg);
+}
+.annotation-toggle__body {
+  padding: 10px 12px 12px;
   color: var(--fg-muted);
   font-family: var(--font-sans);
   font-size: 14.5px;
   line-height: 1.5;
 }
-.annotation-list span {
-  margin: 0 8px 0 0;
-  vertical-align: 0.08em;
+.annotation-toggle__body p {
+  margin: 0;
 }
 .chart-mockup__context-fig {
   margin: 0 0 18px;
@@ -2710,7 +2791,7 @@ details summary h3 { display: inline; }
   padding: clamp(14px, 2vw, 20px) clamp(16px, 2.5vw, 24px);
   display: flex;
   gap: 10px;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   border-bottom: 1px solid transparent;
@@ -2722,9 +2803,15 @@ details summary h3 { display: inline; }
 .results-detail-toggle > summary::after {
   content: "▾";
   margin-left: auto;
+  flex-shrink: 0;
+  align-self: center;
   color: var(--fg-muted);
-  font-size: 14px;
-  transition: transform 0.18s ease;
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+.results-detail-toggle > summary:hover::after {
+  color: var(--accent);
 }
 .results-detail-toggle[open] > summary::after { transform: rotate(180deg); }
 .results-detail-toggle__hint {

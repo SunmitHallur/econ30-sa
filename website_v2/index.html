@@ -167,9 +167,6 @@
             The first Johannesburg Stock Exchange building, 1893. South Africa was tied to global finance long before 1994. <a class="fig-src" href="https://commons.wikimedia.org/wiki/File:JOBURG_(1893)_The_Exchange.jpg">Source</a>
           </figcaption>
         </figure>
-        <blockquote class="callout">
-          <strong>Note:</strong> The national regressions on this site show associations, not proof of causation. Stronger causal claims rely on the district-level studies listed in <a href="#sources">Sources</a>.
-        </blockquote>
       </div>
     </section>
     <div class="section-bridge" aria-label="Transition to ground">
@@ -294,9 +291,6 @@
       <div class="section-head">
         <p class="section-step">Section 04</p>
         <h2>Trade rose faster than what people earned.</h2>
-        <p class="section-lede">
-          Trade openness rose fast; income per person moved more slowly, and unemployment stayed high.
-        </p>
       </div>
 
       <div class="chart-mockup chart-mockup--macro">
@@ -310,10 +304,30 @@
               trade as a share of the economy explodes while income per person lags behind, all while unemployment remains painfully high.
             </p>
             <div class="annotation-list">
-              <p><span>How to read</span> Income per person and trade/GDP are set so 1990 = 100 (with macro lines back to 1960); the vertical axis uses a log scale so large swings in trade do not hide slower moves in income.</p>
-              <p><span>Caution</span> In these national data, higher trade moves alongside higher income per person, higher unemployment, and a higher top-income share. That pattern is real, but it does not prove trade caused any of them.</p>
-              <p><span>Technical note</span> A formal “long-run link” test between log income per person and trade/GDP does not find a stable long-run pairing here (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span> for Engle–Granger).</p>
-              <p><span>Source</span> World Development Indicators; trade-policy context in <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Sources</a>.</p>
+              <details class="annotation-toggle">
+                <summary>How to read</summary>
+                <div class="annotation-toggle__body">
+                  <p>Income per person and trade/GDP are set so 1990 = 100 (with macro lines back to 1960); the vertical axis uses a log scale so large swings in trade do not hide slower moves in income.</p>
+                </div>
+              </details>
+              <details class="annotation-toggle">
+                <summary>Caution</summary>
+                <div class="annotation-toggle__body">
+                  <p>In these national data, higher trade moves alongside higher income per person, higher unemployment, and a higher top-income share. That pattern is real, but it does not prove trade caused any of them.</p>
+                </div>
+              </details>
+              <details class="annotation-toggle">
+                <summary>Technical note</summary>
+                <div class="annotation-toggle__body">
+                  <p>A formal “long-run link” test between log income per person and trade/GDP does not find a stable long-run pairing here (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span> for Engle–Granger).</p>
+                </div>
+              </details>
+              <details class="annotation-toggle">
+                <summary>Source</summary>
+                <div class="annotation-toggle__body">
+                  <p>World Development Indicators; trade-policy context in <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Sources</a>.</p>
+                </div>
+              </details>
             </div>
           </div>
           </div>
@@ -323,7 +337,7 @@
               <figure class="card macro-chart-solo chart-mockup__card">
                 <figcaption class="card-head">
                   <h3>Indexed national indicators, 1990 = 100 (log scale)</h3>
-                  <p class="chart-mockup__card-lede">Income per person and trade/GDP from 1960, all indexed to 100 in 1990. The log scale keeps the clearer picture: trade moved a lot; income per person moved less.</p>
+                  <p class="chart-mockup__card-lede">Income per person and trade/GDP from 1960, all indexed to 100 in 1990.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall is-loading" aria-busy="true"><canvas id="chart-indexed"></canvas></div>
               </figure>
@@ -420,20 +434,26 @@
               percentage points of employment share between 1999 and 2025.
             </p>
             <div class="annotation-list">
-              <p><span>How to read</span> The big line chart shows the share of employed adults working in
-                tradable sectors (agriculture + mining + manufacturing) vs the rest. The
-                smaller chart traces manufacturing's value-added share of GDP from the WDI.</p>
-              <p><span>Method</span> Employment shares are weighted from Stats SA worker microdata: OHS 1999,
-                LFS 2000–2007, QLFS 2008–2025. Year values average all available waves. Value-added
-                shares come from the World Bank's WDI series (NV.IND.MANF.ZS).</p>
-              <p><span>Stat check</span> Regressing manufacturing employment share on trade openness
-                (Newey–West HAC, two lags, <span class="mono" id="sector-reg-n">n</span> years) gives a slope of
-                <span class="mono" id="sector-reg-slope">–</span> with <span class="mono" id="sector-reg-t">t</span> and
-                <span class="mono" id="sector-reg-p">p</span>. The same regression for tradable share gives
-                <span class="mono" id="sector-reg-trd-slope">–</span> (p&nbsp;= <span class="mono" id="sector-reg-trd-p">–</span>).</p>
-              <p><span>Caution</span> Co-movement is not causation. The cleanest causal evidence remains
-                <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
-                district-level analysis; this is the macro sector pattern it implies.</p>
+              <details class="annotation-toggle">
+                <summary>How to read</summary>
+                <div class="annotation-toggle__body">
+                  <p>The big line chart shows the share of employed adults working in tradable sectors (agriculture + mining + manufacturing) vs the rest. The smaller chart traces manufacturing's value-added share of GDP from the WDI.</p>
+                </div>
+              </details>
+              <details class="annotation-toggle">
+                <summary>Method</summary>
+                <div class="annotation-toggle__body">
+                  <p>Employment shares are weighted from Stats SA worker microdata: OHS 1999, LFS 2000–2007, QLFS 2008–2025. Year values average all available waves. Value-added shares come from the World Bank's WDI series (NV.IND.MANF.ZS).</p>
+                </div>
+              </details>
+              <details class="annotation-toggle">
+                <summary>Caution</summary>
+                <div class="annotation-toggle__body">
+                  <p>Co-movement is not causation. The cleanest causal evidence remains
+                    <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
+                    district-level analysis; this is the macro sector pattern it implies.</p>
+                </div>
+              </details>
             </div>
           </div>
           </div>
@@ -510,9 +530,24 @@
               under 6%.
             </p>
             <div class="annotation-list">
-              <p><span>Income</span> WID shows the top 10%’s share already near 47% through the 1980s, then rising to about 65% by 2020. Pre-1990 WID points are back-extrapolated — use them for broad context, not year-by-year precision.</p>
-              <p><span>Wealth</span> Wealth is more concentrated than yearly income: the top 10% held roughly 85–86% of household wealth from the 1980s onward.</p>
-              <p><span>Source</span> WID and <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee–Czajka–Gethin</a>.</p>
+              <details class="annotation-toggle">
+                <summary>Income</summary>
+                <div class="annotation-toggle__body">
+                  <p>WID shows the top 10%’s share already near 47% through the 1980s, then rising to about 65% by 2020.</p>
+                </div>
+              </details>
+              <details class="annotation-toggle">
+                <summary>Wealth</summary>
+                <div class="annotation-toggle__body">
+                  <p>Wealth is more concentrated than yearly income: the top 10% held roughly 85–86% of household wealth from the 1980s onward.</p>
+                </div>
+              </details>
+              <details class="annotation-toggle">
+                <summary>Source</summary>
+                <div class="annotation-toggle__body">
+                  <p>WID and <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee–Czajka–Gethin</a>.</p>
+                </div>
+              </details>
             </div>
           </div>
           </div>
@@ -577,17 +612,16 @@
       </div>
 
       <div class="two-lives" id="two-lives-app" data-src="data/two-lives.json">
-        <p class="two-lives__disclaimer" role="note">
-          <strong>Pieter</strong> and <strong>Sipho</strong> are <em>composite</em> characters.
-          They are built from the cited data and history, not drawn from one real person's life.
-          Their paths reflect documented patterns, not survey responses.
-        </p>
         <details class="two-lives__how card">
           <summary>How did I create this?</summary>
           <div class="two-lives__how-body">
             <p>
-              Pieter and Sipho are composite sketches, not survey respondents. I built them from
-              the essay’s cited history and data—apartheid spatial law, manufacturing decline,
+              <strong>Pieter</strong> and <strong>Sipho</strong> are <em>composite</em> characters.
+              They are built from the cited data and history, not drawn from one real person's life.
+              Their paths reflect documented patterns, not survey responses.
+            </p>
+            <p>
+              I built them from the essay’s cited history and data—apartheid spatial law, manufacturing decline,
               WID inequality shares, and district-level tariff exposure
               (<a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna</a>)—then
               turned that evidence into five decision beats (1994 → 2020).
@@ -880,7 +914,7 @@
         <p class="section-step">Section 09</p>
         <h2>One number hides nine very different provinces.</h2>
         <p class="section-lede">
-          Provincial narrow unemployment, 1997 Q4–2025 Q4 (harmonised OHS / LFS / QLFS).
+          Provincial narrow unemployment from 1997 - 2025 (harmonised OHS / LFS / QLFS).
           Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
         </p>
       </div>
@@ -993,16 +1027,21 @@
       <div class="map-methodology" aria-label="Map methodology and sources">
         <div class="map-methodology__grid">
           <div class="map-methodology__method">
-            <p>
-              <strong>Method.</strong> I calculated provincial rates from Stats SA microdata (narrow unemployment, survey weights),
-              harmonising <strong>LFS</strong> and <strong>OHS</strong> for early years and <strong>QLFS</strong> thereafter.
-              Official tables can differ by revision; treat long-run movement across survey redesigns as indicative.
-            </p>
-            <p class="map-methodology-sources">
-              <a class="kb-link" href="#sources">Sources</a> lists P0211 and related entries under <em>Datasets</em>.
-            </p>
+            <details class="map-methodology__toggle">
+              <summary>Method</summary>
+              <div class="map-methodology__toggle-body">
+                <p>
+                  I calculated provincial rates from Stats SA microdata (narrow unemployment, survey weights),
+                  harmonising <strong>LFS</strong> and <strong>OHS</strong> for early years and <strong>QLFS</strong> thereafter.
+                  Official tables can differ by revision; treat long-run movement across survey redesigns as indicative.
+                </p>
+                <p class="map-methodology-sources">
+                  <a class="kb-link" href="#sources">Sources</a> lists P0211 and related entries under <em>Datasets</em>.
+                </p>
+              </div>
+            </details>
           </div>
-          <div id="map-data-citation" class="map-data-citation" aria-label="Map data citation and technical note"></div>
+          <details id="map-data-citation" class="map-methodology__toggle" aria-label="Map data citation and technical note"></details>
         </div>
       </div>
     </section>

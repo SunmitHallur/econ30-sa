@@ -23,7 +23,9 @@
     "meta-findings",
   ];
   const ESSAY_ADJACENT_RE =
-    /\b(essay|site|project|capstone|econ(?:omics)?\s*30|thesis|argument|claim|finding|conclusion|method|methodolog|data|dataset|source|chart|map|regression|evidence|caus|associat|apartheid|south africa|post.?1994|integration|inclusion|openness|trade|gear|rdp|unemployment|inequality|manufactur|sector|pieter|sipho|two lives|wdi|qlfs|benjamini|bonferroni|chow|present|professor|reader|section|walkthrough|gdp|provinc|geograph|policy|democrat|sanction|township|hallur|takeaway|summar|explain|compare)\b/i;
+    /\b(essay|site|project|capstone|econ(?:omics)?\s*30|thesis|argument|claim|finding|conclusion|method|methodolog|data|dataset|source|chart|map|regression|evidence|caus|associat|apartheid|south africa|post.?1994|integration|inclusion|openness|trade|gear|rdp|unemployment|inequality|manufactur|sector|pieter|sipho|two lives|wdi|qlfs|benjamini|bonferroni|chow|present|professor|reader|section|walkthrough|gdp|provinc|geograph|policy|democrat|sanction|township|hallur|takeaway|summar|explain|compare|timeline|history|chronolog|event|sovereign|rating|downgrade|credit|junk|covid|pandemic|wto|commodity|crisis|financial|wealth|income|gugulethu|johannesburg|durban|metro|interactive|character|composite|tour|walkthrough|harmonis|qlfs|ohs|lfs|wid|tariff|liberalis|sanction|codesa|election|democrati|apartheid|factory|mining|agriculture|tradable|services|spread|western cape|eastern cape|gauteng|provinc)\b/i;
+
+  const SITE_YEAR_RE = /\b(19[89]\d|20[0-2]\d)\b/;
 
   /** Words that appear in many queries but are not essay-specific — ignore for corpus overlap. */
   const GENERIC_QUERY_TOKENS = new Set(
@@ -182,7 +184,13 @@
     const n = normalizeQuery(query);
     if (!n || n.length < 3) return false;
     if (ESSAY_ADJACENT_RE.test(n)) return true;
-    if (/\b(who|what|why|how)\b/.test(n) && queryTouchesCorpus(query)) return true;
+    if (
+      SITE_YEAR_RE.test(n) &&
+      (ESSAY_ADJACENT_RE.test(n) || queryTouchesCorpus(query) || /\b(happened|when|during|event)\b/.test(n))
+    ) {
+      return true;
+    }
+    if (/\b(who|what|why|how|when)\b/.test(n) && queryTouchesCorpus(query)) return true;
     return false;
   };
 
@@ -209,7 +217,7 @@
     for (const chunk of corpus.chunks) {
       tokenize(chunk.title).forEach((t) => vocab.add(t));
       tokenize(chunk.text).forEach((t) => {
-        if (t.length >= 4) vocab.add(t);
+        if (t.length >= 3) vocab.add(t);
       });
       (chunk.keywords || []).forEach((k) => vocab.add(String(k).toLowerCase()));
     }
@@ -234,10 +242,18 @@
     if (isLaypersonHelpQuery(query)) return false;
     if (queryTouchesCorpus(query)) return false;
     if (rawHits[0]?.score >= 20) return false;
+    if ((rawHits[0]?.score ?? 0) >= 2) return false;
+    if (
+      SITE_YEAR_RE.test(n) &&
+      (queryTouchesCorpus(query) ||
+        ESSAY_ADJACENT_RE.test(n) ||
+        /\b(happened|when|during|event|what|why|how)\b/.test(n))
+    ) {
+      return false;
+    }
     const subs = substantiveTokens(query);
     if (!subs.length) return true;
-    const top = rawHits[0]?.score ?? 0;
-    return top < 20;
+    return (rawHits[0]?.score ?? 0) < 2;
   };
 
   const obviousOffTopicAnswer = () => ({
@@ -340,13 +356,64 @@
     return body.length > 320 ? `${body.slice(0, 317).trim()}…` : body;
   };
 
+  const findTimelineChunk = (query) => {
+    const q = normalizeQuery(query);
+    const topicRules = [
+      {
+        test: () => /\b(sovereign|rating|downgrade|junk status|investment grade)\b/.test(q),
+        id: "timeline-2017-sovereign-rating-downgrades",
+      },
+      {
+        test: () => /\b(covid|coronavirus|pandemic)\b/.test(q),
+        id: "timeline-2020-22-covid-19-shock",
+      },
+      { test: () => /\b(wto|world trade organization)\b/.test(q), id: "timeline-1995-joining-the-wto" },
+      {
+        test: () => /\b(financial crisis|global crisis)\b/.test(q) || (/\b2008\b/.test(q) && /\b(crisis|crash)\b/.test(q)),
+        id: "timeline-2008-09-global-financial-crisis",
+      },
+      {
+        test: () => /\b(commodity boom|minerals boom)\b/.test(q),
+        id: "timeline-2000s-commodity-boom-years",
+      },
+      {
+        test: () => /\b(timeline|chronology|what events)\b/.test(q),
+        id: "timeline-overview",
+      },
+    ];
+    for (const rule of topicRules) {
+      if (!rule.test()) continue;
+      const chunk = getChunkById(rule.id);
+      if (chunk) return { chunk, score: 20 };
+    }
+    const year = q.match(SITE_YEAR_RE)?.[1];
+    if (!year) return null;
+    const yearQuestion =
+      ESSAY_ADJACENT_RE.test(q) ||
+      queryTouchesCorpus(query) ||
+      /\b(happened|when|during|event|what|why|how)\b/.test(q);
+    if (!yearQuestion) return null;
+    const faq = corpus.chunks.find((c) => c.id.startsWith("faq-") && c.text.includes(year));
+    if (faq) return { chunk: faq, score: 20 };
+    const timeline = corpus.chunks.find(
+      (c) =>
+        c.id.startsWith("timeline-") &&
+        c.id !== "timeline-overview" &&
+        (c.id.includes(year) || (c.keywords || []).includes(year) || c.text.includes(year))
+    );
+    return timeline ? { chunk: timeline, score: 20 } : null;
+  };
+
   /** Direct routing for common demo questions before keyword search. */
   const findCuratedChunk = (query) => {
     const q = normalizeQuery(query);
+    const timelineHit = findTimelineChunk(query);
+    if (timelineHit) return timelineHit;
     const rules = [
       { test: () => /\bwhat is this (essay|site|project)\b/.test(q) || q === "what is this essay about", id: "faq-what-is-this-essay-about" },
       { test: () => /\bwhat happened in 1994\b/.test(q) || (q.includes("1994") && q.includes("happened")), id: "faq-what-happened-in-1994" },
       { test: () => /\bwhat happened in 1996\b/.test(q) || (q.includes("1996") && q.includes("happened")), id: "faq-what-happened-in-1996" },
+      { test: () => /\bwhat happened in 2017\b/.test(q) || (q.includes("2017") && q.includes("happened")), id: "faq-what-happened-in-2017" },
       { test: () => /\bwhat is gear\b/.test(q) || (q.includes("gear") && q.includes("what")), id: "faq-what-is-gear" },
       { test: () => /\bwhat is rdp\b/.test(q), id: "faq-what-is-rdp" },
       { test: () => /\bwhen did trade\b/.test(q) || (q.includes("trade") && (q.includes("rise") || q.includes("increase") || q.includes("grow"))), id: "faq-when-did-trade-rise" },
@@ -356,7 +423,11 @@
       { test: () => /\b(thesis|main argument|central claim|what is this (about|project))\b/.test(q), id: "faq-what-is-this-essay-about" },
       { test: () => /\b(method|methodolog|how did you (study|analyze)|what data)\b/.test(q), id: "faq-what-data-do-you-use" },
       { test: () => /\b(causation|causal|correlation|prove caus)\b/.test(q), id: "faq-causation-or-correlation" },
+      { test: () => /\bwho is pieter\b/.test(q), id: "two-lives-pieter" },
+      { test: () => /\bwho is sipho\b/.test(q), id: "two-lives-sipho" },
       { test: () => /\b(pieter|sipho|two lives|characters)\b/.test(q), id: "faq-who-are-pieter-and-sipho" },
+      { test: () => /\b(two lives|interactive story)\b/.test(q) && /\b(real|actual|survey)\b/.test(q), id: "faq-is-two-lives-real-data" },
+      { test: () => /\bwhat is two lives\b/.test(q) || /\btwo lives\b/.test(q) && /\bwhat\b/.test(q), id: "faq-what-is-two-lives" },
       { test: () => /\b(main finding|takeaway|headline|summar)/.test(q), id: "faq-what-are-the-main-findings" },
       { test: () => /\b(section|structure|navigate|organized)\b/.test(q), id: "meta-sections" },
       { test: () => /\b(capstone|econ\s*30|who wrote|author)\b/.test(q), id: "meta-scope" },
@@ -424,12 +495,18 @@
       if (/\b1996\b/.test(qNorm) && ["timeline", "question"].includes(chunk.section)) {
         score += 3;
       }
+      const qYear = qNorm.match(SITE_YEAR_RE)?.[1];
+      if (qYear && (chunk.id?.includes(qYear) || (chunk.keywords || []).includes(qYear))) {
+        score += 4;
+      }
       if (/\b(trade|openness|exports|imports)\b/.test(qNorm) && chunk.section === "macro") {
         score += 3;
       }
-      if (/\b(happened|when|timeline|year)\b/.test(qNorm) && chunk.section === "timeline") {
+      if (/\b(happened|when|timeline|year|event)\b/.test(qNorm) && chunk.section === "timeline") {
         score += 2;
       }
+      if (chunk.id?.startsWith("timeline-")) score += 0.5;
+      if (chunk.id?.startsWith("tour-")) score += 0.5;
       if (sectionBoostId && chunk.section === sectionBoostId) score += 1;
 
       if (/\b(method|data|regression|evidence|study|analyze)\b/.test(qNorm)) {

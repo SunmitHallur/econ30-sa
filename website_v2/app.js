@@ -229,11 +229,29 @@
         if (item.type === "band") {
           const x1 = scales.x.getPixelForValue(item.x1);
           const x2 = scales.x.getPixelForValue(item.x2);
+          const bandW = x2 - x1;
           ctx.fillStyle = item.fill || "rgba(15,95,70,0.08)";
-          ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.bottom - chartArea.top);
-          ctx.fillStyle = item.color || palette().fg;
-          ctx.font = "600 12px Inter, sans-serif";
-          ctx.fillText(item.label || "", x1 + 6, chartArea.top + 14);
+          ctx.fillRect(x1, chartArea.top, bandW, chartArea.bottom - chartArea.top);
+          const label = item.label || "";
+          if (label) {
+            const pad = 6;
+            let fontSize = 12;
+            let textWidth = 0;
+            do {
+              ctx.font = `600 ${fontSize}px Inter, sans-serif`;
+              textWidth = ctx.measureText(label).width;
+              fontSize -= 1;
+            } while (textWidth > bandW - pad * 2 && fontSize >= 9);
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(x1 + pad, chartArea.top, bandW - pad * 2, chartArea.bottom - chartArea.top);
+            ctx.clip();
+            ctx.fillStyle = item.color || palette().fg;
+            const textX = x1 + Math.max(pad, (bandW - textWidth) / 2);
+            const textY = chartArea.bottom - 8;
+            ctx.fillText(label, textX, textY);
+            ctx.restore();
+          }
         } else if (item.type === "marker") {
           const x = scales.x.getPixelForValue(item.x);
           ctx.strokeStyle = item.color || "rgba(255,255,255,0.45)";
@@ -244,9 +262,19 @@
           ctx.lineTo(x, chartArea.bottom);
           ctx.stroke();
           ctx.setLineDash([]);
-          ctx.fillStyle = item.color || palette().fg;
-          ctx.font = "600 12px Inter, sans-serif";
-          ctx.fillText(item.label || "", x + 6, chartArea.top + 16);
+          const label = item.label || "";
+          if (label) {
+            ctx.fillStyle = item.color || palette().fg;
+            ctx.font = "600 12px Inter, sans-serif";
+            const pad = 6;
+            const y = chartArea.top + 16;
+            const textWidth = ctx.measureText(label).width;
+            let textX = x + pad;
+            if (textX + textWidth > chartArea.right - 2) {
+              textX = Math.max(chartArea.left + 2, x - pad - textWidth);
+            }
+            ctx.fillText(label, textX, y);
+          }
         } else if (item.type === "label") {
           const x = scales.x.getPixelForValue(item.x);
           const y = scales.y.getPixelForValue(item.y);
@@ -530,23 +558,6 @@
       });
     }
 
-    const regs = sector.regressions || {};
-    const manufReg = regs.manuf_emp_vs_trade;
-    const tradReg = regs.tradable_emp_vs_trade;
-    const fmtSlope = (r) => (r ? `${r.slope.toFixed(5)} (per pp of trade openness)` : "–");
-    const fmtP = (r) => (r ? `p ≈ ${r.p_two_sided_normal < 0.001 ? "<0.001" : r.p_two_sided_normal.toFixed(3)}` : "–");
-    const fmtT = (r) => (r ? `t ≈ ${r.t_hac.toFixed(2)}` : "–");
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    if (manufReg) {
-      set("sector-reg-n", manufReg.n);
-      set("sector-reg-slope", fmtSlope(manufReg));
-      set("sector-reg-t", fmtT(manufReg));
-      set("sector-reg-p", fmtP(manufReg));
-    }
-    if (tradReg) {
-      set("sector-reg-trd-slope", fmtSlope(tradReg));
-      set("sector-reg-trd-p", fmtP(tradReg));
-    }
   };
 
   const buildUnemploymentChart = (ts) => {
@@ -1267,13 +1278,18 @@
     const citeRoot = $("#map-data-citation");
     if (citeRoot && (series.citation_apa || series.method_note || (series.citation_urls && series.citation_urls.length))) {
       citeRoot.replaceChildren();
+      const summary = document.createElement("summary");
+      summary.textContent = "Statistics South Africa (1994-2025)";
+      citeRoot.appendChild(summary);
+      const citeBody = document.createElement("div");
+      citeBody.className = "map-methodology__toggle-body";
       if (series.citation_apa) {
         const p = document.createElement("p");
         p.className = "map-citation-apa";
         const cite = document.createElement("cite");
         cite.textContent = series.citation_apa;
         p.appendChild(cite);
-        citeRoot.appendChild(p);
+        citeBody.appendChild(p);
       }
       if (Array.isArray(series.citation_urls) && series.citation_urls.length) {
         const linkRow = document.createElement("p");
@@ -1299,20 +1315,19 @@
           a.textContent = label;
           linkRow.appendChild(a);
         });
-        if (linkRow.childElementCount) citeRoot.appendChild(linkRow);
+        if (linkRow.childElementCount) citeBody.appendChild(linkRow);
       }
       if (series.method_note) {
         const mn = document.createElement("p");
         mn.className = "map-method-note";
         mn.textContent = series.method_note;
-        citeRoot.appendChild(mn);
+        citeBody.appendChild(mn);
       }
       if (series.method_note_detail) {
-        const det = document.createElement("details");
-        det.className = "map-method-details";
-        const sum = document.createElement("summary");
-        sum.textContent = "Technical notes (harmonisation)";
-        det.appendChild(sum);
+        const subhead = document.createElement("p");
+        subhead.className = "map-methodology__toggle-subhead";
+        subhead.textContent = "Technical notes (harmonisation)";
+        citeBody.appendChild(subhead);
         const detailItems = Array.isArray(series.method_note_detail)
           ? series.method_note_detail
           : String(series.method_note_detail)
@@ -1327,15 +1342,15 @@
             li.textContent = line;
             list.appendChild(li);
           });
-          det.appendChild(list);
+          citeBody.appendChild(list);
         } else {
           const body = document.createElement("p");
           body.className = "map-method-detail-body";
           body.textContent = detailItems[0] || series.method_note_detail;
-          det.appendChild(body);
+          citeBody.appendChild(body);
         }
-        citeRoot.appendChild(det);
       }
+      citeRoot.appendChild(citeBody);
     }
 
     const gj = await fetchJSON("zaf-provinces.geojson");

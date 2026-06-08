@@ -230,36 +230,6 @@ def load_map_spread_chunk() -> dict | None:
     }
 
 
-def load_two_lives_chunk() -> dict | None:
-    path = DATA / "two-lives.json"
-    if not path.is_file():
-        return None
-    tl = json.loads(path.read_text(encoding="utf-8"))
-    intro = tl.get("intro", {})
-    chars = tl.get("characters", {})
-    pieter = chars.get("pieter", {})
-    sipho = chars.get("sipho", {})
-    beats_text = " ".join(
-        f"{b.get('year', '')}: {b.get('title', '')} {b.get('scene', '')}"
-        for b in tl.get("beats", [])[:6]
-    )
-    return {
-        "id": "two-lives-overview",
-        "section": "two-lives",
-        "title": "Two Lives interactive",
-        "anchor": "#two-lives",
-        "text": (
-            f"{intro.get('lede', '')} "
-            f"Pieter: {pieter.get('tagline', '')} {pieter.get('blurb', '')} "
-            f"Sipho: {sipho.get('tagline', '')} {sipho.get('blurb', '')} "
-            f"Key beats: {beats_text}"
-        )[:3500],
-        "stats": [],
-        "kb": [],
-        "keywords": ["pieter", "sipho", "township", "johannesburg", "interactive", "choices"],
-    }
-
-
 def load_meta_chunks() -> list[dict]:
     """Broad orientation chunks so the guide can answer essay-adjacent questions."""
     return [
@@ -420,6 +390,252 @@ def load_meta_chunks() -> list[dict]:
     ]
 
 
+TIMELINE_EVENTS: list[tuple[str, str, str, list[str], str]] = [
+    (
+        "1989-93",
+        "Apartheid sanctions unravel",
+        "Trade and banking sanctions eased step by step while multiparty talks (CODESA) moved forward.",
+        ["sanctions", "codesa", "apartheid", "1989", "1993"],
+        "apartheid-era-sanctions",
+    ),
+    (
+        "1994",
+        "Democratic elections and RDP",
+        "First democratic elections after apartheid. The RDP emphasised redistribution and basic services; import tariffs were still relatively high.",
+        ["1994", "elections", "rdp", "democracy", "apartheid"],
+        "reconstruction-and-development-programme",
+    ),
+    (
+        "1995",
+        "Joining the WTO",
+        "South Africa joined the World Trade Organization. Membership committed the country to phase down import taxes through about 2005.",
+        ["1995", "wto", "trade", "tariffs", "liberalisation"],
+        "state-of-trade-policy-south-africa",
+    ),
+    (
+        "1996",
+        "GEAR adopted",
+        "The government adopted GEAR: tighter budgets, lower trade barriers, some privatisation, and inflation targets became the main macro recipe.",
+        ["1996", "gear", "policy", "fiscal", "tariffs"],
+        "gear-strategy",
+    ),
+    (
+        "2000s",
+        "Commodity boom years",
+        "Resource prices and foreign investment jumped during the 2000s commodity boom; factory jobs outside mining often struggled.",
+        ["2000s", "commodity", "mining", "investment", "boom"],
+        "minerals-energy-complex",
+    ),
+    (
+        "2008-09",
+        "Global financial crisis",
+        "The global financial crisis hit manufacturing sharply; unemployment stepped up in South Africa.",
+        ["2008", "2009", "crisis", "financial", "manufacturing", "unemployment"],
+        "trade-liberalization-sa-manufacturing",
+    ),
+    (
+        "2009-18",
+        "The gap widens",
+        "A decade of slow, uneven growth: asset-holders kept pulling ahead while jobless and informal workers fell further behind.",
+        ["2009", "2018", "inequality", "growth", "informal", "gap"],
+        "political-economy-of-transition",
+    ),
+    (
+        "2017",
+        "Sovereign rating downgrades",
+        "Credit-rating agencies moved South Africa below top investment grades in 2017; government borrowing became costlier.",
+        ["2017", "sovereign", "rating", "downgrade", "credit", "junk", "borrowing"],
+        "trade-liberalisation-south-africa",
+    ),
+    (
+        "2020-22",
+        "COVID-19 shock",
+        "COVID-19 brought record single-year job losses in 2020; only partial recovery followed through 2021-22.",
+        ["2020", "2021", "2022", "covid", "pandemic", "jobs", "shock"],
+        "building-back-better-covid-jobs",
+    ),
+    (
+        "2024-25",
+        "QLFS Q1 2025 unemployment",
+        "QLFS Q1 2025: narrow unemployment 32.9%; broader unemployment including discouraged seekers 43.1%; youth unemployment 46.1%.",
+        ["2024", "2025", "qlfs", "unemployment", "youth", "discouraged"],
+        "stats-sa-qlfs-p0211-2025q1",
+    ),
+]
+
+
+def timeline_chunk_id(year: str, title: str) -> str:
+    raw = f"{year}-{title}".lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", raw).strip("-")
+    return f"timeline-{slug}"
+
+
+def load_timeline_chunks() -> list[dict]:
+    chunks: list[dict] = [
+        {
+            "id": "timeline-overview",
+            "section": "timeline",
+            "title": "Site timeline overview",
+            "anchor": "#timeline",
+            "text": (
+                "The interactive timeline on this site walks key moments in post-apartheid South Africa: "
+                "sanctions unwinding, 1994 elections and RDP, 1995 WTO entry, 1996 GEAR, the 2000s commodity boom, "
+                "the 2008-09 financial crisis, widening inequality through the 2010s, 2017 sovereign credit downgrades, "
+                "the COVID-19 shock, and latest QLFS unemployment readings."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "timeline",
+                "history",
+                "chronology",
+                "events",
+                "years",
+                "policy",
+                "1994",
+                "2017",
+                "2020",
+            ],
+        }
+    ]
+    for year, title, body, kws, kb in TIMELINE_EVENTS:
+        chunks.append(
+            {
+                "id": timeline_chunk_id(year, title),
+                "section": "timeline",
+                "title": f"{year}: {title}",
+                "anchor": "#timeline",
+                "text": f"In {year}, {title}. {body}",
+                "stats": [],
+                "kb": [kb],
+                "keywords": kws + ["timeline", "happened", "when", "year"],
+            }
+        )
+    return chunks
+
+
+def load_tour_chunks() -> list[dict]:
+    path = DATA / "tour.json"
+    if not path.is_file():
+        return []
+    tour = json.loads(path.read_text(encoding="utf-8"))
+    chunks: list[dict] = []
+    for step in tour.get("steps") or []:
+        narration = step.get("narration") or ""
+        if len(narration) < 40:
+            continue
+        sid = step.get("id") or "hero"
+        chunks.append(
+            {
+                "id": f"tour-{sid}",
+                "section": sid if sid in SECTION_TITLES else "hero",
+                "title": f"Walkthrough: {step.get('title') or sid}",
+                "anchor": step.get("anchor") or f"#{sid}",
+                "text": neutralize_em_dash(narration),
+                "stats": [],
+                "kb": [],
+                "keywords": tokenize(narration)[:30] + ["walkthrough", "tour", "guide"],
+            }
+        )
+    return chunks
+
+
+def load_two_lives_chunks() -> list[dict]:
+    path = DATA / "two-lives.json"
+    if not path.is_file():
+        return []
+    tl = json.loads(path.read_text(encoding="utf-8"))
+    intro = tl.get("intro", {})
+    chars = tl.get("characters", {})
+    pieter = chars.get("pieter", {})
+    sipho = chars.get("sipho", {})
+    beats = tl.get("beats") or []
+    beats_text = " ".join(
+        f"{b.get('year', '')}: {b.get('title', '')}. {b.get('scene', '')}"
+        for b in beats
+    )
+    access = tl.get("access_meta", {})
+    chunks: list[dict] = [
+        {
+            "id": "two-lives-overview",
+            "section": "two-lives",
+            "title": "Two Lives interactive",
+            "anchor": "#two-lives",
+            "text": (
+                f"{intro.get('lede', '')} "
+                f"Pieter: {pieter.get('tagline', '')} {pieter.get('blurb', '')} "
+                f"Sipho: {sipho.get('tagline', '')} {sipho.get('blurb', '')} "
+                f"Key beats: {beats_text}"
+            )[:3500],
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "pieter",
+                "sipho",
+                "two lives",
+                "interactive",
+                "characters",
+                "story",
+                "choices",
+                "township",
+                "johannesburg",
+                "gugulethu",
+            ],
+        },
+        {
+            "id": "two-lives-pieter",
+            "section": "two-lives",
+            "title": "Pieter (Two Lives)",
+            "anchor": "#two-lives",
+            "text": (
+                f"Pieter is a composite character in Two Lives: {pieter.get('tagline', '')} "
+                f"{pieter.get('blurb', '')} He starts with apartheid-era advantages in jobs, suburbs, and bank credit."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": ["pieter", "johannesburg", "finance", "white", "broker", "character"],
+        },
+        {
+            "id": "two-lives-sipho",
+            "section": "two-lives",
+            "title": "Sipho (Two Lives)",
+            "anchor": "#two-lives",
+            "text": (
+                f"Sipho is a composite character in Two Lives: {sipho.get('tagline', '')} "
+                f"{sipho.get('blurb', '')} He faces trade shocks and factory decline from a township starting point."
+            ),
+            "stats": [],
+            "kb": [],
+            "keywords": ["sipho", "gugulethu", "township", "factory", "black", "character", "cape town"],
+        },
+        {
+            "id": "two-lives-how-it-works",
+            "section": "two-lives",
+            "title": "How Two Lives works",
+            "anchor": "#two-lives",
+            "text": (
+                "Two Lives is an interactive narrative, not survey data. You make choices through beats from 1994 to 2020; "
+                "each option nudges hidden scores for Pieter and Sipho. Endings fall into bands from falling behind to pulling ahead. "
+                f"{access.get('disclaimer', '')} "
+                "Pieter lands secure far more often than Sipho because they start from different scores, not because the menu differs."
+            )[:2000],
+            "stats": [],
+            "kb": [],
+            "keywords": [
+                "interactive",
+                "choices",
+                "game",
+                "composite",
+                "real data",
+                "feasibility",
+                "paths",
+                "endings",
+            ],
+        },
+    ]
+    return chunks
+
+
 def load_timeseries_chunk() -> dict | None:
     path = DATA / "timeseries.json"
     if not path.is_file():
@@ -471,7 +687,10 @@ def main() -> None:
     chunks.extend(load_kb_chunks())
     chunks.extend(load_regression_stats())
     chunks.extend(load_meta_chunks())
-    for extra in (load_map_spread_chunk(), load_two_lives_chunk(), load_timeseries_chunk()):
+    chunks.extend(load_timeline_chunks())
+    chunks.extend(load_tour_chunks())
+    chunks.extend(load_two_lives_chunks())
+    for extra in (load_map_spread_chunk(), load_timeseries_chunk()):
         if extra:
             chunks.append(extra)
 
@@ -608,6 +827,71 @@ def main() -> None:
             "conclusions",
             "#conclusions",
             ["findings", "main", "takeaway", "summary", "results"],
+        ),
+        (
+            "sovereign rating downgrade 2017",
+            "In 2017 credit-rating agencies downgraded South Africa below top investment grades. "
+            "Borrowing became costlier for government. The site places this on the timeline as part of the post-1994 "
+            "integration story, not as the sole cause of unemployment or inequality.",
+            "timeline",
+            "#timeline",
+            ["2017", "sovereign", "rating", "downgrade", "credit", "junk", "borrowing"],
+        ),
+        (
+            "what happened in 2017",
+            "In 2017 sovereign credit-rating agencies moved South Africa below top investment grades, making government borrowing costlier. "
+            "The timeline card on this site labels this Sovereign rating downgrades.",
+            "timeline",
+            "#timeline",
+            ["2017", "happened", "sovereign", "rating", "downgrade"],
+        ),
+        (
+            "covid unemployment shock",
+            "COVID-19 (2020-22) brought record single-year job losses in South Africa with only partial recovery through 2021-22. "
+            "The unemployment chart marks a COVID shock around 2020 when narrow unemployment jumped sharply.",
+            "timeline",
+            "#timeline",
+            ["covid", "2020", "pandemic", "jobs", "unemployment", "shock"],
+        ),
+        (
+            "what is two lives",
+            "Two Lives is an interactive story on this site: Pieter (Johannesburg finance) versus Sipho (Gugulethu factory worker). "
+            "You choose paths from 1994 through trade and policy shocks. Characters are composites built from cited evidence, not real survey respondents.",
+            "two-lives",
+            "#two-lives",
+            ["two lives", "interactive", "pieter", "sipho", "story", "game"],
+        ),
+        (
+            "is two lives real data",
+            "No. Pieter and Sipho are composite illustrations built from the essay's evidence and history. "
+            "Choice feasibility tags (~X% of South Africans could) combine QLFS, FinScope, and other proxies; they are not actual survey choices.",
+            "two-lives",
+            "#two-lives",
+            ["two lives", "real", "data", "composite", "characters", "feasibility"],
+        ),
+        (
+            "what is the timeline",
+            "The timeline section walks key post-1994 moments: sanctions unwinding, 1994 elections and RDP, 1995 WTO, 1996 GEAR, "
+            "commodity boom, 2008-09 crisis, widening gap, 2017 sovereign downgrades, COVID-19, and latest QLFS unemployment.",
+            "timeline",
+            "#timeline",
+            ["timeline", "events", "chronology", "history", "years"],
+        ),
+        (
+            "wto south africa",
+            "South Africa joined the WTO in 1995, committing to phase down import taxes through about 2005. "
+            "The site links this to the broader trade-liberalisation arc after apartheid.",
+            "timeline",
+            "#timeline",
+            ["wto", "1995", "trade", "tariffs", "liberalisation"],
+        ),
+        (
+            "financial crisis 2008",
+            "The 2008-09 global financial crisis shrank South African manufacturing sharply and unemployment stepped up. "
+            "The timeline and unemployment chart both reference this shock.",
+            "timeline",
+            "#timeline",
+            ["2008", "2009", "crisis", "financial", "manufacturing"],
         ),
     ]
     for fid, text, section, anchor, kws in faqs:
