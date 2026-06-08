@@ -3593,15 +3593,26 @@ details summary h3 { display: inline; }
   color: var(--fg-muted);
 }
 .tl-chose__access {
-  font-weight: 500;
-  color: var(--fg-muted);
+  font-weight: 600;
+  color: var(--accent-strong);
 }
 
 /* Reaction (parallel) */
 .tl-chose {
   margin: 0 0 16px;
-  font-size: 0.95rem;
-  color: var(--fg-muted);
+  padding: 12px 14px 12px 16px;
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--accent) 9%, var(--bg-elev));
+  border: 1px solid color-mix(in oklab, var(--accent) 22%, var(--rule));
+  border-left: 3px solid var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--fg);
+}
+.tl-chose strong {
+  color: var(--accent-strong);
+  font-weight: 800;
 }
 .tl-react {
   display: grid;

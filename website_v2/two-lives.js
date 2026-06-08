@@ -53,7 +53,7 @@
 
   function accessLabel(opt) {
     if (opt == null || opt.access_pct == null) return null;
-    const suffix = data.access_meta?.label || "could take this path";
+    const suffix = data.access_meta?.label || "of South Africans could take this path";
     return `~${opt.access_pct}% ${suffix}`;
   }
 
@@ -241,7 +241,7 @@
             el("span", { class: "tl-recap__year", text: h.year }),
             el("span", { class: "tl-recap__label", text: h.label }),
             h.access_pct != null
-              ? el("span", { class: "tl-recap__access", text: `~${h.access_pct}% could` })
+              ? el("span", { class: "tl-recap__access", text: `~${h.access_pct}% ${data.access_meta?.label || "of South Africans could take this path"}` })
               : null,
           ].filter(Boolean))
         )),
