@@ -295,15 +295,14 @@
     if (!canvas) return;
     const years = ts.indexed.years;
     const ds = [];
-    // Use three highly-distinct hues: blue (income), warm orange (trade), purple (FDI).
-    // The previous palette stacked three blue shades that were hard to tell apart.
-    const colors = { gdp_pc_usd: "wdi", trade_gdp: "wid", fdi_gdp: "wiid" };
+    const colors = { gdp_pc_usd: "wdi", trade_gdp: "wid" };
     const styles = {
       gdp_pc_usd: { borderWidth: 2.6 },
       trade_gdp: { borderWidth: 2.6, borderDash: [6, 4] },
-      fdi_gdp: { borderWidth: 2.2, borderDash: [2, 3] },
     };
-    Object.entries(ts.indexed.series).forEach(([key, s]) => {
+    ["gdp_pc_usd", "trade_gdp"].forEach((key) => {
+      const s = ts.indexed.series[key];
+      if (!s) return;
       ds.push(datasetFrom(years, s, colors[key] ?? "fg", styles[key] ?? { borderWidth: 2.2 }));
     });
     makeLineChart(canvas, {

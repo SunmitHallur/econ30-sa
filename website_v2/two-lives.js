@@ -57,14 +57,6 @@
     return `~${opt.access_pct}% ${suffix}`;
   }
 
-  function optionAccessBadge(opt) {
-    const label = accessLabel(opt);
-    if (!label) return null;
-    const attrs = { class: "tl-option__access", text: label };
-    if (opt.access_basis) attrs.title = opt.access_basis;
-    return el("span", attrs);
-  }
-
   // -- engine state ---------------------------------------------------------
   let data = null;
   let state = null;
@@ -170,24 +162,16 @@
     wrap.appendChild(el("p", { class: "tl-scene", text: beat.scene }));
 
     if (!state.reacted) {
-      if (data.access_meta?.disclaimer) {
-        wrap.appendChild(el("p", { class: "tl-access-note", text: data.access_meta.disclaimer }));
-      }
       const opts = el("div", { class: "tl-options", role: "group", "aria-label": "Choose what happens next" });
       beat.options.forEach((opt, idx) => {
-        const access = accessLabel(opt);
-        const btnAttrs = {
+        opts.appendChild(el("button", {
           class: "tl-option",
           type: "button",
           onclick: () => choose(idx),
-        };
-        if (opt.access_basis) btnAttrs.title = opt.access_basis;
-        if (access) btnAttrs["aria-description"] = access;
-        opts.appendChild(el("button", btnAttrs, [
+        }, [
           el("span", { class: "tl-option__num", text: String(idx + 1), "aria-hidden": "true" }),
           el("span", { class: "tl-option__label", text: opt.label }),
-          optionAccessBadge(opt),
-        ].filter(Boolean)));
+        ]));
       });
       wrap.appendChild(opts);
     } else {
@@ -197,6 +181,11 @@
         ? `You chose: <strong>${escapeHtml(r.label)}</strong> <span class="tl-chose__access">(${escapeHtml(access)})</span>`
         : `You chose: <strong>${escapeHtml(r.label)}</strong>`;
       wrap.appendChild(el("p", { class: "tl-chose", html: choseHtml }));
+      if (r.access_basis) {
+        wrap.appendChild(el("p", { class: "tl-access-note", text: r.access_basis }));
+      } else if (data.access_meta?.disclaimer) {
+        wrap.appendChild(el("p", { class: "tl-access-note", text: data.access_meta.disclaimer }));
+      }
       wrap.appendChild(el("div", { class: "tl-react" }, CHARS.map((k) =>
         el("div", { class: `tl-react__col tl-react__col--${k}` }, [
           el("p", { class: "tl-react__name" }, [nameWithToken(k)]),

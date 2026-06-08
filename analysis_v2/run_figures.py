@@ -143,12 +143,10 @@ def _build_indexed(df: pd.DataFrame) -> dict:
     series_cols = {
         "gdp_pc_usd": "GDP per capita",
         "trade_gdp": "Trade / GDP",
-        "fdi_gdp": "FDI / GDP",
     }
     col_map = {
         "gdp_pc_usd": "wdi_gdp_pc_usd",
         "trade_gdp": "wdi_trade_gdp",
-        "fdi_gdp": "wdi_fdi_gdp",
     }
     out = {"years": df["year"].tolist(), "series": {}}
     for key, label in series_cols.items():
@@ -304,7 +302,6 @@ def fig_indexed(df: pd.DataFrame) -> None:
     cols = {
         "wdi_gdp_pc_usd": "GDP per capita",
         "wdi_trade_gdp": "Trade / GDP",
-        "wdi_fdi_gdp": "FDI / GDP",
     }
     fig, ax = plt.subplots()
     base = df[df.year == 1990].iloc[0]

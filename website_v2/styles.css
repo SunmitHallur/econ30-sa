@@ -601,6 +601,7 @@ a:hover { border-bottom-color: currentColor; }
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
+  .hero-right { align-self: stretch; }
 }
 
 @supports not (background-clip: text) {
@@ -2499,8 +2500,10 @@ details summary h3 { display: inline; }
 }
 .results-summary-list li:last-child { margin-bottom: 0; }
 .results-summary-card__note {
+  margin-top: 14px !important;
   font-family: var(--font-sans) !important;
   font-size: 14.5px !important;
+  line-height: 1.5 !important;
   color: var(--fg-muted) !important;
 }
 .results-detail-toggle {
@@ -2648,6 +2651,72 @@ details summary h3 { display: inline; }
 }
 .conclusion-prose {
   margin-top: 1.5rem;
+}
+
+.contribution-glass {
+  position: relative;
+  margin-top: 1.35rem;
+  margin-bottom: 0;
+  padding: 18px 22px 18px 26px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid color-mix(in oklab, var(--rule-strong) 55%, transparent);
+  background: color-mix(in oklab, var(--bg-elev) 44%, transparent);
+  backdrop-filter: blur(16px) saturate(1.35);
+  -webkit-backdrop-filter: blur(16px) saturate(1.35);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 14%, transparent),
+    0 10px 32px color-mix(in oklab, var(--fg) 7%, transparent),
+    inset 1px 1px 0 color-mix(in oklab, #fff 10%, transparent),
+    inset 0 -12px 24px color-mix(in oklab, var(--fg) 3%, transparent);
+}
+.contribution-glass::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--accent) 35%, transparent) 100%
+  );
+}
+.contribution-glass__label {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+.contribution-glass__lede {
+  margin: 0 0 8px;
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--fg);
+}
+.contribution-glass__body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+:root[data-theme="dark"] .contribution-glass {
+  background: color-mix(in oklab, var(--bg-elev) 52%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 18%, transparent),
+    0 12px 36px color-mix(in oklab, #000 42%, transparent),
+    inset 1px 1px 0 color-mix(in oklab, #fff 6%, transparent),
+    inset 0 -14px 28px color-mix(in oklab, #000 18%, transparent);
+}
+:root[data-theme="dark"] .contribution-glass__label {
+  color: var(--accent);
 }
 
 .ground-row-2 { margin-top: 28px; }
@@ -2939,12 +3008,13 @@ details summary h3 { display: inline; }
   max-width: 22ch;
 }
 .hero-thesis-pull em { color: var(--accent-strong); }
-/* Right column: photo card with the three stat boxes stacked beneath it. */
+/* Right column: photo vertically centered against the text block height. */
 .hero-right {
   display: flex;
   flex-direction: column;
   gap: clamp(14px, 1.8vw, 20px);
   min-width: 0;
+  align-self: center;
 }
 .hero-stats {
   display: flex;
