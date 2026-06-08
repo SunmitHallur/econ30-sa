@@ -51,6 +51,20 @@
     ]);
   }
 
+  function accessLabel(opt) {
+    if (opt == null || opt.access_pct == null) return null;
+    const suffix = data.access_meta?.label || "could take this path";
+    return `~${opt.access_pct}% ${suffix}`;
+  }
+
+  function optionAccessBadge(opt) {
+    const label = accessLabel(opt);
+    if (!label) return null;
+    const attrs = { class: "tl-option__access", text: label };
+    if (opt.access_basis) attrs.title = opt.access_basis;
+    return el("span", attrs);
+  }
+
   // -- engine state ---------------------------------------------------------
   let data = null;
   let state = null;
@@ -156,21 +170,33 @@
     wrap.appendChild(el("p", { class: "tl-scene", text: beat.scene }));
 
     if (!state.reacted) {
+      if (data.access_meta?.disclaimer) {
+        wrap.appendChild(el("p", { class: "tl-access-note", text: data.access_meta.disclaimer }));
+      }
       const opts = el("div", { class: "tl-options", role: "group", "aria-label": "Choose what happens next" });
       beat.options.forEach((opt, idx) => {
-        opts.appendChild(el("button", {
+        const access = accessLabel(opt);
+        const btnAttrs = {
           class: "tl-option",
           type: "button",
           onclick: () => choose(idx),
-        }, [
+        };
+        if (opt.access_basis) btnAttrs.title = opt.access_basis;
+        if (access) btnAttrs["aria-description"] = access;
+        opts.appendChild(el("button", btnAttrs, [
           el("span", { class: "tl-option__num", text: String(idx + 1), "aria-hidden": "true" }),
           el("span", { class: "tl-option__label", text: opt.label }),
-        ]));
+          optionAccessBadge(opt),
+        ].filter(Boolean)));
       });
       wrap.appendChild(opts);
     } else {
       const r = state.lastReact;
-      wrap.appendChild(el("p", { class: "tl-chose", html: `You chose: <strong>${escapeHtml(r.label)}</strong>` }));
+      const access = accessLabel(r);
+      const choseHtml = access
+        ? `You chose: <strong>${escapeHtml(r.label)}</strong> <span class="tl-chose__access">(${escapeHtml(access)})</span>`
+        : `You chose: <strong>${escapeHtml(r.label)}</strong>`;
+      wrap.appendChild(el("p", { class: "tl-chose", html: choseHtml }));
       wrap.appendChild(el("div", { class: "tl-react" }, CHARS.map((k) =>
         el("div", { class: `tl-react__col tl-react__col--${k}` }, [
           el("p", { class: "tl-react__name" }, [nameWithToken(k)]),
@@ -225,7 +251,10 @@
           el("li", { class: "tl-recap__item" }, [
             el("span", { class: "tl-recap__year", text: h.year }),
             el("span", { class: "tl-recap__label", text: h.label }),
-          ])
+            h.access_pct != null
+              ? el("span", { class: "tl-recap__access", text: `~${h.access_pct}% could` })
+              : null,
+          ].filter(Boolean))
         )),
       ]);
       wrap.appendChild(details);
@@ -250,7 +279,11 @@
     CHARS.forEach((k) => { state.scores[k] += opt.effects[k] || 0; });
     state.reacted = true;
     state.lastReact = opt;
-    state.history.push({ year: beat.year, label: opt.label });
+    state.history.push({
+      year: beat.year,
+      label: opt.label,
+      access_pct: opt.access_pct ?? null,
+    });
     render();
   }
 

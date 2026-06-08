@@ -2484,6 +2484,20 @@ details summary h3 { display: inline; }
   color: var(--fg);
 }
 .results-summary-card p:last-child { margin-bottom: 0; }
+.results-summary-list {
+  margin: 0 0 0 1.1em;
+  padding: 0;
+  list-style: disc;
+}
+.results-summary-list li {
+  margin: 0 0 10px;
+  padding-left: 0.35em;
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.25vw, 19px);
+  line-height: 1.65;
+  color: var(--fg);
+}
+.results-summary-list li:last-child { margin-bottom: 0; }
 .results-summary-card__note {
   font-family: var(--font-sans) !important;
   font-size: 14.5px !important;
@@ -3196,7 +3210,50 @@ details summary h3 { display: inline; }
   border-left: 3px solid color-mix(in oklab, var(--fg-faint) 60%, transparent);
   border-radius: var(--radius-sm);
   padding: 12px 16px;
+  margin: 0 0 12px;
+}
+.two-lives__how {
   margin: 0 0 20px;
+  padding: 0;
+  background: var(--bg-elev);
+}
+.two-lives__how > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.two-lives__how > summary::-webkit-details-marker { display: none; }
+.two-lives__how > summary::after {
+  content: "▾";
+  color: var(--fg-muted);
+  font-size: 13px;
+  transition: transform 0.18s ease;
+}
+.two-lives__how[open] > summary {
+  border-bottom: 1px solid var(--rule);
+}
+.two-lives__how[open] > summary::after { transform: rotate(180deg); }
+.two-lives__how > summary:hover { color: var(--accent); }
+.two-lives__how-body {
+  padding: 12px 16px 14px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+.two-lives__how-body p {
+  margin: 0 0 10px;
+}
+.two-lives__how-body p:last-child { margin-bottom: 0; }
+.two-lives__how-body code {
+  font-size: 0.82em;
+  color: var(--fg);
 }
 .two-lives__noscript {
   color: var(--fg-muted);
@@ -3419,7 +3476,34 @@ details summary h3 { display: inline; }
   font-weight: 800;
   font-size: 0.9rem;
 }
-.tl-option__label { font-size: 1rem; line-height: 1.4; }
+.tl-option__label {
+  flex: 1 1 auto;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.tl-option__access {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--fg-muted);
+  background: var(--bg-sunken);
+  border: 1px solid color-mix(in oklab, var(--fg) 10%, transparent);
+  border-radius: 999px;
+  padding: 4px 9px;
+  white-space: nowrap;
+}
+.tl-access-note {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--fg-muted);
+}
+.tl-chose__access {
+  font-weight: 500;
+  color: var(--fg-muted);
+}
 
 /* Reaction (parallel) */
 .tl-chose {
@@ -3571,7 +3655,8 @@ details summary h3 { display: inline; }
 }
 .tl-recap__item {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 6px 12px;
   align-items: baseline;
   padding: 7px 0;
   border-top: 1px dashed color-mix(in oklab, var(--fg) 12%, transparent);
@@ -3598,6 +3683,13 @@ details summary h3 { display: inline; }
   min-width: 56px;
 }
 .tl-recap__label { font-size: 0.9rem; line-height: 1.4; }
+.tl-recap__access {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  margin-left: auto;
+}
 .tl-actions {
   display: flex;
   flex-wrap: wrap;
@@ -3617,6 +3709,12 @@ details summary h3 { display: inline; }
   .tl-status__row--sipho { order: -1; }
   .tl-progress__year { font-size: 0.55rem; }
   .tl-progress-row { flex-wrap: wrap; }
+  .tl-option { flex-wrap: wrap; align-items: flex-start; }
+  .tl-option__access {
+    margin-left: 42px;
+    white-space: normal;
+    text-align: left;
+  }
 }
 
 /* ---------------- Ask me anything (inline Essay Guide agent) ---------------- */

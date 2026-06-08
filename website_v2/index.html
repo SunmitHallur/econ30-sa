@@ -108,20 +108,6 @@
             <figcaption>Johannesburg from Braamfontein, 2009. <a class="fig-src" href="https://commons.wikimedia.org/wiki/File:Johannesburg_CBD.jpg">Source</a></figcaption>
           </figure>
         </div>
-        <dl class="hero-stats" aria-label="The opening in three numbers">
-          <div class="hero-stat hero-stat--trade">
-            <dt>Trade openness</dt>
-            <dd><span class="hero-stat__num">37% → 66%</span><span class="hero-stat__unit">of GDP</span></dd>
-          </div>
-          <div class="hero-stat hero-stat--income">
-            <dt>Income per person</dt>
-            <dd><span class="hero-stat__num">+~33%</span><span class="hero-stat__unit">since 1994</span></dd>
-          </div>
-          <div class="hero-stat hero-stat--inequality">
-            <dt>Top-10% income share</dt>
-            <dd><span class="hero-stat__num">47% → 65%</span><span class="hero-stat__unit">1990–2020</span></dd>
-          </div>
-        </dl>
       </div>
     </section>
 
@@ -301,7 +287,7 @@
               trade as a share of the economy explodes while income per person lags behind, all while unemployment remains painfully high.
             </p>
             <div class="annotation-list">
-              <p><span>How to read</span> Income per person, trade/GDP and FDI/GDP are set so 1990 = 100; the vertical axis uses a log scale so large swings in trade do not hide slower moves in income.</p>
+              <p><span>How to read</span> Income per person, trade/GDP and FDI/GDP are set so 1990 = 100 (with macro lines back to 1960); the vertical axis uses a log scale so large swings in trade do not hide slower moves in income.</p>
               <p><span>Caution</span> In these national data, higher trade lines up with higher income per person, higher unemployment, and a higher top-income share, but that does not prove trade caused any of them.</p>
               <p><span>Technical note</span> A formal “long-run link” test between log income per person and trade/GDP does not find a stable long-run pairing here (<span class="mono" id="coint-gdp-trade">p ≈ 0.48</span> for Engle–Granger).</p>
               <p><span>Source</span> World Development Indicators; trade-policy context in <a class="kb-link" href="#sources" data-kb="trade-liberalisation-south-africa">Sources</a>.</p>
@@ -314,7 +300,7 @@
               <figure class="card macro-chart-solo chart-mockup__card">
                 <figcaption class="card-head">
                   <h3>Indexed national indicators, 1990 = 100 (log scale)</h3>
-                  <p class="chart-mockup__card-lede">Income per person, trade/GDP and FDI/GDP, all set to 100 in 1990. The log scale keeps the clearer picture: trade moved a lot; income per person moved less.</p>
+                  <p class="chart-mockup__card-lede">Income per person, trade/GDP and FDI/GDP from 1960, all indexed to 100 in 1990. The log scale keeps the clearer picture: trade moved a lot; income per person moved less.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-indexed"></canvas></div>
               </figure>
@@ -441,7 +427,7 @@
               <figure class="card sector-chart-solo chart-mockup__card">
                 <figcaption class="card-head">
                   <h3>Manufacturing's slice of GDP and employment</h3>
-                  <p class="chart-mockup__card-lede">Two indicators of the same story: manufacturing as a share of value added (WDI) and as a share of employment (LFS/QLFS).</p>
+                  <p class="chart-mockup__card-lede">Manufacturing VA share of GDP from 1960 (WDI); employment share from 1999 (LFS/QLFS).</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-manuf-decline"></canvas></div>
               </figure>
@@ -501,8 +487,8 @@
               under 6%.
             </p>
             <div class="annotation-list">
-              <p><span>Income</span> The top 10%’s share of income rose from roughly 47% in 1990 to about 65% by 2020.</p>
-              <p><span>Wealth</span> Wealth is more concentrated than yearly income: the top 10% held roughly 85% of household wealth.</p>
+              <p><span>Income</span> WID shows the top 10%’s share already near 47% through the 1980s, then rising to about 65% by 2020. Pre-1990 WID points are back-extrapolated — use them for broad context, not year-by-year precision.</p>
+              <p><span>Wealth</span> Wealth is more concentrated than yearly income: the top 10% held roughly 85–86% of household wealth from the 1980s onward.</p>
               <p><span>Source</span> WID and <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee–Czajka–Gethin</a>.</p>
             </div>
           </div>
@@ -513,14 +499,14 @@
               <figure class="card chart-mockup__card">
                 <figcaption class="card-head">
                   <h3>Pre-tax income shares (WID)</h3>
-                  <p class="chart-mockup__card-lede">Top-10% income share: 47% in 1990 → 65% in 2020. The bottom 50% receives &lt; 6%.</p>
+                  <p class="chart-mockup__card-lede">Top-10% income share from 1980 (WID): ~47% through the 1980s → 65% in 2020. The bottom 50% receives &lt; 6%.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-income-shares"></canvas></div>
               </figure>
               <figure class="card chart-mockup__card">
                 <figcaption class="card-head">
                   <h3>Wealth shares (WID)</h3>
-                  <p class="chart-mockup__card-lede">Wealth is even more skewed than income. See <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee-Czajka-Gethin (2022)</a>.</p>
+                  <p class="chart-mockup__card-lede">Wealth shares from 1980 (WID). Even more skewed than income. See <a class="kb-link" href="#sources" data-kb="wealth-inequality-lab-south-africa">Chatterjee-Czajka-Gethin (2022)</a>.</p>
                 </figcaption>
                 <div class="chart-canvas-wrap chart-canvas-wrap--tall"><canvas id="chart-wealth-shares"></canvas></div>
               </figure>
@@ -573,6 +559,28 @@
           illustrative figures built from the cited data and history, not real individuals.
           Their paths reflect documented patterns, not any one person's life.
         </p>
+        <details class="two-lives__how card">
+          <summary>How did I create this?</summary>
+          <div class="two-lives__how-body">
+            <p>
+              Pieter and Sipho are composite sketches, not survey respondents. I built them from
+              the essay’s cited history and data—apartheid spatial law, manufacturing decline,
+              WID inequality shares, and district-level tariff exposure
+              (<a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna</a>)—then
+              turned that evidence into five decision beats (1994 → 2020).
+            </p>
+            <p>
+              Each choice nudges hidden scores for both characters; endings fall into bands from
+              “falling behind” to “pulling ahead.” The story lives in
+              <code>data/two-lives.json</code>; the engine is <code>two-lives.js</code> (no Chart.js).
+              With four options per beat, there are 1,024 paths—yet Pieter lands secure ~88% of the
+              time and Sipho only ~22%, because they start at different scores (capital vs. a
+              trade-exposed wage), not because the menu differs. The <strong>~X% could</strong> tags
+              on each button are estimated feasibility shares (QLFS, FinScope, stokvel, grant, and
+              migration proxies)—not real survey choices, because no dataset asks these exact questions.
+            </p>
+          </div>
+        </details>
         <div class="two-lives__stage" id="tl-stage" aria-live="polite"></div>
         <noscript>
           <p class="two-lives__noscript">
@@ -615,29 +623,32 @@
         </button>
       </div>
       <div class="card results-summary-card">
-        <h3 class="card-title">Summary in one paragraph</h3>
+        <h3 class="card-title">Summary</h3>
         <p>
           Of the hundreds of regression specifications run on the macro panel, two
-          conclusions survive strict Benjamini–Hochberg corrections. <strong>First</strong>,
-          the move toward an open economy lines up with the decline of trade-exposed
-          sectors: manufacturing employment share and tradable employment share both
-          fall robustly as trade openness rises (HAC <span class="mono">t</span> ≈ −2.5 and −3.8 respectively over
-          26 years). <strong>Second</strong>, trade openness also tracks the rise of the top
-          1%'s income share, the one inequality and trade link the multiple-testing
-          adjustments cannot dismiss. On the other side of the ledger, the Chow test does
-          not find a clean structural break at the 1996 GEAR pivot, and trade does not
-          robustly explain unemployment levels on its
-          own. None of these single-country regressions are causal proof. For that
-          this essay leans on
-          <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
-          district-level evidence, but they show which patterns are sturdy enough to
-          take seriously.
+          conclusions survive strict Benjamini–Hochberg corrections:
         </p>
-        <p class="results-summary-card__note">
-          BH / Bonf / Raw flags below indicate how strict a multiple-testing bar each
-          regression clears. The full battery is collapsed by default; expand it only if
-          you want every estimate and diagnostic.
-        </p>
+        <ul class="results-summary-list">
+          <li>
+            The move toward an open economy lines up with the decline of trade-exposed sectors:
+            manufacturing employment share and tradable employment share both fall robustly as
+            trade openness rises (HAC <span class="mono">t</span> ≈ −2.5 and −3.8 respectively over 26 years).
+          </li>
+          <li>
+            Trade openness also tracks the rise of the top 1%'s income share—the one inequality
+            and trade link the multiple-testing adjustments cannot dismiss.
+          </li>
+          <li>
+            On the other side of the ledger, the Chow test does not find a clean structural break
+            at the 1996 GEAR pivot, and trade does not robustly explain unemployment levels on its
+            own.
+          </li>
+          <li>
+            None of these single-country regressions are causal proof. For that this essay leans on
+            <a class="kb-link" href="#sources" data-kb="trade-liberalization-local-labor-markets-south-africa">Erten–Leight–Tregenna's</a>
+            district-level evidence, but they show which patterns are sturdy enough to take seriously.
+          </li>
+        </ul>
       </div>
 
       <details class="card results-detail-toggle">
@@ -848,7 +859,7 @@
         <p class="section-step">Section 09</p>
         <h2>One number hides nine very different provinces.</h2>
         <p class="section-lede">
-          Provincial narrow unemployment, 1999–2025 (LFS/QLFS). Scroll to advance quarters; zoom for metro detail.
+          Provincial narrow unemployment, 1999–2025 (LFS/QLFS).
           Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
         </p>
       </div>
@@ -881,7 +892,7 @@
       <div id="map-compare" class="map-compare" hidden>
         <h3 class="map-compare__title">First quarter vs latest quarter</h3>
         <p class="map-compare__lede">
-          Same colour scale as above: lighter is lower narrow unemployment, darker is higher.
+          Lighter color = lower unemployment, darker color = higher unemployment
         </p>
         <div class="map-compare-grid" role="group" aria-label="Before and after provincial maps">
           <figure class="map-compare-cell">
@@ -973,6 +984,14 @@
           on average, but not broadly secure in jobs and income. The next phase is not
           less integration, but better-governed integration so gains in trade and
           investment translate into mass opportunity, not just aggregate improvement.
+        </p>
+        <p class="conclusion-contribution">
+          <strong>What this project adds.</strong> Not new primary data, but a new assembly:
+          WDI macro indicators, WID inequality shares, and harmonised OHS/LFS/QLFS microdata
+          merged into one year-keyed panel—with tradable sector shares, a wave-by-wave
+          provincial unemployment map, and pre-1990 context—that no single source publishes
+          as a single view. The site and regression battery are built on that integration
+          so openness, sector loss, inequality, and geography can be read side by side.
         </p>
       </div>
       <div class="card quote-showcase quote-orbit-card">

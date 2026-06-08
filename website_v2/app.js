@@ -312,7 +312,11 @@
       yTitle: "Index, 1990 = 100 (log axis)",
       xTitle: "Year",
       yAxisType: "logarithmic",
-      annotations: [{ type: "label", x: 2002, y: 320, label: "Trade rises faster than income" }],
+      annotations: [
+        { type: "band", x1: 1960, x2: 1990, label: "Apartheid era", fill: "rgba(15,95,70,0.06)" },
+        { type: "marker", x: 1994, label: "1994 elections", color: "rgba(255,255,255,0.42)", dash: [3, 4] },
+        { type: "label", x: 2002, y: 320, label: "Trade rises faster than income" },
+      ],
     });
   };
 
@@ -374,6 +378,9 @@
         ],
         yTitle: "% of GDP / % of employed",
         xTitle: "Year",
+        annotations: [
+          { type: "band", x1: 1960, x2: 1990, label: "VA from 1960", fill: "rgba(15,95,70,0.05)" },
+        ],
       });
     }
   };
@@ -482,11 +489,13 @@
     const canvas = $("#chart-unemployment");
     if (!canvas) return;
     const years = ts.years;
+    const vals = ts.series.unemployment.values;
     makeLineChart(canvas, {
       labels: years,
       datasets: [datasetFrom(years, ts.series.unemployment, "danger", { borderWidth: 2.5 })],
       yTitle: "% of labour force",
       xTitle: "Year",
+      xMin: vals.findIndex((v) => v != null) >= 0 ? years[vals.findIndex((v) => v != null)] : 1990,
       annotations: [{ type: "marker", x: 2020, label: "COVID shock", color: "rgba(255,255,255,0.48)", dash: [4, 4] }],
     });
   };
@@ -504,7 +513,11 @@
       ],
       yTitle: "Share of national income (pre-tax)",
       xTitle: "Year",
-      annotations: [{ type: "label", x: 2020, y: 0.65, label: "≈65%" }],
+      annotations: [
+        { type: "band", x1: 1980, x2: 1990, label: "Pre-1990 WID (imputed)", fill: "rgba(15,95,70,0.06)" },
+        { type: "marker", x: 1994, label: "1994", color: "rgba(255,255,255,0.38)", dash: [3, 4] },
+        { type: "label", x: 2020, y: 0.65, label: "≈65%" },
+      ],
     });
   };
 
@@ -520,7 +533,11 @@
       ],
       yTitle: "Share of household wealth",
       xTitle: "Year",
-      annotations: [{ type: "label", x: 2020, y: 0.85, label: "≈85%" }],
+      annotations: [
+        { type: "band", x1: 1980, x2: 1990, label: "Pre-1990 WID (imputed)", fill: "rgba(15,95,70,0.06)" },
+        { type: "marker", x: 1994, label: "1994", color: "rgba(255,255,255,0.38)", dash: [3, 4] },
+        { type: "label", x: 2020, y: 0.85, label: "≈85%" },
+      ],
     });
   };
 

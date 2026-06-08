@@ -8,7 +8,8 @@ import urllib.request
 from pathlib import Path
 
 USER_AGENT = "Econ30FinalProject/1.0 (academic research)"
-OUT = Path(__file__).resolve().parent / "data" / "sa_wdi_panel.csv"
+YEAR_MIN, YEAR_MAX = 1960, 2023
+OUT = Path(__file__).resolve().parent / "Knowledge Base" / "raw" / "data" / "sa_wdi_panel.csv"
 
 INDICATORS = {
     "SI.POV.GINI": "gini",
@@ -23,10 +24,10 @@ INDICATORS = {
 def fetch_indicator(wb_code: str) -> dict[int, float | None]:
     url = (
         f"https://api.worldbank.org/v2/country/ZAF/indicator/{wb_code}"
-        f"?format=json&per_page=500&date=1990:2023"
+        f"?format=json&per_page=500&date={YEAR_MIN}:{YEAR_MAX}"
     )
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=60) as resp:
+    with urllib.request.urlopen(req, timeout=120) as resp:
         payload = json.loads(resp.read().decode())
     out: dict[int, float | None] = {}
     for row in payload[1]:
@@ -37,7 +38,7 @@ def fetch_indicator(wb_code: str) -> dict[int, float | None]:
 
 def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    years = range(1990, 2024)
+    years = range(YEAR_MIN, YEAR_MAX + 1)
     cols = {alias: fetch_indicator(code) for code, alias in INDICATORS.items()}
     fieldnames = ["year"] + list(INDICATORS.values())
     with OUT.open("w", newline="", encoding="utf-8") as f:

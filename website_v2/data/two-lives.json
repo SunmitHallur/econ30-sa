@@ -19,6 +19,10 @@
       "start": -2
     }
   },
+  "access_meta": {
+    "label": "could take this path",
+    "disclaimer": "Estimated share of South African adults for whom each option was realistically available—not a survey of choices people actually picked. No national dataset maps 1:1 onto these narrative beats; figures combine QLFS employment shares, FinScope savings/inclusion, stokvel participation, grant coverage, and migration proxies."
+  },
   "bands": [
     { "key": "destitute", "max": -3, "status": "Falling behind" },
     { "key": "crisis", "max": 0, "status": "In trouble" },
@@ -36,6 +40,8 @@
       "options": [
         {
           "label": "Invest whatever savings you have",
+          "access_pct": 22,
+          "access_basis": "FinScope proxy: ~20–25% of adults had investable savings (lower in 1994; most wealth concentrated at top)",
           "effects": { "pieter": 3, "sipho": 0 },
           "react": {
             "pieter": "Pieter has savings and a broker on speed-dial. As global money floods the stock exchange, his portfolio starts to climb.",
@@ -44,6 +50,8 @@
         },
         {
           "label": "Keep your head down at your current job",
+          "access_pct": 51,
+          "access_basis": "QLFS: roughly half of adults were employed and could stay put in an existing job",
           "effects": { "pieter": -2, "sipho": -1 },
           "react": {
             "pieter": "Pieter stays cautious and salaried. That is fine, but he watches colleagues who invested pull ahead.",
@@ -52,6 +60,8 @@
         },
         {
           "label": "Go back to school to learn new skills",
+          "access_pct": 9,
+          "access_basis": "Adult/part-time study participation — low single digits nationally",
           "effects": { "pieter": 1, "sipho": 2 },
           "react": {
             "pieter": "Pieter takes night classes; with a cushion to fall back on, the risk is small.",
@@ -60,6 +70,8 @@
         },
         {
           "label": "Start a small side business after work",
+          "access_pct": 26,
+          "access_basis": "Informal supplementary income: ~20–30% of households run side trade or hustles",
           "effects": { "pieter": 1, "sipho": 2 },
           "react": {
             "pieter": "Pieter tries a side venture for fun and a little extra. He can afford to fail.",
@@ -76,6 +88,8 @@
       "options": [
         {
           "label": "Move your savings into finance or overseas",
+          "access_pct": 15,
+          "access_basis": "Adults with movable capital after 1994 liberalisation — a small affluent minority",
           "effects": { "pieter": 3, "sipho": 0 },
           "react": {
             "pieter": "With capital controls loosened, Pieter shifts savings into global assets. The open economy is built for him.",
@@ -84,6 +98,8 @@
         },
         {
           "label": "Stay at the factory and hope orders return",
+          "access_pct": 10,
+          "access_basis": "Manufacturing workers in import-competing plants (~12–15% of employment in 1990s)",
           "effects": { "pieter": -1, "sipho": -3 },
           "react": {
             "pieter": "Not really Pieter's fight, but a slowing factory town is not good for anyone's clients.",
@@ -92,6 +108,8 @@
         },
         {
           "label": "Organize with coworkers to slow the layoffs",
+          "access_pct": 5,
+          "access_basis": "Unionised manufacturing workers — COSATU peak membership was a small share of all adults",
           "effects": { "pieter": -2, "sipho": 2 },
           "react": {
             "pieter": "Pieter sides with the workers and is quietly marked as not a team player by the firm.",
@@ -100,6 +118,8 @@
         },
         {
           "label": "Apply for a steadier government or office job",
+          "access_pct": 36,
+          "access_basis": "Public-sector employment eventually ~25% of formal jobs; many more could plausibly apply",
           "effects": { "pieter": 0, "sipho": 1 },
           "react": {
             "pieter": "Pieter could land something stable, but leaving finance feels like a step down. He stays put.",
@@ -116,6 +136,8 @@
       "options": [
         {
           "label": "Switch to a higher-paying industry while you can",
+          "access_pct": 17,
+          "access_basis": "Job-switchers during the commodity boom — labour turnover in booming sectors",
           "effects": { "pieter": 3, "sipho": 1 },
           "react": {
             "pieter": "Pieter's sector is exactly where the boom lands. His income compounds.",
@@ -124,6 +146,8 @@
         },
         {
           "label": "Stay where you are and wait it out",
+          "access_pct": 44,
+          "access_basis": "Employed adults who stayed in place while mining/finance boomed elsewhere",
           "effects": { "pieter": 0, "sipho": -1 },
           "react": {
             "pieter": "Pieter coasts; the rising tide carries him regardless.",
@@ -132,6 +156,8 @@
         },
         {
           "label": "Pick up informal work on the side for extra cash",
+          "access_pct": 29,
+          "access_basis": "QLFS informal sector + supplementary hustles (~20–30% of workers in informal activity)",
           "effects": { "pieter": 1, "sipho": 2 },
           "react": {
             "pieter": "Pieter dabbles in a side venture for fun and a little extra.",
@@ -140,6 +166,8 @@
         },
         {
           "label": "Pool money with family or friends in a savings group",
+          "access_pct": 19,
+          "access_basis": "FinScope: stokvel/savings-group participation ~11–19% of adults (higher in Black households)",
           "effects": { "pieter": 0, "sipho": 2 },
           "react": {
             "pieter": "Pieter already has a bank. A stokvel feels unnecessary when credit is one call away.",
@@ -156,6 +184,8 @@
       "options": [
         {
           "label": "Hold on to what you own and wait it out",
+          "access_pct": 17,
+          "access_basis": "Households with assets (housing, pensions, investments) to ride out the GFC shock",
           "effects": { "pieter": 2, "sipho": -1 },
           "react": {
             "pieter": "Pieter's holdings dip, then recover. Having assets to hold is its own kind of shelter.",
@@ -164,6 +194,8 @@
         },
         {
           "label": "Take any job you can find, however temporary",
+          "access_pct": 40,
+          "access_basis": "Unemployed and precarious workers (~30%+ unemployment + churn seeking any wage)",
           "effects": { "pieter": -2, "sipho": 1 },
           "react": {
             "pieter": "Pieter takes a step down to stay employed, a bruise to the ego, not the bank balance.",
@@ -172,6 +204,8 @@
         },
         {
           "label": "Move to a bigger city where more jobs are listed",
+          "access_pct": 13,
+          "access_basis": "Internal migrants to metros (Gauteng inflows; ~3–5% of adults move in crisis years)",
           "effects": { "pieter": 1, "sipho": 2 },
           "react": {
             "pieter": "Pieter relocates easily: a moving van, a new suburb, a transferred mortgage.",
@@ -180,6 +214,8 @@
         },
         {
           "label": "Move in with family to cut rent and expenses",
+          "access_pct": 32,
+          "access_basis": "Multigenerational/doubled-up households — common cost-cutting strategy in downturns",
           "effects": { "pieter": -1, "sipho": 1 },
           "react": {
             "pieter": "Pieter downsizes slightly. It is an adjustment, not a crisis.",
@@ -196,6 +232,8 @@
       "options": [
         {
           "label": "Double down on what has worked for you so far",
+          "access_pct": 19,
+          "access_basis": "Asset-holders and established professionals who could lean into existing strategy",
           "effects": { "pieter": 3, "sipho": 0 },
           "react": {
             "pieter": "Pieter leans harder into assets and connections. His income is now mostly money making money.",
@@ -204,6 +242,8 @@
         },
         {
           "label": "Live on government help, odd jobs, and family support",
+          "access_pct": 38,
+          "access_basis": "Grant recipients + piece-work survival (SASSA coverage + informal fallback)",
           "effects": { "pieter": -3, "sipho": 1 },
           "react": {
             "pieter": "For Pieter this would mean a hard fall: selling up, leaning on the state he never expected to need.",
@@ -212,6 +252,8 @@
         },
         {
           "label": "Try to move to another country for work",
+          "access_pct": 3,
+          "access_basis": "Viable emigration pathways — net emigration ~20–30k/yr vs ~40m adults; few have capital and visas",
           "effects": { "pieter": 2, "sipho": -1 },
           "react": {
             "pieter": "Pieter has passport options, savings, and in-demand skills to emigrate cleanly.",
@@ -220,6 +262,8 @@
         },
         {
           "label": "Spend what you have on your children's schooling",
+          "access_pct": 46,
+          "access_basis": "Parents with school-age children prioritising fees — roughly half of households",
           "effects": { "pieter": 0, "sipho": 2 },
           "react": {
             "pieter": "Pieter's kids were already in good schools. The choice changes little for him.",

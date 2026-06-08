@@ -23,10 +23,16 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
+KB = ROOT.parent / "Knowledge Base" / "raw" / "data"
 OUT = ROOT / "outputs"
 SITE_DATA = ROOT.parent / "website_v2" / "data"
 PANEL_CSV = OUT / "sa_panel_full.csv"
 REG_JSON = OUT / "regression_results.json"
+
+PANEL_YEAR_MIN = 1990
+CHART_YEAR_MIN_MACRO = 1960
+CHART_YEAR_MIN_INEQUALITY = 1980
+YEAR_MAX = 2024
 
 
 def _fig_style() -> None:
@@ -53,6 +59,47 @@ def _nan_to_none(xs):
 
 def _series(df: pd.DataFrame, col: str) -> list:
     return _nan_to_none(df[col].tolist())
+
+
+def _wid_series(df_wid: pd.DataFrame, variable: str, percentile: str) -> pd.DataFrame:
+    sub = df_wid[(df_wid.variable == variable) & (df_wid.percentile == percentile)]
+    return sub[["year", "value"]].dropna()
+
+
+def load_chart_macro() -> pd.DataFrame:
+    """WDI macro series for chart fixtures (1960+); regression panel stays at 1990+."""
+    df = pd.read_csv(KB / "sa_wdi_panel.csv")
+    df = df.rename(
+        columns={
+            "gdp_pc_constant_usd": "wdi_gdp_pc_usd",
+            "gdp_growth_pct": "wdi_gdp_growth",
+            "trade_pct_gdp": "wdi_trade_gdp",
+            "fdi_net_inflows_pct_gdp": "wdi_fdi_gdp",
+            "unemployment_ilo_pct": "wdi_unemployment",
+            "gini": "wdi_gini",
+        }
+    )
+    return df.loc[(df.year >= CHART_YEAR_MIN_MACRO) & (df.year <= YEAR_MAX)].sort_values("year").reset_index(drop=True)
+
+
+def load_chart_inequality(panel_df: pd.DataFrame) -> pd.DataFrame:
+    """WID inequality for chart fixtures (1980+); Gini overlays still come from the 1990+ panel."""
+    df = pd.read_csv(KB / "WID_data_ZA.csv", sep=";")
+    df = df[(df.year >= CHART_YEAR_MIN_INEQUALITY) & (df.year <= YEAR_MAX)].copy()
+    series = {
+        "wid_top1_inc": _wid_series(df, "sptincj992", "p99p100"),
+        "wid_top10_inc": _wid_series(df, "sptincj992", "p90p100"),
+        "wid_bottom50_inc": _wid_series(df, "sptincj992", "p0p50"),
+        "wid_top10_wealth": _wid_series(df, "shwealj992", "p90p100"),
+        "wid_top1_wealth": _wid_series(df, "shwealj992", "p99p100"),
+    }
+    out = pd.DataFrame({"year": range(CHART_YEAR_MIN_INEQUALITY, YEAR_MAX + 1)})
+    for name, sub in series.items():
+        out = out.merge(sub.rename(columns={"value": name}), on="year", how="left")
+    gini_cols = ["year", "wiid_gini", "wdi_gini"]
+    if all(c in panel_df.columns for c in gini_cols):
+        out = out.merge(panel_df[gini_cols], on="year", how="left")
+    return out.sort_values("year").reset_index(drop=True)
 
 
 def write_timeseries(df: pd.DataFrame) -> None:
@@ -266,8 +313,11 @@ def fig_indexed(df: pd.DataFrame) -> None:
         if pd.isna(base_val):
             continue
         ax.plot(df.year, df[col] / base_val * 100, label=label, linewidth=2)
+    ax.axvspan(CHART_YEAR_MIN_MACRO, PANEL_YEAR_MIN, color="#ddd", alpha=0.25)
+    ax.axvline(1994, color="#555", linestyle=":", linewidth=0.8, alpha=0.6)
     ax.axvline(1996, color="#555", linestyle="--", linewidth=0.8, alpha=0.6)
-    ax.text(1996.2, ax.get_ylim()[1] * 0.95, "GEAR 1996", fontsize=8, color="#555")
+    ax.text(1994.2, ax.get_ylim()[1] * 0.95, "1994", fontsize=8, color="#555")
+    ax.text(1996.2, ax.get_ylim()[1] * 0.88, "GEAR 1996", fontsize=8, color="#555")
     ax.set_title("Indexed macro indicators, 1990 = 100")
     ax.set_ylabel("Index (1990=100)")
     ax.set_xlabel("Year")
@@ -277,6 +327,7 @@ def fig_indexed(df: pd.DataFrame) -> None:
 
 def fig_inequality(df: pd.DataFrame) -> None:
     fig, ax = plt.subplots()
+    ax.axvspan(CHART_YEAR_MIN_INEQUALITY, PANEL_YEAR_MIN, color="#ddd", alpha=0.25)
     ax.plot(df.year, df["wid_top10_inc"], label="Top 10% income", linewidth=2)
     ax.plot(df.year, df["wid_top1_inc"], label="Top 1% income", linewidth=2)
     ax.plot(df.year, df["wid_bottom50_inc"], label="Bottom 50% income", linewidth=2)
@@ -287,6 +338,7 @@ def fig_inequality(df: pd.DataFrame) -> None:
     _save(fig, "fig_inequality_income.png")
 
     fig2, ax2 = plt.subplots()
+    ax2.axvspan(CHART_YEAR_MIN_INEQUALITY, PANEL_YEAR_MIN, color="#ddd", alpha=0.25)
     ax2.plot(df.year, df["wid_top10_wealth"], label="Top 10% wealth", linewidth=2)
     ax2.plot(df.year, df["wid_top1_wealth"], label="Top 1% wealth", linewidth=2)
     ax2.set_title("Wealth shares, South Africa (WID)")
@@ -342,19 +394,21 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     SITE_DATA.mkdir(parents=True, exist_ok=True)
     _fig_style()
-    df = pd.read_csv(PANEL_CSV)
+    df_panel = pd.read_csv(PANEL_CSV)
+    df_macro = load_chart_macro()
+    df_ineq = load_chart_inequality(df_panel)
 
-    write_timeseries(df)
-    write_inequality(df)
-    write_governance(df)
-    write_panel(df)
+    write_timeseries(df_macro)
+    write_inequality(df_ineq)
+    write_governance(df_panel)
+    write_panel(df_panel)
     write_qlfs_snapshot()
     copy_regression_payload()
 
-    fig_indexed(df)
-    fig_inequality(df)
-    fig_governance(df)
-    fig_scatter_headline(df)
+    fig_indexed(df_macro)
+    fig_inequality(df_ineq)
+    fig_governance(df_panel)
+    fig_scatter_headline(df_panel)
 
     print(f"Wrote fixtures to {SITE_DATA}")
     print(f"Wrote PNGs to {OUT}")

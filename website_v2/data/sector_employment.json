@@ -47,13 +47,13 @@
       "y": "tradable_share"
     },
     "manuf_va_vs_trade": {
-      "n": 35,
-      "intercept": 34.776777030556424,
-      "slope": -0.36747743567787644,
-      "slope_se_hac": 0.04681231764213969,
-      "t_hac": -7.8500158545254175,
-      "p_two_sided_normal": 4.218847493575595e-15,
-      "r_squared": 0.7239301418756006,
+      "n": 65,
+      "intercept": 38.021604088730896,
+      "slope": -0.3939468834783437,
+      "slope_se_hac": 0.059426089570716066,
+      "t_hac": -6.629190753154865,
+      "p_two_sided_normal": 3.3753222439258934e-11,
+      "r_squared": 0.49972937767095427,
       "lags": 2,
       "x": "trade_pct_gdp",
       "y": "manuf_va_share_gdp"
@@ -61,12 +61,282 @@
   },
   "rows": [
     {
+      "year": 1960,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 19.9391902704433,
+      "industry_va_share_gdp": 32.4691950712114,
+      "agric_va_share_gdp": 9.04144663146103,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 46.8554968795007
+    },
+    {
+      "year": 1961,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 20.546282245827,
+      "industry_va_share_gdp": 32.7162367223065,
+      "agric_va_share_gdp": 9.31714719271624,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 43.7481031866464
+    },
+    {
+      "year": 1962,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 20.6990014265335,
+      "industry_va_share_gdp": 32.8530670470756,
+      "agric_va_share_gdp": 8.9586305278174,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 43.3523537803138
+    },
+    {
+      "year": 1963,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.4497613826906,
+      "industry_va_share_gdp": 33.2774409905843,
+      "agric_va_share_gdp": 8.83528956532955,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 44.9761382690571
+    },
+    {
+      "year": 1964,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.0608899297424,
+      "industry_va_share_gdp": 34.192037470726,
+      "agric_va_share_gdp": 7.6463700234192,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 45.9484777517564
+    },
+    {
+      "year": 1965,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.8494911622924,
+      "industry_va_share_gdp": 35.1687198714515,
+      "agric_va_share_gdp": 7.43438671665774,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 45.5168719871452
+    },
+    {
+      "year": 1966,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.5692050044331,
+      "industry_va_share_gdp": 34.765047778544,
+      "agric_va_share_gdp": 7.70367451482613,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 42.0943749384297
+    },
+    {
+      "year": 1967,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.9272630740642,
+      "industry_va_share_gdp": 33.3864259800018,
+      "agric_va_share_gdp": 8.49482346694983,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 42.4918148836386
+    },
+    {
+      "year": 1968,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.934270765206,
+      "industry_va_share_gdp": 33.4041857423152,
+      "agric_va_share_gdp": 7.13701765860039,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 41.2933289731851
+    },
+    {
+      "year": 1969,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.3191566703017,
+      "industry_va_share_gdp": 33.776808433297,
+      "agric_va_share_gdp": 6.66666666666667,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 39.62195565249
+    },
+    {
+      "year": 1970,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.5191343362365,
+      "industry_va_share_gdp": 33.7556083399314,
+      "agric_va_share_gdp": 5.7468989179203,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 39.7862232779097
+    },
+    {
+      "year": 1971,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.7570473005256,
+      "industry_va_share_gdp": 32.4593884376493,
+      "agric_va_share_gdp": 6.23506927854754,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 40.4980888676541
+    },
+    {
+      "year": 1972,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.182213732357,
+      "industry_va_share_gdp": 33.3810888252149,
+      "agric_va_share_gdp": 6.15515228695744,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 40.7725777353285
+    },
+    {
+      "year": 1973,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.6566304206559,
+      "industry_va_share_gdp": 35.2770437118226,
+      "agric_va_share_gdp": 5.92210717844301,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 41.1514967725166
+    },
+    {
+      "year": 1974,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.2637343099954,
+      "industry_va_share_gdp": 36.0487856914269,
+      "agric_va_share_gdp": 7.17206556910714,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 48.796358852185
+    },
+    {
+      "year": 1975,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 23.0664985817838,
+      "industry_va_share_gdp": 37.0406555310432,
+      "agric_va_share_gdp": 6.32524424834541,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 49.8140560983297
+    },
+    {
+      "year": 1976,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 23.3546656233407,
+      "industry_va_share_gdp": 37.2467372774781,
+      "agric_va_share_gdp": 5.56130005868709,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 48.8807534303999
+    },
+    {
+      "year": 1977,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.5673838035316,
+      "industry_va_share_gdp": 35.9727014410392,
+      "agric_va_share_gdp": 5.81997158514309,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 48.2113862390907
+    },
+    {
+      "year": 1978,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 21.4101078527498,
+      "industry_va_share_gdp": 37.1044656386487,
+      "agric_va_share_gdp": 5.58204831090115,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 50.9515108298422
+    },
+    {
+      "year": 1979,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.4679728711379,
+      "industry_va_share_gdp": 39.7532027128862,
+      "agric_va_share_gdp": 5.00188394875659,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 54.1070082893745
+    },
+    {
+      "year": 1980,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.8054051725376,
+      "industry_va_share_gdp": 42.4027456668151,
+      "agric_va_share_gdp": 5.30465126297802,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 56.5073165127734
+    },
+    {
+      "year": 1981,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 24.8645077625124,
+      "industry_va_share_gdp": 40.8372992084562,
+      "agric_va_share_gdp": 5.43192356158015,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 52.1929556270568
+    },
+    {
+      "year": 1982,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 24.116600197264,
+      "industry_va_share_gdp": 39.096873793902,
+      "agric_va_share_gdp": 4.70217419271838,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 47.141815686779
+    },
+    {
+      "year": 1983,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 23.8792323266251,
+      "industry_va_share_gdp": 39.3343969546841,
+      "agric_va_share_gdp": 3.65363264011345,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 40.2562021253767
+    },
+    {
+      "year": 1984,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 23.3437427619861,
+      "industry_va_share_gdp": 37.9563442938494,
+      "agric_va_share_gdp": 3.95744646864792,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 43.392941289225
+    },
+    {
+      "year": 1985,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.1608113658037,
+      "industry_va_share_gdp": 37.8549203321755,
+      "agric_va_share_gdp": 4.28584356009717,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 47.9482663808045
+    },
+    {
+      "year": 1986,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.3549976732809,
+      "industry_va_share_gdp": 38.1564032502476,
+      "agric_va_share_gdp": 4.12008256869787,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 46.6489279194359
+    },
+    {
+      "year": 1987,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 22.7753752225897,
+      "industry_va_share_gdp": 36.6644619689646,
+      "agric_va_share_gdp": 4.62630373950649,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 44.9712541338082
+    },
+    {
+      "year": 1988,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 23.0548928033572,
+      "industry_va_share_gdp": 36.3444844915986,
+      "agric_va_share_gdp": 4.76800852835169,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 45.8513122493528
+    },
+    {
+      "year": 1989,
+      "n_waves": 0,
+      "manuf_va_share_gdp": 23.4863000405794,
+      "industry_va_share_gdp": 35.7709204467263,
+      "agric_va_share_gdp": 4.39916018278375,
+      "services_va_share_gdp": null,
+      "trade_pct_gdp": 42.6997653451896
+    },
+    {
       "year": 1990,
       "n_waves": 0,
       "manuf_va_share_gdp": 23.7435109635203,
       "industry_va_share_gdp": 35.6076007199649,
       "agric_va_share_gdp": 3.7770561775014,
-      "services_va_share_gdp": 52.4390804809169,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 38.2118009241798
     },
     {
@@ -75,7 +345,7 @@
       "manuf_va_share_gdp": 23.1384260995339,
       "industry_va_share_gdp": 34.4217067552365,
       "agric_va_share_gdp": 3.74350458027535,
-      "services_va_share_gdp": 54.1811753361547,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 34.8816092569776
     },
     {
@@ -84,7 +354,7 @@
       "manuf_va_share_gdp": 22.3050145423398,
       "industry_va_share_gdp": 33.060858320151,
       "agric_va_share_gdp": 3.14920989404015,
-      "services_va_share_gdp": 56.9491865117711,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 34.3213534993474
     },
     {
@@ -93,7 +363,7 @@
       "manuf_va_share_gdp": 21.3870941167691,
       "industry_va_share_gdp": 31.9307593029594,
       "agric_va_share_gdp": 3.42257462613413,
-      "services_va_share_gdp": 57.3095753093944,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 35.6981243460429
     },
     {
@@ -102,7 +372,7 @@
       "manuf_va_share_gdp": 21.0159817531681,
       "industry_va_share_gdp": 31.230316330669,
       "agric_va_share_gdp": 3.75544808249115,
-      "services_va_share_gdp": 57.3140764710769,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 37.1146091666279
     },
     {
@@ -111,7 +381,7 @@
       "manuf_va_share_gdp": 21.2467296668225,
       "industry_va_share_gdp": 30.9818655662995,
       "agric_va_share_gdp": 3.12158524596013,
-      "services_va_share_gdp": 58.2314446131759,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 39.4780337793026
     },
     {
@@ -120,7 +390,7 @@
       "manuf_va_share_gdp": 20.2672862924698,
       "industry_va_share_gdp": 29.8899862560641,
       "agric_va_share_gdp": 3.41658824480889,
-      "services_va_share_gdp": 59.214983285733,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 42.199251732528
     },
     {
@@ -129,7 +399,7 @@
       "manuf_va_share_gdp": 19.9134866388256,
       "industry_va_share_gdp": 29.2506309429667,
       "agric_va_share_gdp": 3.265895498876,
-      "services_va_share_gdp": 59.9623259250618,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 42.3013344291831
     },
     {
@@ -138,7 +408,7 @@
       "manuf_va_share_gdp": 19.3278130726006,
       "industry_va_share_gdp": 28.576366566325,
       "agric_va_share_gdp": 3.03418044396185,
-      "services_va_share_gdp": 60.4023022949226,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 44.0357453368965
     },
     {
@@ -161,7 +431,7 @@
       "manuf_va_share_gdp": 18.5261294778975,
       "industry_va_share_gdp": 27.6656022125323,
       "agric_va_share_gdp": 2.84639917281201,
-      "services_va_share_gdp": 61.406463138041,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 42.2582960172673
     },
     {
@@ -184,7 +454,7 @@
       "manuf_va_share_gdp": 18.968266431053,
       "industry_va_share_gdp": 28.2297555130289,
       "agric_va_share_gdp": 2.61474799327768,
-      "services_va_share_gdp": 61.1859808725457,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 46.2207217354077
     },
     {
@@ -207,7 +477,7 @@
       "manuf_va_share_gdp": 19.0369578655221,
       "industry_va_share_gdp": 28.531613122664,
       "agric_va_share_gdp": 2.8124516945524,
-      "services_va_share_gdp": 60.7831497223987,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 49.170945185829
     },
     {
@@ -230,7 +500,7 @@
       "manuf_va_share_gdp": 19.0721822951943,
       "industry_va_share_gdp": 28.5059160154765,
       "agric_va_share_gdp": 2.95697182549084,
-      "services_va_share_gdp": 60.791789515513,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 53.4655016294369
     },
     {
@@ -253,7 +523,7 @@
       "manuf_va_share_gdp": 18.502111880883,
       "industry_va_share_gdp": 26.8928680646111,
       "agric_va_share_gdp": 2.65397752870021,
-      "services_va_share_gdp": 62.5769415025101,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 45.723862568979
     },
     {
@@ -276,7 +546,7 @@
       "manuf_va_share_gdp": 17.9898145212371,
       "industry_va_share_gdp": 26.3036366679746,
       "agric_va_share_gdp": 2.411716114862,
-      "services_va_share_gdp": 62.5295022900426,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 45.6435752240041
     },
     {
@@ -299,7 +569,7 @@
       "manuf_va_share_gdp": 17.3705797296878,
       "industry_va_share_gdp": 26.0150792659507,
       "agric_va_share_gdp": 2.08511798972012,
-      "services_va_share_gdp": 62.6447743317012,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 47.4277813970329
     },
     {
@@ -322,7 +592,7 @@
       "manuf_va_share_gdp": 15.5955245517406,
       "industry_va_share_gdp": 24.8591176319147,
       "agric_va_share_gdp": 2.05097651238464,
-      "services_va_share_gdp": 63.4994322880989,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 53.7681412741145
     },
     {
@@ -345,7 +615,7 @@
       "manuf_va_share_gdp": 15.4419248277389,
       "industry_va_share_gdp": 25.2946183090828,
       "agric_va_share_gdp": 2.35591400504256,
-      "services_va_share_gdp": 62.7545126209971,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 57.125139137747
     },
     {
@@ -368,7 +638,7 @@
       "manuf_va_share_gdp": 15.6086910770333,
       "industry_va_share_gdp": 26.9415561091344,
       "agric_va_share_gdp": 2.57248876696489,
-      "services_va_share_gdp": 61.5371405407045,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 65.9745237996233
     },
     {
@@ -391,7 +661,7 @@
       "manuf_va_share_gdp": 14.5078043632622,
       "industry_va_share_gdp": 25.7430761887593,
       "agric_va_share_gdp": 2.39949613487755,
-      "services_va_share_gdp": 63.6360883195073,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 49.5875353278801
     },
     {
@@ -414,7 +684,7 @@
       "manuf_va_share_gdp": 13.8595736133129,
       "industry_va_share_gdp": 25.3034630993363,
       "agric_va_share_gdp": 2.10778749314158,
-      "services_va_share_gdp": 64.2752626096743,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 50.4060871625999
     },
     {
@@ -437,7 +707,7 @@
       "manuf_va_share_gdp": 12.861770015896,
       "industry_va_share_gdp": 24.8394911507999,
       "agric_va_share_gdp": 2.04389308620297,
-      "services_va_share_gdp": 64.3421981264186,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 54.6363504358971
     },
     {
@@ -460,7 +730,7 @@
       "manuf_va_share_gdp": 12.4825918463265,
       "industry_va_share_gdp": 24.4686002355753,
       "agric_va_share_gdp": 1.97670959546361,
-      "services_va_share_gdp": 64.3045111542673,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 55.5826171933345
     },
     {
@@ -483,7 +753,7 @@
       "manuf_va_share_gdp": 12.3667757766351,
       "industry_va_share_gdp": 24.5517417673484,
       "agric_va_share_gdp": 1.92684924597199,
-      "services_va_share_gdp": 64.0537426456394,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 58.875027630051
     },
     {
@@ -506,7 +776,7 @@
       "manuf_va_share_gdp": 12.4807113856549,
       "industry_va_share_gdp": 24.3052820058227,
       "agric_va_share_gdp": 2.12574854869936,
-      "services_va_share_gdp": 64.0117818477066,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 59.4995740550593
     },
     {
@@ -529,7 +799,7 @@
       "manuf_va_share_gdp": 12.5179444713924,
       "industry_va_share_gdp": 23.7323079746326,
       "agric_va_share_gdp": 2.23397839045912,
-      "services_va_share_gdp": 64.1025757790295,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 56.7266761447156
     },
     {
@@ -552,7 +822,7 @@
       "manuf_va_share_gdp": 12.4836443520042,
       "industry_va_share_gdp": 23.7825372977493,
       "agric_va_share_gdp": 2.41418607394576,
-      "services_va_share_gdp": 63.913401523834,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 55.8612575048782
     },
     {
@@ -575,7 +845,7 @@
       "manuf_va_share_gdp": 12.5127045016941,
       "industry_va_share_gdp": 23.6105564955695,
       "agric_va_share_gdp": 2.49379863849766,
-      "services_va_share_gdp": 64.3304256202533,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 53.5359318293741
     },
     {
@@ -598,7 +868,7 @@
       "manuf_va_share_gdp": 12.4570332833175,
       "industry_va_share_gdp": 23.5370608392744,
       "agric_va_share_gdp": 2.2607038266992,
-      "services_va_share_gdp": 64.2531759654529,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 54.4855451276341
     },
     {
@@ -621,7 +891,7 @@
       "manuf_va_share_gdp": 12.4008912661528,
       "industry_va_share_gdp": 23.6220152843652,
       "agric_va_share_gdp": 1.9503211452698,
-      "services_va_share_gdp": 64.3473048295753,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 53.8979964081406
     },
     {
@@ -644,7 +914,7 @@
       "manuf_va_share_gdp": 11.725046778088,
       "industry_va_share_gdp": 23.3394384079582,
       "agric_va_share_gdp": 2.57866122238783,
-      "services_va_share_gdp": 64.6102537818073,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 50.7596590804177
     },
     {
@@ -667,7 +937,7 @@
       "manuf_va_share_gdp": 12.0775538850278,
       "industry_va_share_gdp": 24.9006017482132,
       "agric_va_share_gdp": 2.45787199667371,
-      "services_va_share_gdp": 62.7445288151422,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 56.1647136277546
     },
     {
@@ -690,7 +960,7 @@
       "manuf_va_share_gdp": 12.4454055010392,
       "industry_va_share_gdp": 24.9820287872223,
       "agric_va_share_gdp": 2.60577484985618,
-      "services_va_share_gdp": 62.2719610043357,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 64.94713440234
     },
     {
@@ -713,7 +983,7 @@
       "manuf_va_share_gdp": 12.9800055529093,
       "industry_va_share_gdp": 24.5639655120651,
       "agric_va_share_gdp": 2.53517112309848,
-      "services_va_share_gdp": 62.7205686343674,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 65.6798759740707
     },
     {
@@ -736,7 +1006,7 @@
       "manuf_va_share_gdp": 12.7973009661441,
       "industry_va_share_gdp": 24.3105308888817,
       "agric_va_share_gdp": 2.81119526983539,
-      "services_va_share_gdp": 62.9921807546005,
+      "services_va_share_gdp": null,
       "trade_pct_gdp": 61.646770473025
     },
     {

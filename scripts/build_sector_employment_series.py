@@ -148,7 +148,7 @@ def load_qlfs_waves() -> dict[int, list[dict]]:
     return out
 
 
-def fetch_wdi(code: str, start: int = 1990, end: int = 2024) -> dict[int, float | None]:
+def fetch_wdi(code: str, start: int = 1960, end: int = 2024) -> dict[int, float | None]:
     url = (
         f"https://api.worldbank.org/v2/country/ZAF/indicator/{code}"
         f"?format=json&per_page=500&date={start}:{end}"
