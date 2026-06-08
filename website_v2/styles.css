@@ -501,7 +501,7 @@ a:hover { border-bottom-color: currentColor; }
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: clamp(36px, 5vw, 56px);
-  align-items: center;
+  align-items: start;
 }
 .hero-inner {
   text-align: center;
@@ -601,7 +601,10 @@ a:hover { border-bottom-color: currentColor; }
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
-  .hero-right { align-self: stretch; }
+  .hero-right {
+    align-self: stretch;
+    margin-top: 0;
+  }
 }
 
 @supports not (background-clip: text) {
@@ -1923,7 +1926,6 @@ details summary h3 { display: inline; }
 }
 
 /* ---------------- Narrative-forward (ground + hero + readable) ---------------- */
-.hero { align-items: start; }
 /* One shell: avoid outer card + inner framed photo + bare chart (triple-border look). */
 .hero-figure {
   position: relative;
@@ -3008,13 +3010,14 @@ details summary h3 { display: inline; }
   max-width: 22ch;
 }
 .hero-thesis-pull em { color: var(--accent-strong); }
-/* Right column: photo vertically centered against the text block height. */
+/* Right column: align photo with the title, not the full column (CTAs sit below). */
 .hero-right {
   display: flex;
   flex-direction: column;
   gap: clamp(14px, 1.8vw, 20px);
   min-width: 0;
-  align-self: center;
+  align-self: start;
+  margin-top: calc(12px + 1.2em + 12px); /* eyebrow + its margin ≈ title cap height */
 }
 .hero-stats {
   display: flex;
