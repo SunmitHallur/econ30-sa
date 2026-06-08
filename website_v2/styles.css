@@ -3010,14 +3010,33 @@ details summary h3 { display: inline; }
   max-width: 22ch;
 }
 .hero-thesis-pull em { color: var(--accent-strong); }
-/* Right column: align photo with the title, not the full column (CTAs sit below). */
+/* Right column: balance image in the viewport below the header. */
 .hero-right {
   display: flex;
   flex-direction: column;
   gap: clamp(14px, 1.8vw, 20px);
   min-width: 0;
   align-self: start;
-  margin-top: calc(12px + 1.2em + 12px); /* eyebrow + its margin ≈ title cap height */
+}
+@media (min-width: 901px) {
+  .hero {
+    --hero-topbar-offset: 3.1rem;
+    --hero-photo-media-h: clamp(240px, 46vh, 420px);
+    --hero-photo-block-h: calc(var(--hero-photo-media-h) + 2.35rem);
+    --hero-pad-top: clamp(56px, 10vw, 112px);
+  }
+  .hero-figure--photo-only .hero-photo-card picture {
+    height: var(--hero-photo-media-h);
+  }
+  .hero-right {
+    margin-top: max(
+      calc(12px + 1.2em + 12px),
+      calc(
+        (100dvh - var(--hero-topbar-offset) - var(--hero-photo-block-h)) / 2
+        - var(--hero-pad-top)
+      )
+    );
+  }
 }
 .hero-stats {
   display: flex;
