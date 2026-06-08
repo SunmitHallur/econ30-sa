@@ -572,6 +572,10 @@
           viaApi: true,
         };
       }
+      if (res.status === 503) {
+        apiAvailable = false;
+        return null;
+      }
       if (!res.ok) return null;
       if (!data?.answer) return null;
       apiAvailable = true;
@@ -629,13 +633,19 @@
     });
   };
 
+  const thinkingLabel = () => {
+    if (!corpus?.chunks?.length) return "Essay excerpts unavailable — showing limited answers.";
+    if (apiAvailable === false) return "AI unavailable — showing closest passages.";
+    return "Searching essay excerpts…";
+  };
+
   const appendThinking = (logs = getAskLogs()) => {
     const nodes = [];
     logs.forEach((log) => {
       const thinking = document.createElement("div");
       thinking.className =
         "essay-guide__msg essay-guide__msg--assistant essay-guide__thinking";
-      thinking.textContent = "Searching the essay…";
+      thinking.textContent = thinkingLabel();
       log.appendChild(thinking);
       log.scrollTop = log.scrollHeight;
       nodes.push(thinking);
@@ -862,8 +872,12 @@
       tab.classList.toggle("is-active", tab.dataset.mode === next);
       tab.setAttribute("aria-selected", tab.dataset.mode === next ? "true" : "false");
     });
-    $("#essay-guide-panel-tour")?.classList.toggle("is-hidden", next !== "tour");
-    $("#essay-guide-panel-ask")?.classList.toggle("is-hidden", next !== "ask");
+    const tourPanel = $("#essay-guide-panel-tour");
+    const askPanel = $("#essay-guide-panel-ask");
+    tourPanel?.classList.toggle("is-hidden", next !== "tour");
+    askPanel?.classList.toggle("is-hidden", next !== "ask");
+    if (tourPanel) tourPanel.hidden = next !== "tour";
+    if (askPanel) askPanel.hidden = next !== "ask";
     if (next === "tour") {
       if (!tourStarted) {
         tourStarted = true;
@@ -956,14 +970,14 @@
             <h2 id="essay-guide-heading" class="essay-guide__heading">Walkthrough &amp; questions</h2>
           </div>
           <div class="essay-guide__bar-actions">
-            <div class="essay-guide__tabs" role="tablist">
-              <button type="button" class="essay-guide__tab is-active" data-mode="ask" role="tab" aria-selected="true">Ask</button>
-              <button type="button" class="essay-guide__tab" data-mode="tour" role="tab" aria-selected="false">Walkthrough</button>
+            <div class="essay-guide__tabs" role="tablist" aria-label="Guide mode">
+              <button type="button" class="essay-guide__tab is-active" id="essay-guide-tab-ask" data-mode="ask" role="tab" aria-selected="true" aria-controls="essay-guide-panel-ask">Ask</button>
+              <button type="button" class="essay-guide__tab" id="essay-guide-tab-tour" data-mode="tour" role="tab" aria-selected="false" aria-controls="essay-guide-panel-tour">Walkthrough</button>
             </div>
             <button type="button" class="essay-guide__close ghost-btn ghost-btn--icon" aria-label="Close guide"><span class="ghost-btn__text" aria-hidden="true">×</span></button>
           </div>
         </div>
-        <div id="essay-guide-panel-ask" class="essay-guide__panel">
+        <div id="essay-guide-panel-ask" class="essay-guide__panel" role="tabpanel" aria-labelledby="essay-guide-tab-ask">
           <div id="essay-guide-log" class="essay-guide__log" aria-live="polite" aria-relevant="additions"></div>
           <div id="essay-guide-suggestions" class="essay-guide__suggestions"></div>
           <form class="essay-guide__form" id="essay-guide-form">
@@ -973,7 +987,7 @@
           </form>
           <p class="essay-guide__disclaimer">Answers come from this essay and its data. Not financial or policy advice.</p>
         </div>
-        <div id="essay-guide-panel-tour" class="essay-guide__panel is-hidden">
+        <div id="essay-guide-panel-tour" class="essay-guide__panel is-hidden" role="tabpanel" aria-labelledby="essay-guide-tab-tour" hidden>
           <p id="essay-guide-tour-progress" class="essay-guide__tour-progress mono"></p>
           <h3 id="essay-guide-tour-title" class="essay-guide__tour-title"></h3>
           <p id="essay-guide-tour-narration" class="essay-guide__tour-narration"></p>
@@ -998,7 +1012,7 @@
       <button type="button" class="essay-guide-invite__close" aria-label="Dismiss">×</button>
       <p class="essay-guide-invite__kicker">Essay Guide</p>
       <h2 id="essay-guide-invite-title" class="essay-guide-invite__title">Would you like a walkthrough?</h2>
-      <p class="essay-guide-invite__lede">Take an 11-step tour of this essay or ask questions grounded in the charts and sources. The guide stays on the right so you can keep reading.</p>
+      <p class="essay-guide-invite__lede">Take an 11-step tour of this essay or ask questions grounded in the charts and sources. The Guide panel opens alongside the page so you can keep reading.</p>
       <div class="essay-guide-invite__actions">
         <button type="button" class="essay-guide-invite__primary" id="essay-guide-invite-tour">Start walkthrough</button>
         <button type="button" class="essay-guide-invite__secondary" id="essay-guide-invite-ask">Ask a question</button>

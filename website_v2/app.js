@@ -79,6 +79,18 @@
     warn: cssVar("--warn"),
   });
 
+  const chartMarkerStroke = (opacity = 0.4) => {
+    const dark = document.documentElement.dataset.theme === "dark";
+    return dark ? `rgba(255,255,255,${opacity})` : `rgba(24,24,27,${opacity * 0.88})`;
+  };
+
+  const clearChartLoading = (canvas) => {
+    const wrap = canvas?.closest?.(".chart-canvas-wrap");
+    if (!wrap) return;
+    wrap.classList.remove("is-loading");
+    wrap.removeAttribute("aria-busy");
+  };
+
   /** Tooltip chrome follows light/dark page theme (readable on both). */
   const tooltipThemeColors = () => {
     const dark = document.documentElement.dataset.theme === "dark";
@@ -221,6 +233,7 @@
     } else {
       yScale.ticks.callback = formatChartTickPlain;
     }
+    clearChartLoading(canvas);
     return new Chart(canvas, {
       type: "line",
       data: { labels, datasets },
@@ -313,7 +326,7 @@
       yAxisType: "logarithmic",
       annotations: [
         { type: "band", x1: 1960, x2: 1990, label: "Apartheid era", fill: "rgba(15,95,70,0.06)" },
-        { type: "marker", x: 1994, label: "1994 elections", color: "rgba(255,255,255,0.42)", dash: [3, 4] },
+        { type: "marker", x: 1994, label: "1994 elections", color: chartMarkerStroke(0.42), dash: [3, 4] },
         { type: "label", x: 2002, y: 320, label: "Trade rises faster than income" },
       ],
     });
@@ -386,7 +399,11 @@
 
   /** Backfill the three "first → latest" stat boxes and the inline regression numbers. */
   const renderSectorStats = (sector) => {
-    if (!sector || !Array.isArray(sector.rows)) return;
+    $$("[data-stat]").forEach((card) => card.classList.remove("sector-stat--loading", "sector-stat--error"));
+    if (!sector || !Array.isArray(sector.rows)) {
+      $$("[data-stat]").forEach((card) => card.classList.add("sector-stat--error"));
+      return;
+    }
     const rows = sector.rows;
     const fmtPct = (v, dp = 1) => (v == null || Number.isNaN(v) ? "–" : `${(v * 100).toFixed(dp)}%`);
     const fmtRaw = (v, dp = 1) => (v == null || Number.isNaN(v) ? "–" : `${v.toFixed(dp)}%`);
@@ -495,7 +512,7 @@
       yTitle: "% of labour force",
       xTitle: "Year",
       xMin: vals.findIndex((v) => v != null) >= 0 ? years[vals.findIndex((v) => v != null)] : 1990,
-      annotations: [{ type: "marker", x: 2020, label: "COVID shock", color: "rgba(255,255,255,0.48)", dash: [4, 4] }],
+      annotations: [{ type: "marker", x: 2020, label: "COVID shock", color: chartMarkerStroke(0.48), dash: [4, 4] }],
     });
   };
 
@@ -514,7 +531,7 @@
       xTitle: "Year",
       annotations: [
         { type: "band", x1: 1980, x2: 1990, label: "Pre-1990 WID (imputed)", fill: "rgba(15,95,70,0.06)" },
-        { type: "marker", x: 1994, label: "1994", color: "rgba(255,255,255,0.38)", dash: [3, 4] },
+        { type: "marker", x: 1994, label: "1994", color: chartMarkerStroke(0.38), dash: [3, 4] },
         { type: "label", x: 2020, y: 0.65, label: "≈65%" },
       ],
     });
@@ -534,7 +551,7 @@
       xTitle: "Year",
       annotations: [
         { type: "band", x1: 1980, x2: 1990, label: "Pre-1990 WID (imputed)", fill: "rgba(15,95,70,0.06)" },
-        { type: "marker", x: 1994, label: "1994", color: "rgba(255,255,255,0.38)", dash: [3, 4] },
+        { type: "marker", x: 1994, label: "1994", color: chartMarkerStroke(0.38), dash: [3, 4] },
         { type: "label", x: 2020, y: 0.85, label: "≈85%" },
       ],
     });
@@ -787,6 +804,13 @@
     };
     window.addEventListener("load", () => {
       window.refreshTimelineAutoplay();
+    });
+
+    scrollEl.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      const step = e.key === "ArrowRight" ? 280 : -280;
+      scrollEl.scrollBy({ left: step, behavior: reduceMotion ? "auto" : "smooth" });
     });
   };
 
@@ -1054,9 +1078,16 @@
   const buildMap = async (series) => {
     const el = $("#za-map");
     if (!el || typeof L === "undefined") return;
+    const showMapStatus = (html, busy = false) => {
+      el.innerHTML = html;
+      if (busy) el.setAttribute("aria-busy", "true");
+      else el.removeAttribute("aria-busy");
+    };
+    showMapStatus('<p class="map-loading-status">Loading map…</p>', true);
     const waves = series?.waves;
     if (!waves?.length) {
       console.warn("map: no wave data");
+      showMapStatus('<p class="map-error-status" role="alert">Map data unavailable.</p>');
       return;
     }
 
@@ -1134,7 +1165,16 @@
       }
     }
 
-    const gj = await fetchJSON("zaf-provinces.geojson");
+    let gj;
+    try {
+      gj = await fetchJSON("zaf-provinces.geojson");
+    } catch (err) {
+      console.error("map: GeoJSON load failed", err);
+      showMapStatus('<p class="map-error-status" role="alert">Could not load province map. Check your connection and reload.</p>');
+      return;
+    }
+    el.innerHTML = "";
+    el.removeAttribute("aria-busy");
     const legendRangeEl = $("#map-legend-range");
     const legendHintEl = $("#map-metro-zoom-hint");
 
@@ -1274,13 +1314,29 @@
     let autoplayTimer = null;
     let comparePairBuilt = false;
     let playbackCompleted = false;
-    let scrollDriveActive = !reduceMotion;
+    const mqMapMobile = window.matchMedia("(max-width: 767px)");
+    let scrollDriveActive = !reduceMotion && !mqMapMobile.matches;
+
+    const applyMapScrollMode = () => {
+      if (playbackCompleted) return;
+      if (mqMapMobile.matches || reduceMotion) {
+        scrollDriveActive = false;
+        if (scrollyHintEl && mqMapMobile.matches) {
+          scrollyHintEl.innerHTML = "Use the <strong>slider</strong> or <strong>Play</strong> to move through quarters.";
+        }
+      } else {
+        scrollDriveActive = true;
+      }
+      setScrollyHeight();
+    };
 
     if (playLabel) playLabel.textContent = "Play";
     if (playBtn) playBtn.setAttribute("aria-pressed", "false");
     if (scrollyHintEl && reduceMotion) {
       scrollyHintEl.innerHTML = "Use the <strong>slider</strong> or <strong>Play</strong> to move through quarters. After you reach the <strong>last</strong> quarter once, a before-and-after comparison appears below.";
     }
+    applyMapScrollMode();
+    mqMapMobile.addEventListener("change", applyMapScrollMode);
 
     const markPlaybackComplete = () => {
       if (playbackCompleted) return;
@@ -1464,7 +1520,10 @@
 
       const nat = w.national != null ? ` · National ${w.national}%` : "";
       if (periodEl) periodEl.textContent = `${w.label}${nat}`;
-      if (sliderEl) sliderEl.value = String(waveIndex);
+      if (sliderEl) {
+        sliderEl.value = String(waveIndex);
+        sliderEl.setAttribute("aria-valuetext", `${w.label}${nat}`);
+      }
       if (legendRangeEl) {
         legendRangeEl.textContent = `${mapFixedVmin.toFixed(1)}% to ${mapFixedVmax.toFixed(1)}% (fixed scale, all quarters)`;
       }
@@ -1582,30 +1641,20 @@
       chip.addEventListener("click", () => {
         const row = document.getElementById(chip.dataset.target || "");
         if (!row) return;
-        row.scrollIntoView({ behavior: "smooth", block: "center" });
-        row.classList.add("flash-target");
-        setTimeout(() => row.classList.remove("flash-target"), 1200);
+        const details = row.closest(".results-detail-toggle");
+        if (details && !details.open) details.open = true;
+        const mainRail = document.querySelector('.results-scrolly-rail-item[data-step="1"]');
+        if (mainRail) {
+          mainRail.click();
+        } else {
+          window.refreshResultsScrolly?.();
+        }
+        requestAnimationFrame(() => {
+          row.scrollIntoView({ behavior: "smooth", block: "center" });
+          row.classList.add("flash-target");
+          setTimeout(() => row.classList.remove("flash-target"), 1200);
+        });
       });
-    });
-  };
-  const updateArgumentBreadcrumb = (activeId) => {
-    if (!$(".arg-breadcrumb")) return;
-    const stepMap = {
-      question: "question",
-      "from-the-ground": "ground",
-      timeline: "timeline",
-      macro: "numbers",
-      sectors: "numbers",
-      inequality: "numbers",
-      "two-lives": "numbers",
-      results: "results",
-      map: "results",
-      conclusions: "conclusions",
-      sources: "sources",
-    };
-    const activeStep = stepMap[activeId];
-    $$(".arg-breadcrumb [data-step]").forEach((el) => {
-      el.classList.toggle("is-active", el.dataset.step === activeStep);
     });
   };
   const wireTOC = () => {
@@ -1667,7 +1716,6 @@
             ? "Intro"
             : sectionLabelById.get(activeId) ?? activeId;
       }
-      updateArgumentBreadcrumb(activeId);
     };
 
     const onScroll = () => {
@@ -2182,12 +2230,12 @@
     wireQuoteOrbit();
     // Disabled outdated hand-drawn intro effect per UX cleanup.
     wireGlobalScrollMotion();
+    $$("[data-stat]").forEach((card) => card.classList.add("sector-stat--loading"));
     try {
-      const [ts, ineq, panel, reg, mapSeries, sectorData] = await Promise.all([
+      const [ts, ineq, panel, mapSeries, sectorData] = await Promise.all([
         fetchJSON("data/timeseries.json"),
         fetchJSON("data/inequality.json"),
         fetchJSON("data/panel.json"),
-        fetchJSON("data/regressions.json"),
         fetchJSON("data/map_unemployment_series.json"),
         fetchJSON("data/sector_employment.json").catch(() => null),
       ]);
@@ -2218,8 +2266,40 @@
         const section = document.getElementById(id);
         if (section) lazyObserver.observe(section);
       });
-      safeRun("regression tables", () => renderRegressionTables(reg));
-      window.refreshResultsScrolly?.();
+      let regressionsPromise = null;
+      const loadRegressions = () => {
+        if (regressionsPromise) return regressionsPromise;
+        regressionsPromise = fetchJSON("data/regressions.json")
+          .then((reg) => {
+            safeRun("regression tables", () => renderRegressionTables(reg));
+            window.refreshResultsScrolly?.();
+          })
+          .catch((e) => {
+            regressionsPromise = null;
+            throw e;
+          });
+        return regressionsPromise;
+      };
+      const resultsSection = document.getElementById("results");
+      if (resultsSection && "IntersectionObserver" in window) {
+        const regObserver = new IntersectionObserver((entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          regObserver.disconnect();
+          loadRegressions().catch((e) => console.error("website_v2 block failed: regressions", e));
+        }, { rootMargin: "120px 0px" });
+        regObserver.observe(resultsSection);
+      }
+      document.querySelector(".results-detail-toggle")?.addEventListener("toggle", (e) => {
+        if (e.target.open) {
+          loadRegressions().catch((err) => console.error("website_v2 block failed: regressions", err));
+        }
+      });
+      if (!sectorData) {
+        $$("[data-stat]").forEach((card) => {
+          card.classList.remove("sector-stat--loading");
+          card.classList.add("sector-stat--error");
+        });
+      }
       // Lazy-load Leaflet (CSS + JS) only when the map section approaches the viewport.
       let leafletPromise = null;
       const loadLeaflet = () => {

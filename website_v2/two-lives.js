@@ -143,7 +143,7 @@
           el("p", { class: "tl-cast__blurb", text: c.blurb }),
         ]);
       })),
-      el("p", { class: "tl-hint", text: "Tip: you can press 1–4 to choose, and → to continue." }),
+      el("p", { class: "tl-hint", text: "Tip: press 1–4 to choose. After you pick, press → to continue." }),
       el("button", {
         class: "tl-btn tl-btn--primary",
         type: "button",
@@ -193,6 +193,7 @@
         ])
       )));
       const isLast = state.beat >= data.beats.length - 1;
+      wrap.appendChild(el("p", { class: "tl-hint", text: "Press → to continue." }));
       wrap.appendChild(el("button", {
         class: "tl-btn tl-btn--primary",
         type: "button",

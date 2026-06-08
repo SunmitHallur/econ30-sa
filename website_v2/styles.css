@@ -319,6 +319,10 @@ a:hover { border-bottom-color: currentColor; }
     inset 0 0 0 1px color-mix(in oklab, var(--accent) 22%, transparent),
     0 1px 0 color-mix(in oklab, var(--rule-strong) 55%, transparent);
 }
+.topnav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 .section-indicator {
   position: fixed;
   right: clamp(10px, 2vw, 20px);
@@ -888,6 +892,21 @@ figure.card .chart-canvas-wrap {
   display: block;
   width: 100%;
   height: 100%;
+}
+.chart-canvas-wrap.is-loading::before {
+  content: "Loading chart…";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--fg-muted);
+  background: color-mix(in oklab, var(--bg-elev) 92%, transparent);
+}
+.chart-canvas-wrap.is-loading canvas {
+  opacity: 0;
 }
 
 /* ---------------- Timeline (horizontal rail + axis) ---------------- */
@@ -2784,7 +2803,8 @@ details summary h3 { display: inline; }
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  display: block;
+  overflow: hidden;
   border-radius: var(--radius-lg);
   border: 1px solid var(--rule);
   box-shadow:
@@ -2794,6 +2814,12 @@ details summary h3 { display: inline; }
   will-change: transform, opacity;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+.quote-orbit__face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .quote-orbit__panel {
   display: flex;
@@ -3227,6 +3253,10 @@ details summary h3 { display: inline; }
   color: var(--fg);
   cursor: pointer;
 }
+.result-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 .result-chip__tier {
   display: inline-block;
   font-size: 11px;
@@ -3259,11 +3289,18 @@ details summary h3 { display: inline; }
 }
 
 @media (max-width: 900px) {
-  .arg-breadcrumb { top: 58px; }
   .section-indicator { display: none; }
   .result-chips { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
+  .topnav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+    padding-right: 6px;
+  }
+  .topnav::-webkit-scrollbar { display: none; }
   .topnav a {
     font-size: 12px;
     padding: 5px 8px;
@@ -3274,7 +3311,6 @@ details summary h3 { display: inline; }
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .arg-breadcrumb { display: none; }
   .results-table {
     display: block;
     overflow-x: auto;
@@ -3810,7 +3846,7 @@ details summary h3 { display: inline; }
   .tl-react__col--sipho,
   .tl-ending--sipho,
   .tl-status__row--sipho { order: -1; }
-  .tl-progress__year { font-size: 0.55rem; }
+  .tl-progress__year { display: none; }
   .tl-progress-row { flex-wrap: wrap; }
   .tl-option { flex-wrap: wrap; align-items: flex-start; }
   .tl-option__access {
@@ -4151,8 +4187,8 @@ details summary h3 { display: inline; }
   color: var(--bg);
 }
 .essay-guide__disclaimer {
-  font-size: 11px;
-  color: var(--fg-faint);
+  font-size: 13px;
+  color: var(--fg-muted);
   margin: 8px 0 0;
   line-height: 1.35;
 }
@@ -4354,9 +4390,54 @@ body.essay-guide-tour-active .essay-guide__next-btn {
   background: var(--bg-sunken);
   outline: none;
 }
+.map-loading-status,
+.map-error-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  padding: 24px;
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+.map-error-status { color: var(--danger); }
+.sector-stat--loading .sector-stat__num,
+.sector-stat--loading .sector-stat__delta {
+  color: transparent;
+  position: relative;
+}
+.sector-stat--loading .sector-stat__num::after,
+.sector-stat--loading .sector-stat__delta::after {
+  content: "…";
+  color: var(--fg-muted);
+  position: absolute;
+  left: 0;
+}
+.sector-stat--error .sector-stat__label::after {
+  content: " (unavailable)";
+  font-weight: 400;
+  color: var(--fg-muted);
+  font-size: 0.85em;
+}
+
+@media (max-width: 900px) {
+  .essay-guide {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: min(72vh, 560px);
+    padding: 0 0 max(12px, env(safe-area-inset-bottom)) 0;
+  }
+  .essay-guide__bar {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+}
 @media (max-width: 720px) {
   .essay-guide {
-    width: min(340px, 100vw);
+    width: 100%;
   }
   body.essay-guide-panel-open .main-stack {
     margin-right: 0;
