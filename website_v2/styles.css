@@ -4390,18 +4390,6 @@ body.essay-guide-tour-active .essay-guide__next-btn {
   background: var(--bg-sunken);
   outline: none;
 }
-.map-loading-status,
-.map-error-status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 280px;
-  padding: 24px;
-  text-align: center;
-  color: var(--fg-muted);
-  font-size: 14px;
-}
-.map-error-status { color: var(--danger); }
 .sector-stat--loading .sector-stat__num,
 .sector-stat--loading .sector-stat__delta {
   color: transparent;

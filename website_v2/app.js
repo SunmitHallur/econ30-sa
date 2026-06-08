@@ -1078,16 +1078,9 @@
   const buildMap = async (series) => {
     const el = $("#za-map");
     if (!el || typeof L === "undefined") return;
-    const showMapStatus = (html, busy = false) => {
-      el.innerHTML = html;
-      if (busy) el.setAttribute("aria-busy", "true");
-      else el.removeAttribute("aria-busy");
-    };
-    showMapStatus('<p class="map-loading-status">Loading map…</p>', true);
     const waves = series?.waves;
     if (!waves?.length) {
       console.warn("map: no wave data");
-      showMapStatus('<p class="map-error-status" role="alert">Map data unavailable.</p>');
       return;
     }
 
@@ -1165,16 +1158,7 @@
       }
     }
 
-    let gj;
-    try {
-      gj = await fetchJSON("zaf-provinces.geojson");
-    } catch (err) {
-      console.error("map: GeoJSON load failed", err);
-      showMapStatus('<p class="map-error-status" role="alert">Could not load province map. Check your connection and reload.</p>');
-      return;
-    }
-    el.innerHTML = "";
-    el.removeAttribute("aria-busy");
+    const gj = await fetchJSON("zaf-provinces.geojson");
     const legendRangeEl = $("#map-legend-range");
     const legendHintEl = $("#map-metro-zoom-hint");
 
@@ -1314,29 +1298,13 @@
     let autoplayTimer = null;
     let comparePairBuilt = false;
     let playbackCompleted = false;
-    const mqMapMobile = window.matchMedia("(max-width: 767px)");
-    let scrollDriveActive = !reduceMotion && !mqMapMobile.matches;
-
-    const applyMapScrollMode = () => {
-      if (playbackCompleted) return;
-      if (mqMapMobile.matches || reduceMotion) {
-        scrollDriveActive = false;
-        if (scrollyHintEl && mqMapMobile.matches) {
-          scrollyHintEl.innerHTML = "Use the <strong>slider</strong> or <strong>Play</strong> to move through quarters.";
-        }
-      } else {
-        scrollDriveActive = true;
-      }
-      setScrollyHeight();
-    };
+    let scrollDriveActive = !reduceMotion;
 
     if (playLabel) playLabel.textContent = "Play";
     if (playBtn) playBtn.setAttribute("aria-pressed", "false");
     if (scrollyHintEl && reduceMotion) {
       scrollyHintEl.innerHTML = "Use the <strong>slider</strong> or <strong>Play</strong> to move through quarters. After you reach the <strong>last</strong> quarter once, a before-and-after comparison appears below.";
     }
-    applyMapScrollMode();
-    mqMapMobile.addEventListener("change", applyMapScrollMode);
 
     const markPlaybackComplete = () => {
       if (playbackCompleted) return;
@@ -1520,10 +1488,7 @@
 
       const nat = w.national != null ? ` · National ${w.national}%` : "";
       if (periodEl) periodEl.textContent = `${w.label}${nat}`;
-      if (sliderEl) {
-        sliderEl.value = String(waveIndex);
-        sliderEl.setAttribute("aria-valuetext", `${w.label}${nat}`);
-      }
+      if (sliderEl) sliderEl.value = String(waveIndex);
       if (legendRangeEl) {
         legendRangeEl.textContent = `${mapFixedVmin.toFixed(1)}% to ${mapFixedVmax.toFixed(1)}% (fixed scale, all quarters)`;
       }
