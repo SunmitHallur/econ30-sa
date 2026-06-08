@@ -28,12 +28,14 @@
   });
 
   // ------------------------------------------------------------
-  // Theme toggle (light ↔ dark, persisted)
+  // Theme toggle (light ↔ dark, persisted) + first-visit picker
   // ------------------------------------------------------------
   const themeKey = "econ30-theme";
   const mapThemeRefreshers = [];
-  const applyTheme = t => {
+  const themeRefreshFns = [];
+  const setThemeOnPage = (t, { persist = true, refreshMedia = false } = {}) => {
     document.documentElement.dataset.theme = t;
+    if (persist) localStorage.setItem(themeKey, t);
     const icon = $("#theme-toggle .theme-icon");
     const btn = $("#theme-toggle");
     if (icon) icon.textContent = t === "dark" ? "◑" : "◐";
@@ -41,20 +43,44 @@
       btn.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
       btn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
     }
+    if (refreshMedia) {
+      themeRefreshFns.forEach((fn) => fn());
+    }
   };
-  const initialTheme = () => {
-    const saved = localStorage.getItem(themeKey);
-    if (saved) return saved;
-    return "dark";
+  const hideThemePrompt = () => {
+    const prompt = $("#theme-prompt");
+    if (!prompt) return;
+    prompt.hidden = true;
+    document.body.classList.remove("theme-prompt-open");
   };
-  applyTheme(initialTheme());
+  const showThemePrompt = () => {
+    const prompt = $("#theme-prompt");
+    if (!prompt) return;
+    prompt.hidden = false;
+    document.body.classList.add("theme-prompt-open");
+    const lightBtn = prompt.querySelector('[data-theme-choice="light"]');
+    lightBtn?.focus();
+  };
+  const chooseTheme = (t) => {
+    setThemeOnPage(t, { refreshMedia: true });
+    hideThemePrompt();
+    window.dispatchEvent(new CustomEvent("econ30-theme-chosen", { detail: { theme: t } }));
+  };
+  const savedTheme = localStorage.getItem(themeKey);
+  if (savedTheme) {
+    setThemeOnPage(savedTheme, { persist: false });
+  } else {
+    setThemeOnPage("light", { persist: false });
+    showThemePrompt();
+  }
+  $("#theme-prompt")?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-theme-choice]");
+    if (!btn) return;
+    chooseTheme(btn.dataset.themeChoice === "dark" ? "dark" : "light");
+  });
   $("#theme-toggle")?.addEventListener("click", () => {
     const cur = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    localStorage.setItem(themeKey, cur);
-    applyTheme(cur);
-    // Chart.js snapshots palette at construction; v4 has no reliable global instances iterator.
-    refreshAllChartsForTheme();
-    mapThemeRefreshers.forEach(fn => fn());
+    setThemeOnPage(cur, { refreshMedia: true });
   });
 
   // ------------------------------------------------------------
@@ -159,6 +185,8 @@
       if (c) applyPaletteToChart(c);
     });
   };
+  themeRefreshFns.push(refreshAllChartsForTheme);
+  themeRefreshFns.push(() => mapThemeRefreshers.forEach((fn) => fn()));
 
   /** Axis & tooltip numbers without locale grouping (years read as 1990 not 1,990). */
   const formatChartTickPlain = value => {

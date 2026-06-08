@@ -916,6 +916,8 @@
   };
 
   const scheduleInvite = (delayMs = INVITE_DELAY_MS) => {
+    const themePrompt = $("#theme-prompt");
+    if (themePrompt && !themePrompt.hidden) return;
     if (inviteDismissed() || panelOpen) return;
     if (inviteTimer) clearTimeout(inviteTimer);
     inviteTimer = window.setTimeout(() => {
@@ -1168,6 +1170,9 @@
     }
   };
 
+  window.addEventListener("econ30-theme-chosen", () => {
+    if (!inviteDismissed() && !panelOpen) scheduleInvite(800);
+  });
   window.addEventListener("load", onPageReady);
   window.addEventListener("pageshow", (e) => {
     if (!panelOpen && tourActive) pauseTour();

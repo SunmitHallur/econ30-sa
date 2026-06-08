@@ -16,8 +16,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script>
     (function () {
-      var t = localStorage.getItem("econ30-theme") || "dark";
-      document.documentElement.dataset.theme = t;
+      var t = localStorage.getItem("econ30-theme");
+      document.documentElement.dataset.theme = t || "light";
     })();
   </script>
   <link rel="stylesheet" href="styles.css" />
@@ -44,6 +44,25 @@
   </script>
 </head>
 <body>
+  <div id="theme-prompt" class="theme-prompt" role="dialog" aria-labelledby="theme-prompt-title" aria-describedby="theme-prompt-lede" aria-modal="true" hidden>
+    <div class="theme-prompt__card">
+      <p class="theme-prompt__kicker">Display</p>
+      <h2 id="theme-prompt-title" class="theme-prompt__title">Choose a color scheme</h2>
+      <p id="theme-prompt-lede" class="theme-prompt__lede">Pick how you want to read the essay. You can switch anytime with the button in the top bar.</p>
+      <div class="theme-prompt__choices">
+        <button type="button" class="theme-prompt__choice theme-prompt__choice--light" data-theme-choice="light">
+          <span class="theme-prompt__swatch" aria-hidden="true"></span>
+          <span class="theme-prompt__choice-label">Light</span>
+          <span class="theme-prompt__choice-hint">Blue &amp; white</span>
+        </button>
+        <button type="button" class="theme-prompt__choice theme-prompt__choice--dark" data-theme-choice="dark">
+          <span class="theme-prompt__swatch" aria-hidden="true"></span>
+          <span class="theme-prompt__choice-label">Dark</span>
+          <span class="theme-prompt__choice-hint">Green &amp; black</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <div class="ambient-paths" aria-hidden="true">
@@ -68,8 +87,8 @@
         <a href="#two-lives" data-nav-sections="two-lives,results,map">Evidence</a>
         <a href="#conclusions" data-nav-sections="conclusions,ask-anything,sources">Takeaways</a>
       </nav>
-      <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Switch to light theme" aria-pressed="true" title="Toggle theme">
-        <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◑</span></span>
+      <button id="theme-toggle" class="ghost-btn ghost-btn--icon" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Toggle theme">
+        <span class="ghost-btn__text"><span class="theme-icon" aria-hidden="true">◐</span></span>
       </button>
     </div>
     <div class="top-progress" aria-hidden="true"><span id="top-progress-fill"></span></div>
