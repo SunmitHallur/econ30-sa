@@ -185,6 +185,51 @@ def load_regression_stats() -> list[dict]:
     return chunks
 
 
+def load_map_spread_chunk() -> dict | None:
+    path = DATA / "map_unemployment_series.json"
+    if not path.is_file():
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    ins = data.get("spread_insight") or {}
+    if not ins:
+        return None
+    text = (
+        "Original finding from my provincial map: national narrow unemployment rose "
+        f"from {ins.get('national_start')}% ({ins.get('start_label')}) to {ins.get('national_end')}% "
+        f"({ins.get('end_label')}), a change of about {ins.get('national_delta_pp')} percentage points. "
+        f"Over the same window the provincial spread (gap between the lowest- and highest-unemployment "
+        f"provinces) widened from {ins.get('spread_start_pp')} to {ins.get('spread_end_pp')} pp "
+        f"(+{ins.get('spread_delta_pp')} pp). Western Cape stayed the lowest-unemployment province and "
+        f"Eastern Cape the highest in both endpoints. This is descriptive spatial divergence from "
+        "harmonised OHS/LFS/QLFS microdata, not official Stats SA tables. It complements district-level "
+        "evidence cited in Sources; it is not proof of causation on its own."
+    )
+    return {
+        "id": "map-spatial-divergence",
+        "section": "map",
+        "title": "Provincial unemployment spread widened",
+        "anchor": "#map",
+        "text": text,
+        "stats": [
+            {"label": "National Δ", "value": f"+{ins.get('national_delta_pp')} pp"},
+            {"label": "Spread Δ", "value": f"+{ins.get('spread_delta_pp')} pp"},
+        ],
+        "kb": ["stats-sa-qlfs-p0211-2025q1"],
+        "keywords": [
+            "map",
+            "provincial",
+            "spread",
+            "divergence",
+            "spatial",
+            "geography",
+            "western cape",
+            "eastern cape",
+            "unemployment",
+            "uneven",
+        ],
+    }
+
+
 def load_two_lives_chunk() -> dict | None:
     path = DATA / "two-lives.json"
     if not path.is_file():
@@ -426,7 +471,7 @@ def main() -> None:
     chunks.extend(load_kb_chunks())
     chunks.extend(load_regression_stats())
     chunks.extend(load_meta_chunks())
-    for extra in (load_two_lives_chunk(), load_timeseries_chunk()):
+    for extra in (load_map_spread_chunk(), load_two_lives_chunk(), load_timeseries_chunk()):
         if extra:
             chunks.append(extra)
 
@@ -508,6 +553,16 @@ def main() -> None:
             "map",
             "#map",
             ["map", "provinces", "unemployment", "geography"],
+        ),
+        (
+            "did unemployment diverge across provinces",
+            "Yes, on my harmonised map series. National unemployment rose about 10 percentage points "
+            "from 1997 Q4 to 2025 Q4, while the gap between the lowest- and highest-unemployment provinces widened "
+            "by roughly 8 points (Western Cape lowest, Eastern Cape highest throughout). That is descriptive spatial "
+            "divergence that complements district-level studies; it is not proof that trade or policy caused the widening.",
+            "map",
+            "#map",
+            ["diverge", "provinces", "spread", "spatial", "geography", "uneven"],
         ),
         (
             "remember one sentence",

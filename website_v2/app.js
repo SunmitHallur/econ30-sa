@@ -1123,7 +1123,139 @@
     return `rgb(${r},${g},${b})`;
   };
 
+  let provSpreadChart = null;
+
+  const renderMapSpreadInsight = (series) => {
+    const mapStatKeys = ["map-national", "map-spread", "map-anchor"];
+    const clearLoading = () => {
+      mapStatKeys.forEach((key) => {
+        const root = document.querySelector(`[data-stat="${key}"]`);
+        root?.classList.remove("sector-stat--loading", "sector-stat--error");
+      });
+    };
+    const ins = series?.spread_insight;
+    const waves = series?.waves;
+    if (!ins || !waves?.length) {
+      clearLoading();
+      mapStatKeys.forEach((key) => {
+        document.querySelector(`[data-stat="${key}"]`)?.classList.add("sector-stat--error");
+      });
+      return;
+    }
+    const fmtRate = (v) => (v == null ? "–" : `${Number(v).toFixed(1)}%`);
+    const fmtPp = (v) => (v == null ? "–" : `${Number(v).toFixed(1)} pp`);
+    const fmtDeltaPp = (d) => {
+      if (d == null || Number.isNaN(d)) return "–";
+      const sign = d > 0 ? "+" : d < 0 ? "−" : "";
+      return `${sign}${Math.abs(d).toFixed(1)} pp`;
+    };
+    const paintStat = ({
+      cardKey,
+      startText,
+      endText,
+      startYear,
+      endYear,
+      deltaText,
+      trend = "up",
+    }) => {
+      const root = document.querySelector(`[data-stat="${cardKey}"]`);
+      if (!root) return;
+      root.classList.remove("sector-stat--down", "sector-stat--up", "sector-stat--worse", "sector-stat--flat");
+      root.classList.add(`sector-stat--${trend}`);
+      const set = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      set(`stat-${cardKey}-start`, startText);
+      set(`stat-${cardKey}-end`, endText);
+      set(`stat-${cardKey}-start-yr`, startYear);
+      set(`stat-${cardKey}-end-yr`, endYear);
+      set(`stat-${cardKey}-delta`, deltaText);
+      const arrow = document.getElementById(`stat-${cardKey}-arrow`);
+      if (arrow) {
+        arrow.textContent = trend === "down" ? "↓" : (trend === "up" || trend === "worse") ? "↑" : "→";
+      }
+    };
+
+    const worseIfRising = (delta) => (delta > 0 ? "worse" : delta < 0 ? "up" : "flat");
+
+    paintStat({
+      cardKey: "map-national",
+      startText: fmtRate(ins.national_start),
+      endText: fmtRate(ins.national_end),
+      startYear: ins.start_label,
+      endYear: ins.end_label,
+      deltaText: fmtDeltaPp(ins.national_delta_pp),
+      trend: worseIfRising(ins.national_delta_pp),
+    });
+    paintStat({
+      cardKey: "map-spread",
+      startText: fmtPp(ins.spread_start_pp),
+      endText: fmtPp(ins.spread_end_pp),
+      startYear: ins.start_label,
+      endYear: ins.end_label,
+      deltaText: fmtDeltaPp(ins.spread_delta_pp),
+      trend: worseIfRising(ins.spread_delta_pp),
+    });
+
+    const d0 = waves[0].dispersion;
+    const d1 = waves[waves.length - 1].dispersion;
+    const anchorRoot = document.querySelector('[data-stat="map-anchor"]');
+    if (anchorRoot && d0 && d1) {
+      const set = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      set("stat-map-anchor-low-name", d0.min_province);
+      set("stat-map-anchor-high-name", d0.max_province);
+      set("stat-map-anchor-low", `${d0.min_rate.toFixed(1)}% → ${d1.min_rate.toFixed(1)}%`);
+      set("stat-map-anchor-high", `${d0.max_rate.toFixed(1)}% → ${d1.max_rate.toFixed(1)}%`);
+      set("stat-map-anchor-years", `${ins.start_label} → ${ins.end_label}`);
+      anchorRoot.classList.remove("sector-stat--down", "sector-stat--up", "sector-stat--worse", "sector-stat--flat");
+      anchorRoot.classList.add(worseIfRising(ins.spread_delta_pp));
+    }
+    clearLoading();
+  };
+
+  const buildProvincialSpreadChart = (series) => {
+    const canvas = $("#chart-prov-spread");
+    if (!canvas || !series?.waves?.length) return;
+    const waves = series.waves.filter((w) => w.dispersion?.spread_pp != null);
+    if (!waves.length) return;
+    const years = waves.map((w) => w.year + (w.quarter - 1) / 4);
+    const values = waves.map((w) => w.dispersion.spread_pp);
+    if (provSpreadChart) provSpreadChart.destroy();
+    provSpreadChart = makeLineChart(canvas, {
+      labels: years,
+      datasets: [
+        datasetFrom(
+          years,
+          { label: "Provincial spread (max − min)", values },
+          "danger",
+          { borderWidth: 2.4, pointRadius: 0, pointHoverRadius: 4, paletteKey: "danger" },
+        ),
+      ],
+      yTitle: "Spread (percentage points)",
+      xTitle: "Year",
+      xMin: Math.floor(years[0]),
+    });
+    themeRefreshFns.push(() => {
+      if (!provSpreadChart) return;
+      const p = palette();
+      provSpreadChart.data.datasets.forEach((ds) => {
+        const color = colorFrom(ds.paletteKey || "danger");
+        ds.borderColor = color;
+        ds.backgroundColor = `${color}33`;
+        ds.pointBackgroundColor = color;
+      });
+      provSpreadChart.update("none");
+    });
+  };
+
   const buildMap = async (series) => {
+    renderMapSpreadInsight(series);
+    buildProvincialSpreadChart(series);
+
     const el = $("#za-map");
     if (!el || typeof L === "undefined") return;
     const waves = series?.waves;
@@ -1475,6 +1607,12 @@
       comparePanel.hidden = false;
       const w0 = waves[0];
       const w1 = waves[waves.length - 1];
+      const compareLede = $("#map-compare-lede");
+      const ins = series?.spread_insight;
+      if (compareLede && ins?.spread_start_pp != null && ins?.national_delta_pp != null) {
+        compareLede.textContent =
+          `Spread widened from ${ins.spread_start_pp.toFixed(1)} to ${ins.spread_end_pp.toFixed(1)} pp while national unemployment rose ${ins.national_delta_pp.toFixed(1)} pp (${ins.start_label} → ${ins.end_label}). Lighter color = lower unemployment, darker = higher.`;
+      }
       if (compareStartCap) compareStartCap.textContent = `${w0.label}${w0.national != null ? ` · National ${w0.national}%` : ""}`;
       if (compareEndCap) compareEndCap.textContent = `${w1.label}${w1.national != null ? ` · National ${w1.national}%` : ""}`;
       const a = mountSideBySideMap(startEl, w0);

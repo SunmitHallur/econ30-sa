@@ -24,7 +24,7 @@ Use this map for targeted edits after the visual-essay redesign.
 | 6 | `inequality` | `#chart-income-shares`, `#chart-wealth-shares` |
 | 7 | `two-lives` | `#two-lives-app`, `#tl-stage` — interactive perspective engine (`two-lives.js` + `data/two-lives.json`) |
 | 8 | `results` | `.results-summary-card`, `.results-detail-toggle`, `.result-chips`, `#headline-table` |
-| 9 | `map` | `#za-map` |
+| 9 | `map` | `.map-spread-insight`, `#chart-prov-spread`, `#za-map` |
 | 10 | `conclusions` | `.conclusion-grid`, `#quote-orbit` |
 | 11 | `sources` | dataset/policy/causal cards, `.citation-card` |
 

@@ -868,8 +868,8 @@
       </details>
     </section>
     <div class="section-bridge" aria-label="Transition to map">
-      <p class="section-bridge__from">Evidence narrows the core claims.</p>
-      <p class="section-bridge__to"><a href="#map">Next: where unemployment is concentrated ↓</a></p>
+      <p class="section-bridge__from">Evidence narrows nationally.</p>
+      <p class="section-bridge__to"><a href="#map">Next: where the pain is uneven ↓</a></p>
     </div>
 
     <!-- ============================================================ -->
@@ -880,10 +880,74 @@
         <p class="section-step">Section 09</p>
         <h2>One number hides nine very different provinces.</h2>
         <p class="section-lede">
-          Provincial narrow unemployment, 1999–2025 (LFS/QLFS).
+          Provincial narrow unemployment, 1997 Q4–2025 Q4 (harmonised OHS / LFS / QLFS).
           Source: <a class="kb-link" href="#sources" data-kb="stats-sa-qlfs-p0211-2025q1">Stats SA QLFS</a>.
         </p>
       </div>
+
+      <aside class="map-spread-insight" aria-label="Original finding: provincial unemployment divergence">
+        <p class="map-spread-insight__label">Original finding</p>
+        <div class="sector-key-stats sector-stats-card map-spread-stats" aria-label="Provincial unemployment divergence statistics">
+          <div class="sector-stat sector-stat--loading" data-stat="map-national">
+            <p class="sector-stat__label">National unemployment</p>
+            <div class="sector-stat__compare">
+              <div class="sector-stat__point">
+                <span class="sector-stat__num mono" id="stat-map-national-start">–</span>
+                <span class="sector-stat__year mono" id="stat-map-national-start-yr"></span>
+              </div>
+              <span class="sector-stat__arrow" id="stat-map-national-arrow" aria-hidden="true">→</span>
+              <div class="sector-stat__point sector-stat__point--end">
+                <span class="sector-stat__num mono" id="stat-map-national-end">–</span>
+                <span class="sector-stat__year mono" id="stat-map-national-end-yr"></span>
+              </div>
+            </div>
+            <p class="sector-stat__delta mono" id="stat-map-national-delta"></p>
+            <p class="sector-stat__detail">Harmonised survey aggregate</p>
+          </div>
+          <div class="sector-stat sector-stat--loading" data-stat="map-spread">
+            <p class="sector-stat__label">Provincial spread (max − min)</p>
+            <div class="sector-stat__compare">
+              <div class="sector-stat__point">
+                <span class="sector-stat__num mono" id="stat-map-spread-start">–</span>
+                <span class="sector-stat__year mono" id="stat-map-spread-start-yr"></span>
+              </div>
+              <span class="sector-stat__arrow" id="stat-map-spread-arrow" aria-hidden="true">→</span>
+              <div class="sector-stat__point sector-stat__point--end">
+                <span class="sector-stat__num mono" id="stat-map-spread-end">–</span>
+                <span class="sector-stat__year mono" id="stat-map-spread-end-yr"></span>
+              </div>
+            </div>
+            <p class="sector-stat__delta mono" id="stat-map-spread-delta"></p>
+            <p class="sector-stat__detail">Gap between highest- and lowest-unemployment provinces</p>
+          </div>
+          <div class="sector-stat sector-stat--loading map-anchor-stat" data-stat="map-anchor">
+            <p class="sector-stat__label">Lowest vs highest province</p>
+            <div class="map-anchor-rows">
+              <div class="map-anchor-row">
+                <span class="map-anchor-row__prov" id="stat-map-anchor-low-name">Western Cape</span>
+                <span class="map-anchor-row__vals mono" id="stat-map-anchor-low">–</span>
+              </div>
+              <div class="map-anchor-row">
+                <span class="map-anchor-row__prov" id="stat-map-anchor-high-name">Eastern Cape</span>
+                <span class="map-anchor-row__vals mono" id="stat-map-anchor-high">–</span>
+              </div>
+            </div>
+            <p class="sector-stat__year mono" id="stat-map-anchor-years"></p>
+            <p class="sector-stat__detail">Both anchors rose; the gap between them widened.</p>
+          </div>
+        </div>
+        <p class="map-spread-insight__lede">
+          Unemployment rose, but so too did the spread of that unemployment. Under the surface, the spatial pattern of unemployment became more uneven across provinces, as shown in the graph below.
+        </p>
+      </aside>
+
+      <figure class="card map-spread-chart-card">
+        <figcaption class="card-head">
+          <h3>Provincial unemployment spread over time</h3>
+          <p class="chart-mockup__card-lede">Each point is the gap between the highest- and lowest-unemployment province in that quarter (percentage points).</p>
+        </figcaption>
+        <div class="chart-canvas-wrap chart-canvas-wrap--spread is-loading" aria-busy="true"><canvas id="chart-prov-spread"></canvas></div>
+      </figure>
 
       <p class="map-scrolly-hint" id="map-scrolly-hint">
         Scroll slowly to advance quarters, use <strong>Play</strong> for an automatic run to the latest quarter, or drag the slider anytime. A before-and-after comparison appears when you finish once.
@@ -912,7 +976,7 @@
       </div>
       <div id="map-compare" class="map-compare" hidden>
         <h3 class="map-compare__title">First quarter vs latest quarter</h3>
-        <p class="map-compare__lede">
+        <p class="map-compare__lede" id="map-compare-lede">
           Lighter color = lower unemployment, darker color = higher unemployment
         </p>
         <div class="map-compare-grid" role="group" aria-label="Before and after provincial maps">
@@ -930,7 +994,7 @@
         <div class="map-methodology__grid">
           <div class="map-methodology__method">
             <p>
-              <strong>Method.</strong> Provincial rates are author-calculated from Stats SA microdata (narrow unemployment, survey weights),
+              <strong>Method.</strong> I calculated provincial rates from Stats SA microdata (narrow unemployment, survey weights),
               harmonising <strong>LFS</strong> and <strong>OHS</strong> for early years and <strong>QLFS</strong> thereafter.
               Official tables can differ by revision; treat long-run movement across survey redesigns as indicative.
             </p>
@@ -1017,7 +1081,9 @@
           sector shares, a provincial unemployment map that updates with each survey wave, and
           charts that reach back before 1990. No single source publishes that combination as one
           view. The site and the regressions behind it use that merged panel so openness, sector
-          loss, inequality, and geography can be read in the same place.
+          loss, inequality, and geography can be read in the same place. On my map, national unemployment rose about 10 percentage points from 1997 Q4 to 2025 Q4,
+          while the gap between the lowest- and highest-unemployment provinces widened by roughly
+          8 points—integration strained inclusion geographically, not just on average.
         </p>
       </aside>
       <div class="card quote-showcase quote-orbit-card">
@@ -1140,7 +1206,7 @@
             <li><a href="https://www.statssa.gov.za/?page_id=1854&amp;PPN=P0211" target="_blank" rel="noopener noreferrer">Stats SA, Statistical release P0211 (QLFS)</a>: official publications and methodology.</li>
             <li><a href="https://www.statssa.gov.za/" target="_blank" rel="noopener noreferrer">Statistics South Africa</a>: producer of QLFS/LFS/OHS microdata used in analysis scripts.</li>
             <li>
-              <strong>Provincial map (§9):</strong> Narrow unemployment by province/quarter from harmonised Stats SA <strong>LFS / OHS / QLFS</strong> microdata (author aggregates; not official published tables).
+              <strong>Provincial map (§9):</strong> Narrow unemployment by province/quarter from harmonised Stats SA <strong>LFS / OHS / QLFS</strong> microdata (my aggregates; not official published tables).
               <details class="sources-more">
                 <summary>Files &amp; coverage</summary>
                 <p class="sources-more__body"><a href="https://www.statssa.gov.za/" target="_blank" rel="noopener noreferrer">Stats SA</a> and <a href="https://www.datafirst.uct.ac.za/" target="_blank" rel="noopener noreferrer">DataFirst</a> (UCT) survey microdata. Some pre-2008 waves omitted where labor fields are not comparable.</p>
@@ -1177,7 +1243,8 @@
         <ul class="link-list sources-scope-list">
           <li><strong>Fair to say:</strong> After 1994, South Africa opened more while unemployment stayed high and income and wealth remained concentrated. That is a descriptive read of the national charts and cited surveys.</li>
           <li><strong>Fair to say:</strong> On this site’s macro panel, <strong>two</strong> associations survive Benjamini–Hochberg correction: trade openness with <strong>declining tradable-sector employment shares</strong> and with <strong>rising top-1% income share</strong> (see §8).</li>
-          <li><strong>Fair to say:</strong> Provincial unemployment is <strong>spatially uneven</strong>. The map (§9) uses author-built aggregates from harmonised Stats SA microdata; treat long runs across survey redesigns as indicative.</li>
+          <li><strong>Fair to say:</strong> Provincial unemployment is <strong>spatially uneven</strong>. My map (§9) uses aggregates I built from harmonised Stats SA microdata; treat long runs across survey redesigns as indicative.</li>
+          <li><strong>Fair to say:</strong> On my map, the <strong>provincial spread</strong> (gap between lowest- and highest-unemployment provinces) <strong>widened by roughly 8 percentage points</strong> from 1997 Q4 to 2025 Q4 while national unemployment also rose—descriptive spatial divergence that complements district-level studies cited below, not proof of causation on its own.</li>
           <li><strong>Not fair to claim:</strong> That national regressions or these charts alone prove trade <em>caused</em> inequality, sector decline, or unemployment. Stronger causal claims rely on outside studies cited in <a href="#sources">Sources</a> (e.g. district tariff exposure).</li>
           <li><strong>Not fair to claim:</strong> That <strong>GEAR (1996)</strong> marks a clean structural break in these national series (the Chow test here does not support that), or that trade openness by itself explains unemployment levels in the macro panel.</li>
           <li><strong>Not fair to claim:</strong> Perfect comparability across inequality databases (different methods and end years) or across every map quarter (some waves lack comparable labor fields).</li>

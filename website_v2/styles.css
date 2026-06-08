@@ -1631,6 +1631,65 @@ details summary { cursor: pointer; list-style: revert; }
 details summary h3 { display: inline; }
 
 /* ---------------- Map ---------------- */
+.map-spread-insight {
+  margin: 0 auto clamp(20px, 3vw, 28px);
+  max-width: var(--max-width);
+}
+.map-spread-insight__label {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+.map-spread-insight__lede {
+  margin: 14px 0 0;
+  max-width: 62ch;
+  color: var(--fg-muted);
+  font-size: clamp(15px, 1.35vw, 17px);
+  line-height: 1.55;
+}
+.map-spread-stats {
+  margin-top: 0;
+}
+.map-spread-chart-card {
+  margin: 0 auto clamp(20px, 3vw, 28px);
+  max-width: var(--max-width);
+}
+.chart-canvas-wrap--spread {
+  height: clamp(200px, 28vw, 240px);
+}
+.sector-stat__num--sm {
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+}
+.map-anchor-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.map-anchor-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.map-anchor-row__prov {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+}
+.map-anchor-row__vals {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+.map-anchor-stat.sector-stat--worse .map-anchor-row__vals {
+  color: var(--danger);
+}
 .map-scrolly-hint {
   margin: 0 auto 14px;
   max-width: 62ch;
@@ -2494,6 +2553,11 @@ details summary h3 { display: inline; }
   border-left-color: var(--danger);
   background: color-mix(in oklab, var(--danger) 6%, var(--bg-sunken));
 }
+/* Rise in a “bad” metric (unemployment, spread): red styling, ↑ arrow */
+.sector-stat--worse {
+  border-left-color: var(--danger);
+  background: color-mix(in oklab, var(--danger) 6%, var(--bg-sunken));
+}
 .sector-stat--up {
   border-left-color: var(--accent-strong);
   background: color-mix(in oklab, var(--accent) 8%, var(--bg-sunken));
@@ -2530,7 +2594,8 @@ details summary h3 { display: inline; }
   color: var(--fg-muted);
   font-variant-numeric: tabular-nums;
 }
-.sector-stat--down .sector-stat__point--end .sector-stat__num { color: var(--danger); }
+.sector-stat--down .sector-stat__point--end .sector-stat__num,
+.sector-stat--worse .sector-stat__point--end .sector-stat__num { color: var(--danger); }
 .sector-stat--up .sector-stat__point--end .sector-stat__num { color: var(--accent-strong); }
 .sector-stat__year {
   font-size: 0.72rem;
@@ -2545,7 +2610,8 @@ details summary h3 { display: inline; }
   color: var(--fg-faint);
   padding: 0 2px;
 }
-.sector-stat--down .sector-stat__arrow { color: var(--danger); }
+.sector-stat--down .sector-stat__arrow,
+.sector-stat--worse .sector-stat__arrow { color: var(--danger); }
 .sector-stat--up .sector-stat__arrow { color: var(--accent-strong); }
 .sector-stat__delta {
   margin: 0;
@@ -2558,7 +2624,8 @@ details summary h3 { display: inline; }
   background: color-mix(in oklab, var(--fg-faint) 12%, transparent);
   color: var(--fg-muted);
 }
-.sector-stat--down .sector-stat__delta {
+.sector-stat--down .sector-stat__delta,
+.sector-stat--worse .sector-stat__delta {
   background: color-mix(in oklab, var(--danger) 18%, transparent);
   color: var(--danger);
 }

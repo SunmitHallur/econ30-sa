@@ -19,12 +19,64 @@ from __future__ import annotations
 import csv
 import json
 import re
+import statistics
 from pathlib import Path
 from typing import Any, Callable
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "Knowledge Base" / "raw" / "data"
 OUT = ROOT / "website_v2" / "data" / "map_unemployment_series.json"
+
+
+def provincial_dispersion(provinces: dict[str, float]) -> dict[str, Any]:
+    """Unweighted dispersion across the nine provinces for one wave."""
+    lo_p = min(provinces, key=provinces.get)
+    hi_p = max(provinces, key=provinces.get)
+    vals = list(provinces.values())
+    return {
+        "min_province": lo_p,
+        "min_rate": provinces[lo_p],
+        "max_province": hi_p,
+        "max_rate": provinces[hi_p],
+        "spread_pp": round(provinces[hi_p] - provinces[lo_p], 2),
+        "stdev_pp": round(statistics.stdev(vals), 2),
+    }
+
+
+def build_spread_insight(waves: list[dict[str, Any]]) -> dict[str, Any]:
+    """Headline start-vs-end comparison for the map section."""
+    if not waves:
+        return {}
+    start = waves[0]
+    end = waves[-1]
+    d0 = start.get("dispersion") or provincial_dispersion(start["provinces"])
+    d1 = end.get("dispersion") or provincial_dispersion(end["provinces"])
+    nat0 = start.get("national")
+    nat1 = end.get("national")
+    return {
+        "start_wave_id": start["id"],
+        "end_wave_id": end["id"],
+        "start_label": start.get("label", start["id"]),
+        "end_label": end.get("label", end["id"]),
+        "national_start": nat0,
+        "national_end": nat1,
+        "national_delta_pp": round(nat1 - nat0, 2) if nat0 is not None and nat1 is not None else None,
+        "spread_start_pp": d0["spread_pp"],
+        "spread_end_pp": d1["spread_pp"],
+        "spread_delta_pp": round(d1["spread_pp"] - d0["spread_pp"], 2),
+        "stdev_start_pp": d0["stdev_pp"],
+        "stdev_end_pp": d1["stdev_pp"],
+        "stdev_delta_pp": round(d1["stdev_pp"] - d0["stdev_pp"], 2),
+        "low_province": d0["min_province"],
+        "high_province": d0["max_province"],
+        "low_province_end": d1["min_province"],
+        "high_province_end": d1["max_province"],
+        "method": (
+            "Spread = highest provincial narrow unemployment minus lowest, each quarter. "
+            "Aggregates I built from harmonised survey microdata; not official published tables."
+        ),
+    }
+
 
 PROV_CODE_TO_NAME = {
     1: "Western Cape",
@@ -579,6 +631,12 @@ def main() -> None:
         deduped.append(w)
     waves = deduped
 
+    for w in waves:
+        if w.get("provinces"):
+            w["dispersion"] = provincial_dispersion(w["provinces"])
+
+    spread_insight = build_spread_insight(waves)
+
     payload = {
         "title": "Provincial narrow unemployment (harmonised survey extracts)",
         "definition": "Stats SA narrow unemployment: unemployed ÷ (employed + unemployed), survey-weighted. "
@@ -587,7 +645,7 @@ def main() -> None:
         "source_note": "Household survey microdata; producer Statistics South Africa. Series mixes survey instruments; "
         "interpret long-run comparisons cautiously.",
         "citation_apa": (
-            "Statistics South Africa (1994–2025). Provincial narrow unemployment computed by the author "
+            "Statistics South Africa (1994–2025). Provincial narrow unemployment aggregated by Hallur "
             "from harmonised QLFS, LFS, and OHS microdata (not official published tables)."
         ),
         "citation_urls": [
@@ -608,6 +666,7 @@ def main() -> None:
             "Metro dots (2015 Q1 onward): eight metros from QLFS Metro_code; zoom in on the map to view.",
             "Skipped quarters: waves without comparable labour-status fields are omitted from the animation.",
         ],
+        "spread_insight": spread_insight,
         "waves": waves,
     }
 
