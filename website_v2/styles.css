@@ -2786,15 +2786,18 @@ details summary h3 { display: inline; }
   background: var(--bg-elev);
 }
 .results-detail-toggle > summary {
+  position: relative;
   list-style: none;
   cursor: pointer;
   padding: clamp(14px, 2vw, 20px) clamp(16px, 2.5vw, 24px);
   display: flex;
-  gap: 10px;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
   border-bottom: 1px solid transparent;
+}
+.results-detail-toggle > summary .card-title {
+  margin: 0;
 }
 .results-detail-toggle[open] > summary {
   border-bottom: 1px solid var(--rule);
@@ -2802,9 +2805,10 @@ details summary h3 { display: inline; }
 .results-detail-toggle > summary::-webkit-details-marker { display: none; }
 .results-detail-toggle > summary::after {
   content: "▾";
-  margin-left: auto;
-  flex-shrink: 0;
-  align-self: center;
+  position: absolute;
+  right: clamp(16px, 2.5vw, 24px);
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--fg-muted);
   font-size: 1.5rem;
   line-height: 1;
@@ -2813,11 +2817,8 @@ details summary h3 { display: inline; }
 .results-detail-toggle > summary:hover::after {
   color: var(--accent);
 }
-.results-detail-toggle[open] > summary::after { transform: rotate(180deg); }
-.results-detail-toggle__hint {
-  font-size: 13.5px;
-  color: var(--fg-muted);
-  font-weight: 500;
+.results-detail-toggle[open] > summary::after {
+  transform: translateY(-50%) rotate(180deg);
 }
 .results-detail-toggle .results-scrolly {
   padding: clamp(16px, 2vw, 24px);
@@ -3528,7 +3529,10 @@ details summary h3 { display: inline; }
   font-size: 15px;
   line-height: 1.4;
 }
-.result-chip--bh { border-color: color-mix(in oklab, var(--good) 35%, var(--rule)); }
+.result-chip--bh {
+  grid-column: 1 / -1;
+  border-color: color-mix(in oklab, var(--good) 35%, var(--rule));
+}
 .result-chip--raw { border-color: color-mix(in oklab, var(--warn) 35%, var(--rule)); }
 .result-chip--ns { border-color: color-mix(in oklab, var(--danger) 30%, var(--rule)); }
 .results-table tr.flash-target {
