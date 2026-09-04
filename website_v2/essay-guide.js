@@ -1,6 +1,7 @@
 /* =============================================================
   Econ 30 · Essay Guide: guided walkthrough + grounded Q&A
-  Works fully client-side; optionally calls /api/chat when available.
+  Works fully client-side; optionally calls api/chat when available
+  (relative URL so the guide works at / and at /econ30/).
   ============================================================= */
 (() => {
   "use strict";
@@ -625,7 +626,7 @@
         text: h.chunk.text.slice(0, 800),
         anchor: h.chunk.anchor,
       }));
-      const res = await fetch("/api/chat", {
+      const res = await fetch("api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1224,7 +1225,7 @@
       scheduleInvite(0);
     }
 
-    // Probe API only on deployed hosts (/api/chat is a Vercel function, not static files)
+    // Probe API only on deployed hosts (api/chat is a Vercel function, not static files)
     const isLocal =
       location.hostname === "localhost" ||
       location.hostname === "127.0.0.1" ||
@@ -1232,7 +1233,7 @@
     if (isLocal) {
       apiAvailable = false;
     } else {
-      fetch("/api/chat", { method: "HEAD" }).then((r) => {
+      fetch("api/chat", { method: "HEAD" }).then((r) => {
         apiAvailable = r.ok;
       }).catch(() => {
         apiAvailable = false;
