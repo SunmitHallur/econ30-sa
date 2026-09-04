@@ -4,6 +4,25 @@
   "installCommand": "npm install --omit=dev",
   "buildCommand": "echo 'Static site + optional API'",
   "outputDirectory": "website_v2",
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "econ30finalproject.vercel.app" }],
+      "destination": "https://sunmithallur.com/econ30/",
+      "permanent": true
+    },
+    {
+      "source": "/:path((?!__origin).*)",
+      "has": [{ "type": "host", "value": "econ30finalproject.vercel.app" }],
+      "destination": "https://sunmithallur.com/econ30/:path",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    { "source": "/__origin", "destination": "/index.html" },
+    { "source": "/__origin/", "destination": "/index.html" },
+    { "source": "/__origin/:path*", "destination": "/:path*" }
+  ],
   "headers": [
     {
       "source": "/",

@@ -37,6 +37,8 @@ function allowedHostnames(): string[] {
     "econ30.vercel.app",
     "econ30finalproject.vercel.app",
     "www.econ30.vercel.app",
+    "sunmithallur.com",
+    "www.sunmithallur.com",
     "localhost",
     "127.0.0.1",
   ];
